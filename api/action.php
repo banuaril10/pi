@@ -739,7 +739,7 @@ if($_GET['modul'] == 'inventory'){
 		$pi_key = $_POST['m_pi'];
 		
 		
-			$statement1 = $connec->query("update m_pi set status = '4', postdate = '".date('Y-m-d')."' where m_pi_key = '".$pi_key."'");
+			$statement1 = $connec->query("update m_pi set status = '5', postdate = '".date('Y-m-d')."' where m_pi_key = '".$pi_key."'");
 			
 			if($statement1){
 				$json = array('result'=>'1');	
