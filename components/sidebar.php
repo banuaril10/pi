@@ -39,6 +39,10 @@
 						<li class="submenu-item ">
 							<a href="muser.php">Master Users</a>
 						</li>
+						
+						<li class="submenu-item ">
+							<a href="importer.php">Importer</a>
+						</li>
 					</ul>
 				</li>
 				

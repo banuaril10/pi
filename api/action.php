@@ -782,7 +782,7 @@ if($_GET['modul'] == 'inventory'){
 
 						// var_dump($jsons);
 						
-						if($jsons['result'] == 1){
+						if($jsons['result'] == '1'){
 							
 							$connec->query("update m_pi set status = '3' where m_pi_key ='".$pi_key."'");
 			
@@ -819,6 +819,9 @@ if($_GET['modul'] == 'inventory'){
 								);
 						
 								$jsons1 = json_decode($stats1, true);
+								
+								// var_dump($stats1);
+								
 								if($jsons1['result'] == '1'){
 									$statement1 = $connec->query("update m_piline set issync = '1' where sku = '".$jsons1['sku']."' and m_pi_key ='".$pi_key."'");
 									if($statement1){
