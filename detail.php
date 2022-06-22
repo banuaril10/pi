@@ -8,7 +8,7 @@
 		<i class="bi bi-justify fs-3"></i>
 	</a>
 </header>
-<?php include "components/header.php"; ?>
+<?php include "components/hhh.php"; ?>
 
 <!------ CONTENT AREA ------->
 <div class="row">
@@ -337,4 +337,4 @@ var input, filter, table, tr, td, i, txtValue;
 
 </script>
 </div>
-<?php include "components/footer.php"; ?>
+<?php include "components/fff.php"; ?>
