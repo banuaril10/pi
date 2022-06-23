@@ -24,9 +24,9 @@
 <body>
 	<div class="main-content">
 		<div id="page-wrapper">
-			<div class="main-page login-page ">
+			<div class="main-page login-page">
 			
-				<h3 class="title1">Sign in Physical Inventory 1.0</h3>
+				<h3 class="title1">Sign in Physical Inventory 1.0.1</h3>
 				<div class="widget-shadow">
 					<div class="login-body">
 					
