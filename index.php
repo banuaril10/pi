@@ -25,12 +25,13 @@
 	<div class="main-content">
 		<div id="page-wrapper">
 			<div class="main-page login-page ">
+			
 				<h3 class="title1">Sign in Physical Inventory 1.0</h3>
 				<div class="widget-shadow">
 					<div class="login-body">
 					
-
 					
+					<button style="width: 100%" type="button" id="btn-update" class="btn btn-danger">Cek Version</button>
 					
 					<form action="config/cek_login.php" method="POST">
 						
@@ -112,6 +113,16 @@
    
    
 <script type="text/javascript">
+  $('#btn-update').click(function(){
+        var clickBtnValue = $(this).val();
+        var ajaxurl = 'update.php',
+        data =  {'action': clickBtnValue};
+        $.post(ajaxurl, data, function (response) {
+            // Response div goes here.
+            
+        });
+    });
+
 function syncUser(){
 	
 
