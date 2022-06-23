@@ -70,6 +70,16 @@ $cmd3 = ['CREATE TABLE public.m_pi_sales (
 );'
 ];
 
+$inv_temp = ['CREATE TABLE public.inv_temp (
+	sku varchar NULL,
+	qty numeric NULL,
+	filename varchar NULL,
+	tanggal timestamp NULL,
+	status numeric NULL
+);'
+];
+
+
 
 //alter table 
 $result = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'm_pi'" );
@@ -116,7 +126,19 @@ else {
 
 }
 
+$result_inv = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'inv_temp'" );
+if($result_inv->rowCount() == 1) {
+	
+}
+else {
 
+	foreach ($inv_temp as $rr){
+
+			$connec->exec($rr);
+	}
+
+
+}
 
 	foreach ($connec->query($sql) as $row) {
 			$_SESSION['userid'] = $row["userid"];

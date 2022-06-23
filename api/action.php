@@ -263,7 +263,7 @@ if($_GET['modul'] == 'inventory'){
 	if($_GET['act'] == 'input'){
 		
 		
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and status != '3'";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and (status != '3' or status != '5')";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -742,7 +742,21 @@ if($_GET['modul'] == 'inventory'){
 			$statement1 = $connec->query("update m_pi set status = '5', postdate = '".date('Y-m-d')."' where m_pi_key = '".$pi_key."'");
 			
 			if($statement1){
-				$json = array('result'=>'1');	
+				
+				$statement2 = $connec->query("update pos_mproduct set isactived = '1' where sku in
+							(
+								select sku from m_piline where m_pi_key = '".$pi_key."'
+							)");
+				
+				if($statement2){
+					$json = array('result'=>'1');
+					
+				}else{
+					$json = array('result'=>'1');
+				}
+				
+				
+					
 			}else{
 				$json = array('result'=>'0');	
 				
@@ -1192,6 +1206,82 @@ if($_GET['modul'] == 'inventory'){
 
 				
 
+	}else if($_GET['act'] == 'proses_inv_temp'){
+		$sku = $_POST['sku'];
+		$qty = $_POST['qty'];
+		$tgl = $_POST['tgl'];
+		$jumlahpi = $_POST['jumlahpi'];
+		
+		// $sku = '8262400000064';
+		// $qty = '12';
+		// $tgl = '2022-06-23';
+		// $jumlahpi = '1212';
+		
+		
+		
+		$cekqty = "select qtycount from m_piline where sku = '".$sku."' and date(insertdate) = '".$tgl."'";
+		$result = $connec->query($cekqty);
+		$count = $result->rowCount();
+		
+		if($count > 0){
+			// $sql  = "update m_pi_line set qtycount=? where sku=? and date(insertdate)=?";
+			// $stmt = $connec->prepare($sql);
+			foreach ($result as $tot) {
+				$qtycount = $tot['qtycount'];
+				$jumqty = (int)$qtycount + (int)$qty;
+				$upcount = $connec->query("update m_piline set qtycount='".$jumqty."' where sku='".$sku."' and date(insertdate)='".$tgl."'");
+				if($upcount){
+					
+					$update = $connec->query("update inv_temp set status = 1 where sku = '".$sku."' and date(tanggal) = '".$tgl."'");
+					if($sukses){
+						$json = array('result'=>'1', 'sku'=>$sku);
+					
+					
+					}else{
+						$json = array('result'=>'1', 'sku'=>$sku);
+					
+					}
+				}else{
+					$json = array('result'=>'1', 'sku'=>$sku);
+					
+				}
+				
+				
+				
+				
+				
+				// $sukses = $stmt->execute([$jumqty, $sku, $tgl]);
+				
+			
+				
+				
+							
+						
+					
+					
+				
+				
+				
+				
+				
+				
+				
+				// $update_lagi = $connec->query("");
+				// if(){
+					
+					
+				// }
+				
+			}
+			
+			
+		}else{
+			$json = array('result'=>'1', 'sku'=>$sku.' Tidak ada di line');
+			
+		}
+		$json_string = json_encode($json);	
+		echo $json_string;	
+	
 	}
 	
 	// ,'INSERT INTO m_pi_users (ad_muser_key, isactived, userid, username, userpwd, ad_org_id, name, price) VALUES ();'
