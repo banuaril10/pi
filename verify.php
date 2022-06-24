@@ -61,6 +61,9 @@
 						from m_pi where m_pi.status in ('2','3','4') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
+						
+											
+							
 						if($row['status'] == 1){
 							$stat = 'Draft';
 							

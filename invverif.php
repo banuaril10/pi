@@ -46,6 +46,15 @@
 						}
 						
 				?>
+				<table>
+				<tr>
+					<td style="width: 40px; background-color: #ffa597"></td>
+					<td> : </td>
+					<td>Sudah verifikasi</td>
+				
+				</tr>
+				</table>
+				
 				</div>
 				
 				
@@ -94,6 +103,16 @@
 			$vc = $row1['verifiedcount'];
 		}
 		
+		
+		if($vc > 0){
+			
+			$color = 'style="background-color: #ffa597"';
+			
+		}else{
+			$color = '';
+			
+		}
+		
 		?>
 		
 		
@@ -114,7 +133,7 @@
 								
 
 							</tr>
-							<tr class="header2" >
+							<tr class="header2" <?php echo $color; ?>>
 	
 								<td>
 								

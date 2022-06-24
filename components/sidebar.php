@@ -39,10 +39,14 @@
 						<li class="submenu-item ">
 							<a href="muser.php">Master Users</a>
 						</li>
+					<?php if($_SESSION['role'] == 'Global'){ ?>
 						
 						<li class="submenu-item ">
 							<a href="importer.php">Importer</a>
 						</li>
+						
+					<?php } ?>	
+						
 					</ul>
 				</li>
 				
