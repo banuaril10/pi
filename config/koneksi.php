@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('Asia/Jakarta');
-// error_reporting(0);
+error_reporting(0);
 try {
     // $dbuser = 'postgres';
     // $dbpass = 'idm$$&!@#141';

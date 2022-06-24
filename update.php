@@ -12,7 +12,7 @@ function execPrint($command) {
 	print("</pre>");
 }
 // Print the exec output inside of a pre element
-execPrint("sudo git pull");
+execPrint("git pull");
 // execPrint("123456");
 execPrint("git status");
 
