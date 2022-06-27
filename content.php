@@ -531,24 +531,24 @@ $('#butsave').on('click', function() {
 							$("#overlay").fadeIn(300);
 						},
 						success: function(dataResult){
-							// console.log(dataResult);
-							var dataResult = JSON.parse(dataResult);
-							if(dataResult.result=='2'){
-								$('#notif').html("Proses input ke inventory line");
-								$( "#butsave" ).prop( "disabled", false );
-								$("#overlay").fadeOut(300);
+							console.log(dataResult);
+							// var dataResult = JSON.parse(dataResult);
+							// if(dataResult.result=='2'){
+								// $('#notif').html("Proses input ke inventory line");
+								// $( "#butsave" ).prop( "disabled", false );
+								// $("#overlay").fadeOut(300);
 								
-							}else if(dataResult.result=='1'){
-								$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
-								$("#overlay").fadeOut(300);
-								location.reload();
-								$( "#butsave" ).prop( "disabled", false );
-							}
-							else {
-								$('#notif').html(dataResult.msg);
-								$( "#butsave" ).prop( "disabled", false );
-								$("#overlay").fadeOut(300);
-							}
+							// }else if(dataResult.result=='1'){
+								// $('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
+								// $("#overlay").fadeOut(300);
+								// location.reload();
+								// $( "#butsave" ).prop( "disabled", false );
+							// }
+							// else {
+								// $('#notif').html(dataResult.msg);
+								// $( "#butsave" ).prop( "disabled", false );
+								// $("#overlay").fadeOut(300);
+							// }
 							
 						}
 					});
