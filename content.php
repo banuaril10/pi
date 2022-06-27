@@ -456,7 +456,7 @@ $('#butsave').on('click', function() {
 		var kat = $('select[id=kat] option').filter(':selected').val();
 		var rack = $('select[id=rack] option').filter(':selected').val();
 		var pc = $('select[id=pc] option').filter(':selected').val();
-		var sso = $('#status_sales').val();
+		var sso = $('#stats_sales_order').val();
 		// var image = $('#image')[0].files[0];
 		
 		
@@ -531,12 +531,13 @@ $('#butsave').on('click', function() {
 							$("#overlay").fadeIn(300);
 						},
 						success: function(dataResult){
+							// console.log(dataResult);
 							var dataResult = JSON.parse(dataResult);
 							if(dataResult.result=='2'){
 								$('#notif').html("Proses input ke inventory line");
 								$( "#butsave" ).prop( "disabled", false );
 								$("#overlay").fadeOut(300);
-								// $("#example").load(" #example");
+								
 							}else if(dataResult.result=='1'){
 								$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
 								$("#overlay").fadeOut(300);

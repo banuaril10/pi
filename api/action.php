@@ -263,7 +263,7 @@ if($_GET['modul'] == 'inventory'){
 	if($_GET['act'] == 'input'){
 		
 		
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and (status != '3' or status != '5')";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and status != '3' and status != '5'";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -310,18 +310,8 @@ if($_GET['modul'] == 'inventory'){
 							$qtysales = $rsa1['qtysales'];
 						}
 						
-				$hasil = get_data_erp($sl, $row['m_product_id'], $org_key, $ss); //php curl
 				
-		
-				$j_hasil = json_decode($hasil, true);
 				
-									
-				$qtyon= $j_hasil['qtyon'];			
-				$price= $j_hasil['price'];			
-				$statuss= $j_hasil['statuss'];			
-				$qtyout= $j_hasil['qtyout'];			
-				$statusss= $j_hasil['statusss'];
-
 
 		
 						$cek_count = "select qtycount from m_piline where sku = '".$row['sku']."' and date(insertdate)=date(now())"; //mencari apakah items sdh ada di rack piline
@@ -341,28 +331,28 @@ if($_GET['modul'] == 'inventory'){
 						
 						
 			
-					
-					
-					
-					
-					// if($counterp > 0){
-						// foreach ($rerp as $row_erp) {
-							// $qtyon = $row_erp['qtyonhand'];
-							
-						// }	
-					// }else{
-						// $qtyon = '';
-						
-					// }
-					
-					
-					
+					// $hasil = get_data_erp($sl, $row['m_product_id'], $org_key, $ss); //php curl
+					$hasil = get_data_erp($sl, $row['m_product_id'], $org_key, $ss); //php curl
+				
+					$j_hasil = json_decode($hasil, true);
+				
+				// var_dump($sl." ".$row['m_product_id']." ".$org_key." ".$ss);
+				// var_dump($hasil);
+				
+				if($hasil){
+					$qtyon= $j_hasil['qtyon'];			
+					$price= $j_hasil['price'];			
+					$statuss= $j_hasil['statuss'];			
+					$qtyout= $j_hasil['qtyout'];			
+					$statusss= $j_hasil['statusss'];
 					
 					$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
 					VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')");
 					
-					 // $statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, m_storage_id, m_product_id, sku, qtyerp) 
-					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."')");
+					// $sqll = "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')";
+					
+					// echo $sqll;
 					
 					if($statement1){
 						
@@ -380,6 +370,68 @@ if($_GET['modul'] == 'inventory'){
 						
 						
 					}
+					
+				}else{
+					
+					$qtyon= 0;			
+					$price= 0;			
+					$statuss= 0;
+					$qtyout= 0;			
+					$statusss= 0;
+					
+					$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')");
+					
+					// $sqll = "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')";
+					
+					// echo $sqll;
+					
+					if($statement1){
+						
+						$connec->query("update pos_mproduct set isactived = 0 where sku = '".$row['sku']."'");
+						
+						
+						$no = $no+1;
+						if($no == $count){
+							$json = array('result'=>'1');
+							
+						}else{
+							
+							$json = array('result'=>'2');
+						}
+						
+						
+					}
+				}
+				// var_dump($hasil);
+									
+				
+					
+					
+					
+					// if($counterp > 0){
+						// foreach ($rerp as $row_erp) {
+							// $qtyon = $row_erp['qtyonhand'];
+							
+						// }	
+					// }else{
+						// $qtyon = '';
+						
+					// }
+					
+				
+					// $sqll = "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')";
+					
+					
+					
+					
+					// echo $sqll;
+					 // $statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, m_storage_id, m_product_id, sku, qtyerp) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."')");
+					
+					
 				}
 
 			}else{
