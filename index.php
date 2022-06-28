@@ -1,9 +1,3 @@
-
-
-
-
-
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -21,23 +15,58 @@
 <script src="styles/js/custom.js"></script>
 <link href="styles/css/custom.css" rel="stylesheet">
 </head> 
-<body>
+<body onload="cekVersion();">
 	<div class="main-content">
 		<div id="page-wrapper">
 			<div class="main-page login-page">
 			
-				<h3 class="title1">Sign in Physical Inventory 1.0.1</h3>
+			
+			
+				<h3 class="title1">Sign in Physical Inventory</h3>
+				
+				
+				
+				
 				<div class="widget-shadow">
 					<div class="login-body">
 					
 					
-					<button style="width: 100%" type="button" id="btn-update" class="btn btn-danger">Cek Version</button>
+					
+					
 					
 					<form action="config/cek_login.php" method="POST">
 						
-					<p id="notif1" style="color: red; font-weight: bold"></p>
+					<font id="notif1" style="color: red; font-weight: bold"></font><br>
 						
 					<?php include "config/koneksi.php"; 
+					$cmd5 = ["CREATE TABLE public.m_piversion (
+							value character varying(10)
+						);","insert into m_piversion (value) VALUES ('1')"
+					];
+					
+					
+					$result4 = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'm_piversion'" );
+					if($result4->rowCount() == 1) {
+						// $cek1 = $connec->query("select * from m_piversion");
+						
+						// foreach ($cek1 as $rr){
+							// $version = $rr['value'];
+						// }
+						
+					 
+						
+					}else {
+					
+						
+						foreach ($cmd5 as $r){
+					
+								$connec->exec($r);
+								
+						
+						}
+					
+					
+					}
 					
 					
 					$cmd4 = ['CREATE TABLE public.m_pi_users (
@@ -93,10 +122,10 @@
 					?> 
 						
 						<br>
-						<br>
+				
 							<input type="text" class="user" name="user" placeholder="username" required="">
 							<input type="password" name="pwd" class="lock" placeholder="password">
-							<input type="submit" name="Sign In" value="Continue"></input>
+							<input type="submit" name="Sign In" id="login" value="Continue"></input>
 							
 						</form>
 					</div>
@@ -122,6 +151,36 @@
             
         });
     });
+
+function cekVersion(){
+	
+	$.ajax({
+		url: "api/cek_version.php",
+		type: "GET",
+		beforeSend: function(){
+	
+			$('#notif1').html("<font style='color: red'>Sedang mengecek version..</font>");
+		},
+		success: function(dataResult){
+			// console.log(dataResult);
+			var dataResults = JSON.parse(dataResult);
+			if(dataResults.result=='1'){
+				$('#notif1').html("<font style='color: green'>Version up to date</font>");
+				$(':input[type="submit"]').prop('disabled', false);
+			}else{
+				
+				$('#notif1').html("<font style='color: red'>Versi belum update, silahkan update dulu</font>");
+				$(':input[type="submit"]').prop('disabled', true);
+			}
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+	
+}
+
 
 function syncUser(){
 	
