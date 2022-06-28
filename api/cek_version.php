@@ -27,14 +27,7 @@ function get_version(){
 					
 }
 			
-			$cek_ver = "select value from m_piversion";
-			$cv = $connec->query($cek_ver);
 			
-			
-			foreach ($cv as $r){
-				
-				$cv_lokal = $r['value'];
-			}
 			
 			$hasil = get_version(); //php curl
 				
@@ -44,6 +37,17 @@ function get_version(){
 				if($hasil){
 					$cv_web = $j_hasil['version'];
 				}					
+				
+				
+			$cek_ver = "select value from m_piversion";
+			$cv = $connec->query($cek_ver);
+			
+			
+			foreach ($cv as $r){
+				
+				$cv_lokal = $r['value'];
+			}
+				
 			
 				if($cv_lokal == $cv_web){
 					
