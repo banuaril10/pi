@@ -165,11 +165,11 @@ function cekVersion(){
 			// console.log(dataResult);
 			var dataResults = JSON.parse(dataResult);
 			if(dataResults.result=='1'){
-				$('#notif1').html("<font style='color: green'>Version up to date</font>");
+				$('#notif1').html("<font style='color: green'>Version up to date (ver "+dataResults.version+")</font>");
 				$(':input[type="submit"]').prop('disabled', false);
 			}else{
 				
-				$('#notif1').html("<font style='color: red'>Versi belum update, silahkan update dulu</font>");
+				$('#notif1').html("<font style='color: red'>Versi belum update, silahkan update dulu ke ver "+dataResults.version+"</font>");
 				$(':input[type="submit"]').prop('disabled', true);
 			}
 			// else {

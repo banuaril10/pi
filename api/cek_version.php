@@ -47,9 +47,9 @@ function get_version(){
 			
 				if($cv_lokal == $cv_web){
 					
-					$json = array('result'=>'1');
+					$json = array('result'=>'1', 'version'=>$cv_web);
 				}else{
-					$json = array('result'=>'0');
+					$json = array('result'=>'0', 'version'=>$cv_web);
 					
 				}
 			
