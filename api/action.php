@@ -554,7 +554,16 @@ if($_GET['modul'] == 'inventory'){
 			if($count_pos > 0){
 				foreach ($cekm as $haha) {
 					
-					$json = array('result'=>'2', 'msg'=>'ITEMS '.$sku.' BUKAN PUNYA RAK SINI, ITEMS INI PUNYA RAK '.$haha['rack'].' LANJUTKAN?');	
+					if($haha['rack'] == NULL) {
+						
+						$json = array('result'=>'2', 'msg'=>'ITEMS '.$sku.' TIDAK PUNYA RACK, LANJUTKAN?');	
+						
+					}else{
+						$json = array('result'=>'2', 'msg'=>'ITEMS '.$sku.' BUKAN PUNYA RAK SINI, ITEMS INI PUNYA RAK '.$haha['rack'].', LANJUTKAN?');	
+						
+					}
+					
+					
 				}
 				
 				
