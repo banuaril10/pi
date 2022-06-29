@@ -1,5 +1,5 @@
 <?php session_start();
-ini_set('max_execution_time', '2000');
+ini_set('max_execution_time', '4000');
 if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
   
 }else{
@@ -723,6 +723,25 @@ if($_GET['modul'] == 'inventory'){
 			
 			if($statement1){
 				$json = array('result'=>'1', 'msg'=>$sku .' ('.$nama.') QUANTITY = <font style="color: red">'.$qtyon.'</font>');	
+			}else{
+				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
+				
+			}				
+			
+
+		$json_string = json_encode($json);
+		echo $json_string;
+	}else if($_GET['act'] == 'deleteline'){
+		
+		$m_piline_key = $_POST['m_piline_key'];
+		
+		
+			$statement1 = $connec->query("delete from m_piline where m_piline_key = '".$m_piline_key."'");
+			
+			
+			
+			if($statement1){
+				$json = array('result'=>'1', 'msg'=>'Berhasil delete line');	
 			}else{
 				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
 				

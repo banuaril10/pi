@@ -61,7 +61,7 @@
 						</thead>
 						<tbody>
 			
-		<?php $list_line = "select m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		<?php $list_line = "select m_piline.m_piline_key, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
 		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' order by qtyerp desc";
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	?>
@@ -80,10 +80,10 @@
 								
 									<button type="button" style="display: inline-block; background: blue; color: white" onclick="changeQtyPlus('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class=""><i class="fa fa-plus"></i></button>
 									&nbsp
-									<button type="button" style="display: inline-block; background: red; color: white" onclick="changeQtyMinus('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class=""><i class="fa fa-minus"></i></button>
+									<button type="button" style="display: inline-block; background: #ba3737; color: white" onclick="changeQtyMinus('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class=""><i class="fa fa-minus"></i></button>
 									
 									
-									
+									<button style="float: right" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row1['m_piline_key']; ?>">X</button>	
 										
 								</div>		
 										
@@ -91,6 +91,30 @@
 								</td>
 
 							</tr>
+							
+							<div class="modal fade" id="exampleModal<?php echo $row1['m_piline_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin delete line?</h5>
+								
+									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									SKU : <b><?php echo $row1['sku']; ?></b><br>
+									Nama : <b><?php echo $row1['name']; ?></b>
+									
+									
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+									<button type="button" class="btn btn-danger" onclick="deleteLine('<?php echo $row1['m_piline_key']; ?>');" class="">YAKIN</button>
+								</div>
+								</div>
+							</div>
+							</div>
 			
 		<?php $no++;} ?>
 			
@@ -229,6 +253,32 @@ function changeQty(sku, nama){
 			
 		}
 	});
+}
+
+function deleteLine(m_piline_key){
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=deleteline",
+		type: "POST",
+		data : {m_piline_key: m_piline_key},
+		success: function(dataResult){
+			var dataResult = JSON.parse(dataResult);
+			console.log(dataResult);
+			if(dataResult.result=='0'){
+				$('#notif').html(dataResult.msg);
+				// $("#example").load(" #example");
+			}else if(dataResult.result=='1'){
+				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+				$("#example1").load(" #example1");
+				$(".modal").modal('hide');
+			}
+			else {
+				$('#notif').html("Gagal sync coba lagi nanti!");
+			}
+			
+		}
+	});
+	
+	
 }
 
 
