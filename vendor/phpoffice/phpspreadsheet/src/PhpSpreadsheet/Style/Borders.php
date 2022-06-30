@@ -140,10 +140,7 @@ class Borders extends Supervisor
      */
     public function getSharedComponent()
     {
-        /** @var Style */
-        $parent = $this->parent;
-
-        return $parent->getSharedComponent()->getBorders();
+        return $this->parent->getSharedComponent()->getBorders();
     }
 
     /**

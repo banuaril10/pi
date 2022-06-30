@@ -33,7 +33,6 @@ class NumberFormatter
      */
     private static function processComplexNumberFormatMask($number, string $mask): string
     {
-        /** @var string */
         $result = $number;
         $maskingBlockCount = preg_match_all('/0+/', $mask, $maskingBlocks, PREG_OFFSET_CAPTURE);
 
@@ -46,16 +45,12 @@ class NumberFormatter
                 $divisor = 10 ** $size;
                 $offset = $block[1];
 
-                /** @var float */
-                $numberFloat = $number;
-                $blockValue = sprintf("%0{$size}d", fmod($numberFloat, $divisor));
-                $number = floor($numberFloat / $divisor);
+                $blockValue = sprintf("%0{$size}d", fmod($number, $divisor));
+                $number = floor($number / $divisor);
                 $mask = substr_replace($mask, $blockValue, $offset, $size);
             }
-            /** @var string */
-            $numberString = $number;
             if ($number > 0) {
-                $mask = substr_replace($mask, $numberString, $offset, 0);
+                $mask = substr_replace($mask, $number, $offset, 0);
             }
             $result = $mask;
         }
@@ -69,9 +64,7 @@ class NumberFormatter
     private static function complexNumberFormatMask($number, string $mask, bool $splitOnPoint = true): string
     {
         $sign = ($number < 0.0) ? '-' : '';
-        /** @var float */
-        $numberFloat = $number;
-        $number = (string) abs($numberFloat);
+        $number = (string) abs($number);
 
         if ($splitOnPoint && strpos($mask, '.') !== false && strpos($number, '.') !== false) {
             $numbers = explode('.', $number);
@@ -95,8 +88,6 @@ class NumberFormatter
      */
     private static function formatStraightNumericValue($value, string $format, array $matches, bool $useThousands): string
     {
-        /** @var float */
-        $valueFloat = $value;
         $left = $matches[1];
         $dec = $matches[2];
         $right = $matches[3];
@@ -105,7 +96,7 @@ class NumberFormatter
         $minWidth = strlen($left) + strlen($dec) + strlen($right);
         if ($useThousands) {
             $value = number_format(
-                $valueFloat,
+                $value,
                 strlen($right),
                 StringHelper::getDecimalSeparator(),
                 StringHelper::getThousandsSeparator()
@@ -116,9 +107,9 @@ class NumberFormatter
 
         if (preg_match('/[0#]E[+-]0/i', $format)) {
             //    Scientific format
-            return sprintf('%5.2E', $valueFloat);
+            return sprintf('%5.2E', $value);
         } elseif (preg_match('/0([^\d\.]+)0/', $format) || substr_count($format, '.') > 1) {
-            if ($value == (int) $valueFloat && substr_count($format, '.') === 1) {
+            if ($value == (int) $value && substr_count($format, '.') === 1) {
                 $value *= 10 ** strlen(explode('.', $format)[1]);
             }
 
@@ -126,9 +117,7 @@ class NumberFormatter
         }
 
         $sprintf_pattern = "%0$minWidth." . strlen($right) . 'f';
-        /** @var float */
-        $valueFloat = $value;
-        $value = sprintf($sprintf_pattern, round($valueFloat, strlen($right)));
+        $value = sprintf($sprintf_pattern, $value);
 
         return self::pregReplace(self::NUMBER_REGEX, $value, $format);
     }
@@ -207,15 +196,15 @@ class NumberFormatter
     }
 
     /**
-     * @param array|string $value
+     * @param mixed $value
      */
     private static function makeString($value): string
     {
-        return is_array($value) ? '' : "$value";
+        return is_array($value) ? '' : (string) $value;
     }
 
     private static function pregReplace(string $pattern, string $replacement, string $subject): string
     {
-        return self::makeString(preg_replace($pattern, $replacement, $subject) ?? '');
+        return self::makeString(preg_replace($pattern, $replacement, $subject));
     }
 }

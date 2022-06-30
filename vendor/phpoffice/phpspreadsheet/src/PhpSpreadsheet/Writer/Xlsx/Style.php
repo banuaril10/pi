@@ -201,15 +201,6 @@ class Style extends WriterPart
         $objWriter->endElement();
     }
 
-    private static function writePatternColors(Fill $fill): bool
-    {
-        if ($fill->getFillType() === Fill::FILL_NONE) {
-            return false;
-        }
-
-        return $fill->getFillType() === Fill::FILL_SOLID || $fill->getColorsChanged();
-    }
-
     /**
      * Write Pattern Fill.
      */
@@ -222,13 +213,15 @@ class Style extends WriterPart
         $objWriter->startElement('patternFill');
         $objWriter->writeAttribute('patternType', $fill->getFillType());
 
-        if (self::writePatternColors($fill)) {
+        if ($fill->getFillType() !== Fill::FILL_NONE) {
             // fgColor
             if ($fill->getStartColor()->getARGB()) {
                 $objWriter->startElement('fgColor');
                 $objWriter->writeAttribute('rgb', $fill->getStartColor()->getARGB());
                 $objWriter->endElement();
             }
+        }
+        if ($fill->getFillType() !== Fill::FILL_NONE) {
             // bgColor
             if ($fill->getEndColor()->getARGB()) {
                 $objWriter->startElement('bgColor');

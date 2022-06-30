@@ -122,10 +122,7 @@ class Font extends Supervisor
      */
     public function getSharedComponent()
     {
-        /** @var Style */
-        $parent = $this->parent;
-
-        return $parent->getSharedComponent()->getFont();
+        return $this->parent->getSharedComponent()->getFont();
     }
 
     /**

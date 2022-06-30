@@ -1,10 +1,5 @@
 {
     "require": {
-        "phpoffice/phpspreadsheet": "^1.23"
-    },
-	"config": {
-        "platform": {
-            "php": "7.3"
-        }
+        "phpoffice/phpspreadsheet": "^1.20"
     }
 }
