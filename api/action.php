@@ -323,7 +323,7 @@ if($_GET['modul'] == 'inventory'){
 				
 				}
 
-				$sql1 = "select a.m_product_id,a.sku,case when sum(b.qty) is null THEN '0' ELSE sum(b.qty) END as qtysales from inv_mproduct a left join pos_dsalesline b on a.sku = b.sku where a.rack_name='".$rack."' and date(b.insertdate)=date(now()) group by a.m_product_id, a.sku";
+				$sql1 = "select m_product_id,sku from inv_mproduct where rack_name='".$rack."'";
 				$result = $connec->query($sql1);
 				$count = $result->rowCount();
 				
@@ -339,8 +339,19 @@ if($_GET['modul'] == 'inventory'){
 				
 				foreach ($connec->query($sql1) as $row) {
 						
+						$sql_sales = "select case when sum(qty) is null THEN '0' ELSE sum(qty) END as qtysales from pos_dsalesline 
+						where date(insertdate)=date(now()) and sku='".$row['sku']."'";
+					
+						$rsa = $connec->query($sql_sales);
+
+						foreach ($rsa as $rsa1) {
 						
-						$qtysales = $row['qtysales'];
+							$qtysales = $rsa1['qtysales'];
+						}
+						
+						
+						
+						// $qtysales = $row['qtysales'];
 						$cek_count = "select qtycount from m_piline where sku = '".$row['sku']."' and date(insertdate)=date(now())"; //mencari apakah items sdh ada di rack piline
 						$rsac = $connec->query($cek_count);
 						$ccc = $rsac->rowCount();
