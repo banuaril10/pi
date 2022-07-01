@@ -165,7 +165,7 @@ function get_data_erp($a,$b,$c,$d){
 	$fields_string = http_build_query($postData);
 	$curl = curl_init();
 
-	curl_setopt($curl,CURLOPT_URL, 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=get_data_new');
+	curl_setopt($curl,CURLOPT_URL, 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=get_data');
 	curl_setopt($curl,CURLOPT_POST, 1);
 	curl_setopt($curl,CURLOPT_ENCODING, '');
 	curl_setopt($curl,CURLOPT_POST, 1);
