@@ -3,8 +3,8 @@ ini_set('max_execution_time', '4000');
 if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
   
 }else{
-	
-	header("Location: ../index.php");
+	$json = array('result'=>'3', 'msg'=>'Session telah habis, reload dulu halamannya');	
+	// header("Location: ../index.php");
 }
 
 
@@ -293,7 +293,9 @@ if($_GET['modul'] == 'inventory'){
 	if($_GET['act'] == 'input'){
 		
 		
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and status != '3' and status != '5'";
+		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+				
+								$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and status != '3' and status != '5'";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -440,6 +442,15 @@ if($_GET['modul'] == 'inventory'){
 				
 				
 			}
+				
+				
+		}else{
+	
+				$json = array('result'=>'3', 'msg'=>'Session telah habis, reload halaman dulu');
+		}
+		
+		
+
 		
 		
 			
@@ -449,8 +460,9 @@ if($_GET['modul'] == 'inventory'){
 		 
 		
 	}else if($_GET['act'] == 'inputitems'){		
-				
+			
 
+		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
 			movementdate, approvedby, status, rack_name, postby, postdate, category
@@ -465,6 +477,15 @@ if($_GET['modul'] == 'inventory'){
 				
 				$json = array('result'=>'0', 'msg'=>'Gagal, coba lagi nanti');
 			}
+			
+		}else{
+			
+			$json = array('result'=>'3', 'msg'=>'Session telah habis, reload halaman dulu');
+			
+		}
+			
+
+			
 
 			$json_string = json_encode($json);
 			echo $json_string;
@@ -1067,8 +1088,8 @@ if($_GET['modul'] == 'inventory'){
 
 	}else if($_GET['act'] == 'update_sales'){
 		
-		
-		$ss = $_GET['status_sales'];
+		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+			$ss = $_GET['status_sales'];
 
 		
 		
@@ -1091,7 +1112,13 @@ if($_GET['modul'] == 'inventory'){
 			}else{
 				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
 				
-			}				
+			}
+			
+		}else{
+			
+			$json = array('result'=>'3', 'msg'=>'Session telah habis, reload dulu halamannya');	
+		}
+		
 			
 
 		$json_string = json_encode($json);

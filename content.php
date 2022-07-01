@@ -622,13 +622,16 @@ $('#butsave').on('click', function() {
 	
 	
 	function cekSalesOrder(org_id){
-		
+		// alert(org_id);
 		$.ajax({
 			url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=cek_sales&org_id="+org_id,
 			type: "GET",
 			beforeSend: function(){
 				$("#overlay").fadeIn(300);
 				$('#notif').html("Proses cek sales order gantung..");
+				$(".row-info").hide();
+				$(".modal-footer").hide();
+				
 			},
 			success: function(dataResult){
 				var dataResult = JSON.parse(dataResult);
@@ -666,9 +669,14 @@ $('#butsave').on('click', function() {
 				if(dataResult.result=='1'){
 					$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 					$('#stats_sales_order').val(stats);
-					
+					$(".row-info").show();
+					$(".modal-footer").show();
 					// location.reload();
 				}else if(dataResult.result=='0'){
+					$('#notif').html(dataResult.msg);
+					
+					
+				}else {
 					$('#notif').html(dataResult.msg);
 					
 					
