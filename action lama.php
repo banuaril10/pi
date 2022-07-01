@@ -121,37 +121,6 @@ function push_to_server_line($a, $b, $c, $d, $e, $f, $g, $h, $i, $ii, $j, $k, $k
 	// return $json_string;
 }
 
-function get_data_erp_borongan($a,$b,$c,$d){
-			
-	$postData = array(
-		"m_locator_id" => $a,
-		"m_pro_id" => $b,
-		"org_key" => $c,
-		"ss" => $d
-	
-    );				    
-	$fields_string = http_build_query($postData);
-	$curl = curl_init();
-
-	curl_setopt_array($curl, array(
-	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=get_data_new',
-	CURLOPT_RETURNTRANSFER => true,
-	CURLOPT_ENCODING => '',
-	CURLOPT_MAXREDIRS => 10,
-	CURLOPT_TIMEOUT => 0,
-	CURLOPT_FOLLOWLOCATION => true,
-	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-	CURLOPT_CUSTOMREQUEST => 'POST',
-	CURLOPT_POSTFIELDS => $fields_string,
-	));
-	
-	$response = curl_exec($curl);
-	
-	curl_close($curl);
-	return $response;
-					
-					
-}
 
 function get_data_erp($a,$b,$c,$d){
 			
@@ -161,22 +130,24 @@ function get_data_erp($a,$b,$c,$d){
 		"org_key" => $c,
 		"ss" => $d
 	
-    );				    
-	$fields_string = http_build_query($postData);
+    );				
+	
+
 	$curl = curl_init();
 
-	curl_setopt($curl,CURLOPT_URL, 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=get_data_new');
-	curl_setopt($curl,CURLOPT_POST, 1);
-	curl_setopt($curl,CURLOPT_ENCODING, '');
-	curl_setopt($curl,CURLOPT_POST, 1);
-	curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl,CURLOPT_MAXREDIRS, 10);
-	curl_setopt($curl,CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-	curl_setopt($curl,CURLOPT_POSTFIELDS, $fields_string);
-
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=get_data',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $postData,
+	));
 	
 	$response = curl_exec($curl);
-	
 	
 	curl_close($curl);
 	return $response;	
@@ -281,12 +252,11 @@ if($_GET['modul'] == 'inventory'){
 	$pc = $_POST['pc'];
 	$ss = $_POST['sso'];
 	
-	// $it = 'Global';
-	// $sl = '4DC01BB67AB148C9A02C4F5DB39AF969';
-	// $kat = '1';
-	// $rack = 'R-1';
+	// $it = 1;
+	// $sl = 1;
+	// $kat = 1;
+	// $rack = 1;
 	// $pc = 1;
-	// $ss = '0';
 	
 	
 	
@@ -319,11 +289,9 @@ if($_GET['modul'] == 'inventory'){
 				foreach ($statement as $rr) {
 				
 					$lastid = $rr['m_pi_key'];
-					// $lastid = '12322';
-				
 				}
 
-				$sql1 = "select a.m_product_id,a.sku,case when sum(b.qty) is null THEN '0' ELSE sum(b.qty) END as qtysales from inv_mproduct a left join pos_dsalesline b on a.sku = b.sku where a.rack_name='".$rack."' and date(b.insertdate)=date(now()) group by a.m_product_id, a.sku";
+				$sql1 = "select m_product_id,sku from inv_mproduct where rack_name='".$rack."'";
 				$result = $connec->query($sql1);
 				$count = $result->rowCount();
 				
@@ -331,16 +299,21 @@ if($_GET['modul'] == 'inventory'){
 				
 				
 				$no = 0;
-				$items = array();
-
-				
-				
-				
-				
 				foreach ($connec->query($sql1) as $row) {
+					
+					$sql_sales = "select case when sum(qty) is null THEN '0' ELSE sum(qty) END as qtysales from pos_dsalesline where date(insertdate)=date(now()) and sku='".$row['sku']."'";
+					
+				    $rsa = $connec->query($sql_sales);
+
+						foreach ($rsa as $rsa1) {
 						
+							$qtysales = $rsa1['qtysales'];
+						}
 						
-						$qtysales = $row['qtysales'];
+				
+				
+
+		
 						$cek_count = "select qtycount from m_piline where sku = '".$row['sku']."' and date(insertdate)=date(now())"; //mencari apakah items sdh ada di rack piline
 						$rsac = $connec->query($cek_count);
 						$ccc = $rsac->rowCount();
@@ -356,56 +329,67 @@ if($_GET['modul'] == 'inventory'){
 							
 						}
 						
-					$items[] = array('sku'=> $row['sku'], 'mpi' =>$row['m_product_id'], 'qtycount'=>$qtycount, 'qtysales'=>$qtysales);
 						
-
-					
 			
-				}
+					// $hasil = get_data_erp($sl, $row['m_product_id'], $org_key, $ss); //php curl
+					$hasil = get_data_erp($sl, $row['m_product_id'], $org_key, $ss); //php curl
 				
-				$items_json = json_encode($items);
+					$j_hasil = json_decode($hasil, true);
 				
+				// var_dump($sl." ".$row['m_product_id']." ".$org_key." ".$ss);
+				// var_dump($hasil);
 				
-				
-				
-				
-				$hasil = get_data_erp_borongan($sl, $items_json, $org_key, $ss); //php curl
-				
-				// print_r ($hasil);
-				
-				
-				
-				$j_hasil = json_decode($hasil, true);
-				
-				
-				// $obj = json_decode($j_hasil);
-				// var_dump($j_hasil);
-				// die();
-				// print_r($items_json);
-				
-				foreach($j_hasil as $r) {
-					$qtyon= $r['qtyon'];			
-					$price= $r['price'];			
-					$statuss= $r['statuss'];			
-					$qtyout= $r['qtyout'];			
-					$statusss= $r['statusss'];
-					$mpi= $r['mpi'];
-					$sku= $r['sku'];
-					$qtycount= $r['qtycount'];
-					$qtysales= $r['qtysales'];
-				
+				if($hasil){
+					$qtyon= $j_hasil['qtyon'];			
+					$price= $j_hasil['price'];			
+					$statuss= $j_hasil['statuss'];			
+					$qtyout= $j_hasil['qtyout'];			
+					$statusss= $j_hasil['statusss'];
+					
 					$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
-					VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$mpi."', 
-					'".$sku."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')");
+					VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')");
 					
-					// echo "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
-					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$mpi."', 
-					// '".$sku."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')";
+					// $sqll = "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')";
 					
+					// echo $sqll;
 					
 					if($statement1){
 						
-						$connec->query("update pos_mproduct set isactived = 0 where sku = '".$sku."'");
+						$connec->query("update pos_mproduct set isactived = 0 where sku = '".$row['sku']."'");
+						
+						
+						$no = $no+1;
+						if($no == $count){
+							$json = array('result'=>'1');
+							
+						}else{
+							
+							$json = array('result'=>'2');
+						}
+						
+						
+					}
+					
+				}else{
+					
+					$qtyon= 0;			
+					$price= 0;			
+					$statuss= 0;
+					$qtyout= 0;			
+					$statusss= 0;
+					
+					$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')");
+					
+					// $sqll = "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')";
+					
+					// echo $sqll;
+					
+					if($statement1){
+						
+						$connec->query("update pos_mproduct set isactived = 0 where sku = '".$row['sku']."'");
 						
 						
 						$no = $no+1;
@@ -420,8 +404,36 @@ if($_GET['modul'] == 'inventory'){
 						
 					}
 				}
+				// var_dump($hasil);
+									
 				
-		
+					
+					
+					
+					// if($counterp > 0){
+						// foreach ($rerp as $row_erp) {
+							// $qtyon = $row_erp['qtyonhand'];
+							
+						// }	
+					// }else{
+						// $qtyon = '';
+						
+					// }
+					
+				
+					// $sqll = "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."')";
+					
+					
+					
+					
+					// echo $sqll;
+					 // $statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, m_storage_id, m_product_id, sku, qtyerp) 
+					// VALUES ('".$lastid."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."','".$row['m_product_id']."', '".$row['sku']."', '".$qtyon."')");
+					
+					
+				}
+
 			}else{
 				
 				$json = array('result'=>'0', 'msg'=>'Gagal, coba lagi nanti');
