@@ -32,11 +32,11 @@
 				<?php } ?>
 				
 				<div id="info">
-				<?php $sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync,  sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline
+				<?php $sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync,  sum(qtysales * price) hargasales, sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline
 						from m_piline where m_pi_key = '".$_GET['m_pi']."'";
 						foreach ($connec->query($sql_amount) as $tot) {
 							
-							$qtyerp = $tot['hargaerp'] - $tot['hargagantung'];
+							$qtyerp = $tot['hargaerp'] - $tot['hargagantung'] - $tot['hargasales'];
 							$qtycount = $tot['hargafisik'];
 
 							$jumline = $tot['jumline'];
@@ -90,7 +90,7 @@
 						<tbody>
 			
 		<?php $list_line = "select m_piline.sku ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout) order by qtyerp desc";
+		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by qtyerp desc";
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
 		$variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);

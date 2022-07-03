@@ -1217,10 +1217,10 @@ if($_GET['modul'] == 'inventory'){
 				
 		}
 		
-		$sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync,  sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline from m_piline where m_pi_key = '".$m_pi."'";
+		$sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync, sum(qtysales * price) hargasales, sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline from m_piline where m_pi_key = '".$m_pi."'";
 		foreach ($connec->query($sql_amount) as $tot) {
 			
-			$qtyerp = $tot['hargaerp'] - $tot['hargagantung'];
+			$qtyerp = $tot['hargaerp'] - $tot['hargagantung'] - $tot['hargasales'];
 			$qtycount = $tot['hargafisik'];
 
 			$jumline = $tot['jumline'];
