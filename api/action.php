@@ -153,6 +153,65 @@ function get_data_erp_borongan($a,$b,$c,$d){
 					
 }
 
+function get_data_stock($a,$b){
+			
+	$postData = array(
+		"org_id" => $a,
+		"sku" => $b
+	
+    );				    
+	// $fields_string = http_build_query($postData);
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_pos_peritems',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $postData,
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+					
+					
+}
+
+function get_data_stock_all($a){
+			
+	$postData = array(
+		"org_id" => $a,
+	
+    );				    
+	// $fields_string = http_build_query($postData);
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_pos',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $postData,
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+					
+					
+}
+
 function get_data_erp($a,$b,$c,$d){
 			
 	$postData = array(
@@ -1352,32 +1411,6 @@ if($_GET['modul'] == 'inventory'){
 					
 				}
 				
-				
-				
-				
-				
-				// $sukses = $stmt->execute([$jumqty, $sku, $tgl]);
-				
-			
-				
-				
-							
-						
-					
-					
-				
-				
-				
-				
-				
-				
-				
-				// $update_lagi = $connec->query("");
-				// if(){
-					
-					
-				// }
-				
 			}
 			
 			
@@ -1388,9 +1421,188 @@ if($_GET['modul'] == 'inventory'){
 		$json_string = json_encode($json);	
 		echo $json_string;	
 	
+	}else if($_GET['act'] == 'sync_pos_peritems'){
+		
+		$sku = $_POST['sku'];
+		// $sku = "8151000000129";
+		$hasil = get_data_stock($org_key, $sku);
+		$j_hasil = json_decode($hasil, true);
+		
+		// $jum = count($hasil);
+		
+		// if($jum > 0){
+			
+		foreach($j_hasil as $r) {
+			
+			
+			
+			
+			if($r['result'] == 1){
+				$data = array(
+				"result"=>1,
+				'msg'=>$r['sku'] .' ('.$r['namaitem'].'), QUANTITY = <font style="color: red">'.$r['stockqty'].'</font>'
+			
+			);
+			
+			
+			$cekitems = $connec->query("select count(sku) as jum from pos_mproduct where sku = '".$r['sku']."'");
+			foreach ($cekitems as $ra) {
+				
+					$haha = $ra['jum'];
+				}
+				
+			if($haha > 0){
+				
+				$upcount = $connec->query("update pos_mproduct set stockqty='".$r['stockqty']."' where sku='".$r['sku']."'");
+			}else{
+				
+				$sql = "insert into pos_mproduct (
+ad_mclient_key,
+ad_morg_key,
+isactived,
+insertdate,
+insertby,
+postby,
+postdate,
+m_product_id,
+m_product_category_id,
+c_uom_id,
+sku,
+name,
+price,
+stockqty,
+m_locator_id,
+locator_name) VALUES (
+				'".$r['ad_client_id']."',
+				'".$r['ad_mor_key']."',
+				'".$r['isactive']."',
+				'".$r['insertdate']."',
+				'".$r['insertby']."',
+				'".$r['postby']."',
+				'".$r['postdate']."',
+				'".$r['m_product_id']."',
+				'".$r['m_product_category_id']."',
+				'".$r['c_uom_id']."',
+				'".$r['sku']."',
+				'".$r['namaitem']."',
+				'".$r['price']."',
+				'".$r['stockqty']."',
+				'".$r['m_locator_id']."',
+				'".$r['locator_name']."'
+)";
+				
+				$upcount = $connec->query($sql);
+				
+			}
+			
+			
+			if($upcount){
+				$data = array(
+					"result"=>1,
+					'msg'=>$r['sku'] .' ('.$r['namaitem'].'), STOCK = <font style="color: red">'.$r['stockqty'].'</font>'
+				);
+				
+			}else{
+				
+				$data = array(
+					"result"=>1,
+					'msg'=>'Gagal update stock'
+				);
+			}
+				
+			}else{
+				$data = array(
+					"result"=>0,
+					"msg"=>"Items tidak ditemukan di ERP"
+			
+				);
+				
+			}
+			
+			
+		}
+		// }else{
+			
+			
+		// }
+		
+		
+		$json_string = json_encode($data);	
+		echo $json_string;
+		// echo $sql;
+		
+	}else if($_GET['act'] == 'sync_pos'){
+		
+		
+		// $sku = "8151000000129";
+		$hasil = get_data_stock_all($org_key);
+		$j_hasil = json_decode($hasil, true);
+		
+		// $jum = count($hasil);
+		
+		// if($jum > 0){
+		$no = 0;	
+		foreach($j_hasil as $r) {
+			
+			$upcount = $connec->query("update pos_mproduct set stockqty='".$r['stockqty']."' where sku='".$r['sku']."'");
+			if($upcount){
+				$no = $no + 1;
+				
+			}else{
+				
+				
+			}
+
+		}
+		
+		$data = array("result"=>1, "msg"=>"Berhasil sync ".$no." data");
+		
+		$json_string = json_encode($data);	
+		echo $json_string;
+		// echo $sql;
+		
+	}else if($_GET['act'] == 'load_product'){
+		$sku = $_POST['sku'];
+		$list_line = "select sku, name, coalesce(stockqty,0) as stock from pos_mproduct where sku = '".$sku."' order by name asc";
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {
+			
+							echo 
+							"<tr>
+								<td>".$no."</td>
+								<td>".$row1['sku']."<br> ".$row1['name']."</td>
+								<td>".$row1['stock']."</td>
+
+							</tr>";
+							
+							
+			
+		 $no++;}
+		
+		
+	}else if($_GET['act'] == 'load_product_all'){
+		$sku = $_POST['sku'];
+		$list_line = "select sku, name, coalesce(stockqty,0) as stock from pos_mproduct order by name asc";
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {
+			
+							echo 
+							"<tr>
+								<td>".$no."</td>
+								<td>".$row1['sku']."<br> ".$row1['name']."</td>
+								<td>".$row1['stock']."</td>
+
+							</tr>";
+							
+							
+			
+		 $no++;}
+		
+		
 	}
 	
-	// ,'INSERT INTO m_pi_users (ad_muser_key, isactived, userid, username, userpwd, ad_org_id, name, price) VALUES ();'
+	
+	
 
 }
     

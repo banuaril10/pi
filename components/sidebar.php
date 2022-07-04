@@ -63,11 +63,19 @@
 					</ul>
 				</li>
 				
-				<li class="sidebar-item">
-					<a href="sync_pos.php" class='sidebar-link'>
-						<i class="bi bi-arrow-repeat"></i>
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-stack"></i>
 						<span>Sync POS</span>
 					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="sync_peritems.php">Sync Per Items</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="manage_stock.php">Manage Stock</a>
+						</li>
+					</ul>
 				</li>
 				
 				<li class="sidebar-item">
