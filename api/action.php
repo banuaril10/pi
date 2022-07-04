@@ -94,8 +94,6 @@ function push_to_server_line($a, $b, $c, $d, $e, $f, $g, $h, $i, $ii, $j, $k, $k
 		"price" => $r,
 		"qtysalesout" => $s,
     );				
-
-// var_dump($postData);	
 	
 
 	$curl = curl_init();
@@ -116,9 +114,36 @@ function push_to_server_line($a, $b, $c, $d, $e, $f, $g, $h, $i, $ii, $j, $k, $k
 	
 	curl_close($curl);
 	return $response;
-	// if ($server_output == "OK") {$json = array('result'=>'1');	  } else {$json = array('result'=>'0');	 }
-	// $json_string = json_encode($json);
-	// return $json_string;
+}
+
+function push_to_server_line_all($a){
+	
+			
+		
+			
+	$postData = array(
+		"data_line" => $a,
+    );				
+	$fields_string = http_build_query($postData);
+
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=piline_all',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $fields_string,
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
 }
 
 function get_data_erp_borongan($a,$b,$c,$d){
@@ -927,7 +952,9 @@ if($_GET['modul'] == 'inventory'){
 	}else if($_GET['act'] == 'release'){
 
 			$no = 0;
+			$items = array();
 			$pi_key = $_POST['m_pi'];
+			// $pi_key = 'AFE7B608A79C409E806CEFC27794B309';
 			$sql = "select * from m_pi where m_pi_key ='".$pi_key."'";
 			$result = $connec->query($sql);
 			foreach ($result as $row) {
@@ -965,57 +992,63 @@ if($_GET['modul'] == 'inventory'){
 							
 							
 							foreach ($connec->query($sql_line) as $rline) {
+								$items[] = array(
+									'm_piline_key'	=>$rline['m_piline_key'], 
+									'm_pi_key' 		=>$rline['m_pi_key'], 
+									'ad_client_id' 	=>$rline['ad_client_id'], 
+									'ad_org_id' 	=>$rline['ad_org_id'], 
+									'isactived' 	=>$rline['isactived'], 
+									'insertdate' 	=>$rline['insertdate'], 
+									'insertby' 		=>$rline['insertby'], 
+									'postby' 		=>$rline['postby'], 
+									'postdate' 		=>$rline['postdate'], 
+									'm_storage_id' 	=>$rline['m_storage_id'], 
+									'm_product_id' 	=>$rline['m_product_id'], 
+									'sku' 			=>$rline['sku'], 
+									'name' 			=>$rline['name'], 
+									'qtyerp' 		=>$rline['qtyerp'], 
+									'qtycount' 		=>$rline['qtycount'], 
+									'issync' 		=>$rline['issync'], 
+									'status' 		=>$rline['status'], 
+									'verifiedcount' =>$rline['verifiedcount'], 
+									'qtysales' 		=>$rline['qtysales'], 
+									'price' 		=>$rline['price'], 
+									'qtysalesout' 	=>$rline['qtysalesout']
+								);
+								
+							}	
+								$items_json = json_encode($items);
+								$hasil = push_to_server_line_all($items_json);
+						
+								$j_hasil = json_decode($hasil, true);
 								
 							
-								$stats1 = push_to_server_line($rline['m_piline_key'],
-								$rline['m_pi_key'],
-								$rline['ad_client_id'],
-								$rline['ad_org_id'],
-								$rline['isactived'],
-								$rline['insertdate'],
-								$rline['insertby'],
-								$rline['postby'],
-								$rline['postdate'],
-								$rline['m_storage_id'],
-								$rline['m_product_id'],
-								$rline['sku'],
-								$rline['name'],
-								$rline['qtyerp'],
-								$rline['qtycount'],
-								$rline['issync'],
-								$rline['status'],
-								$rline['verifiedcount'],
-								$rline['qtysales'],
-								$rline['price'],
-								$rline['qtysalesout']
-								
-								);
-						
-								$jsons1 = json_decode($stats1, true);
-								
-								// var_dump($stats1);
-								
-								if($jsons1['result'] == '1'){
-									$statement1 = $connec->query("update m_piline set issync = '1' where sku = '".$jsons1['sku']."' and m_pi_key ='".$pi_key."'");
+								// var_dump($hasil);
+
+								// die();
+				
+				
+				
+						foreach($j_hasil as $r) {
+									$statement1 = $connec->query("update m_piline set issync = '".$r['status']."' where m_piline_key = '".$r['m_piline_key']."' 
+									and m_pi_key ='".$r['m_pi_key']."'");
 									if($statement1){
 										
-									$connec->query("update pos_mproduct set isactived = 1 where sku = '".$jsons1['sku']."'");
-							
-										
-										
+									$connec->query("update pos_mproduct set isactived = 1 where sku = '".$r['sku']."'");
 										$no = $no +1;
-										$json = array('result'=>'1', 'msg'=>'Berhasil mengirim '.$no.' data');	
+										
 									}else{
-										$json = array('result'=>'0');	
+										// $json = array('result'=>'0');	
 				
 									}			
-								}
+					
 							}
+							
 							
 							
 						}
 						
-						
+				$json = array('result'=>'1', 'msg'=>'Berhasil mengirim '.$no.' data');			
 				$json_string = json_encode($json);
 				echo $json_string;		
 						
