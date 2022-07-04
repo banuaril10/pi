@@ -18,7 +18,7 @@
 				
 
 				<h4>SYNC PER ITEMS <?php //echo $_SESSION['org_key']; ?></h4>	
-				<p style="color: red">Note : scan/ketik items yg belum naik ke pos atau items yg stock nya berbeda dgn ERP</p>
+				<p style="color: red; font-weight: bold">Note : scan/ketik SKU items yg belum naik ke POS atau items yg stock nya berbeda dgn ERP</p>
 			</div>
 			<div class="card-body">
 			<div class="tables">
