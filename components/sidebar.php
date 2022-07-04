@@ -21,7 +21,7 @@
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-stack"></i>
-						<span>Main Menu</span>
+						<span>Physical Inventory</span>
 					</a>
 					<ul class="submenu ">
 						<li class="submenu-item ">
@@ -29,18 +29,6 @@
 						</li>
 						<li class="submenu-item ">
 							<a href="verify.php">Inventory Verify</a>
-						</li>
-						<li class="submenu-item ">
-							<a href="mproduct.php">Sync Master Rack</a>
-						</li>
-						<li class="submenu-item ">
-							<a href="mrack.php">Master Rack Double</a>
-						</li>
-						<li class="submenu-item ">
-							<a href="muser.php">Master Users</a>
-						</li>
-						<li class="submenu-item ">
-							<a href="pigantung.php">List PI Expired</a>
 						</li>
 					<?php if($_SESSION['role'] == 'Global'){ ?>
 						
@@ -53,10 +41,39 @@
 					</ul>
 				</li>
 				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-stack"></i>
+						<span>Master Data</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="mproduct.php">Sync Master Rack</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mrack.php">Master Rack Double</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="muser.php">Master Users</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="pigantung.php">List PI Expired</a>
+						</li>
+						
+					</ul>
+				</li>
+				
+				<li class="sidebar-item">
+					<a href="sync_pos.php" class='sidebar-link'>
+						<i class="bi bi-arrow-repeat"></i>
+						<span>Sync POS</span>
+					</a>
+				</li>
+				
 				<li class="sidebar-item">
 					<a href="logout.php" class='sidebar-link'>
 						<i class="bi bi-arrow-bar-left"></i>
-						<span>Logout</spaan>
+						<span>Logout</span>
 					</a>
 				</li>
 			</ul>
