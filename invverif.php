@@ -423,7 +423,7 @@ function cetakGeneric(mpi, rn, dn){
 		var html ='';	
 		html += 'No Document  : '+dn+' \n\r';
 		html += 'Rack         : '+rn+' \n\r \n\r';
-		alert(html);
+		// alert(html);
 		// $.ajax({
 			// url: "api/action.php?modul=inventory&act=cetak_generic",
 			// type: "POST",
@@ -468,7 +468,7 @@ function cetakGeneric(mpi, rn, dn){
 								// html+='\n\r';
 								// html+='\n\r';
 								// html+='\n\r';
-								// print_text(html);
+								print_text(html);
 								
 							// }
 					
