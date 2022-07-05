@@ -311,10 +311,10 @@
 			<select name="rack" id="rack" class="selectize">
 				<option value="">Rack Name</option>
 				<?php 
-				$sql1 = "select rack from pos_mproduct where not rack isnull group by rack order by rack";
+				$sql1 = "select rack_name from inv_mproduct where not rack_name isnull group by rack_name order by rack_name";
 	
 				foreach ($connec->query($sql1) as $row) {
-					echo '<option value="'.$row['rack'].'">'.$row['rack'].'</option>';	    
+					echo '<option value="'.$row['rack_name'].'">'.$row['rack_name'].'</option>';	    
 				}
 				?>
 				
