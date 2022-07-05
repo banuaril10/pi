@@ -1689,6 +1689,28 @@ locator_name) VALUES (
 		 $no++;}
 		
 		
+	}else if($_GET['act'] == 'cetak_generic'){
+		$mpi = $_POST['mpi'];
+		$jj = array();
+		$list_line = "select m_piline.sku ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by qtyerp desc";
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+			$variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);
+			$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
+			
+			
+			$jj[] = array(
+				"sku"=> $row1['sku'],
+				"name"=> $row1['name'],
+				"qtyvariant"=> $variant,
+				"qtycount"=> $row1['qtycount']
+			);
+		}
+		
+
+		$json_string = json_encode($jj);	
+		echo $json_string;
 	}
 	
 	

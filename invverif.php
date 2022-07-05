@@ -24,7 +24,11 @@
  
 						}
 				$sql_list = "select m_pi_key, name ,insertdate, rack_name from m_pi where status = '2' and m_pi_key = '".$_GET['m_pi']."' order by insertdate desc"; 
-				foreach ($connec->query($sql_list) as $tot) { ?>
+				foreach ($connec->query($sql_list) as $tot) {
+					$rack_name = $tot['rack_name'];
+					$dn = $tot['name'];
+
+					?>
 						<font>RACK : <b><?php echo $tot['rack_name']; ?></b></font><br>
 						<font>DOCUMENT NO : <b><?php echo $tot['name']; ?></b></font><br>
 					
@@ -75,7 +79,8 @@
 					
 					<div class="form-group"> 
 					
-					<button onclick="cetakGeneric('<?php echo $_GET['m_pi']; ?>');" class="btn btn-primary">Cetak Generic</button>	
+					
+					<button onclick="cetakGeneric('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>');" class="btn btn-primary">Cetak Generic</button>	
 					<button onclick="testPrint();" class="btn btn-success">Test Print</button>	
 					<br>
 					<br>
@@ -191,6 +196,47 @@ $(document).ready(function () {
 window.onbeforeunload = function () {
     return 'Are you sure? Your work will be lost. ';
 };
+
+
+function textbyline(str,intmax,stralign){
+    var strresult='';
+  if (stralign=='right'){
+    strresult=str.padStart(intmax);
+  } else if (stralign=='center'){
+    var l = str.length;
+    var w2 = Math.floor(intmax / 2);
+    var l2 = Math.floor(l / 2);
+    var s = new Array(w2 - l2 + 1).join(" ");
+    str = s + str + s;
+    if (str.length < intmax)
+    {
+        str += new Array(intmax - str.length + 1).join(" ");
+    }
+    strresult=str;
+  } else {
+    strresult=str;
+  }
+  return strresult;
+};
+
+
+function print_text(html){
+	// console.log(html);
+	$.ajax({
+		url: "print.php",
+		type: "POST",
+		data : {html: html},
+		success: function(dataResult){
+			var dataResult = JSON.parse(dataResult);
+
+			$('#notif').html("Proses print");
+			
+			
+		}
+	});
+}
+
+
 
 document.getElementById("search").addEventListener("change", function() {
 var input, filter, table, tr, td, i, txtValue;
@@ -368,47 +414,50 @@ function filterTable(sku){
 
 
 
-function cetakGeneric(mpi){
-		// console.log(idk, name, rack_name);
-		var fontpi = document.getElementById("fontpi").value;
-
-			
-			
-		<!-- console.log(idk, name, rack_name); -->
-				var html = 'No Document  : '+mpi+'\n\r';
-				   html += 'Rack         : '+mpi+'\n\r \n\r';
+function cetakGeneric(mpi, rn, dn){
+		var html = 'No Document  : '+dn+'\n\r';
+		   html += 'Rack         : '+rn+'\n\r \n\r';
 				
-			var number = 0;	
-			var no = 1;	
+		var number = 0;	
+		var no = 1;	
 				
 
-					html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
-		
-					res.rows.forEach(function(table) {
-						
-						var sku = table.sku;
-						var name = table.name;
-						var qtyvariant = table.qtyvariant;
-						var qtycount = table.qtycount;
-									html += no+'. '+name+'\n\r';
-									html +=textbyline(sku,1,'left')+''+textbyline(qtycount,22-sku.length,'right')+' '+textbyline(qtyvariant,9,'right');
-									html += "\n\r=======================================\n\r";
+		html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
 
-									
-									<!-- html += '<tr style="text-align: left; border: 0.5px solid black">'; -->
-									
-								
-									<!-- html += '<td style="text-align: left; border: 0.5px solid black">'; -->
-									<!-- html += qtyvariant; -->
-									<!-- html += '</td>'; -->
-									<!-- html += '</tr>'; -->
+		$.ajax({
+			url: "api/action.php?modul=inventory&act=cetak_generic",
+			type: "POST",
+			data : {mpi: mpi},
+			success: function(dataResult){
+				
+				// html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
+				
+				var dataResult = JSON.parse(dataResult);
+				// console.log(dataResult.length);
+				var panjang = dataResult.length;
+				$('#notif').html("Proses print");
+				
+				for(let i = 0; i < dataResult.length; i++) {
+						let data = dataResult[i];
+
+						var sku = data.sku;
+						var name = data.name;
+						var qtyvariant = data.qtyvariant;
+						var qtycount = data.qtycount;
+							
+							
+							html += no+'. '+name+'\n\r';
+							html +=textbyline(sku,1,'left')+' '+textbyline(''+qtycount+'',19-sku.length,'right')+' '+textbyline(''+qtyvariant+'',10,'right');
+							html += "\n\r=======================================\n\r";
+
+								// +' '+textbyline(qtyvariant,9,'right')
 			
 							number++;
 							no++;
 							
 							
 							
-							if(number == res.rows.length){
+							if(number == panjang){
 							
 								html+='\n\r';
 								html+='\n\r';
@@ -416,30 +465,34 @@ function cetakGeneric(mpi){
 								html+='\n\r';
 								html+='\n\r';
 								html+='\n\r';
-								
 								print_text(html);
-								<!-- console.log(html); -->
-								
-								
-								
 								
 							}
+					
+					// console.log(sku+''+name+''+qtyvariant+''+qtycount);
+
+					
+					// console.log(obj.id);
+				}
+				
+				
+				
+				
+				
+				
+			}
+		});
+		
+			
+
+		
+					// res.rows.forEach(function(table) {
+						
+
 		
 						
-							});
-							
-							if(res.rows.length == 0){
-							
-								alert("Belum ada data atau tidak ada selisih");
-							}
+							// });
 					
-						
-				
-				
-					
-			
-								
-			
 				
 }
 
@@ -464,21 +517,21 @@ html+='\n \r';
 html+='\n \r';
 html+='\n \r';
 
-// print_text(html);
+print_text(html);
 
 
-$.ajax({
-		url: "print.php",
-		type: "POST",
-		data : {html: html},
-		success: function(dataResult){
-			var dataResult = JSON.parse(dataResult);
+// $.ajax({
+		// url: "print.php",
+		// type: "POST",
+		// data : {html: html},
+		// success: function(dataResult){
+			// var dataResult = JSON.parse(dataResult);
 
-			$('#notif').html("Proses print");
+			// $('#notif').html("Proses print");
 			
 			
-		}
-	});
+		// }
+	// });
 
 
 
@@ -486,62 +539,6 @@ $.ajax({
 
 
 
-function textbyline(str,intmax,stralign){
-    var strresult='';
-  if (stralign=='right'){
-    strresult=str.padStart(intmax);
-  } else if (stralign=='center'){
-    var l = str.length;
-    var w2 = Math.floor(intmax / 2);
-    var l2 = Math.floor(l / 2);
-    var s = new Array(w2 - l2 + 1).join(" ");
-    str = s + str + s;
-    if (str.length < intmax)
-    {
-        str += new Array(intmax - str.length + 1).join(" ");
-    }
-    strresult=str;
-  } else {
-    strresult=str;
-  }
-  return strresult;
-};
-
-
-function print_text(html){
-const process = require('child_process');
-
-	  // writefile(html);
-      // cmd='print.bat';
-	  
-	  
-
-   var cmd='';
-    cmd='echo "'+html+'" | lpr -o raw';
-	
-	
-	
-    var child = process.exec(cmd);  
-   child.on('error', function(err) {
-    console.log('stderr: <'+err+'>' );
-   });
-  
-   child.stdout.on('data', function (data) {
-    console.log(data);
-   });
-  
-   child.stderr.on('data', function (data) {
-    console.log('stderr: <'+data+'>' );
-   });
-  
-   child.on('close', function (code) {
-       if (code == 0)
-       console.log('child process complete.');
-       else
-       console.log('child process exited with code ' + code);
-  
-   });
-}
 
 </script>
 

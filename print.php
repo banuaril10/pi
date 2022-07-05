@@ -7,13 +7,22 @@ $html = $_POST['html'];
 // $txt = $html;
 // fwrite($myfile, $txt);
 // fclose($myfile);
-// $cmd='print.bat';
+
+
+// $cmd='print.bat'; //windows
 	  
 	  
 
 	$cmd='';
-    $cmd='echo "'.$html.'" | lpr -o raw';
+    $cmd='echo "'.$html.'" | lpr -o raw'; //linux
 	
 	
 	
-    $child = shell_exec($cmd);  
+    // $child = shell_exec($cmd);  
+	
+	
+	
+	$data = array("result"=>1, "msg"=>"Berhasil cetak");
+		
+		$json_string = json_encode($data);	
+		echo $json_string;
