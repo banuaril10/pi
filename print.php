@@ -18,11 +18,11 @@ $html = $_POST['html'];
 	
 	
 	
-    // $child = shell_exec($cmd);  
+    $child = shell_exec($cmd); 
 	
 	
 	
-	$data = array("result"=>1, "msg"=>"Berhasil cetak");
+	$data = array("result"=>1, "msg"=>$child);
 		
 		$json_string = json_encode($data);	
 		echo $json_string;
