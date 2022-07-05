@@ -1577,7 +1577,64 @@ locator_name) VALUES (
 		$no = 0;	
 		foreach($j_hasil as $r) {
 			
-			$upcount = $connec->query("update pos_mproduct set stockqty='".$r['stockqty']."' where sku='".$r['sku']."'");
+			
+			$cekitems = $connec->query("select count(sku) as jum from pos_mproduct where sku = '".$r['sku']."'");
+			foreach ($cekitems as $ra) {
+				
+					$haha = $ra['jum'];
+				}
+				
+			if($haha > 0){
+				$upcount = $connec->query("update pos_mproduct set stockqty='".$r['stockqty']."' where sku='".$r['sku']."'");
+				
+			}else{
+				
+				$sql = "insert into pos_mproduct (
+ad_mclient_key,
+ad_morg_key,
+isactived,
+insertdate,
+insertby,
+postby,
+postdate,
+m_product_id,
+m_product_category_id,
+c_uom_id,
+sku,
+name,
+price,
+stockqty,
+m_locator_id,
+locator_name) VALUES (
+				'".$r['ad_client_id']."',
+				'".$r['ad_mor_key']."',
+				'".$r['isactive']."',
+				'".$r['insertdate']."',
+				'".$r['insertby']."',
+				'".$r['postby']."',
+				'".$r['postdate']."',
+				'".$r['m_product_id']."',
+				'".$r['m_product_category_id']."',
+				'".$r['c_uom_id']."',
+				'".$r['sku']."',
+				'".substr($r['namaitem'], 0, 49)."',
+				'".$r['price']."',
+				'".$r['stockqty']."',
+				'".$r['m_locator_id']."',
+				'".$r['locator_name']."'
+)";
+				$upcount = $connec->query($sql);
+				
+				// echo $sql;
+				
+			}
+			
+			
+			
+			
+			
+			
+			
 			if($upcount){
 				$no = $no + 1;
 				

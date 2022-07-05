@@ -23,7 +23,7 @@
 			<div class="card-header">
 				
 
-				<h4>MANAGE STOCK </h4>	
+				<h4>MANAGE STOCK </h4>
 			<p style="color: red; font-weight: bold">Note : Manage stock akan menyesuaikan stock lokal dengan ERP</p>
 			</div>
 			<div class="card-body">
