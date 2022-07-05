@@ -420,22 +420,22 @@ function cetakGeneric(mpi, rn, dn){
 		var number = 0;	
 		var no = 1;	
 				
-		var html ='\n\r';
-		html+='\n\r';
-		html+='\n\r';
-		html+='\n\r';	
-		html+='\n\r';	
-				
-		html += 'No Document  : '+dn+'\n\r';
-		html += 'Rack         : '+rn+'\n\r \n\r';
-		html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
+		
 
 		$.ajax({
 			url: "api/action.php?modul=inventory&act=cetak_generic",
 			type: "POST",
 			data : {mpi: mpi},
 			success: function(dataResult){
-				
+				var html ='\n\r';
+				html+='\n\r';
+				html+='\n\r';
+				html+='\n\r';	
+				html+='\n\r';	
+						
+				html += 'No Document  : '+dn+'\n\r';
+				html += 'Rack         : '+rn+'\n\r \n\r';
+				html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
 				// html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
 				
 				var dataResult = JSON.parse(dataResult);
@@ -454,7 +454,7 @@ function cetakGeneric(mpi, rn, dn){
 							
 							html += no+'. '+name+'\n\r';
 							html +=textbyline(sku,1,'left')+' '+textbyline(''+qtycount+'',19-sku.length,'right')+' '+textbyline(''+qtyvariant+'',10,'right');
-							html += "\n\r=======================================\n\r";
+							html += "\n\r\n\r";
 
 								// +' '+textbyline(qtyvariant,9,'right')
 			
