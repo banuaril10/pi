@@ -59,6 +59,7 @@
 				
 				
 			</div>
+		
 			<div class="card-body">
 			<div class="tables">
 						
@@ -74,7 +75,10 @@
 					
 					<div class="form-group"> 
 					
-					
+					<button onclick="cetakGeneric('<?php echo $_GET['m_pi']; ?>');" class="btn btn-primary">Cetak Generic</button>	
+					<button onclick="testPrint();" class="btn btn-success">Test Print</button>	
+					<br>
+					<br>
 					<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search" autofocus>
 					<input type="hidden" id="search1">
 					</div> 
@@ -359,6 +363,184 @@ function filterTable(sku){
     }       
   }
 	
+}
+
+
+
+
+function cetakGeneric(mpi){
+		// console.log(idk, name, rack_name);
+		var fontpi = document.getElementById("fontpi").value;
+
+			
+			
+		<!-- console.log(idk, name, rack_name); -->
+				var html = 'No Document  : '+mpi+'\n\r';
+				   html += 'Rack         : '+mpi+'\n\r \n\r';
+				
+			var number = 0;	
+			var no = 1;	
+				
+
+					html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
+		
+					res.rows.forEach(function(table) {
+						
+						var sku = table.sku;
+						var name = table.name;
+						var qtyvariant = table.qtyvariant;
+						var qtycount = table.qtycount;
+									html += no+'. '+name+'\n\r';
+									html +=textbyline(sku,1,'left')+''+textbyline(qtycount,22-sku.length,'right')+' '+textbyline(qtyvariant,9,'right');
+									html += "\n\r=======================================\n\r";
+
+									
+									<!-- html += '<tr style="text-align: left; border: 0.5px solid black">'; -->
+									
+								
+									<!-- html += '<td style="text-align: left; border: 0.5px solid black">'; -->
+									<!-- html += qtyvariant; -->
+									<!-- html += '</td>'; -->
+									<!-- html += '</tr>'; -->
+			
+							number++;
+							no++;
+							
+							
+							
+							if(number == res.rows.length){
+							
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								
+								print_text(html);
+								<!-- console.log(html); -->
+								
+								
+								
+								
+							}
+		
+						
+							});
+							
+							if(res.rows.length == 0){
+							
+								alert("Belum ada data atau tidak ada selisih");
+							}
+					
+						
+				
+				
+					
+			
+								
+			
+				
+}
+
+
+function testPrint(){
+// const process = require('child_process');
+var sku = '0877878330032';
+var sku1 = '011827364';
+var sku2 = '1200098';
+var count = '5';
+var count1 = '22';
+var html = 'Tes Print Generic Text\n\r';
+html+='kiri';
+html+=textbyline('tengah', 10, 'center')+'\n\r'; //rumus 22 - sku.length
+html+=textbyline(sku,1,'left')+''+textbyline(count,22-sku.length,'right')+' '+textbyline('15',9,'right')+'\r\n';
+html+=textbyline(sku2,1,'left')+''+textbyline(count,22-sku2.length,'right')+' '+textbyline('15',9,'right')+'\r\n';
+html+=textbyline(sku1,1,'left')+''+textbyline(count1,22-sku1.length,'right')+' '+textbyline('15',9,'right')+'\r\n';
+html+='\n \r';
+html+='\n \r';
+html+='\n \r';
+html+='\n \r';
+html+='\n \r';
+html+='\n \r';
+
+// print_text(html);
+
+
+$.ajax({
+		url: "print.php",
+		type: "POST",
+		data : {html: html},
+		success: function(dataResult){
+			var dataResult = JSON.parse(dataResult);
+
+			$('#notif').html("Proses print");
+			
+			
+		}
+	});
+
+
+
+}
+
+
+
+function textbyline(str,intmax,stralign){
+    var strresult='';
+  if (stralign=='right'){
+    strresult=str.padStart(intmax);
+  } else if (stralign=='center'){
+    var l = str.length;
+    var w2 = Math.floor(intmax / 2);
+    var l2 = Math.floor(l / 2);
+    var s = new Array(w2 - l2 + 1).join(" ");
+    str = s + str + s;
+    if (str.length < intmax)
+    {
+        str += new Array(intmax - str.length + 1).join(" ");
+    }
+    strresult=str;
+  } else {
+    strresult=str;
+  }
+  return strresult;
+};
+
+
+function print_text(html){
+const process = require('child_process');
+
+	  // writefile(html);
+      // cmd='print.bat';
+	  
+	  
+
+   var cmd='';
+    cmd='echo "'+html+'" | lpr -o raw';
+	
+	
+	
+    var child = process.exec(cmd);  
+   child.on('error', function(err) {
+    console.log('stderr: <'+err+'>' );
+   });
+  
+   child.stdout.on('data', function (data) {
+    console.log(data);
+   });
+  
+   child.stderr.on('data', function (data) {
+    console.log('stderr: <'+data+'>' );
+   });
+  
+   child.on('close', function (code) {
+       if (code == 0)
+       console.log('child process complete.');
+       else
+       console.log('child process exited with code ' + code);
+  
+   });
 }
 
 </script>
