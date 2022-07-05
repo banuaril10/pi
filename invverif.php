@@ -420,18 +420,15 @@ function cetakGeneric(mpi, rn, dn){
 		var number = 0;	
 		var no = 1;	
 				
-		var html ='';	
-		html += 'No Document  : '+dn+' \n\r';
-		html += 'Rack         : '+rn+' \n\r \n\r';
+		
 		// alert(html);
 		$.ajax({
 			url: "api/action.php?modul=inventory&act=cetak_generic",
 			type: "POST",
 			data : {mpi: mpi},
 			success: function(dataResult){
-
-				html += 'No Document  : \n\r';
-				html += 'Rack         : \n\r \n\r';
+				var html = 'No Document  : '+dn+' \n\r';
+				html += '	Rack         : '+rn+' \n\r \n\r';
 				html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
 			
 				
