@@ -415,13 +415,13 @@ function filterTable(sku){
 
 
 function cetakGeneric(mpi, rn, dn){
-		var html = 'No Document  : '+dn+'\n\r';
-		   html += 'Rack         : '+rn+'\n\r \n\r';
+		
 				
 		var number = 0;	
 		var no = 1;	
 				
-
+	var html = 'No Document  : '+dn+'\n\r';
+	   html += 'Rack         : '+rn+'\n\r \n\r';
 		html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
 
 		$.ajax({
