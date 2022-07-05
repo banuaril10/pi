@@ -427,14 +427,9 @@ function cetakGeneric(mpi, rn, dn){
 			type: "POST",
 			data : {mpi: mpi},
 			success: function(dataResult){
-				var html ='\n\r';
-				html+='\n\r';
-				html+='\n\r';
-				html+='\n\r';	
-				html+='\n\r';	
-						
-				html += 'No Document  : '+dn+'\n\r';
-				html += 'Rack         : '+rn+'\n\r \n\r';
+				var html ='';	
+				html += 'No Document  : \n\r';
+				html += 'Rack         : \n\r \n\r';
 				html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
 				// html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Varian',6,'right')+' \n\r';
 				
