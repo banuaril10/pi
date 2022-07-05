@@ -1578,16 +1578,39 @@ locator_name) VALUES (
 		foreach($j_hasil as $r) {
 			
 			
+			
+			
+			$ceksales = $connec->query("select sku, sum(qty) from pos_dsalesline where sku = '".$r['sku']."' and date(insertdate) = date(now()) group by sku");
+			foreach ($ceksales as $rs) {
+				
+					$stock_sales = $rs['jum'];
+				}
+			
 			$cekitems = $connec->query("select count(sku) as jum from pos_mproduct where sku = '".$r['sku']."'");
 			foreach ($cekitems as $ra) {
 				
 					$haha = $ra['jum'];
 				}
+			
+			$totqty = $r['stockqty'] - $stock_sales;
 				
 			if($haha > 0){
-				$upcount = $connec->query("update pos_mproduct set stockqty='".$r['stockqty']."' where sku='".$r['sku']."'");
+				
+				
+				
+				
+				
+				$upcount = $connec->query("update pos_mproduct set stockqty='".$totqty."' where sku='".$r['sku']."'");
 				
 			}else{
+				
+				
+				
+				
+				
+				
+				
+				
 				
 				$sql = "insert into pos_mproduct (
 ad_mclient_key,
