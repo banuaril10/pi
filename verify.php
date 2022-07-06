@@ -140,7 +140,7 @@
 								
 								
 								<?php if($row['status'] == 2){ ?>
-								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row['m_pi_key']; ?>">Release</button>
+								<button type="button" onclick="cekSession();" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row['m_pi_key']; ?>">Release</button>
 
 								<?php } if($row['status'] == 3 && $statt == 0){ ?>
 									
@@ -170,7 +170,9 @@
 							
 							<div class="modal fade" id="exampleModal<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
+							 <p id="notif_sess" style="color: red; font-weight: bold; background: #fff; padding: 10px"></p>
 								<div class="modal-content">
+								
 								<div class="modal-header">
 									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin melakukan release?</h5>
 								
@@ -192,12 +194,19 @@
 							</div>
 							</div>
 							
+							
+							
+							
+							
 							<div class="modal fade" id="exampleModall<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
+								
+								
+								
 								<div class="modal-header">
 									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin melanjutkan release items yg gantung?</h5>
-								
+									
 									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 									</button>
@@ -249,6 +258,46 @@
 
 <script type="text/javascript" >
 loopingLine();
+
+function cekSession(){
+		$.ajax({
+			url: "api/action.php?modul=inventory&act=cek_session",
+			type: "GET",
+			beforeSend: function(){
+				$('#notif_sess').html("Cek session..");
+				 $(".modal-content").hide();
+				
+			},
+			success: function(dataResult){
+				console.log(dataResult);
+				var dataResult = JSON.parse(dataResult);
+				
+				if(dataResult.result=='1'){
+					$('#notif_sess').html("<font style='color: green'>"+dataResult.msg+"</font>");
+					 $(".modal-content").show();
+					
+				
+				}else{
+					
+					
+					$('#notif_sess').html("<font style='color: red'>"+dataResult.msg+"</font>");
+					
+					 $(".modal-content").hide();
+				
+				}
+				
+				
+				
+			}
+					
+				
+				
+				
+			
+		});
+	
+	
+}
 
 function sendWa(m_pi){
 	

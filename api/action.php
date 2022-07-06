@@ -1743,6 +1743,19 @@ locator_name) VALUES (
 
 		$json_string = json_encode($jj);	
 		echo $json_string;
+	}else if($_GET['act'] == 'cek_session'){
+		
+		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+			
+			$data = array("result"=>1, "msg"=>"Session masih ada");
+			
+		}else{
+			
+			$data = array("result"=>0, "msg"=>"Session telah habis, mohon reload kembali");
+		}
+		
+		$json_string = json_encode($data);	
+		echo $json_string;
 	}
 	
 	
