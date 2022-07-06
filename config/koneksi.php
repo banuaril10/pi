@@ -13,7 +13,7 @@ try {
     $dbpass = 'pos';
     $dbhost = 'localhost';
     $dbname='dbinfinitepos';
-    $dbport='5434';
+    $dbport='5432';
 
 
     $connec = new PDO("pgsql:host=$dbhost;dbname=$dbname;port=$dbport", $dbuser, $dbpass);
