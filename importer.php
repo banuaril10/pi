@@ -204,13 +204,13 @@ document.getElementById("checkallinv").addEventListener("click", function() {
               $('#process').css('display', 'block');
             },  
             success:function(data){
-
+			var dataResult = JSON.parse(data);
 				
              var percentage = 0;
 
              var timer = setInterval(function(){
                percentage = percentage + 20;
-               progress_bar_process(percentage, timer);
+               progress_bar_process(percentage, timer, dataResult.msg);
              }, 1000);
 			 
 			 
@@ -229,14 +229,14 @@ document.getElementById("checkallinv").addEventListener("click", function() {
         });  
         });  
 
-      function progress_bar_process(percentage, timer){
+      function progress_bar_process(percentage, timer, msg){
        $('.progress-bar').css('width', percentage + '%');
        if(percentage > 100){
         clearInterval(timer);
         $('#import_excel')[0].reset();
         $('#process').css('display', 'none');
         $('.progress-bar').css('width', '0%');
-        $('#pesan').html("<div class='alert alert-primary mb-3' role='alert'>Oke, Data PI Gudang berhasil di import</div>");
+        $('#pesan').html("<div class='alert alert-primary mb-3' role='alert'>"+msg+"</div>");
 		
         $('#sebentar').html("");
         $('#example').load(" #example");
