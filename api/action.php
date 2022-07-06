@@ -1541,7 +1541,7 @@ locator_name) VALUES (
 			if($upcount){
 				$data = array(
 					"result"=>1,
-					'msg'=>$r['sku'] .' ('.$r['namaitem'].'), STOCK = <font style="color: red">'.$r['stockqty'].'</font>'
+					'msg'=>$r['sku'] .' ('.$r['namaitem'].'), STOCK = <font style="color: red">'.$totqty.'</font>'
 				);
 				
 			}else{
