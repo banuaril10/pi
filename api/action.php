@@ -218,7 +218,7 @@ function get_data_stock_all($a){
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_pos',
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_pos_fix',
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_ENCODING => '',
 	CURLOPT_MAXREDIRS => 10,
@@ -1467,7 +1467,7 @@ if($_GET['modul'] == 'inventory'){
 			
 		foreach($j_hasil as $r) {
 			
-			
+			$stock_sales = 0;
 			
 			
 			if($r['result'] == 1){
@@ -1587,7 +1587,7 @@ locator_name) VALUES (
 		foreach($j_hasil as $r) {
 			
 			
-			
+			$stock_sales = 0;
 			
 			$ceksales = $connec->query("select sku, sum(qty) as jj from pos_dsalesline where sku = '".$r['sku']."' and date(insertdate) = date(now()) group by sku");
 			foreach ($ceksales as $rs) {
@@ -1602,6 +1602,7 @@ locator_name) VALUES (
 				}
 			
 			$totqty = $r['stockqty'] - $stock_sales;
+			// $totqty = $r['stockqty'];
 				
 			if($haha > 0){
 				

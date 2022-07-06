@@ -86,7 +86,7 @@
 					<table class="table table-bordered" id="example">
 						<thead>
 							<tr>
-								<th><input type="button" class="btn btn-success" id="checkall" value="✔"/></th>
+								<th><input type="button" id="checkall" value="✔"/></th>
 								<th>No</th>
 								<th>SKU</th>
 								<th>Name</th>
