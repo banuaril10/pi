@@ -289,7 +289,7 @@ function formatRupiah(angka, prefix){
 						
 				
 
-						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 12px'>"+res[1].toUpperCase()+"</label><br><label style='text-align: left; font-size: 10px'><b>Rp </b></label><label style='text-align: left; font-size: 18px'><b>"+res[2]+"</b></label><br><label style='text-align: left; font-size: 10px'>"+res[0]+"<br>"+sc+"</label><br><label style='text-align: left; font-size: 10px'>"+res[3]+"</label><br><label style='text-align: left; font-size: 10px'>"+res[4].toUpperCase()+"</label> </div>";
+						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 12px'>"+res[1].toUpperCase()+"</label><br><label style='text-align: left; font-size: 10px'><b>Rp </b></label><label style='text-align: left; font-size: 18px'><b>"+formatRupiah(res[2], '')+"</b></label><br><label style='text-align: left; font-size: 10px'>"+res[0]+"<br>"+sc+"</label><br><label style='text-align: left; font-size: 10px'>"+res[3]+"</label><br><label style='text-align: left; font-size: 10px'>"+res[4].toUpperCase()+"</label> </div>";
 						
 						if((i+1)%4==0 && i!==0){
 							
@@ -361,7 +361,7 @@ function formatRupiah(angka, prefix){
 
 
 
-						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 14px'><b>"+res[1].toUpperCase()+"</b></label><br><label style='text-align: left; font-size: 14px'><b>Rp </b></label><label style='text-align: left; font-size: 40px'><b>"+res[2]+"</b></label><br><label style='text-align: left; font-size: 14px'>"+res[0]+" | "+sc+"</label><br><label style='text-align: left; font-size: 14px'>"+res[3]+"</label> | <label style='text-align: left; font-size: 14px'>"+res[4].toUpperCase()+"</label></div>";
+						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 14px'><b>"+res[1].toUpperCase()+"</b></label><br><label style='text-align: left; font-size: 14px'><b>Rp </b></label><label style='text-align: left; font-size: 40px'><b>"+formatRupiah(res[2], '')+"</b></label><br><label style='text-align: left; font-size: 14px'>"+res[0]+" | "+sc+"</label><br><label style='text-align: left; font-size: 14px'>"+res[3]+"</label> | <label style='text-align: left; font-size: 14px'>"+res[4].toUpperCase()+"</label></div>";
 						
 						if((i+1)%4==0 && i!==0){
 							
@@ -436,7 +436,7 @@ function formatRupiah(angka, prefix){
 						
 				
 
-						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 12px'>"+res[1].toUpperCase()+"</label><br><label style='text-align: left; font-size: 10px'><b>Rp </b></label><label style='text-align: left; font-size: 18px'><b>"+res[2]+"</b></label><br><label style='text-align: left; font-size: 10px'>"+res[0]+"<br>"+sc+"</label><br><label style='text-align: left; font-size: 10px'>"+res[3]+"</label><br><label style='text-align: left; font-size: 10px'>"+res[4].toUpperCase()+"</label> </div>";
+						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 12px'>"+res[1].toUpperCase()+"</label><br><label style='text-align: left; font-size: 10px'><b>Rp </b></label><label style='text-align: left; font-size: 18px'><b>"+formatRupiah(res[2], '')+"</b></label><br><label style='text-align: left; font-size: 10px'>"+res[0]+"<br>"+sc+"</label><br><label style='text-align: left; font-size: 10px'>"+res[3]+"</label><br><label style='text-align: left; font-size: 10px'>"+res[4].toUpperCase()+"</label> </div>";
 						
 						if((i+1)%4==0 && i!==0){
 							
@@ -533,7 +533,7 @@ document.getElementById("checkall").addEventListener("click", function() {
 							
 						// var ptop = top;
 
-						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 14px'><b>"+res[1].toUpperCase()+"</b></label><br><label style='text-align: left; font-size: 14px'><b>Rp </b></label><label style='text-align: left; font-size: "+price+"'><b>"+res[2]+"</b></label><br><label style='text-align: left; font-size: 14px'>"+res[0]+" | "+sc+"</label><br><label style='text-align: left; font-size: 14px'>"+res[3]+"</label> | <label style='text-align: left; font-size: 14px'>"+res[4].toUpperCase()+"</label></div>";
+						text += "<div style='text-align:left; left:"+left+"; position: absolute; display: inline-block; border: 1px; color: black; width: 202px; height: 151px; font-family: Calibri'><label style='text-align: right; font-size: 14px'><b>"+res[1].toUpperCase()+"</b></label><br><label style='text-align: left; font-size: 14px'><b>Rp </b></label><label style='text-align: left; font-size: "+price+"'><b>"+formatRupiah(res[2], '')+"</b></label><br><label style='text-align: left; font-size: 14px'>"+res[0]+" | "+sc+"</label><br><label style='text-align: left; font-size: 14px'>"+res[3]+"</label> | <label style='text-align: left; font-size: 14px'>"+res[4].toUpperCase()+"</label></div>";
 						
 						if((i+1)%4==0 && i!==0){
 							
