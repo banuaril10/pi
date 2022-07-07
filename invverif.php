@@ -494,15 +494,15 @@ var count1 = '22';
 var html = 'Tes Print Generic Text\n\r';
 html+='kiri';
 html+=textbyline('tengah', 10, 'center')+'\n\r'; //rumus 22 - sku.length
-html+=textbyline(sku,1,'left')+''+textbyline(count,22-sku.length,'right')+' '+textbyline('15',9,'right')+'\r\n';
-html+=textbyline(sku2,1,'left')+''+textbyline(count,22-sku2.length,'right')+' '+textbyline('15',9,'right')+'\r\n';
-html+=textbyline(sku1,1,'left')+''+textbyline(count1,22-sku1.length,'right')+' '+textbyline('15',9,'right')+'\r\n';
-html+='\n \r';
-html+='\n \r';
-html+='\n \r';
-html+='\n \r';
-html+='\n \r';
-html+='\n \r';
+html+=textbyline(sku,1,'left')+''+textbyline(count,22-sku.length,'right')+' '+textbyline('15',9,'right')+'\n';
+html+=textbyline(sku2,1,'left')+''+textbyline(count,22-sku2.length,'right')+' '+textbyline('15',9,'right')+'\n';
+html+=textbyline(sku1,1,'left')+''+textbyline(count1,22-sku1.length,'right')+' '+textbyline('15',9,'right')+'\n';
+html+='\n';
+html+='\n';
+html+='\n';
+html+='\n';
+html+='\n';
+html+='\n';
 
 print_text(html);
 
