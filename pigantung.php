@@ -48,7 +48,7 @@
 						
 						<?php 
 						$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
-						where status in ('1','2') and inventorytype = '".$_SESSION['role']."' and date(insertdate) != date(NOW()) order by insertdate desc";
+						where status in ('1','2','3','4') and inventorytype = '".$_SESSION['role']."' and date(insertdate) != date(NOW()) order by insertdate desc";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
 						if($row['status'] == 1){
