@@ -81,31 +81,36 @@
 
 
 <script type="text/javascript">
-document.getElementById("search").addEventListener("keyup", function() {
-var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("search");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("example1");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    td1 = tr[i].getElementsByTagName("td")[2];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      txtValue1 = td1.textContent || td1.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      }else if(txtValue1.toUpperCase().indexOf(filter) > -1){
-		tr[i].style.display = "";  
-	  } else {
-        tr[i].style.display = "none";
-      }
-    }       
-  }
+$(document).ready( function () {
+    $('#example1').DataTable();
+} );
+
+
+// document.getElementById("search").addEventListener("keyup", function() {
+// var input, filter, table, tr, td, i, txtValue;
+  // input = document.getElementById("search");
+  // filter = input.value.toUpperCase();
+  // table = document.getElementById("example1");
+  // tr = table.getElementsByTagName("tr");
+  // for (i = 0; i < tr.length; i++) {
+    // td = tr[i].getElementsByTagName("td")[1];
+    // td1 = tr[i].getElementsByTagName("td")[2];
+    // if (td) {
+      // txtValue = td.textContent || td.innerText;
+      // txtValue1 = td1.textContent || td1.innerText;
+      // if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        // tr[i].style.display = "";
+      // }else if(txtValue1.toUpperCase().indexOf(filter) > -1){
+		// tr[i].style.display = "";  
+	  // } else {
+        // tr[i].style.display = "none";
+      // }
+    // }       
+  // }
 	
 	
 	
-});
+// });
 
 var input = document.getElementById("sku");
 

@@ -1777,7 +1777,95 @@ locator_name) VALUES (
 		
 		$json_string = json_encode($data);	
 		echo $json_string;
+	}else if($_GET['act'] == 'api_datatable'){
+		
+		
+		 $columns = array( 
+                               0 =>'sku', 
+                               1 =>'name',
+                               2=> 'price',
+                               3=> 'price_discount',
+                           );
+ 
+      $querycount =  $connec->query("SELECT count(*) as jumlah FROM pos_mproduct");
+    
+		foreach($querycount as $r){
+			$datacount = $r['jumlah'];
+			
+		}
+   
+        $totalData = $datacount;
+             
+        $totalFiltered = $totalData; 
+ 
+        $limit = $_POST['length'];
+        $start = $_POST['start'];
+        $order = $columns[$_POST['order']['0']['column']];
+        $dir = $_POST['order']['0']['dir'];
+             
+        if(empty($_POST['search']['value']))
+        {
+         $query = $connec->query("SELECT a.sku,a.name,a.price, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount FROM 
+		 pos_mproduct a left join pos_mproductdiscount b on a.sku = b.sku
+		 
+		 order by $order $dir
+                                                      LIMIT $limit
+                                                      OFFSET $start");
+        }
+        else {
+            $search = $_POST['search']['value']; 
+            $query = $connec->query("SELECT a.sku,a.name,a.price, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount FROM 
+		 pos_mproduct a left join pos_mproductdiscount b on a.sku = b.sku WHERE a.sku LIKE '%$search%'
+                                                         or a.name LIKE '%$search%'
+                                                         order by $order $dir
+                                                         LIMIT $limit
+                                                         OFFSET $start");
+ 
+ 
+         $querycount = $connec->query("SELECT count(*) as jumlah FROM 
+		 pos_mproduct a left join pos_mproductdiscount b on a.sku = b.sku WHERE a.sku LIKE '%$search%'
+                                                         or a.name LIKE '%$search%'");
+        foreach($querycount as $rr){
+			$datacount = $rr['jumlah'];
+			
+		}
+           $totalFiltered = $datacount;
+        }
+ 
+        $data = array();
+        if(!empty($query))
+        {
+            $no = $start + 1;
+			foreach($query as $r){
+				$nestedData['no'] = $no;
+                $nestedData['sku'] = $r['sku'];
+                $nestedData['name'] = $r['name'];
+                $nestedData['price'] = $r['price'];
+                $nestedData['price_discount'] = $r['price_discount'];
+                $data[] = $nestedData;
+                $no++;
+				
+			}
+			
+
+        }
+           
+        $json_data = array(
+                    "draw"            => intval($_POST['draw']),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data  
+                    );
+             
+        echo json_encode($json_data); 
+		
+		
+		
+	
 	}
+	
+	
+	
 	
 	
 	

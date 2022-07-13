@@ -89,6 +89,13 @@
 				</li>
 				
 				<li class="sidebar-item">
+					<a href="cek_harga.php" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Cek Harga</span>
+					</a>
+				</li>
+				
+				<li class="sidebar-item">
 					<a href="logout.php" class='sidebar-link'>
 						<i class="bi bi-arrow-bar-left"></i>
 						<span>Logout</span>

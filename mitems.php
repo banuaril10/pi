@@ -81,7 +81,33 @@
 			</table>	
 			</form>	
 				
-				<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search">
+				<!--<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search">-->
+				
+				<table id="example" class="display" style="width:100%">
+					<thead>
+						<tr>
+							<th><input type="button" id="checkall" value="✔"/></th>
+							<th>No</th>
+							<th>SKU</th>
+							<th>Name</th>
+							<th>Price</th>
+							<th>Price Discount</th>
+							<th>Rack Name</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th><input type="button" id="checkall" value="✔"/></th>
+							<th>No</th>
+							<th>SKU</th>
+							<th>Name</th>
+							<th>Price</th>
+							<th>Price Discount</th>
+							<th>Rack Name</th>
+						</tr>
+					</tfoot>
+				</table>
+				
 				
 					<table class="table table-bordered" id="example">
 						<thead>
@@ -146,6 +172,9 @@
    
 						</tbody>
 					</table>
+					
+					
+					
 				</div>
 			</div>
 		</div>
@@ -156,6 +185,9 @@
 
 
 <script type="text/javascript">
+$(document).ready( function () {
+    $('#example').DataTable();
+} );
 function formatRupiah(angka, prefix){
 			var number_string = angka.replace(/[^,\d]/g, '').toString(),
 			split   		= number_string.split(','),
