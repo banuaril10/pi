@@ -169,7 +169,16 @@ else {
 			// setcookie("userid",$row["userid"],time() + (10 * 365 * 24 * 60 * 60));
 			// setcookie("username",$row["username"],time() + (10 * 365 * 24 * 60 * 60));
 			// setcookie("org_key",$row["ad_morg_key"],time() + (10 * 365 * 24 * 60 * 60));
-			header("Location: ../content.php?".$_SESSION["username"]);
+			
+			if($row["ad_org_id"] == '112233445566'){
+				
+				header("Location: ../cek_harga.php?".$_SESSION["username"]);
+			}else{
+				
+				header("Location: ../content.php?".$_SESSION["username"]);
+			}
+			
+			
 	}
 	
 }else{
