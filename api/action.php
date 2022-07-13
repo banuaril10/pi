@@ -14,6 +14,15 @@ $username = $_SESSION['username'];
 $org_key = $_SESSION['org_key'];
 $ss = $_SESSION['status_sales'];
 $kode_toko = $_SESSION['kode_toko'];
+
+
+function rupiah($angka){
+	
+	$hasil_rupiah = number_format($angka,0,',','.');
+	return $hasil_rupiah;
+ 
+}
+
 function push_to_server($pi_key, $a, $b, $c, $d, $e, $f,$ff, $g, $h, $i, $j, $k, $l, $m, $n){
 	
 											
@@ -1840,8 +1849,8 @@ locator_name) VALUES (
 				$nestedData['no'] = $no;
                 $nestedData['sku'] = $r['sku'];
                 $nestedData['name'] = $r['name'];
-                $nestedData['price'] = $r['price'];
-                $nestedData['price_discount'] = $r['price_discount'];
+                $nestedData['price'] = rupiah($r['price']);
+                $nestedData['price_discount'] = rupiah($r['price_discount']);
                 $data[] = $nestedData;
                 $no++;
 				
