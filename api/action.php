@@ -1847,7 +1847,7 @@ locator_name) VALUES (
             $no = $start + 1;
 			foreach($query as $r){
 				$nestedData['no'] = $no;
-                $nestedData['sku'] = $r['sku'];
+                $nestedData['sku'] = $r['sku'].'<br> <font style="color: green; font-weight: bold">Reguler : '.rupiah($r['price']).'</font><br> <font style="color: red; font-weight: bold">Diskon : '.rupiah($r['price_discount']).'</font>';
                 $nestedData['name'] = $r['name'];
                 $nestedData['price'] = rupiah($r['price']);
                 $nestedData['price_discount'] = rupiah($r['price_discount']);

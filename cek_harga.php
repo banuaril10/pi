@@ -41,8 +41,8 @@
                 <th scope="col">No</th>
                 <th scope="col">SKU</th>
                 <th scope="col">Nama</th>
-                <th scope="col">Harga</th>
-                <th scope="col">Harga Diskon</th>
+                <!--<th scope="col">Harga</th>
+                <th scope="col">Harga Diskon</th>-->
               </tr>
             </thead>
             <tbody>
@@ -76,8 +76,8 @@
                   { "data": "no" },
                   { "data": "sku" },
                   { "data": "name" },
-                  { "data": "price" },
-                  { "data": "price_discount" },
+                  // { "data": "price" },
+                  // { "data": "price_discount" },
               ]  
  
           });
