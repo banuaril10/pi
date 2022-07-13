@@ -25,10 +25,16 @@
 			<div class="card-header">
 				<h4>CEK HARGA</h4>
 			</div>
+			
+			
+			
 			<div class="card-body">
-			<div class="tables">			
+			<div class="tables">	
+			<p id="notif" style="color: red; font-weight: bold"></p>
+			<div id="qr-reader" style="width: 100%"></div>
+			
 				<div class="table-responsive bs-example widget-shadow">	
-				<p id="notif1" style="color: red; font-weight: bold"></p>		
+				
 
 
 		
@@ -59,9 +65,47 @@
 </div>
 </div>
 </div>
-
+<script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
 
 <script type="text/javascript">
+function onScanSuccess(decodedText, decodedResult) {
+    console.log(`Code scanned = ${decodedText}`, decodedResult);
+	// document.querySelector('input[type="search"]').value = decodedText;
+	getItems(decodedText);
+}
+var html5QrcodeScanner = new Html5QrcodeScanner(
+	"qr-reader", { fps: 10, qrbox: 250 });
+html5QrcodeScanner.render(onScanSuccess);
+
+
+function getItems(sku){
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=get_items",
+		type: "POST",
+		data : {sku: sku},
+		beforeSend: function(){
+			$('#notif').html("Proses mencari items..");
+		},
+		success: function(dataResult){
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result == 0){
+				
+				$('#notif').html("<font style='color: red'>Items tidak ditemukan</font>");
+			}else{
+				
+				$('#notif').html("<font style='color: green'>"+dataResult.sku+" ("+dataResult.name+") Harga : <font style='color: red'>"+dataResult.price_discount+"</font></font>");
+			}
+
+				
+
+			
+		}
+	});
+	
+}
+
+
   $(function(){
  
            $('.table').DataTable({

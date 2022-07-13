@@ -1881,6 +1881,39 @@ locator_name) VALUES (
 		
 		
 	
+	}else if($_GET['act'] == 'get_items'){
+		
+		
+		 $sku = $_POST['sku'];
+		 $query = $connec->query("SELECT a.sku,a.name,a.price, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname FROM 
+		 pos_mproduct a left join (select * from pos_mproductdiscount where todate > '".date('Y-m-d')."') b on a.sku = b.sku WHERE (a.sku = '".$sku."' 
+		 or a.shortcut = '".$sku."')");
+		 $count = $query->rowCount();
+		 
+		 if($count > 0){
+			 
+		foreach($query as $r){
+			 
+			$json_data = array(
+				"result"=>1,
+				"sku"=>$r['sku'],
+				"name"=>$r['name'],
+				"price_discount"=>$r['price_discount']
+		  
+			);
+		 }
+		 }else{
+			 
+			 $json_data = array(
+				"result"=>0
+		  
+			);
+		 }
+		 
+		
+		 
+		  echo json_encode($json_data); 
+		 
 	}
 	
 	
