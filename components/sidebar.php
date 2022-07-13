@@ -17,7 +17,7 @@
 		<div class="sidebar-menu">
 			<ul class="menu">
 				<li class="sidebar-title">Menu</li>
-
+			<?php if($_SESSION['org_key'] != '112233445566'){ ?>
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-archive-fill"></i>
@@ -88,12 +88,20 @@
 					</a>
 				</li>
 				
+				
+			<?php } ?>	
+				
+				
 				<li class="sidebar-item">
 					<a href="cek_harga.php" class='sidebar-link'>
 						<i class="bi bi-tags-fill"></i>
 						<span>Cek Harga</span>
 					</a>
 				</li>
+				
+				
+				
+				
 				
 				<li class="sidebar-item">
 					<a href="logout.php" class='sidebar-link'>

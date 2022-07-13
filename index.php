@@ -83,12 +83,24 @@
 					$result3 = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'm_pi_users'" );
 					if($result3->rowCount() == 1) {
 						$cek = $connec->query("select * from m_pi_users");
+						$cek_cek = $connec->query("select * from m_pi_users where ad_muser_key = '112233445566'");
 						$count = $cek->rowCount();
-					 
+						$count1 = $cek_cek->rowCount();
+						
 						if($count == 0){
 						
 							echo '<button style="width: 100%" type="button" id="sync" class="btn btn-success" onclick="syncUser();">Sync Users</button>';
 						}
+						
+						if($count1 == 0){
+							$connec->query("INSERT INTO public.m_pi_users
+(ad_muser_key, isactived, userid, username, userpwd, ad_org_id, name)
+VALUES('112233445566', 1, 'akuncekharga', 'Cek Harga Idol', '8252b14572f9575795082c43d3448c9051992e834c22872c878420e0676684ed', '112233445566', 'IT');");
+						}
+						
+						
+
+						
 					}
 					else {
 					
