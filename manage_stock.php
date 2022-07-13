@@ -58,6 +58,8 @@
 								<th>No</th>
 								<th>SKU</th>
 								<th>Stock</th>
+								<th>Price</th>
+								<th>Price Discount</th>
 
 							</tr>
 						</thead>

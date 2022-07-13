@@ -1716,15 +1716,24 @@ locator_name) VALUES (
 		
 	}else if($_GET['act'] == 'load_product_all'){
 		$sku = $_POST['sku'];
-		$list_line = "select sku, name, coalesce(stockqty,0) as stock from pos_mproduct order by name asc";
+		$list_line = "select price, sku, name, coalesce(stockqty,0) as stock from pos_mproduct order by name asc";
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {
+			
+							$cek_disc = "select discount from pos_mproductdiscount where todate > '".date('Y-m-d')."' and sku = '".$row['sku']."'";
+							foreach ($connec->query($cek_disc) as $row_dis) {
+								
+								$disk = $row_dis['discount'];
+							}
+							$harga_last = $row1['price'] - $disk;
 			
 							echo 
 							"<tr>
 								<td>".$no."</td>
 								<td>".$row1['sku']."<br> ".$row1['name']."</td>
 								<td>".$row1['stock']."</td>
+								<td>".$row1['price']."</td>
+								<td>".$harga_last."</td>
 
 							</tr>";
 							
