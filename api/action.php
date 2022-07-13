@@ -1719,8 +1719,8 @@ locator_name) VALUES (
 		$list_line = "select price, sku, name, coalesce(stockqty,0) as stock from pos_mproduct order by name asc";
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {
-			
-							$cek_disc = "select discount from pos_mproductdiscount where todate > '".date('Y-m-d')."' and sku = '".$row['sku']."'";
+							$disk = 0;
+							$cek_disc = "select discount from pos_mproductdiscount where todate > '".date('Y-m-d')."' and sku = '".$row1['sku']."'";
 							foreach ($connec->query($cek_disc) as $row_dis) {
 								
 								$disk = $row_dis['discount'];
