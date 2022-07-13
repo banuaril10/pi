@@ -908,7 +908,7 @@
     top: 0;
     z-index: 10;
     overflow-y: auto;
-    background-color: #fff;
+    background-color: #ececec;
     bottom: 0;
     transition: left .5s ease-out;
 }

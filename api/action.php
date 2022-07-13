@@ -1194,8 +1194,19 @@ if($_GET['modul'] == 'inventory'){
 				$statement1 = $connec->query("update m_pi_sales set status_sales = '".$ss."' where date(tanggal) = '".date('Y-m-d')."'");
 				
 			}else{
+				$connec->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+				$sql = "
+				insert into m_pi_sales (tanggal, status_sales) VALUES ('".date('Y-m-d')."', '".$ss."'); 
+				update pos_mproduct set isactived = 1;";
 				
-				$statement1 = $connec->query("insert into m_pi_sales (tanggal, status_sales) VALUES ('".date('Y-m-d')."', '".$ss."')");
+				$statement1 = $connec->prepare($sql);
+				$statement1->execute();
+				
+				
+				// $statement1 = $connec->query("");
+				
+				// $connec->query("");
+				
 			}
 			
 			if($statement1){

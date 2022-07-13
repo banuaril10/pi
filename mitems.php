@@ -91,6 +91,7 @@
 								<th>SKU</th>
 								<th>Name</th>
 								<th>Price</th>
+								<th>Price Discount</th>
 								<th>Rack Name</th>
 							</tr>
 						</thead>
@@ -114,7 +115,14 @@
 						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
-						
+							$disk = 0;
+							$cek_disc = "select discount from pos_mproductdiscount where todate > '".date('Y-m-d')."' and sku = '".$row['sku']."'";
+							foreach ($connec->query($cek_disc) as $row_dis) {
+								
+								$disk = $row_dis['discount'];
+							}
+							$harga_last = $row['price'] - $disk;
+							
 						?>
 						
 						
@@ -124,6 +132,7 @@
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $row['name']; ?></td>
 								<td><?php echo $row['price']; ?></td>
+								<td><?php echo $harga_last; ?></td>
 								
 								<td><?php echo $row['rack_name']; ?></td>
 								
