@@ -1814,7 +1814,7 @@ locator_name) VALUES (
              
         if(empty($_POST['search']['value']))
         {
-         $query = $connec->query("SELECT a.sku,a.name,a.price, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname FROM 
+         $query = $connec->query("SELECT a.sku,a.name,a.price,a.shortcut, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname FROM 
 		 pos_mproduct a left join (select * from pos_mproductdiscount where todate > '".date('Y-m-d')."') b on a.sku = b.sku
 		 
 		 order by $order $dir
@@ -1823,9 +1823,10 @@ locator_name) VALUES (
         }
         else {
             $search = $_POST['search']['value']; 
-            $query = $connec->query("SELECT a.sku,a.name,a.price, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname FROM 
+            $query = $connec->query("SELECT a.sku,a.name,a.price,a.shortcut, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname FROM 
 		 pos_mproduct a left join (select * from pos_mproductdiscount where todate > '".date('Y-m-d')."') b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
                                                          or a.name ILIKE  '%$search%'
+                                                         or a.shortcut ILIKE  '%$search%'
                                                          order by $order $dir
                                                          LIMIT $limit
                                                          OFFSET $start");
@@ -1833,7 +1834,9 @@ locator_name) VALUES (
  
          $querycount = $connec->query("SELECT count(*) as jumlah FROM 
 		 pos_mproduct a left join (select * from pos_mproductdiscount where todate > '".date('Y-m-d')."') b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
-                                                         or a.name ILIKE '%$search%'");
+                                                         or a.name ILIKE '%$search%'
+                                                         or a.shortcut ILIKE  '%$search%'
+														 ");
         foreach($querycount as $rr){
 			$datacount = $rr['jumlah'];
 			
