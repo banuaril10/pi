@@ -31,6 +31,10 @@
 			<div class="card-body">
 			<div class="tables">	
 			<p id="notif" style="color: red; font-weight: bold"></p>
+			<button onclick="turnOn();" class="switch">On</button>
+			<button onclick="turnOff();" class="switch1">Off</button>
+			
+			
 			<div id="qr-reader" style="width: 100%"></div>
 			
 				<div class="table-responsive bs-example widget-shadow">	
@@ -74,8 +78,121 @@ function onScanSuccess(decodedText, decodedResult) {
 	getItems(decodedText);
 }
 var html5QrcodeScanner = new Html5QrcodeScanner(
-	"qr-reader", { fps: 10, qrbox: 250 });
+	"qr-reader", { fps: 10, qrbox: 250, torch: true });
 html5QrcodeScanner.render(onScanSuccess);
+
+function powerTorch(powerOn) 
+{    
+  if(html5QrCode.getState() === Html5QrcodeScannerState.SCANNING ||
+     html5QrCode.getState() === Html5QrcodeScannerState.PAUSED
+    )
+  {
+    html5QrCode.applyVideoConstraints(
+       {
+         advanced: [{torch: powerOn}]
+       });
+  }
+}
+
+
+
+
+function turnOn(){
+	const SUPPORTS_MEDIA_DEVICES = 'mediaDevices' in navigator;
+	if (SUPPORTS_MEDIA_DEVICES) {
+  //Get the environment camera (usually the second one)
+  navigator.mediaDevices.enumerateDevices().then(devices => {
+  
+    const cameras = devices.filter((device) => device.kind === 'videoinput');
+
+    if (cameras.length === 0) {
+      throw 'No camera found on this device.';
+    }
+    const camera = cameras[cameras.length - 1];
+
+    // Create stream and get video track
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        deviceId: camera.deviceId,
+        facingMode: ['user', 'environment'],
+        height: {ideal: 1080},
+        width: {ideal: 1920}
+      }
+    }).then(stream => {
+      const track = stream.getVideoTracks()[0];
+
+      //Create image capture object and get camera capabilities
+      const imageCapture = new ImageCapture(track)
+      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
+
+        //todo: check if camera has a torch
+
+        //let there be light!
+        const btn = document.querySelector('.switch');
+        btn.addEventListener('click', function(){
+          track.applyConstraints({
+            advanced: [{torch: true}]
+          });
+        });
+      });
+    });
+  });
+  
+  //The light will be on as long the track exists
+  
+  
+}
+}
+
+function turnOff(){
+		const SUPPORTS_MEDIA_DEVICES = 'mediaDevices' in navigator;
+	if (SUPPORTS_MEDIA_DEVICES) {
+  //Get the environment camera (usually the second one)
+  navigator.mediaDevices.enumerateDevices().then(devices => {
+  
+    const cameras = devices.filter((device) => device.kind === 'videoinput');
+
+    if (cameras.length === 0) {
+      throw 'No camera found on this device.';
+    }
+    const camera = cameras[cameras.length - 1];
+
+    // Create stream and get video track
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        deviceId: camera.deviceId,
+        facingMode: ['user', 'environment'],
+        height: {ideal: 1080},
+        width: {ideal: 1920}
+      }
+    }).then(stream => {
+      const track = stream.getVideoTracks()[0];
+
+      //Create image capture object and get camera capabilities
+      const imageCapture = new ImageCapture(track)
+      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
+
+        //todo: check if camera has a torch
+
+        //let there be light!
+        const btn = document.querySelector('.switch1');
+        btn.addEventListener('click', function(){
+          track.applyConstraints({
+            advanced: [{torch: false}]
+          });
+        });
+      });
+    });
+  });
+  
+  //The light will be on as long the track exists
+  
+  
+}
+	
+	
+}
+
 
 
 function formatRupiah(angka, prefix){
