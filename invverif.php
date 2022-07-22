@@ -134,11 +134,11 @@
 							</tr>
 	
 							<tr class="header1" style="background: #e1e5fa">
-								<td>Counter</td>
+								<td style="width: 150px">Counter</td>
 								<td>ERP</td>
 								<td>Sales</td>
-								<td>Variant</td>
-								<td>Verified</td>
+								<td>Varian</td>
+								<td>Verif</td>
 								
 								
 
@@ -148,8 +148,8 @@
 								<td>
 								
 								<div class="form-inline"> 
-								<input type="number" id="qtycount<?php echo $row1['sku']; ?>" class="form-control" value="<?php echo $row1['qtycount']; ?>"> 
-								<button type="button" style="background: green; color: white" onclick="changeQty('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class="">Verifikasi</button>
+								<input type="number" onkeydown="enterKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" name="qtycount<?php echo $row1['sku']; ?>" id="qtycount<?php echo $row1['sku']; ?>" class="form-control" value="<?php echo $row1['qtycount']; ?>"> 
+								<!--<button type="button" id="btn-verifikasi" style="background: green; color: white" onclick="changeQty('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class="">Verifikasi</button>-->
 										
 								</div>		
 										
@@ -160,6 +160,8 @@
 								<td><?php echo $variant; ?></td>
 								<td><?php echo $vc; ?></td>
 							</tr>
+					
+				
 					
 		<?php $no++;} ?>
 			
@@ -186,6 +188,16 @@ function myFunction(){
      // Write your business logic here
      alert('Bye');
 }
+
+
+function enterKey(obj, e, sku, name) {
+ var key = document.all ? window.event.keyCode : e.which;	
+    if(key == 13) {         
+       changeQty(sku, name);
+       // I will forward to a new page here. Not an issue.
+    }
+}
+					
 
 $(document).ready(function () {
 	// $('#example1').DataTable();
@@ -386,6 +398,7 @@ function changeQty(sku, nama){
 				
 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 				$("#example1").load(" #example1");
+				
 				$("#info").load(location.href + " #info");
 				search.value = '';
 				search.focus();

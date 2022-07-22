@@ -6,7 +6,7 @@
 		<div class="sidebar-header">
 			<div class="d-flex justify-content-between">
 				<div class="logo">
-					<a href="content.php">PI <?php echo $_SESSION['kode_toko']; ?></a>
+					<a style="font-size: 20px" href="content.php">Store App <?php echo $_SESSION['kode_toko']; ?></a>
 					<p style="font-size: 20px"><?php echo $_SESSION['username']; ?></p>
 				</div>
 				<div class="toggler">
