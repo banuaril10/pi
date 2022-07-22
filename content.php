@@ -280,7 +280,6 @@
 			</select>
 			
 			<select name="sl" id="sl" class="selectize">
-				<option value="">Storage Location</option>
 				<?php 
 				$sql2 = "select m_locator_id ,locator_name from pos_mproduct where not locator_name isnull group by m_locator_id ,locator_name";
 	

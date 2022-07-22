@@ -1597,6 +1597,8 @@ locator_name) VALUES (
 		
 		
 		// $sku = "8151000000129";
+		
+		
 		$hasil = get_data_stock_all($org_key);
 		$j_hasil = json_decode($hasil, true);
 		

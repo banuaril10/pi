@@ -58,7 +58,7 @@
 				
 				</tr>
 				</table>
-				
+				<font style="color: red; font-weight: bold">Data diurutkan dari selisih terkecil</font>
 				</div>
 				
 				
@@ -90,7 +90,7 @@
 
 					</div>
 					  
-			
+					
 					<table class="table table-bordered " id="example1" style="font-size: 13px">
 						<thead>
 							
@@ -98,11 +98,12 @@
 						</thead>
 						<tbody>
 			
-		<?php $list_line = "select m_piline.sku ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by qtyerp desc";
+		<?php $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key inner join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' order by variant asc";
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
-		$variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);
+		// $variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);
+		$variant = $row1['variant'];
 		$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
 		if($row1['verifiedcount'] == ''){
 			
@@ -301,6 +302,37 @@ var input, filter, table, tr, td, i, txtValue;
 	
 });
 
+
+function filterTable(sku){
+	var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("search1");
+  filter = sku.toUpperCase();
+  table = document.getElementById("example1");
+  tr = table.getElementsByClassName("header");
+  trr = table.getElementsByClassName("header1");
+  trrr = table.getElementsByClassName("header2");
+   // tr.style.display = "none";
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+  
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+     
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+        trr[i].style.display = "";
+        trrr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+        trr[i].style.display = "none";
+        trrr[i].style.display = "none";
+      }
+    }       
+  }
+	
+}
+
+
 function syncErp(mpi){
 	
 	
@@ -356,7 +388,8 @@ function changeQty(sku, nama){
 				$("#example1").load(" #example1");
 				$("#info").load(location.href + " #info");
 				search.value = '';
-				$('#search1').val(sku);
+				search.focus();
+				// $('#search1').val(sku);
 				filterTable(sku);
 			}
 			else {
@@ -382,34 +415,7 @@ function changeQty(sku, nama){
 
 
 
-function filterTable(sku){
-	var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("search1");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("example1");
-  tr = table.getElementsByClassName("header");
-  trr = table.getElementsByClassName("header1");
-  trrr = table.getElementsByClassName("header2");
-   // tr.style.display = "none";
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-  
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-     
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-        trr[i].style.display = "";
-        trrr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-        trr[i].style.display = "none";
-        trrr[i].style.display = "none";
-      }
-    }       
-  }
-	
-}
+
 
 
 

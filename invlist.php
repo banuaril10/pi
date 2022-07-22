@@ -61,7 +61,7 @@
 						</thead>
 						<tbody>
 			
-		<?php $list_line = "select m_piline.m_piline_key, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		<?php $list_line = "select distinct m_piline.m_piline_key, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
 		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' order by qtyerp desc";
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	?>
