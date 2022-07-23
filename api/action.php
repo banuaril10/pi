@@ -1546,7 +1546,7 @@ locator_name) VALUES (
 				'".$r['m_product_category_id']."',
 				'".$r['c_uom_id']."',
 				'".$r['sku']."',
-				'".$r['namaitem']."',
+				'".substr($r['namaitem'], 0, 49)."',
 				'".$r['price']."',
 				'".$r['stockqty']."',
 				'".$r['m_locator_id']."',
