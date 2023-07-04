@@ -1,0 +1,40 @@
+
+.button-refresh {
+  font-weight: bold;
+  background-color: grey;
+  border: none;
+  color: white;
+  padding: 7px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 7px; 
+}
+
+.button-home {
+  font-weight: bold;
+  background-color: green;
+  border: none;
+  color: white;
+  padding: 7px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+   border-radius: 7px; 
+}
+
+.notif-green {
+	font-weight: bold;
+	color: green;
+}
+
+.notif-red {
+	font-weight: bold;
+	color: red;
+}

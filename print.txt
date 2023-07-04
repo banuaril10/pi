@@ -1,0 +1,100 @@
+
+
+
+
+
+No Document  : BOSOL-20220705105918
+Rack         : R-90
+ 
+No | Nama / SKU |  Count | Varian 
+1. Jas Hujan Gamis 753 Salsabila
+8110100000078      0        -42
+
+2. Jas Hujan Plevia BP7001 Set Transparan
+8110100000073      0        -29
+
+3. Payung Anak Kuping Murah (Im)
+8110300000018      0        -23
+
+4. Jas Hujan Setelan Rok 870
+81100914           0        -21
+
+5. J/H Terusan Anak 868 (Im)
+8110200000019      0        -20
+
+6. Jas Hujan Axio AX-882
+8110100000068      0        -19
+
+7. Jas Hujan Setelan JC Tristar 727
+81100928           0        -18
+
+8. Jas Hujan Ponco Lengan Pop 850
+81100856           0        -14
+
+9. Jas Hujan Poncho Celana Exclusive 68214`
+81100947           0        -12
+
+10. Jas Hujan Setelan Bigmaxxx (XXXL) 1817
+8110100000081      0        -12
+
+11. Jas Hujan PL Celana Nautilus 734
+81100929           0        -11
+
+12. Jas Hujan Setelan 612 Sportlite
+8110100000080      0         -9
+
+13. Jas Hujan Setelan Opus Xl 1812
+81100883           0         -8
+
+14. Jas Hujan Setelan Metro 68300
+81100887           0         -6
+
+15. Payung Anak Karakter 888
+81100612           0         -5
+
+16. Jas Hujan Plevia 813 Setelan Army
+8110100000072      0         -5
+
+17. Jas Hujan Setelan  Diamond 700
+81100880           0         -5
+
+18. Jas Hujan Ponco Celana Best Kids 120
+8110200000020      0         -3
+
+19. Jas Hujan Plevia 510 Setelan Ranger
+8110100000071      0         -2
+
+20. J/H Terusan Anak Biasa 616 (Im)
+8110200000018      0         -2
+
+21. Jas Hujan Setelan Anak Horison 68267
+81100764           0         -2
+
+22. Jas Hujan Setelan Rush 811
+81100882           0         -2
+
+23. Jas Hujan Ponco Plevia Bathi 505
+8110600000030      0         -2
+
+24. Jas Hujan Setelan Elephant JC Hemat
+8110100000074      0          1
+
+25. Jas Hujan Setelan 755 Infinity
+8110100000079      0          2
+
+26. J/H Setelan Dewasa Parasut (Im)
+8110600000026      0          3
+
+27. Payung Lipat Magic 3D
+8110500000040      0          3
+
+28. J/H Terusan Transparan Dewasa (Im)
+8110100000066      0          5
+
+
+
+
+
+
+
+
