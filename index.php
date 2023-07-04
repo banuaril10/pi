@@ -22,7 +22,7 @@
 			
 			
 			
-				<h3 class="title1">Sign in Store App</h3>
+				<h3 class="title1">Sign in Store Apps</h3>
 				
 				
 				
