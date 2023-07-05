@@ -1799,14 +1799,20 @@ if($_GET['modul'] == 'inventory'){
 		echo $json_string;
 	}else if($_GET['act'] == 'deleteline'){
 		
-		$m_piline_key = $_POST['m_piline_key'];
-		
-		
+			$m_piline_key = $_POST['m_piline_key'];
+			$sku = '';
+			$getsku = $connec->query("select sku from m_piline where m_piline_key = '".$m_piline_key."'");
+			foreach ($getsku as $gs) {
+				
+				$sku = $gs['sku'];
+			}
+			
 			$statement1 = $connec->query("delete from m_piline where m_piline_key = '".$m_piline_key."'");
 			
 			
 			
 			if($statement1){
+				$connec->query("update pos_mproduct set isactived = '1' where sku = '".$sku."'");
 				$json = array('result'=>'1', 'msg'=>'Berhasil delete line');	
 			}else{
 				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
