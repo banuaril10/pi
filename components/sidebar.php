@@ -152,6 +152,9 @@
 							<a href="mitems.php">Harga Reguler</a>
 						</li>
 						<li class="submenu-item ">
+							<a href="mitemsold.php">Harga Reguler Format Lama</a>
+						</li>
+						<li class="submenu-item ">
 							<a href="mitems_alt.php">Harga Reguler Per Rack</a>
 						</li>
 						<li class="submenu-item ">
@@ -216,6 +219,9 @@
 					<ul class="submenu ">
 						<li class="submenu-item ">
 							<a href="mitems.php">Harga Reguler</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemsold.php">Harga Reguler Format Lama</a>
 						</li>
 						<li class="submenu-item ">
 							<a href="mitems_alt.php">Harga Reguler Per Rack</a>

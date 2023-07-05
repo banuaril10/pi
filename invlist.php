@@ -77,7 +77,7 @@
 			
 							<tr>
 								<td><?php echo $no; ?></td>
-								<td><button type="button" style="display: inline-block; background: red; color: white" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row1['m_piline_key']; ?>"><i class="fa fa-times"></i></button><br><font style="font-weight: bold"><?php echo $row1['sku']; ?> <?php echo $barcode; ?></font><br> <font style="color: green;font-weight: bold"><?php echo $row1['name']; ?></font></td>
+								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal<?php echo $row1['m_piline_key']; ?>"><i class="fa fa-times"></i></button><br><font style="font-weight: bold"><?php echo $row1['sku']; ?> <?php echo $barcode; ?></font><br> <font style="color: green;font-weight: bold"><?php echo $row1['name']; ?></font></td>
 	
 								<td>
 								
