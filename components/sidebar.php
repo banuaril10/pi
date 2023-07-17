@@ -124,9 +124,7 @@
 						<li class="submenu-item ">
 							<a href="manage_stock.php">Manage Stock</a>
 						</li>
-						<li class="submenu-item ">
-							<a href="manage_stock_all.php">Manage Stock Awal</a>
-						</li>
+
 						<li class="submenu-item ">
 							<a href="sync_sku.php">Sync SKU</a>
 						</li>
