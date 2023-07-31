@@ -5925,11 +5925,6 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		$no = 1;
 		foreach ($arr as $row1) {
 			
-				$stats = '<font style="background-color: green;color:#fff;padding:10px">Aktif</font>';
-				if($row1['status'] == '0'){
-					$stats = '<font style="background-color: red;color:#fff;padding:10px">Nonaktif</font>';
-					
-				}
 							echo 
 							"<tr>
 								<td>".$no."</td>
@@ -5943,7 +5938,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 								<td>".$row1['periode_akhir']."</td>
 								<td>".$row1['pembayaran']."</td>
 								<td>".$row1['input_date']."</td>
-								<td>".$stats."</td>
+								<td>".$row1['status']."</td>
 
 							</tr>";
 							
