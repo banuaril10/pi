@@ -542,7 +542,7 @@ var html = 'No Document  : '+dn+' <br>';
    html += 'Rack         : '+rn+' <br>';
    
    
-html += '<table><tr><td>No</td><td>SKU</td><td>Nama</td><td>'+textbyline('Count',6,'right')+'</td><td>'+textbyline('Varian',6,'right')+'</td></tr>';
+html += '<table><tr><td style="color: blue">No</td><td style="color: blue">SKU</td><td style="color: blue">Nama</td><td style="color: blue">'+textbyline('Count',6,'right')+'</td><td style="color: blue">'+textbyline('Varian',6,'right')+'</td></tr>';
 			
 				
 				var dataResult = JSON.parse(dataResult);
@@ -560,8 +560,8 @@ html += '<table><tr><td>No</td><td>SKU</td><td>Nama</td><td>'+textbyline('Count'
 						var barcode = data.barcode;
 							
 							html += '<tr>';
-							html += '<td>'+no+'</td><td>'+sku+'</td>';
-							html +='<td>'+textbyline(name,1,'left')+'</td><td style="text-align: center"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td><td style="text-align: center"> '+textbyline(''+qtyvariant+'',10,'right')+'</td>';
+							html += '<td style="color: blue">'+no+'</td><td style="color: blue">'+sku+'</td>';
+							html +='<td style="color: blue">'+textbyline(name,1,'left')+'</td><td style="text-align: center; color: blue"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td><td style="text-align: center; color: blue"> '+textbyline(''+qtyvariant+'',10,'right')+'</td>';
 							// html += "\n\r";
 							// html += barcode;
 	
