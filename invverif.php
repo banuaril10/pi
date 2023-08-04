@@ -538,11 +538,11 @@ function cetakPdf(mpi, rn, dn){
 			
 				
 				
-var html = 'No Document  : '+dn+' <br>';
-   html += 'Rack         : '+rn+' <br>';
+var html = '<font style="color: blue">No Document  : '+dn+'</font> <br>';
+   html += '<font style="color: blue">Rack         : '+rn+'</font> <br>';
    
    
-html += '<table><tr><td style="color: blue">No</td><td style="color: blue">SKU</td><td style="color: blue">Nama</td><td style="color: blue">'+textbyline('Count',6,'right')+'</td><td style="color: blue">'+textbyline('Varian',6,'right')+'</td></tr>';
+html += '<table ><tr><td style="color: blue">No</td><td style="color: blue">SKU</td><td style="color: blue">Nama</td><td style="color: blue">'+textbyline('Count',6,'right')+'</td><td style="color: blue">'+textbyline('Varian',6,'right')+'</td></tr>';
 			
 				
 				var dataResult = JSON.parse(dataResult);
