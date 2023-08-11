@@ -4564,7 +4564,7 @@ locator_name) VALUES (
 				
 				
 					$nestedData['no'] = $no;
-					$nestedData['check'] = '<input type="checkbox" id="checkbox'.$r['sku'].'" name="checkbox[]" value="'.$r['sku'].'|'.$r['name'].'|'.$r['price'].'|'.$r['tgl_sekarang'].'|'.$r['rack_name'].'|'.$r['shortcut'].'|'.$harga_last.'|'.$row['tag'].'">';
+					$nestedData['check'] = '<input type="checkbox" id="checkbox'.$r['sku'].'" name="checkbox[]" value="'.$r['sku'].'|'.$r['name'].'|'.$r['price'].'|'.$r['tgl_sekarang'].'|'.$r['rack_name'].'|'.$r['shortcut'].'|'.$harga_last.'|'.$r['tag'].'">';
 					$nestedData['sku'] = '<label for="checkbox'.$r['sku'].'">'.$r['sku'].'</label>';
 					$nestedData['barcode'] = $r['barcode'];
 					$nestedData['name'] = '<label for="checkbox'.$r['sku'].'">'.$r['name'].'</label>';
