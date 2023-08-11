@@ -401,7 +401,11 @@
 					}
 					
 					
-					
+$cmd_alter_tag = ['ALTER TABLE pos_mproduct ADD COLUMN IF NOT EXISTS tag varchar(25);'];
+
+foreach ($cmd_alter_tag as $r){
+	$connec->exec($r);
+}					
 					
 					?> 
 						
