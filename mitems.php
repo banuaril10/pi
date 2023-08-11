@@ -171,6 +171,7 @@
 								<th>Name</th>
 								<th>Price</th>
 								<th>Rack Name</th>
+								<th>Tag</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -265,6 +266,7 @@ $(document).ready( function () {
                   { "data": "name" },
                   { "data": "price" },
                   { "data": "rack_name" },
+                  { "data": "tag" },
               ]  
  
           });
@@ -569,14 +571,13 @@ function formatRupiah(angka, prefix){
 						}
 						
 						if(res[4] != ""){
-							var rack = res[0]+"/"+res[4];
+							var rack = res[0]+"/"+res[4]+"/"+res[7];
 							
 							
 						}else{
 							
-							var rack = res[0]+"/NO_RACK";
+							var rack = res[0]+"/NO_RACK/"+res[7];
 						}
-						
 						// <br style='line-height: 70%;'>
 						
 						var newStr = rack.replace('-', '_');

@@ -159,6 +159,7 @@
 								<th>Price</th>
 								<th>Price Discount</th>
 								<th>Rack Name</th>
+								<th>Tag</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -166,7 +167,7 @@
 						<?php 
 						
 						
-						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where a.sku != ''";
+						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where a.sku != ''";
 						
 						if($_GET['rak'] && !empty($_GET['rak'])){
 							
@@ -203,7 +204,7 @@
 						
 						
 							<tr>
-								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['price']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['shortcut']; ?>|<?php echo $harga_last; ?>|<?php echo $tgl_todate; ?>"></td>
+								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['price']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['shortcut']; ?>|<?php echo $harga_last; ?>|<?php echo $tgl_todate; ?>|<?php echo $row['tag']; ?>"></td>
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $row['barcode']; ?></td>
@@ -212,6 +213,7 @@
 								<td><?php echo $harga_last; ?></td>
 								
 								<td><?php echo $row['rack_name']; ?></td>
+								<td><?php echo $row['tag']; ?></td>
 								
 							</tr>
 							
@@ -534,12 +536,12 @@ function formatRupiah(angka, prefix){
 						}
 						
 						if(res[4] != ""){
-							var rack = res[0]+"/"+res[4];
+							var rack = res[0]+"/"+res[4]+"/"+res[8];
 							
 							
 						}else{
 							
-							var rack = res[0]+"/NO_RACK";
+							var rack = res[0]+"/NO_RACK/"+res[8];
 						}
 						
 						
