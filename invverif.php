@@ -83,7 +83,18 @@
 						<option value="1">Nama</option>
 						<option value="2">Variant</option>
 						<option value="3">SKU</option>
-					</select></td></tr>
+					</select></td>
+					
+					<td>Warna : </td>
+					<td><select id="warna">
+						<option value="black">Hitam</option>
+						<option value="blue">Biru</option>
+						<option value="red">Merah</option>
+						<option value="green">Hijau</option>
+					</select>
+					</td>
+					
+					</tr>
 					
 					</table>
 					<br>
@@ -529,6 +540,7 @@ function cetakPdf(mpi, rn, dn){
 		var no = 1;	
 				
 		var sort = document.getElementById("sort").value;
+		var warna = document.getElementById("warna").value;
 		// alert(html);
 		$.ajax({
 			url: "api/action.php?modul=inventory&act=cetak_generic",
@@ -538,11 +550,11 @@ function cetakPdf(mpi, rn, dn){
 			
 				
 				
-var html = '<font style="color: blue">No Document  : '+dn+'</font> <br>';
-   html += '<font style="color: blue">Rack         : '+rn+'</font> <br>';
+var html = '<font style="color: '+warna+'">No Document  : '+dn+'</font> <br>';
+   html += '<font style="color: '+warna+'">Rack         : '+rn+'</font> <br>';
    
    
-html += '<table ><tr><td style="color: blue; border-color: blue;">No</td><td style="color: blue; border-color: blue">SKU</td><td style="color: blue; border-color: blue">Nama</td><td style="color: blue; border-color: blue">'+textbyline('Count',6,'right')+'</td><td style="color: blue; border-color: blue">'+textbyline('Varian',6,'right')+'</td></tr>';
+html += '<table ><tr><td style="color: '+warna+'; border-color: '+warna+';">No</td><td style="color: '+warna+'; border-color: '+warna+'">SKU</td><td style="color: '+warna+'; border-color: '+warna+'">Nama</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Count',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Varian',6,'right')+'</td></tr>';
 			
 				
 				var dataResult = JSON.parse(dataResult);
@@ -560,8 +572,8 @@ html += '<table ><tr><td style="color: blue; border-color: blue;">No</td><td sty
 						var barcode = data.barcode;
 							
 							html += '<tr>';
-							html += '<td style="color: blue; border-color: blue">'+no+'</td><td style="color: blue; border-color: blue">'+sku+'</td>';
-							html +='<td style="color: blue; border-color: blue">'+textbyline(name,1,'left')+'</td><td style="text-align: center; color: blue; border-color: blue"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td><td style="text-align: center; color: blue; border-color: blue"> '+textbyline(''+qtyvariant+'',10,'right')+'</td>';
+							html += '<td style="color: '+warna+'; border-color: '+warna+'">'+no+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+sku+'</td>';
+							html +='<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline(name,1,'left')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtyvariant+'',10,'right')+'</td>';
 							// html += "\n\r";
 							// html += barcode;
 	
