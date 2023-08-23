@@ -91,11 +91,11 @@
 			</table>	
 			</form>	
 				
-				<?php $cek_brand = "select brand from m_profile";
+				<?php $cek_brand = "select name from ad_morg where postby = 'SYSTEM'";
 				
 				foreach ($connec->query($cek_brand) as $row) {
 					
-					$brand = $row['brand'];
+					$brand = $row['name'];
 					
 				}
 				
