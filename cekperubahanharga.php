@@ -91,7 +91,7 @@
 			</table>	
 			</form>	
 				
-				<?php $cek_brand = "select name from ad_morg where postby = 'SYSTEM'";
+				<?php $cek_brand = "select address3 as name from ad_morg where postby = 'SYSTEM'";
 				
 				foreach ($connec->query($cek_brand) as $row) {
 					
