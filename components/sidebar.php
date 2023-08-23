@@ -20,6 +20,13 @@
 			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing'){ ?>
 			
 				<li class="sidebar-item">
+					<a href="cekperubahanharga.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Perubahan Harga</span>
+					</a>
+				</li>
+			
+				<li class="sidebar-item">
 					<a href="document.php" class='sidebar-link'>
 						<i class="bi bi-box-seam"></i>
 						<span>Receiving Items</span>

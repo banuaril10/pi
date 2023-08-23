@@ -490,7 +490,35 @@ function push_to_newpos($a){
 }
 
 
+function push_to_newpos_price($a){
+	
+			
+		
+			
+	$postData = array(
+		"data" => $a,
+    );				
+	$fields_string = http_build_query($postData);
 
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=input_perubahan_harga',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $fields_string,
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+}
 
 
 function push_to_server_line_all2($a){
@@ -3925,6 +3953,58 @@ locator_name) VALUES (
 		
 		$json_string = json_encode($data);	
 		echo $json_string;
+	}else if($_GET['act'] == 'send_price'){
+						$json_url = "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=cek_perubahan_harga";
+						$json = file_get_contents($json_url);
+						
+						$arr = json_decode($json, true);
+						$jum = count($arr);
+						
+						// var_dump($json);
+						$jj = array();
+						$s = array();
+						if($jum > 0){
+						$no = 1;
+						foreach ($arr as $row1) { 
+							// echo $row1['sku'];
+							$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name, a.barcode, a.price, a.tag from pos_mproduct a
+							where a.sku = '".$row1['sku']."' and a.price != '".$row1['price']."'
+							group by a.sku, a.name order by a.name";
+							
+						foreach ($connec->query($sql_list) as $row) {
+							
+							
+							$jj[] = array(
+								"sku"=> $row['sku'],
+								"name"=> $row['name'],
+								"price"=> $row['price'],
+								"price_erp"=> $row1['price'],
+								"store_name"=> $storename,
+							);
+							
+							// echo $row['sku'];
+							
+							
+						}
+					}
+			
+				}
+		
+		if (!$jj) {
+			$data = array("result"=>0, "msg"=>"Belum ada cash in yg di approved");
+			
+		}else{
+				$allarray = array("cashin"=>$jj);
+				$items_json = json_encode($allarray);
+				$hasil = push_to_newpos_price($items_json);
+				$j_hasil = json_decode($hasil, true);
+				
+				$data = array("result"=>1, "msg"=>"Berhasil kirim ke newpos");
+		}	
+
+		$json_string = json_encode($data);	
+		echo $json_string;
+		// var_dump($hasil);
 	}else if($_GET['act'] == 'send_newposall'){
 		$jj = array();
 		$list_line = "select * from cash_in where status = '1' and syncnewpos = '0'";
