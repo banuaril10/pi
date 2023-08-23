@@ -155,11 +155,12 @@
 							foreach ($connec->query($sql_list) as $row) {
 								
 							$harga_last = 0;
-							$cek_disc = "select afterdiscount from pos_discount where (fromdate <= '".date('Y-m-d')."' and todate >= '".date('Y-m-d')."')  and sku = '".$row['sku']."'";
+							$cek_disc = "select discount from pos_mproductdiscount where todate >= '".date('Y-m-d')."' and sku = '".$row['sku']."'";
 							foreach ($connec->query($cek_disc) as $row_dis) {
 								
-								$harga_last = $row_dis['afterdiscount'];
-							}	
+								$disk = $row_dis['discount'];
+								$harga_last = $row['price'] - $disk;
+							}
 								
 							
 						?>
