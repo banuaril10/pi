@@ -31,6 +31,12 @@ $ss = $_SESSION['status_sales'];
 $kode_toko = $_SESSION['kode_toko'];
 
 
+$get_nama_toko = "select name from ad_morg where postby = 'SYSTEM'";
+$resultss = $connec->query($get_nama_toko);
+foreach ($resultss as $r) {
+	$storename = $r["name"];	
+}
+
 function rupiah($angka){
 	
 	$hasil_rupiah = number_format($angka,0,',','.');
