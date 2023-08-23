@@ -141,7 +141,7 @@
     </div>
 	<div class="row">
       <div class="col-25">
-        <label style="color: #fff"for="fname">Tanggal Lahir</label>
+        <label style="color: #fff"for="fname">Tanggal Lahir (jika tidak diisi biarkan saja tgl sekarang)</label>
       </div>
       <div class="col-75">
 	  
