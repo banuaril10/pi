@@ -147,8 +147,8 @@
 						foreach ($arr as $row1) { 
 							// echo $row1['sku'];
 							$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.barcode, a.price, a.tag from pos_mproduct a 
-							left join inv_mproduct b on a.sku = b.sku where a.sku = '".$row1['sku']."' and a.price != '".$row1['price']."'
-							group by a.sku, a.name, b.rack_name order by a.name";
+							left join inv_mproduct b on a.sku = b.sku where a.sku = '".$row1['sku']."' 
+							and a.price != '".$row1['price']."' group by a.sku, a.name, b.rack_name, a.barcode, a.price, a.tag order by a.name";
 							
 							
 							
