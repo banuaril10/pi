@@ -3961,7 +3961,15 @@ locator_name) VALUES (
 		echo $json_string;
 	}else if($_GET['act'] == 'send_price'){
 						$json_url = "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=cek_perubahan_harga";
-						$json = file_get_contents($json_url);
+						$options = stream_context_create(array('http'=>
+							array(
+							'timeout' => 10 //10 seconds
+							)
+						));
+						// echo file_get_contents('http://example.com/', false, $options);
+						
+						
+						$json = file_get_contents($json_url, false, $options);
 						
 						$arr = json_decode($json, true);
 						$jum = count($arr);
