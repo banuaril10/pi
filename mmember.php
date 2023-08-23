@@ -76,7 +76,7 @@
 		
       </div>
 	  
-      <div class="modal-body" style="background: #cacaca">
+      <div class="modal-body" style="background: #6e6e6e">
 	  
 	   <form id="fupForm" method="post">
 	    <p id="notif" style="color: red; font-weight: bold; background: #fff; padding: 10px"></p>
