@@ -149,7 +149,7 @@
 	  <input type="hidden" class="form-control" id="to" value="<?php echo date('Y-m-d'); ?>"></input>
 	  
 	  
-		<input class="form-control" id="tgl_lahir" type='date'></input>
+		<input class="form-control" id="tgl_lahir" type='date' value="<?php echo date('Y-m-d'); ?>"></input>
 		
       </div>
     </div>
@@ -276,18 +276,16 @@
 		var from = $('#from').val();	
 		var to = $('#to').val();	
 		
-		
-		if(no_hp!="" && nama_lengkap!="" && tgl_lahir!="" && jk!="" && kota!=""){
-			// var  mydate = new Date(tgl_lahir);
-			// alert(mydate);
+		// && tgl_lahir!=""
+		if(no_hp!="" && nama_lengkap!="" && jk!="" && kota!=""){
 			
-			const isDateInRage = (startDate, endDate) => (dateToCheck) => {
-				return dateToCheck >= startDate && dateToCheck <= endDate
-			}
+			// const isDateInRage = (startDate, endDate) => (dateToCheck) => {
+				// return dateToCheck >= startDate && dateToCheck <= endDate
+			// }
 			
-			const isInRangeOne = isDateInRage(from, to)
+			// const isInRangeOne = isDateInRage(from, to)
 			
-			if(isInRangeOne(tgl_lahir)){
+			// if(isInRangeOne(tgl_lahir)){
 				
 				
 				
@@ -367,11 +365,11 @@
 			
 			
 			
-		}else{
+		// }else{
 			
 			
-			$('#notif').html("Tgl lahir tdk valid harus diantara 01/01/1900 s.d Tgl sekarang");
-		}
+			// $('#notif').html("Tgl lahir tdk valid harus diantara 01/01/1900 s.d Tgl sekarang");
+		// }
 				
 			}else{
 				$('#notif').html("Lengkapi data dulu");
