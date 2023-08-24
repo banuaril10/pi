@@ -291,17 +291,18 @@ function cetakGeneric(id){
 						var ad_org_id = data.ad_org_id;
 						var nama_toko = data.nama_toko;
 						var insertdate = data.insertdate;
+						var datenow = data.datenow;
 						var brand = data.brand;
 							
-							
-							html += textbyline(brand, 38, 'left')+'\n\r';
-							html += textbyline('STRUK PENDAFTARAN LOMBA', 38, 'left')+'\n\r';
+							html += textbyline(brand, 38, 'center')+'\n\r';
+							html += textbyline('STRUK PENDAFTARAN LOMBA', 38, 'center')+'\n\r';
 							html += textbyline('KODE DFTR.	:' + kode_pendaftaran, 24, 'left')+ '\r\n';
 							html += textbyline('TOKO   		:' + nama_toko, 24, 'left')+ '\r\n';
 							html += textbyline('NAMA   		:' + nama, 24, 'left') + '\r\n';
 							html += textbyline('NO HP  		:' + no_hp, 24, 'left') + '\r\n';
 							html += textbyline('KATEGORI  	:' + kategori, 24, 'left') + '\r\n';
 							html += textbyline('TGL DAFTAR	:' + insertdate, 24, 'left')+ '\r\n';
+							html += textbyline('TGL CETAK	:' + datenow, 24, 'left')+ '\r\n';
 							html += '\n\r';
 							number++;
 							no++;

@@ -31,12 +31,12 @@ $ss = $_SESSION['status_sales'];
 $kode_toko = $_SESSION['kode_toko'];
 
 
-$get_nama_toko = "select name, ad_morg_key from ad_morg where postby = 'SYSTEM'";
+$get_nama_toko = "select * from ad_morg where postby = 'SYSTEM'";
 $resultss = $connec->query($get_nama_toko);
 foreach ($resultss as $r) {
 	$storename = $r["name"];	
 	$ad_morg_key = $r["ad_morg_key"];	
-	$brand = $r["address3"];	
+	$brand = strtoupper($r["address3"]);	
 }
 
 function rupiah($angka){
@@ -6179,6 +6179,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 					"ad_org_id"=> $row1['ad_org_id'],
 					"nama_toko"=> $kt[1],
 					"insertdate"=> $row1['insertdate'],
+					"datenow"=> date('Y-m-d H:i:s'),
 					"brand"=> $brand,
 				);
 			
