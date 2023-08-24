@@ -316,7 +316,7 @@ function cetakGeneric(id){
 								html+='\n\r';
 								html+='\n\r';
 								html+='\n\r';
-								// print_text(html);
+								print_text(html);
 								console.log(html);
 							}
 					
