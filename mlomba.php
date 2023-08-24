@@ -37,6 +37,7 @@
 						<thead>
 							<tr>
 								
+								<th>No</th>
 								<th>Nomor Pendaftaran</th>
 								<th>No. HP</th>
 								<th>Nama</th>
