@@ -291,9 +291,11 @@ function cetakGeneric(id){
 						var ad_org_id = data.ad_org_id;
 						var nama_toko = data.nama_toko;
 						var insertdate = data.insertdate;
+						var brand = data.brand;
 							
 							
-							html += textbyline('STRUK PENDAFTARAN LOMBA IDOLMART', 38, 'left')+'\n\r';
+							html += textbyline(brand, 38, 'left')+'\n\r';
+							html += textbyline('STRUK PENDAFTARAN LOMBA', 38, 'left')+'\n\r';
 							html += textbyline('KODE DFTR.	:' + kode_pendaftaran, 24, 'left')+ '\r\n';
 							html += textbyline('TOKO   		:' + nama_toko, 24, 'left')+ '\r\n';
 							html += textbyline('NAMA   		:' + nama, 24, 'left') + '\r\n';

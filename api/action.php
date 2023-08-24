@@ -36,6 +36,7 @@ $resultss = $connec->query($get_nama_toko);
 foreach ($resultss as $r) {
 	$storename = $r["name"];	
 	$ad_morg_key = $r["ad_morg_key"];	
+	$brand = $r["address3"];	
 }
 
 function rupiah($angka){
@@ -6177,7 +6178,8 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 					"kategori"=> $row1['kategori'],
 					"ad_org_id"=> $row1['ad_org_id'],
 					"nama_toko"=> $kt[1],
-					"insertdate"=> $row1['insertdate']
+					"insertdate"=> $row1['insertdate'],
+					"brand"=> $brand,
 				);
 			
 			}
