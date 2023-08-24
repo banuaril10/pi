@@ -199,6 +199,8 @@
 					if(dataResult.result=='1'){
 						$('#notif').html('<font style="color: green">'+dataResult.message+'</font>');
 						$("#overlay").fadeOut(300);　
+						$('#fupForm')[0].reset();
+						$("#nama").focus();
 					}
 					else {
 						$("#overlay").fadeOut(300);　

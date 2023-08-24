@@ -1062,7 +1062,7 @@ curl_setopt_array($curl, array(
   CURLOPT_FOLLOWLOCATION => true,
   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
   CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS =>'{"no_hp":"'.$nohp.'","nama":"'.$nama.'","kategori":"'.$kategori.'","nama_toko":"'.$storename.'","ad_org_id":"'.$ad_org_id.'"}',
+  CURLOPT_POSTFIELDS =>'{"no_hp":"'.$no_hp.'","nama":"'.$nama.'","kategori":"'.$kategori.'","nama_toko":"'.$nama_toko.'","ad_org_id":"'.$ad_org_id.'"}',
   CURLOPT_HTTPHEADER => array(
     'Content-Type: application/json'
   ),
