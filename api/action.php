@@ -6164,8 +6164,10 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		$s = array();
 		if($jum > 0){
 		$no = 1;
+		
+		
 		foreach ($arr as $row1) {
-	
+		$kt = explode('-', $row1['nama_toko']);
 				$jj[] = array(
 					"kode_struk"=> $row1['kode_struk'],
 					"kode_pendaftaran"=> $row1['kode_pendaftaran'],
@@ -6174,7 +6176,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 					"no_hp"=> $row1['no_hp'],
 					"kategori"=> $row1['kategori'],
 					"ad_org_id"=> $row1['ad_org_id'],
-					"nama_toko"=> $row1['nama_toko'],
+					"nama_toko"=> $kt[1],
 					"insertdate"=> $row1['insertdate']
 				);
 			

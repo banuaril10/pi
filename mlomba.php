@@ -149,8 +149,8 @@
       </div>
       <div class="col-75">
         <select class="form-control" id="kategori" name="kategori">
-          <option value="TK atau PAUD">TK atau PAUD</option>
-          <option value="SD Kelas 1/3">SD Kelas 1/3</option>
+          <option value="A. TK atau PAUD">A. TK atau PAUD</option>
+          <option value="B. SD Kelas 1/3">B. SD Kelas 1/3</option>
         </select>
       </div>
     </div>
