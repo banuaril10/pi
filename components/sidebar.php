@@ -18,7 +18,12 @@
 			<ul class="menu">
 				<li class="sidebar-title">Menu</li>
 			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing'){ ?>
-			
+				<li class="sidebar-item">
+					<a href="mlomba.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Pendaftaran Lomba</span>
+					</a>
+				</li>
 				<li class="sidebar-item">
 					<a href="cekperubahanharga.php" class='sidebar-link'>
 						<i class="bi bi-cash-stack"></i>

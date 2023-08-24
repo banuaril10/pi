@@ -31,10 +31,11 @@ $ss = $_SESSION['status_sales'];
 $kode_toko = $_SESSION['kode_toko'];
 
 
-$get_nama_toko = "select name from ad_morg where postby = 'SYSTEM'";
+$get_nama_toko = "select name, ad_morg_key from ad_morg where postby = 'SYSTEM'";
 $resultss = $connec->query($get_nama_toko);
 foreach ($resultss as $r) {
 	$storename = $r["name"];	
+	$ad_morg_key = $r["ad_morg_key"];	
 }
 
 function rupiah($angka){
@@ -1046,6 +1047,34 @@ function input_shortcut($sku, $shortcut, $username){
 					
 					
 }
+
+
+
+function inputLomba($no_hp, $nama, $kategori, $nama_toko, $ad_org_id){
+$curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=lomba&act=input',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'POST',
+  CURLOPT_POSTFIELDS =>'{"no_hp":"'.$nohp.'","nama":"'.$nama.'","kategori":"'.$kategori.'","nama_toko":"'.$storename.'","ad_org_id":"'.$ad_org_id.'"}',
+  CURLOPT_HTTPHEADER => array(
+    'Content-Type: application/json'
+  ),
+));
+
+$response = curl_exec($curl);
+curl_close($curl);
+return $response;
+
+}
+
+
 
 if($_GET['modul'] == 'inventory'){	
 	$it = $_POST['it'];
@@ -6113,6 +6142,14 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 
 	
 
+}else if($_GET['modul'] == 'lomba'){
+    if($_GET['act'] == 'input'){
+		
+		$json_de = json_decode(inputLomba($_POST['no_hp'], $_POST['nama'], $_POST['kategori'], $storename, $ad_morg_key), true);
+		echo json_encode($json_de);
+		
+
+    }
 }
 
 
