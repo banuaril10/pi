@@ -132,7 +132,7 @@
         <label style="color: #fff"for="fname">Nama</label>
       </div>
       <div class="col-75">
-        <input type="text" class="form-control" class="form-control" id="nama" name="nama" placeholder="Masukan nama lengkap..">
+        <input type="text" class="form-control" class="form-control" id="nama" name="nama" placeholder="Masukan nama lengkap pendaftar..">
       </div>
     </div>
     <div class="row">
@@ -140,7 +140,7 @@
         <label style="color: #fff"for="fname">No HP</label>
       </div>
       <div class="col-75">
-        <input type="text" class="form-control" class="form-control" id="no_hp" name="no_hp" placeholder="Masukan nomor hp kamu..">
+        <input type="text" class="form-control" class="form-control" id="no_hp" name="no_hp" placeholder="Masukan nomor hp pendaftar..">
       </div>
     </div>
     <div class="row">
