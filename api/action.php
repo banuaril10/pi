@@ -6149,7 +6149,41 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		echo json_encode($json_de);
 		
 
-    }
+    }else if($_GET['act'] == 'cetak_generic'){
+		
+		$id = $_POST['id'];
+		
+		$json_url = "https://pi.idolmartidolaku.com/api/action.php?modul=lomba&act=get_id&id=".$id;
+		$json = file_get_contents($json_url);
+		
+		
+		$arr = json_decode($json, true);
+		$jum = count($arr);
+		// var_dump($jsons);
+		$jj = array();
+		$s = array();
+		if($jum > 0){
+		$no = 1;
+		foreach ($arr as $row1) {
+	
+				$jj[] = array(
+					"kode_struk"=> $row1['kode_struk'],
+					"kode_pendaftaran"=> $row1['kode_pendaftaran'],
+					"nomor_urut"=> $row1['nomor_urut'],
+					"nama"=> $row1['nama'],
+					"no_hp"=> $row1['no_hp'],
+					"kategori"=> $row1['kategori'],
+					"ad_org_id"=> $row1['ad_org_id'],
+					"nama_toko"=> $row1['nama_toko'],
+					"insertdate"=> $row1['insertdate']
+				);
+			
+			}
+		}
+		$json_string = json_encode($jj);	
+		echo $json_string;
+		
+	}
 }
 
 

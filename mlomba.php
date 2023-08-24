@@ -43,6 +43,7 @@
 								<th>Nama</th>
 								<th>Kategori</th>
 								<th>Tgl Daftar</th>
+								<th>Aksi</th>
 		
 							</tr>
 						</thead>
@@ -70,8 +71,7 @@
 							$no = 1;
 							foreach ($arr as $row1) {
 	
-												echo 
-												"<tr>
+												echo "<tr>
 													<td>".$no."</td>
 													
 													<td>".$row1['kode_pendaftaran']."</td>
@@ -79,6 +79,7 @@
 													<td>".$row1['nama']."</td>
 													<td>".$row1['kategori']."</td>
 													<td>".$row1['insertdate']."</td>
+													<td><button class='btn btn-primary' onclick='cetakGeneric(\"".$row1['id']."\");'>Reprint</button></td>
 													
 												</tr>";
 												
@@ -216,6 +217,110 @@
 				
 			}
 	});
+	
+	
+function textbyline(str,intmax,stralign){
+    var strresult='';
+  if (stralign=='right'){
+    strresult=str.padStart(intmax);
+  } else if (stralign=='center'){
+    var l = str.length;
+    var w2 = Math.floor(intmax / 2);
+    var l2 = Math.floor(l / 2);
+    var s = new Array(w2 - l2 + 1).join(" ");
+    str = s + str + s;
+    if (str.length < intmax)
+    {
+        str += new Array(intmax - str.length + 1).join(" ");
+    }
+    strresult=str;
+  } else {
+    strresult=str;
+  }
+  return strresult;
+};
+
+
+function print_text(html){
+	// console.log(html);
+	$.ajax({
+		url: "print.php",
+		type: "POST",
+		data : {html: html},
+		success: function(dataResult){
+			var dataResult = JSON.parse(dataResult);
+
+			$('#notif').html("Proses print");
+			
+			
+		}
+	});
+}
+	
+	
+	
+	
+	
+	
+function cetakGeneric(id){
+		
+		// alert(mpi+'<br>'+rn+'<br>'+dn);		
+		var number = 0;	
+		var no = 1;	
+
+		$.ajax({
+			url: "api/action.php?modul=lomba&act=cetak_generic",
+			type: "POST",
+			data : {id: id},
+			success: function(dataResult){
+				var html = '';
+				var dataResult = JSON.parse(dataResult);
+				
+				var panjang = dataResult.length;
+				$('#notif').html("Proses print");
+				
+				for(let i = 0; i < dataResult.length; i++) {
+						let data = dataResult[i];
+
+						var kode_struk = data.kode_struk;
+						var kode_pendaftaran = data.kode_pendaftaran;
+						var nomor_urut = data.nomor_urut;
+						var nama = data.nama;
+						var no_hp = data.no_hp;
+						var kategori = data.kategori;
+						var ad_org_id = data.ad_org_id;
+						var nama_toko = data.nama_toko;
+						var insertdate = data.insertdate;
+							
+							
+							html += textbyline('STRUK PENDAFTARAN LOMBA', 38, 'left')+'\n\r';
+							html += textbyline('NAMA   :' + nama, 24, 'left') + ' - ' + textbyline(kategori, 18, 'right') + '\r\n';
+
+							html += '\n\r';
+							number++;
+							no++;
+							
+							
+							if(number == panjang){
+							
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								html+='\n\r';
+								print_text(html);
+								console.log(html);
+							}
+					
+				
+				}
+			}
+		});
+
+				
+}
+	
 </script>
 </div>
 <?php include "components/fff.php"; ?>
