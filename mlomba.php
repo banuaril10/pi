@@ -293,9 +293,12 @@ function cetakGeneric(id){
 						var insertdate = data.insertdate;
 							
 							
-							html += textbyline('STRUK PENDAFTARAN LOMBA', 38, 'left')+'\n\r';
-							html += textbyline('NAMA   :' + nama, 24, 'left') + ' - ' + textbyline(kategori, 18, 'right') + '\r\n';
-
+							html += textbyline('STRUK PENDAFTARAN LOMBA IDOLMART', 38, 'left')+'\n\r';
+							html += textbyline('KODE   :' + kode_pendaftaran, 24, 'left')+ '\r\n';
+							html += textbyline('TOKO   :' + nama_toko, 24, 'left')+ '\r\n';
+							html += textbyline('NAMA   :' + nama, 24, 'left') + '' + textbyline(kategori, 18, 'right') + '\r\n';
+							html += textbyline('NO HP  :' + no_hp, 24, 'left') + '\r\n';
+							html += textbyline('TGL DAFTAR   :' + insertdate, 24, 'left')+ '\r\n';
 							html += '\n\r';
 							number++;
 							no++;
@@ -309,7 +312,7 @@ function cetakGeneric(id){
 								html+='\n\r';
 								html+='\n\r';
 								html+='\n\r';
-								print_text(html);
+								// print_text(html);
 								console.log(html);
 							}
 					
