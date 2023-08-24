@@ -41,12 +41,54 @@
 								<th>No. HP</th>
 								<th>Nama</th>
 								<th>Kategori</th>
+								<th>Tgl Daftar</th>
 		
 							</tr>
 						</thead>
 						<tbody>
-   
-   
+						
+						<?php 
+						
+							$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
+							$results = $connec->query($sqll);
+							foreach ($results as $r) {
+								$ad_morg_key = $r["ad_morg_key"];	
+							}
+					
+							$json_url = "https://pi.idolmartidolaku.com/api/action.php?modul=lomba&act=get&ad_org_id=".$ad_morg_key;
+							$json = file_get_contents($json_url);
+						
+					
+							$arr = json_decode($json, true);
+							$jum = count($arr);
+							
+							// var_dump($jsons);
+							
+							$s = array();
+							if($jum > 0){
+							$no = 1;
+							foreach ($arr as $row1) {
+	
+												echo 
+												"<tr>
+													<td>".$no."</td>
+													
+													<td>".$row1['kode_pendaftaran']."</td>
+													<td>".$row1['no_hp']."</td>
+													<td>".$row1['nama']."</td>
+													<td>".$row1['kategori']."</td>
+													<td>".$row1['insertdate']."</td>
+													
+												</tr>";
+												
+												
+								
+								$no++;
+								}
+							}
+							
+							?>
+						
 						</tbody>
 					</table>
 				</div>
@@ -88,7 +130,7 @@
         <label style="color: #fff"for="fname">Nama</label>
       </div>
       <div class="col-75">
-        <input type="number" class="form-control" class="form-control" id="nama" name="nama" placeholder="Masukan nama lengkap..">
+        <input type="text" class="form-control" class="form-control" id="nama" name="nama" placeholder="Masukan nama lengkap..">
       </div>
     </div>
     <div class="row">
