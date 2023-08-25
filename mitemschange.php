@@ -178,10 +178,10 @@
 						<tbody>
 						<?php 
 						
-						$table = '(select pos_mproduct.*, price_change.price as price_new from price_change inner join pos_mproduct on price_change.sku = pos_mproduct.sku)';
+						$table = '(select pos_mproduct.*, price_change.price as price_new, price_change.nama_item as ni from price_change inner join pos_mproduct on price_change.sku = pos_mproduct.sku)';
 						
 						
-						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name,a.barcode, a.price, a.tag from ".$table." a left join inv_mproduct b on a.sku = b.sku where a.sku != '' ";
+						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name,a.barcode, a.price, a.price_new, a.tag, a.ni from ".$table." a left join inv_mproduct b on a.sku = b.sku where a.sku != '' ";
 						$sql_list .= " order by a.name";
 						
 
@@ -207,7 +207,7 @@
 						
 						
 							<tr>
-								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['price_new']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['barcode']; ?>|<?php echo $harga_last; ?>|<?php echo $row['tag']; ?>"></td>
+								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['ni']; ?>|<?php echo $row['price_new']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['barcode']; ?>|<?php echo $harga_last; ?>|<?php echo $row['tag']; ?>"></td>
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $row['barcode']; ?></td>
