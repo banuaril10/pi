@@ -178,7 +178,7 @@
 						<tbody>
 						<?php 
 						
-						$table = '(select select pos_mproduct.*, price_change.price as price_new from price_change inner join pos_mproduct on price_change.sku = pos_mproduct.sku)';
+						$table = '(select pos_mproduct.*, price_change.price as price_new from price_change inner join pos_mproduct on price_change.sku = pos_mproduct.sku)';
 						
 						
 						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name,a.barcode, a.price, a.tag from ".$table." a left join inv_mproduct b on a.sku = b.sku where a.sku != '' ";
