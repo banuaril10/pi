@@ -2407,7 +2407,7 @@ if($_GET['modul'] == 'inventory'){
 	}else if($_GET['act'] == 'sync_inv'){
 		
 		// $json_url = "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_inv&org_id=".$org_key;
-		$jsons = get_data_gudang($org_key);
+		$jsons = get_data_gudang($ad_morg_key);
 		// $jsons = file_get_contents($json_url);
 
 
@@ -2449,9 +2449,9 @@ if($_GET['modul'] == 'inventory'){
 			
 			if($jum_s > 0){
 				$values = implode(", ",$s);
-
-				$suc = $connec->query("insert into inv_mproduct (insertdate, insertby, postby, postdate, ad_mclient_key, ad_morg_key, m_product_id, m_product_category_id, sku, name, rack_name) 
-						VALUES ".$values.";");
+				$qqq = "insert into inv_mproduct (insertdate, insertby, postby, postdate, ad_mclient_key, ad_morg_key, m_product_id, m_product_category_id, sku, name, rack_name) 
+						VALUES ".$values.";";
+				$suc = $connec->query($qqq);
 				
 				
 				if($suc){
@@ -2461,7 +2461,7 @@ if($_GET['modul'] == 'inventory'){
 					
 				}else{
 					
-					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti','query'=>$qqq);
 					$json_string = json_encode($json);	
 				}
 				
