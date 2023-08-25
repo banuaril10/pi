@@ -180,37 +180,8 @@
 						
 						$table = '(select *, price_change.price as price_new from price_change inner join pos_mproduct on price_change.sku = pos_mproduct.sku)';
 						
-												
-						// if($_GET['stock'] && !empty($_GET['stock'])){
-						// $stock = $_GET['stock'];
-						// if($stock == "all"){
-							
-							// $value = "Semua Stock";
-							
-						// }else{
-							// $table = "(select * from pos_mproduct where stockqty > 0)";
-							
-							// $value = "Stock > 0";
-						// }
-							
-							
-			
-						}else{
-							
-							$value = "Semua Stock";
-						}
-						
-						
 						
 						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name,a.barcode, a.price, a.tag from ".$table." a left join inv_mproduct b on a.sku = b.sku where a.sku != '' ";
-						
-						if($_GET['rak'] && !empty($_GET['rak'])){
-							
-							$sql_list .= " and b.rack_name = '".$_GET['rak']."'";
-							
-						}
-						
-						
 						$sql_list .= " order by a.name";
 						
 						
