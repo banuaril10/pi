@@ -2428,7 +2428,7 @@ if($_GET['modul'] == 'inventory'){
 				$mpi = $item['m_product_id']; //etc
 				$mpci = $item['m_product_category_id']; //etc
 				$sku = $item['sku']; //etc
-				$n = str_replace("'", "\'", $item['name']); //etc
+				$n = str_replace("'", "", $item['name']); //etc
 				$rn = $item['rack_name']; //etc
 				// print_r($aoi);
 				
