@@ -185,7 +185,7 @@
 						$sql_list .= " order by a.name";
 						
 						
-						
+						echo $sql_list;
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
 							$harga_last = '-';
