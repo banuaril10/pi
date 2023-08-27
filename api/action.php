@@ -4552,12 +4552,13 @@ locator_name) VALUES (
                            );
  
 		if($_POST['rak'] != "all"){
-			 $querycount =  $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where b.rack_name = '".$_POST['rak']."'");
+			 $querycount =  $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where b.rack_name = '".$_POST['rak']."' and 
+			 (a.price is not null or a.price != 0) ");
 			
 		}else{
 			
 			
-			 $querycount =  $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku ");
+			 $querycount =  $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where (a.price is not null or a.price != 0) ");
 		}
  
     
@@ -4591,7 +4592,7 @@ locator_name) VALUES (
 			
 		if($_POST['rak'] != "all"){
 			
-			 $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where b.rack_name = '".$_POST['rak']."' 
+			 $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where (a.price is not null or a.price != 0) and b.rack_name = '".$_POST['rak']."' 
 			 ".$querystock."
 			 order by a.name asc
                                                       LIMIT $limit
@@ -4600,7 +4601,7 @@ locator_name) VALUES (
 		}else{
 			
 			
-			 $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where a.sku !='' ".$querystock." order by a.name asc
+			 $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where (a.price is not null or a.price != 0) and a.sku !='' ".$querystock." order by a.name asc
                                                       LIMIT $limit
                                                       OFFSET $start");
 		}	
@@ -4627,7 +4628,7 @@ locator_name) VALUES (
 		}	
 			
 		if($_POST['rak'] != "all"){
-			 $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where b.rack_name = '".$_POST['rak']."' ".$querystock." 
+			 $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where (a.price is not null or a.price != 0) and b.rack_name = '".$_POST['rak']."' ".$querystock." 
 															and a.sku ILIKE  '%$search%'
                                                          or b.rack_name ILIKE  '%$search%'
                                                          or a.barcode ILIKE  '%$search%'
@@ -4637,7 +4638,7 @@ locator_name) VALUES (
                                                          OFFSET $start");
  
  
-         $querycount = $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where b.rack_name = '".$_POST['rak']."' ".$querystock."  and a.sku ILIKE  '%$search%'
+         $querycount = $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where (a.price is not null or a.price != 0) and b.rack_name = '".$_POST['rak']."' ".$querystock."  and a.sku ILIKE  '%$search%'
                                                          or b.rack_name ILIKE  '%$search%'
                                                          or a.barcode ILIKE  '%$search%'
                                                          or a.name ILIKE  '%$search%'");
@@ -4645,7 +4646,7 @@ locator_name) VALUES (
 		}else{
 			
 			
-			  $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
+			  $query = $connec->query("select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku WHERE (a.price is not null or a.price != 0) and a.sku ILIKE  '%$search%'
                                                          or b.rack_name ILIKE  '%$search%'
                                                          or a.barcode ILIKE  '%$search%'
                                                          or a.name ILIKE  '%$search%' ".$querystock." 
@@ -4654,7 +4655,7 @@ locator_name) VALUES (
                                                          OFFSET $start");
  
  
-         $querycount = $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
+         $querycount = $connec->query("select count(*) as jumlah from pos_mproduct a left join inv_mproduct b on a.sku = b.sku WHERE (a.price is not null or a.price != 0) and a.sku ILIKE  '%$search%'
                                                          or b.rack_name ILIKE  '%$search%'
                                                          or a.barcode ILIKE  '%$search%'
                                                          or a.name ILIKE  '%$search%' ".$querystock." ");
