@@ -173,6 +173,16 @@
 
 
 <script type="text/javascript">
+$(document).ready( function () {
+    $('#example').DataTable({
+        lengthMenu: [
+            [10, 25, 50, -1],
+            [10, 25, 50, 'All'],
+        ],
+    });
+} );
+
+
 	$('#butsave').on('click', function() {
 	
 		var no_hp = $('#no_hp').val();
