@@ -203,6 +203,9 @@
 						$("#overlay").fadeOut(300);　
 						$('#fupForm')[0].reset();
 						$("#nama").focus();
+						cetakGeneric(dataResult.id);
+						
+						
 					}
 					else {
 						$("#overlay").fadeOut(300);　
