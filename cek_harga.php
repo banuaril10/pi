@@ -40,6 +40,8 @@
 			<br>- jika muncul pesan "Data Barcode sudah ada ...." silahkan <button type="button" onclick="manage_stock();" class="btn btn-primary">Sync Barcode</button> terlebih dahulu
 			
 			</font>
+			
+			<button type="button" onclick="sync_price();" class="btn btn-primary">Sync Harga</button>
 			<p id="notif" style="color: green; font-weight: bold"></p>
 			<!--<button onclick="turnOn();" class="switch">On</button>
 			<button onclick="turnOff();" class="switch1">Off</button>
@@ -108,6 +110,34 @@ function manage_stock(){
 	
 	
 }
+
+function sync_price(){
+	$("#overlay").fadeIn(300);
+
+		$.ajax({
+		url: "api/action.php?modul=inventory&act=sync_price",
+		type: "POST",
+		beforeSend: function(){
+			$('#notif').html("Proses sync Barcode..");
+			
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			location.reload();
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#overlay").fadeOut(300);
+			
+		}
+		});
+		
+	
+	
+	
+	
+}
+
+
 
 // function onScanSuccess(decodedText, decodedResult) {
     // console.log(`Code scanned = ${decodedText}`, decodedResult);
