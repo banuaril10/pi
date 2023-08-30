@@ -208,7 +208,12 @@
 					</a>
 				</li>
 			<?php }else if($_SESSION['name'] == 'Marketing'){ ?>
-				
+				<li class="sidebar-item">
+					<a href="cekperubahanharga.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Perubahan Harga</span>
+					</a>
+				</li>
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-stack"></i>
