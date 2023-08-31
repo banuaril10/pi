@@ -286,6 +286,14 @@
 			
 				
 			<?php }else if($_SESSION['name'] == 'Promo'){ ?>
+			
+				<li class="sidebar-item">
+					<a href="mitemspromo_live.php" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Perubahan Harga Promo</span>
+					</a>
+				</li>
+			
 				<li class="sidebar-item">
 					<a href="cek_harga.php" class='sidebar-link'>
 						<i class="bi bi-cash-stack"></i>
