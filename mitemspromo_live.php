@@ -41,6 +41,9 @@
 				<h4>HARGA PROMO <?php echo $_GET['headerpromo']; ?></h4>
 			</div>
 			<div class="card-body">
+			
+			<p style="color: red; font-weight: bold">Note : Filter Header Promo terlebih dahulu</p>
+			
 			<div class="tables">			
 				<div class="table-responsive bs-example widget-shadow">	
 				<p id="notif1" style="color: red; font-weight: bold"></p>		
