@@ -30,6 +30,13 @@
 						<span>Perubahan Harga</span>
 					</a>
 				</li>
+				
+				<li class="sidebar-item">
+					<a href="mitemspromo_live.php" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Perubahan Harga Promo</span>
+					</a>
+				</li>
 			
 				<li class="sidebar-item">
 					<a href="document.php" class='sidebar-link'>
@@ -170,9 +177,6 @@
 						<li class="submenu-item ">
 							<a href="mitemspromo.php">Harga Promo</a>
 						</li>
-						<li class="submenu-item ">
-							<a href="mitemspromo_live.php">Harga Promo Live</a>
-						</li>
 					</ul>
 				</li>
 				
@@ -217,6 +221,17 @@
 						<span>Perubahan Harga</span>
 					</a>
 				</li>
+				
+				
+				<li class="sidebar-item">
+					<a href="mitemspromo_live.php" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Perubahan Harga Promo</span>
+					</a>
+				</li>
+				
+				
+				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-stack"></i>
@@ -247,9 +262,7 @@
 						<li class="submenu-item ">
 							<a href="mitemspromo.php">Harga Promo</a>
 						</li>
-						<li class="submenu-item ">
-							<a href="mitemspromo_live.php">Harga Promo Live</a>
-						</li>
+						
 					</ul>
 				</li>
 				
