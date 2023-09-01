@@ -125,6 +125,7 @@
 								<th>Price ERP</th>
 								<!--<th>Price Discount</th>-->
 								<th>Rack Name</th>
+								<th>Tgl Perubahan</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -183,6 +184,7 @@
 								<!--<td><?php echo $harga_last; ?></td>-->
 								
 								<td><?php echo $row['rack_name']; ?></td>
+								<td><?php echo $row1['updated']; ?></td>
 								
 							</tr>
 								
