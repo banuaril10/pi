@@ -125,7 +125,8 @@
 								<th>Price ERP</th>
 								<!--<th>Price Discount</th>-->
 								<th>Rack Name</th>
-								<th>Tgl Perubahan</th>
+								<th>Tgl Perubahan ERP</th>
+								<th>Tgl Perubahan Lokal</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -155,7 +156,7 @@
 						$no = 1;
 						foreach ($arr as $row1) { 
 							// echo $row1['sku'];
-							$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.barcode, a.price, a.tag from pos_mproduct a 
+							$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.barcode, a.price, a.tag, a.postdate from pos_mproduct a 
 							left join inv_mproduct b on a.sku = b.sku where a.sku = '".$row1['sku']."' 
 							group by a.sku, a.name, b.rack_name, a.barcode, a.price, a.tag order by a.name";
 							
@@ -185,6 +186,7 @@
 								
 								<td><?php echo $row['rack_name']; ?></td>
 								<td><?php echo $row1['updated']; ?></td>
+								<td><?php echo $row['postdate']; ?></td>
 								
 							</tr>
 								
