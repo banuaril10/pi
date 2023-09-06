@@ -215,12 +215,12 @@
 						$no = 1;
 						foreach ($arrs as $row) { 
 						
-						$tgl_todate =  date('d/m/Y', strtotime($row['todate']));
+						// $tgl_todate =  date('d/m/Y', strtotime($row['todate']));
 						
 						?>
 							
 							<tr>
-								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['normal']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>||<?php echo $row['afterdiscount']; ?>|<?php echo $tgl_todate; ?>|"></td>
+								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['normal']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>||<?php echo $row['afterdiscount']; ?>|<?php echo $row['todate']; ?>|"></td>
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $row['name']; ?></td>
