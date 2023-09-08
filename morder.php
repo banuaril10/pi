@@ -45,10 +45,6 @@
 						<thead>
 							<tr>
 								<th>No</th>
-								<th>pos_dorder_key</th>
-								<th>ad_mclient_key</th>
-								<th>ad_morg_key</th>
-								<th>isactived</th>
 								<th>insertdate</th>
 								<th>insertby</th>
 								<th>postby</th>
@@ -81,10 +77,10 @@
 						
 							<tr>
 								<th scope="row"><?php echo $no; ?></th>
-								<td><?php echo $row['pos_dorder_key']; ?></td>
+								<!--<td><?php echo $row['pos_dorder_key']; ?></td>
 								<td><?php echo $row['ad_mclient_key']; ?> </td>
 								<td><?php echo $row['ad_morg_key']; ?> </td>
-								<td><?php echo $row['isactived']; ?> </td>
+								<td><?php echo $row['isactived']; ?> </td>-->
 								<td><?php echo $row['insertdate']; ?> </td>
 								<td><?php echo $row['insertby']; ?> </td>
 								<td><?php echo $row['postby']; ?> </td>
