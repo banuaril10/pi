@@ -6145,7 +6145,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 			$s = array();
 			$p = array();
 			foreach ($j_hasil['edc'] as $rrr) {
-				$s[] = "('".$rrr['pos_medc_key']."','".$org_keys."','".$rrr['insertdate']."', '".$rrr['insertby']."','".$rrr['name']."','".$rrr['description']."','".$rrr['code']."')";
+				$s[] = "('".$rrr['pos_medc_key']."','".$org_keys."','".$rrr['insertdate']."', '".$rrr['insertby']."','".$rrr['name']."','".$rrr['description']."','".$rrr['code']."','".$rrr['isactived']."')";
 	
 			}
 			
@@ -6165,7 +6165,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 				
 				$tr = $connec->query("truncate table pos_medc");
 				if($tr){
-					$sql_edc = "INSERT INTO pos_medc(pos_medc_key, ad_morg_key, insertdate, insertby, name, description, code) values ".$edc."";
+					$sql_edc = "INSERT INTO pos_medc(pos_medc_key, ad_morg_key, insertdate, insertby, name, description, code, isactived) values ".$edc."";
 					$connec->query($sql_edc);
 					
 				}
