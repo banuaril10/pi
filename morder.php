@@ -51,6 +51,7 @@
 								<th>postdate</th>
 								<th>documentno</th>
 								<th>orderamount</th>
+								<th>orderamountwebpos</th>
 								<th>issync</th>
 								<th>orderdate</th>
 								<th>paymentmethodname</th>
@@ -62,6 +63,31 @@
 						</thead>
 						<tbody>
 						<?php 
+						
+						function get_data_amount($docno){
+									    
+							$fields_string = http_build_query($postData);
+							$curl = curl_init();
+						
+							curl_setopt_array($curl, array(
+							CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$docno,
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_ENCODING => '',
+							CURLOPT_MAXREDIRS => 10,
+							CURLOPT_TIMEOUT => 0,
+							CURLOPT_FOLLOWLOCATION => true,
+							CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+							CURLOPT_CUSTOMREQUEST => 'GET'
+							));
+							
+							$response = curl_exec($curl);
+							
+							curl_close($curl);
+							return $response;
+						
+						
+						}
+						
 						function rupiah($angka){
 	
 							$hasil_rupiah = number_format($angka,0,',','.');
@@ -71,6 +97,15 @@
 						$sql_list = "select * from pos_dorder pd where date(insertdate) = '".$_GET['tgl']."'";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
+							
+							
+							$jsons = get_data_amount($row['documentno']);
+							$arrs = json_decode($jsons, true);
+							$orderamount = 0;
+							foreach ($arrs as $rows) { 
+									$orderamount = $rows['orderamount'];
+							}
+							
 						
 						?>
 						
@@ -87,6 +122,7 @@
 								<td><?php echo $row['postdate']; ?> </td>
 								<td><?php echo $row['documentno']; ?> </td>
 								<td><?php echo rupiah($row['orderamount']); ?> </td>
+								<td><?php echo rupiah($orderamount); ?> </td>
 								<td><?php echo $row['issync']; ?> </td>
 								<td><?php echo $row['orderdate']; ?> </td>
 								<td><?php echo $row['paymentmethodname']; ?> </td>
