@@ -104,8 +104,10 @@
 							// foreach ($arrs as $rows) { 
 									// $orderamount = $rows['orderamount'];
 							// }
-							$jsons = file_get_contents("https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno']);
-							var_dump($jsons);
+							
+							$link = "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno'];
+							$jsons = file_get_contents($link);
+							echo $link;
 						
 						?>
 						
