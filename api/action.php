@@ -6190,7 +6190,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 				
 				
 			// }
-		$data = array("result"=>1, "msg"=>"Berhasil sync data");
+		$data = array("result"=>1, "msg"=>"Berhasil sync data", "q"=>$sql_edc);
 		
 		$json_string = json_encode($data);	
 		echo $json_string;

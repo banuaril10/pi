@@ -46,6 +46,42 @@
 					</div> 
 
 					</div>
+					
+					
+					
+					<table class="table table-bordered" id="example">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>EDC NAME</th>
+							</tr>
+						</thead>
+						<tbody>
+						
+						<?php 
+						$sql_list = "select * from pos_medc";
+						$no = 1;
+						foreach ($connec->query($sql_list) as $row) {
+						?>
+						
+						
+							<tr>
+								<th scope="row"><?php echo $no; ?></th>
+								<td><?php echo $row['name']; ?></td>
+							</tr>
+							
+							
+							
+							
+						<?php $no++;} ?>
+   
+   
+						</tbody>
+					</table>
+					
+					
+					
+					
 				</div>
 			</div>
 		</div>
@@ -101,6 +137,7 @@ function sync_edc(){
 			$('#notif').html("Proses sync edc..");
 		},
 		success: function(dataResult){
+			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
 
 			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
