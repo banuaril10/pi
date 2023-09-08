@@ -20,7 +20,7 @@
 			<div class="card-body">
 			<div class="tables">			
 				<div class="table-responsive bs-example widget-shadow">	
-				<p id="notif1" style="color: red; font-weight: bold"></p>	\
+				<p id="notif1" style="color: red; font-weight: bold"></p>
 
 
 			<form action="" method="GET">
