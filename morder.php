@@ -66,6 +66,12 @@
 						</thead>
 						<tbody>
 						<?php 
+						function rupiah($angka){
+	
+							$hasil_rupiah = number_format($angka,0,',','.');
+							return $hasil_rupiah;
+ 
+						}
 						$sql_list = "select * from pos_dorder pd where date(insertdate) = '".$_GET['tgl']."'";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
@@ -84,7 +90,7 @@
 								<td><?php echo $row['postby']; ?> </td>
 								<td><?php echo $row['postdate']; ?> </td>
 								<td><?php echo $row['documentno']; ?> </td>
-								<td><?php echo $row['orderamount']; ?> </td>
+								<td><?php echo rupiah($row['orderamount']); ?> </td>
 								<td><?php echo $row['issync']; ?> </td>
 								<td><?php echo $row['orderdate']; ?> </td>
 								<td><?php echo $row['paymentmethodname']; ?> </td>
