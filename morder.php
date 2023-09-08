@@ -88,7 +88,7 @@
 								<td><?php echo $row['issync']; ?> </td>
 								<td><?php echo $row['orderdate']; ?> </td>
 								<td><?php echo $row['paymentmethodname']; ?> </td>
-								<td><?php echo $row['cashamount']; ?> </td>
+								<td><?php echo rupiah($row['cashamount']); ?> </td>
 								<td><?php echo $row['bankname']; ?> </td>
 								<td><?php echo $row['edcname']; ?> </td>
 								<td><?php echo $row['pointamount']; ?> </td>
