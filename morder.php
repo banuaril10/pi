@@ -105,6 +105,7 @@
 									$orderamount = $rows['orderamount'];
 							}
 							
+							var_dump($jsons);
 						
 						?>
 						
