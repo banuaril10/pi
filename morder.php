@@ -105,7 +105,7 @@
 									// $orderamount = $rows['orderamount'];
 							// }
 							$jsons = file_get_contents("https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno']);
-							// var_dump($jsons);
+							var_dump($jsons);
 						
 						?>
 						
