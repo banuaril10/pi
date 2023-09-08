@@ -98,14 +98,14 @@
 						foreach ($connec->query($sql_list) as $row) {
 							$orderamount = 0;
 							
-							$jsons = get_data_amount($row['documentno']);
+							// $jsons = get_data_amount($row['documentno']);
 							// $arrs = json_decode($jsons, true);
 							
 							// foreach ($arrs as $rows) { 
 									// $orderamount = $rows['orderamount'];
 							// }
-							
-							var_dump($jsons);
+							$jsons = file_get_contents("https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno']);
+							// var_dump($jsons);
 						
 						?>
 						
