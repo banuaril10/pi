@@ -108,6 +108,7 @@
 							$link = "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno'];
 							$jsons = file_get_contents($link);
 							echo $link;
+							echo $jsons;
 						
 						?>
 						
@@ -124,7 +125,7 @@
 								<td><?php echo $row['postdate']; ?> </td>
 								<td><?php echo $row['documentno']; ?> </td>
 								<td><?php echo rupiah($row['orderamount']); ?> </td>
-								<td><?php echo rupiah($orderamount); ?> </td>
+								<td><?php echo rupiah($jsons); ?> </td>
 								<td><?php echo $row['issync']; ?> </td>
 								<td><?php echo $row['orderdate']; ?> </td>
 								<td><?php echo $row['paymentmethodname']; ?> </td>
