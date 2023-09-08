@@ -106,7 +106,7 @@
 							// }
 							
 							$link = "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno'];
-							$jsons = file_get_contents($link);
+							$jsons = file_get_contents($link, false);
 							echo $link;
 							echo $jsons;
 						
