@@ -99,11 +99,11 @@
 							$orderamount = 0;
 							
 							$jsons = get_data_amount($row['documentno']);
-							$arrs = json_decode($jsons, true);
+							// $arrs = json_decode($jsons, true);
 							
-							foreach ($arrs as $rows) { 
-									$orderamount = $rows['orderamount'];
-							}
+							// foreach ($arrs as $rows) { 
+									// $orderamount = $rows['orderamount'];
+							// }
 							
 							var_dump($jsons);
 						
