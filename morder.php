@@ -65,18 +65,22 @@
 						<?php 
 						
 						function get_data_amount($docno){
-									    
+							$postData = array(
+								"docno" => $docno
+							);				    
+							$fields_string = http_build_query($postData);		    
 							$curl = curl_init();
 						
 							curl_setopt_array($curl, array(
-							CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$docno,
+							CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos",
 							CURLOPT_RETURNTRANSFER => true,
 							CURLOPT_ENCODING => '',
 							CURLOPT_MAXREDIRS => 10,
 							CURLOPT_TIMEOUT => 0,
 							CURLOPT_FOLLOWLOCATION => true,
 							CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-							CURLOPT_CUSTOMREQUEST => 'GET'
+							CURLOPT_CUSTOMREQUEST => 'POST',
+							CURLOPT_POSTFIELDS => $fields_string,
 							));
 							
 							$response = curl_exec($curl);
@@ -98,17 +102,17 @@
 						foreach ($connec->query($sql_list) as $row) {
 							$orderamount = 0;
 							
-							// $jsons = get_data_amount($row['documentno']);
-							// $arrs = json_decode($jsons, true);
+							$jsons = get_data_amount($row['documentno']);
+							$arrs = json_decode($jsons, true);
 							
-							// foreach ($arrs as $rows) { 
-									// $orderamount = $rows['orderamount'];
-							// }
+							foreach ($arrs as $rows) { 
+									$orderamount = $rows['orderamount'];
+							}
 							
-							$link = "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno'];
-							$jsons = file_get_contents($link, false);
-							echo $link;
-							echo $jsons;
+							// $link = "https://pi.idolmartidolaku.com/api/action.php?modul=d_order_web_pos&documentno=".$row['documentno'];
+							// $jsons = file_get_contents($link, false);
+							// echo $link;
+							// echo $jsons;
 						
 						?>
 						
@@ -125,7 +129,7 @@
 								<td><?php echo $row['postdate']; ?> </td>
 								<td><?php echo $row['documentno']; ?> </td>
 								<td><?php echo rupiah($row['orderamount']); ?> </td>
-								<td><?php echo rupiah($jsons); ?> </td>
+								<td><?php echo rupiah($orderamount); ?> </td>
 								<td><?php echo $row['issync']; ?> </td>
 								<td><?php echo $row['orderdate']; ?> </td>
 								<td><?php echo $row['paymentmethodname']; ?> </td>
