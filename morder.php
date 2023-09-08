@@ -66,7 +66,6 @@
 						
 						function get_data_amount($docno){
 									    
-							$fields_string = http_build_query($postData);
 							$curl = curl_init();
 						
 							curl_setopt_array($curl, array(
