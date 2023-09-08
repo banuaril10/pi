@@ -97,11 +97,11 @@
 						$sql_list = "select * from pos_dorder pd where date(insertdate) = '".$_GET['tgl']."'";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
-							
+							$orderamount = 0;
 							
 							$jsons = get_data_amount($row['documentno']);
 							$arrs = json_decode($jsons, true);
-							$orderamount = 0;
+							
 							foreach ($arrs as $rows) { 
 									$orderamount = $rows['orderamount'];
 							}
