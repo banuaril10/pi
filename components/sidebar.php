@@ -30,6 +30,14 @@
 				
 				
 			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing'){ ?>
+			
+				<li class="sidebar-item">
+					<a href="capture_sku.php" class='sidebar-link'>
+						<i class="bi bi-camera"></i>
+						<span>Capture Price Tag</span>
+					</a>
+				</li>
+			
 				<li class="sidebar-item">
 					<a href="mlomba.php" class='sidebar-link'>
 						<i class="bi bi-cash-stack"></i>
