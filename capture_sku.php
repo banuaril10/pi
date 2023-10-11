@@ -207,53 +207,50 @@ function uploadImage(id){
 	
 			var vidFileLength = $("#fileupload"+id)[0].files.length;
 			if(vidFileLength === 0){
-				var fileupload = $('#fileuploads'+id).prop('files')[0];
-				// alert("nol");
+				// var fileupload = $('#fileuploads'+id).prop('files')[0];
+				alert("File belum dipilih");
 			}else{
 				// alert("ada");
 				var fileupload = $('#fileupload'+id).prop('files')[0];
+				
+				var sku = $("#sku"+id).val();
+				var toko = $("#toko"+id).val();
+				
+				
+				let formData = new FormData();
+				formData.append('fileupload', fileupload);
+				formData.append('id', id);
+				formData.append('sku', sku);
+				formData.append('toko', toko);
+				
+				$.ajax({
+					xhr: function() {
+					var xhr = new window.XMLHttpRequest();
+					xhr.upload.addEventListener("progress", function(evt) {
+						if (evt.lengthComputable) {
+							var percentComplete = ((evt.loaded / evt.total) * 100);
+							$("#progress-bar"+id).width(percentComplete+'%');
+							$("#progress-bar"+id).html(parseInt(percentComplete)+'%');
+						}
+					}, false);
+					return xhr;
+					},
+					type: 'POST',
+					url: "https://mkt.idolmartidolaku.com/api/upload_sku.php",
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
+					success: function (msg) {
+						$("#file-load"+id).load(" #file-load"+id);
+						$("#fileupload"+id).val('');
+						
+					},
+					error: function () {
+						$("#notif"+id).html("<font style='color: red'>File Gagal diupload</font>");
+					}
+				});
 			}
-			
-			var sku = $("#sku"+id).val();
-			var toko = $("#toko"+id).val();
-			
-			
-	        let formData = new FormData();
-	        formData.append('fileupload', fileupload);
-	        formData.append('id', id);
-	        formData.append('sku', sku);
-	        formData.append('toko', toko);
-			
-			// e.preventDefault();
-	        $.ajax({
-				xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        var percentComplete = ((evt.loaded / evt.total) * 100);
-                        $("#progress-bar"+id).width(percentComplete+'%');
-                        $("#progress-bar"+id).html(parseInt(percentComplete)+'%');
-                    }
-                }, false);
-                return xhr;
-				},
-	            type: 'POST',
-	            url: "https://mkt.idolmartidolaku.com/api/upload_sku.php",
-	            data: formData,
-	            cache: false,
-	            processData: false,
-	            contentType: false,
-	            success: function (msg) {
-	                // alert(msg);
-					// $("#gambar<?php echo $row3['id'];?>").load(" #gambar<?php echo $row3['id'];?>");
-					$("#file-load"+id).load(" #file-load"+id);
-					// $("#form-update"+id).load(" #form-update"+id);
-	                // document.getElementById("file-info<?php echo $row3['id']; ?>").reset();
-	            },
-	            error: function () {
-	                $("#notif"+id).html("<font style='color: red'>File Gagal diupload</font>");
-	            }
-	        });
 	
 }
 
