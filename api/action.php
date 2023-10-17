@@ -3691,7 +3691,7 @@ locator_name) VALUES (
 		$no = 0;	
 		foreach($j_hasil as $r) {
 
-				$upcount = $connec->query("update pos_mproduct set price='".$r['price']."' where sku='".$r['sku']."' and price is null");
+				$upcount = $connec->query("update pos_mproduct set price='".$r['price']."' where sku='".$r['sku']."'");
 	
 			if($upcount){
 				$no = $no + 1;
