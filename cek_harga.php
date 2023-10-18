@@ -145,7 +145,7 @@ function sync_price_khusus(){
 		url: "api/action.php?modul=inventory&act=sync_price_khusus",
 		type: "POST",
 		beforeSend: function(){
-			$('#notif').html("Proses sync Barcode..");
+			$('#notif').html("Proses sync harga khusus..");
 			
 		},
 		success: function(dataResult){
