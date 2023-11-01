@@ -197,6 +197,9 @@
 						<li class="submenu-item ">
 							<a href="mitemspromo.php">Harga Promo</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="mitemsspecial.php">Harga Khusus</a>
+						</li>
 					</ul>
 				</li>
 				
