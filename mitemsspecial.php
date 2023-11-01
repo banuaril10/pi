@@ -123,8 +123,6 @@
 								<th>Name</th>
 								<th>Harga Khusus</th>
 								<th>Rack Name</th>
-								<th>Tgl Perubahan ERP</th>
-								<th>Tgl Perubahan Lokal</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -187,8 +185,7 @@
 								<td><?php echo $row1['price']; ?></td>
 								
 								<td><?php echo $row['rack_name']; ?></td>
-								<td><?php echo $row1['updated']; ?></td>
-								<td><?php echo $row['postdate']; ?></td>
+
 								
 							</tr>
 								
