@@ -29,7 +29,7 @@
 				<?php } ?>
 				
 				
-			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing'){ ?>
+			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing' && $_SESSION['name'] != 'BAC'){ ?>
 			
 				<li class="sidebar-item">
 					<a href="capture_sku.php" class='sidebar-link'>
