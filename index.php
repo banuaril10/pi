@@ -310,11 +310,25 @@
 						$cekuserglobal = $connec->query("select * from m_pi_users where userid = 'akunglobalit'");
 						$cekuserpromo = $connec->query("select * from m_pi_users where userid = 'adminpromo'");
 						$cekusermkt = $connec->query("select * from m_pi_users where userid = 'akunmarketing'");
+						$cekuserbac = $connec->query("select * from m_pi_users where userid = 'akunbac'");
 						$count = $cek->rowCount();
 						$count1 = $cek_cek->rowCount();
 						$count2 = $cekuserglobal->rowCount();
 						$count3 = $cekuserpromo->rowCount();
 						$count4 = $cekusermkt->rowCount();
+						$count5 = $cekuserbac->rowCount();
+						
+						if($count5 == 0){
+							$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
+							$results = $connec->query($sqll);
+							
+							foreach ($results as $r) {
+								
+								$connec->query("INSERT INTO public.m_pi_users
+								(ad_muser_key, isactived, userid, username, userpwd, ad_org_id, name)
+								VALUES ('BAC123', 1, 'akunbac', 'Akun BAC', '8252b14572f9575795082c43d3448c9051992e834c22872c878420e0676684ed', '".$r['ad_morg_key']."', 'BAC')");
+							}
+						}
 						
 						if($count4 == 0){
 							$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";

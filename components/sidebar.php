@@ -334,7 +334,17 @@
 			<?php } ?>	
 				
 				
-
+			<?php }else if($_SESSION['name'] == 'BAC'){ ?>
+			
+				<li class="sidebar-item">
+					<a href="cek_harga.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Cek Harga</span>
+					</a>
+				</li>
+				
+				
+			<?php } ?>	
 				
 				
 				<li class="sidebar-item">

@@ -106,7 +106,7 @@
 				Pilih Brand : <select id="brand">
 					<option value="<?php echo $brand; ?>"><?php echo $brand; ?></option>
 				</select>
-				<button class="btn btn-danger" type="button" id="btn-cetak-tinta"><div class="item1"><b>CETAK PERUBAHAN HARGA</b></div></button>
+				<button class="btn btn-danger" type="button" id="btn-cetak-tinta"><div class="item1"><b>CETAK HARGA KHUSUS</b></div></button>
 					<button class="btn btn-success" type="button" id="btn-cetak-tinta-pdf"><div class="item1"><b>CETAK PLANOGRAM</b></div></button>
 				<br>
 				
