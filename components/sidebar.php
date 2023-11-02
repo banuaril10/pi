@@ -331,10 +331,7 @@
 					</a>
 				</li>
 				
-			<?php } ?>	
-				
-				
-			<?php }else if($_SESSION['name'] == 'BAC'){ ?>
+			<?php }else if($_SESSION['name'] == 'BAC'){ ?>	
 			
 				<li class="sidebar-item">
 					<a href="cek_harga.php" class='sidebar-link'>
