@@ -297,9 +297,10 @@ function syncPromo(){
 			
 		},
 		success: function(dataResult){
+			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
-			syncPromoCode();
-			syncPromoTebus();
+			// syncPromoCode();
+			// syncPromoTebus();
 		}
 		});
 		
