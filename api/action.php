@@ -2586,23 +2586,25 @@ if($_GET['modul'] == 'inventory'){
 			if($jum_s > 0){
 				$values = implode(", ",$s);
 
-				$suc = $connec->query("insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, fromdate, todate, typepromo, maxqty) 
-						VALUES ".$values.";");
+				$qqq = "insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, fromdate, todate, typepromo, maxqty) 
+						VALUES ".$values.";";
+						
+				$suc = $connec->query($qqq);
 				
 				
 				if($suc){
 					
-					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync','q'=> $qqq);
 					$json_string = json_encode($json);	
 					
 				}else{
 					
-					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti','q'=> $qqq);
 					$json_string = json_encode($json);	
 				}
 				
 			}else{
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data rack blm ditemukan');
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data rack blm ditemukan','q'=> $qqq);
 				$json_string = json_encode($json);	
 				
 			}
@@ -2610,7 +2612,7 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else{
 		
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan','q'=> $qqq);
 				$json_string = json_encode($json);	
 		
 	}
