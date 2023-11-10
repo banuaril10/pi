@@ -4792,7 +4792,7 @@ locator_name) VALUES (
             $no = $start + 1;
 			foreach($query as $r){
 				
-				
+				$date = date('d/m/Y');
 				if($r['price'] != '1'){
 					$disk = 0;
 					$cek_disc = "select discount from pos_mproductdiscount where todate >= '".date('Y-m-d')."' and sku = '".$row['sku']."'";
@@ -4801,10 +4801,10 @@ locator_name) VALUES (
 						$disk = $row_dis['discount'];
 					}
 					$harga_last = $row['price'] - $disk;
-				
+					
 				
 					$nestedData['no'] = $no;
-					$nestedData['check'] = '<input type="checkbox" id="checkbox'.$r['sku'].'" name="checkbox[]" value="'.$r['sku'].'|'.$r['name'].'|'.$r['price'].'|'.$r['tgl_sekarang'].'|'.$r['rack_name'].'|'.$r['shortcut'].'|'.$harga_last.'|'.$r['tag'].'">';
+					$nestedData['check'] = '<input type="checkbox" id="checkbox'.$r['sku'].'" name="checkbox[]" value="'.$r['sku'].'|'.$r['name'].'|'.$r['price'].'|'.$r['tgl_sekarang'].'|'.$r['rack_name'].'|'.$r['shortcut'].'|'.$harga_last.'|'.$r['tag'].'|'.$date.'">';
 					$nestedData['sku'] = '<label for="checkbox'.$r['sku'].'">'.$r['sku'].'</label>';
 					$nestedData['barcode'] = $r['barcode'];
 					$nestedData['name'] = '<label for="checkbox'.$r['sku'].'">'.$r['name'].'</label>';

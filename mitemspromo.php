@@ -194,10 +194,6 @@
 								$disk = $row_dis['discount'];
 								// $tgl_todate = $row_dis['todate'];
 								$tgl_todate =  date('d/m/Y', strtotime($row_dis['todate']));
-								
-
-								
-							
 								$harga_last = $row['price'] - $disk;
 							
 						?>

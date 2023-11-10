@@ -157,11 +157,6 @@ function sync_price_khusus(){
 			
 		}
 		});
-		
-	
-	
-	
-	
 }
 
 // function onScanSuccess(decodedText, decodedResult) {
