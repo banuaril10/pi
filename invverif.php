@@ -177,7 +177,7 @@
 								<td>
 								
 								<div class="form-inline"> 
-								<input type="number" onkeydown="enterKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>','<?php echo $_GET['m_pi']; ?>');" name="qtycount<?php echo $row1['sku']; ?>" id="qtycount<?php echo $row1['sku']; ?>" class="form-control" value="<?php echo $row1['qtycount']; ?>"> 
+								<input type="number" onkeydown="enterKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo str_replace("'", "",$row1['name']); ?>','<?php echo $_GET['m_pi']; ?>');" name="qtycount<?php echo $row1['sku']; ?>" id="qtycount<?php echo $row1['sku']; ?>" class="form-control" value="<?php echo $row1['qtycount']; ?>"> 
 								<!--<button type="button" id="btn-verifikasi" style="background: green; color: white" onclick="changeQty('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class="">Verifikasi</button>-->
 										
 								</div>		
