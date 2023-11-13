@@ -6,7 +6,7 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 				
 				if(brand == 'IDOLMART'){
 					
-					brand = brand+" BARU ";
+					brand = brand+" UNIK ";
 					
 				}
 				
