@@ -4792,7 +4792,7 @@ locator_name) VALUES (
             $no = $start + 1;
 			foreach($query as $r){
 				
-				$date = date('d/m/Y');
+				$date = date('dmy');
 				if($r['price'] != '1'){
 					$disk = 0;
 					$cek_disc = "select discount from pos_mproductdiscount where todate >= '".date('Y-m-d')."' and sku = '".$row['sku']."'";
