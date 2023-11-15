@@ -6,6 +6,13 @@ if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 	
 	header("Location: index.php");
 }
+
+$get_nama_toko = "select * from ad_morg where postby = 'SYSTEM'";
+$resultss = $connec->query($get_nama_toko);
+foreach ($resultss as $r) {
+	$storecode = $r["value"];	
+}
+
 ?>
 
 <!DOCTYPE html>

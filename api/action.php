@@ -35,6 +35,7 @@ $get_nama_toko = "select * from ad_morg where postby = 'SYSTEM'";
 $resultss = $connec->query($get_nama_toko);
 foreach ($resultss as $r) {
 	$storename = $r["name"];	
+	$storecode = $r["value"];	
 	$ad_morg_key = $r["ad_morg_key"];	
 	$brand = strtoupper($r["address3"]);	
 }
@@ -4792,7 +4793,7 @@ locator_name) VALUES (
             $no = $start + 1;
 			foreach($query as $r){
 				
-				$date = date('dmy');
+					$date = $storecode.'/'.date('dmy');
 				if($r['price'] != '1'){
 					$disk = 0;
 					$cek_disc = "select discount from pos_mproductdiscount where todate >= '".date('Y-m-d')."' and sku = '".$row['sku']."'";
