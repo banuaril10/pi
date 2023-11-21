@@ -143,7 +143,7 @@
 
 	
 								<td>
-								<?php echo $no; ?>. <b>SKU : </b><?php echo $row1['sku']; ?> (<?php echo $name; ?>)
+								<?php echo $no; ?>. <b>SKU : </b><?php echo $row1['sku']; ?> (<?php echo $row1['desk']; ?>)
 								
 								<form id="file-info<?php echo $row1['id']; ?>">
 								
