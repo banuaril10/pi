@@ -74,12 +74,12 @@
 			
 		
 				<?php 
-		if($_GET['rak'] && !empty($_GET['rak'])){
-
-				$rak = $_GET['rak'];
-				
-
-        }else{
+			if($_GET['rak'] && !empty($_GET['rak'])){
+	
+					$rak = $_GET['rak'];
+					
+	
+			}else{
 
 				$rak = "all";
 				
