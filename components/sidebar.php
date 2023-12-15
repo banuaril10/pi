@@ -200,6 +200,9 @@
 						<li class="submenu-item ">
 							<a href="mitemsspecial.php">Harga Khusus</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromocode_live.php">Harga Bertingkat</a>
+						</li>
 					</ul>
 				</li>
 				
