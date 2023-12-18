@@ -288,6 +288,9 @@
 						<li class="submenu-item ">
 							<a href="mitemspromo.php">Harga Promo</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromocode_live.php">Harga Bertingkat</a>
+						</li>
 						
 					</ul>
 				</li>
