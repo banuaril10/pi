@@ -42,12 +42,12 @@ document.getElementById("btn-cetak-tinta-promo").addEventListener("click", funct
 
 						
 						if(rack != ""){
-							var rack = sku+"/"+rack+"/"+todate;
+							var rack = sku+"/"+rack;
 							
 							
 						}else{
 							
-							var rack = sku+"/NO_RACK/"+todate;
+							var rack = sku+"/NO_RACK";
 						}
 						
 						// harga += "<label style='width: 100%; margin: -10px 0 0 0; font-size: 17px'><br>";
