@@ -173,8 +173,9 @@
 								<th>No</th>
 								<th>SKU</th>
 								<th>Name</th>
+								<th>Beli 1</th>
 								<th>Beli 3</th>
-								<th>Beli 6</th>
+								<!--<th>Beli 6/12</th>-->
 								<th>Beli 12</th>
 								<th>Rack</th>
 							</tr>
