@@ -222,6 +222,11 @@
 							$price = $row1['price'];
 						}
 						
+						if($row['afterdiscount'] != '0'){
+							
+							$price = $row['afterdiscount'];
+						}
+						
 						if($_GET['stock'] && !empty($_GET['stock'])){ 
 							$q_stock = 1;
 							$stock = $_GET['stock'];
@@ -240,9 +245,10 @@
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $name; ?></td>
+								<td><?php echo $price; ?></td>
 								<td><?php echo $row['price1']; ?></td>
 								<td><?php echo $row['price2']; ?></td>
-								<td><?php echo $row['price3']; ?></td>
+								<!--<td><?php echo $row['price3']; ?></td>-->
 								<td><?php echo $row['rack']; ?></td>
 								
 							</tr>
@@ -260,9 +266,10 @@
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $name; ?></td>
+								<td><?php echo $price; ?></td>
 								<td><?php echo $row['price1']; ?></td>
 								<td><?php echo $row['price2']; ?></td>
-								<td><?php echo $row['price3']; ?></td>
+								<!--<td><?php echo $row['price3']; ?></td>-->
 								<td><?php echo $row['rack']; ?></td>
 								
 							</tr>
