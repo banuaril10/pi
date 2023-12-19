@@ -67,7 +67,7 @@ document.getElementById("btn-cetak-tinta-promo").addEventListener("click", funct
 						
 						if(price2 != '0'){
 							// harga += "<label style='font-size: 10px'>Beli 12 </label>  <div style='float: right !important'><label style='font-size: 8px'><b>Rp </b></label><b>"+formatRupiah(price2, '')+"</b></div><br>";
-							harga += "<tr style='font-size: 10px'><td>Beli 12 </td>   <td style='text-align: right'><label style='font-size: 8px'><b>Rp </b></label> <b style='font-size: 17px'>"+formatRupiah(price2, '')+"</b>/pcs</td></tr> ";
+							harga += "<tr style='font-size: 10px'><td>Beli 6 </td>   <td style='text-align: right'><label style='font-size: 8px'><b>Rp </b></label> <b style='font-size: 17px'>"+formatRupiah(price2, '')+"</b>/pcs</td></tr> ";
 							
 						}
 						
