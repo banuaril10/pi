@@ -49,7 +49,10 @@ function get_version(){
 	}
 	
 	
-	$connec->query("update m_piversion set value = '".$cv_web."'"); //klo udah ada update
+	if($cv_web != ''){
+		
+		$connec->query("update m_piversion set value = '".$cv_web."'"); //klo udah ada update
+	}
 			
 	
 
