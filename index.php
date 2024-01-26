@@ -114,6 +114,49 @@
 					];
 					
 					
+					$cmd_promo_grosir = ['
+					CREATE TABLE public.pos_mproductdiscountgrosir (
+						pos_mproductdiscountgrosir_key varchar(32) NOT NULL DEFAULT get_uuid(),
+						ad_mclient_key varchar(32) NULL,
+						ad_morg_key varchar(32) NULL,
+						isactived varchar(2) NULL,
+						insertdate timestamp NULL,
+						insertby varchar(50) NULL,
+						postby varchar(50) NULL,
+						postdate timestamp NULL,
+						discountname varchar(30) NULL,
+						sku varchar(32) NULL,
+						discount_1 numeric NULL,
+						discount_2 numeric NULL,
+						discount_3 numeric NULL,
+						fromdate date NULL,
+						todate date NULL,
+						limitamount numeric NULL,
+						ispromo bool NULL,
+						CONSTRAINT pos_mproductdiscountgrosir_key PRIMARY KEY (pos_mproductdiscountgrosir_key)
+					);
+					CREATE INDEX pos_mproductdiscountgrosir_fromdate_idx ON public.pos_mproductdiscountgrosir USING btree (fromdate);
+					CREATE INDEX pos_mproductdiscountgrosir_sku_idx ON public.pos_mproductdiscountgrosir USING btree (sku);
+					CREATE INDEX pos_mproductdiscountgrosir_todate_idx ON public.pos_mproductdiscountgrosir USING btree (todate);'];
+					
+					
+					$result_grosir = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'pos_mproductdiscountgrosir'" );
+					if($result_grosir->rowCount() == 1) {
+						
+						
+					}
+					else {
+					
+						foreach ($cmd_promo_grosir as $r1){
+					
+								$connec->exec($r1);
+						}
+					
+					
+					}
+					
+					
+					
 					$cmd2_alter_piline = ['ALTER TABLE m_piline ADD COLUMN IF NOT EXISTS barcode varchar(30);'];
 					$cmd2_alter_piline1 = ['ALTER TABLE m_piline ADD COLUMN IF NOT EXISTS hargabeli numeric;'];
 					
@@ -254,15 +297,7 @@
 					
 					}
 					
-					
-					
-					
-					
-					
-					
-					
-					
-					
+	
 					$cmd5 = ["CREATE TABLE public.m_piversion (
 							value character varying(10)
 						);","insert into m_piversion (value) VALUES ('1')"

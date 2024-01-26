@@ -3066,6 +3066,64 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 		}
 			$json_string = json_encode($json);	
 			echo $json_string;	
+	}else if($_GET['act'] == 'sync_user_hris'){
+		$sqll = "select value as ad_morg_key from ad_morg where postby = 'SYSTEM'";
+		$results = $connec->query($sqll);
+		foreach ($results as $r) {
+			$org_keys = $r["ad_morg_key"];	
+		}
+		
+		$json_url = "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_user_hris&org_id=".$org_keys;
+			$json = file_get_contents($json_url);
+
+			$arr = json_decode($json, true);
+			$jum = count($arr);
+		
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE m_pi_hris");
+		if($truncate){
+			
+		
+			
+			
+			// echo $jum;
+			$no = 0;
+			foreach($arr as $item) { //foreach element in $arr
+				$nik 	= $item['nik']; //etc
+				$nama 	= $item['nama']; //etc
+				
+				$sql = "insert into m_pi_hris (nik, nama) 
+					VALUES ('".$nik."', '".$nama."')";
+				
+				$statement1 = $connec->query($sql);
+					
+
+					
+					 
+					if($statement1){
+						$no = $no+1;
+
+						
+					}	
+					
+					
+									
+			}
+			$json = array('result'=>'1', 'msg'=>'Berhasil sync '.$no.' dari '.$jum.' users');
+			
+			
+				
+			
+		}
+			
+			
+		}else{
+			$json = array('result'=>'1', 'msg'=>'Gagal connect ke server');
+			
+			
+		}
+			$json_string = json_encode($json);	
+			echo $json_string;	
 	}else if($_GET['act'] == 'proses_inv_temp'){
 		$sku = $_POST['sku'];
 		$qty = $_POST['qty'];
@@ -6306,6 +6364,48 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		echo $json_string;
 		
 	}
+}else if($_GET['modul'] == 'referal'){
+	
+	if($_GET['act'] == 'update'){
+		
+		$billno = $_POST['billno'];
+		$referal = $_POST['referal'];
+		$update = $connec->query("update pos_dsalesline set postby = '".$referal."' where billno = '".$billno."'");
+						
+		if($update){
+			$json = array('result'=>'1');
+			
+		}else{
+			
+			$json = array('result'=>'0');
+		}
+		
+		$json_string = json_encode($json);	
+		echo $json_string;
+	}else if($_GET['act'] == 'data_hris'){
+		
+		$get = $connec->query("select * from m_pi_hris");
+		$s = array();
+		foreach($get as $r){
+			
+			$header = array(
+					'nik'=>$r['nik'],
+					'nama'=>$r['nama']
+			);
+
+			$s[] = $header;
+			
+		}
+			$json_data = array(
+				"result"=>1,
+				"msg"=>'Proses cetak',
+				"header"=>$s,
+			);
+		
+		
+		echo json_encode($json_data); 				
+	}
+	
 }
 
 

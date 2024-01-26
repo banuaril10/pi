@@ -37,6 +37,13 @@
 						<span>Capture Price Tag</span>
 					</a>
 				</li>
+				
+				<li class="sidebar-item">
+					<a href="capture_jsm.php" class='sidebar-link'>
+						<i class="bi bi-camera"></i>
+						<span>Capture Price Tag JSM</span>
+					</a>
+				</li>
 			
 				<li class="sidebar-item">
 					<a href="mlomba.php" class='sidebar-link'>
@@ -125,6 +132,9 @@
 					
 						<li class="submenu-item ">
 							<a href="muser.php">Master Users</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="muser_hris.php">Master Users HRIS</a>
 						</li>
 						
 						<li class="submenu-item ">
