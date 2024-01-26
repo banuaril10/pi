@@ -40,7 +40,19 @@
 						
 					<?php include "config/koneksi.php"; 
 					
+					$cmd_hris = ['CREATE TABLE m_pi_hris (
+						nik varchar(50) NULL,
+						nama varchar(150) NULL
+					);'];
 					
+					$result_hris = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'm_pi_hris'" );
+					if($result_hris->rowCount() == 0) {
+						foreach ($cmd_hris as $r){
+					
+								$connec->exec($r);
+						}
+						
+					}
 					
 					$cmd_cash = ['CREATE TABLE public.cash_in (
 						cashinid character varying(32) DEFAULT public.get_uuid() NOT NULL PRIMARY KEY,
