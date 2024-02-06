@@ -2613,7 +2613,7 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else{
 		
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json = array('result'=>'1', 'msg'=>'Promo reguler tidak ada');
 				$json_string = json_encode($json);	
 		
 	}
@@ -2695,7 +2695,7 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else{
 		
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json = array('result'=>'1', 'msg'=>'Promo code tidak ada');
 				$json_string = json_encode($json);	
 		
 	}
@@ -2749,8 +2749,6 @@ if($_GET['modul'] == 'inventory'){
 				$ssql = "INSERT INTO pos_mproductdiscountmurah (ad_mclient_key, ad_morg_key, isactived, insertdate, postdate, insertby, discountname, sku, pricediscount, fromdate, todate, limitamount) VALUES ".$values.";";
 
 				$suc = $connec->query($ssql);
-				
-				
 				
 				
 				if($suc){
