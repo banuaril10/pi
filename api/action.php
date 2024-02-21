@@ -6402,6 +6402,24 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		
 		
 		echo json_encode($json_data); 				
+	}else if($_GET['act'] == 'data_hris_nik'){
+		
+		$get = $connec->query("select * from m_pi_hris where nik = '".$_GET['nik']."'");
+		$s = array();
+		$nama = "";
+		foreach($get as $r){
+			
+			// $header = array(
+					// 'nik'=>$r['nik'],
+					// 'nama'=>$r['nama']
+			// );
+
+			// $s[] = $header;
+			$nama = $r['nama'];
+			
+		}
+		
+		echo $nama;		
 	}
 	
 }
