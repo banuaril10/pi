@@ -250,6 +250,13 @@
 						<span>Cek Promo</span>
 					</a>
 				</li>
+				
+				<li class="sidebar-item">
+					<a href="cek_promo_grosir.php" class='sidebar-link'>
+						<i class="bi bi-gift"></i>
+						<span>Cek Promo Grosir</span>
+					</a>
+				</li>
 			<?php }else if($_SESSION['name'] == 'Marketing'){ ?>
 				<li class="sidebar-item">
 					<a href="cekperubahanharga.php" class='sidebar-link'>
@@ -344,6 +351,13 @@
 					<a href="cek_promo.php" class='sidebar-link'>
 						<i class="bi bi-gift"></i>
 						<span>Cek Promo</span>
+					</a>
+				</li>
+				
+				<li class="sidebar-item">
+					<a href="cek_promo_grosir.php" class='sidebar-link'>
+						<i class="bi bi-gift"></i>
+						<span>Cek Promo Grosir</span>
 					</a>
 				</li>
 				
