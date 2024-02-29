@@ -126,6 +126,7 @@
 					];
 					
 					
+					
 					$cmd_promo_grosir = ['
 					CREATE TABLE public.pos_mproductdiscountgrosir (
 						pos_mproductdiscountgrosir_key varchar(32) NOT NULL DEFAULT get_uuid(),
@@ -167,6 +168,46 @@
 					
 					}
 					
+					
+					$cmd_promo_grosir_new = ['
+					CREATE TABLE public.pos_mproductdiscountgrosir_new (
+						pos_mproductdiscountgrosir_key varchar(32) NOT NULL DEFAULT get_uuid(),
+						ad_mclient_key varchar(32) NULL,
+						ad_morg_key varchar(32) NULL,
+						isactived varchar(2) NULL,
+						insertdate timestamp NULL,
+						insertby varchar(50) NULL,
+						postby varchar(50) NULL,
+						postdate timestamp NULL,
+						discountname varchar(30) NULL,
+						sku varchar(32) NULL,
+						discount numeric NULL,
+						minbuy numeric NULL,
+						fromdate date NULL,
+						todate date NULL,
+						limitamount numeric NULL,
+						ispromo bool NULL,
+						CONSTRAINT pos_mproductdiscountgrosir_new_key PRIMARY KEY (pos_mproductdiscountgrosir_key)
+					);
+					CREATE INDEX pos_mproductdiscountgrosir_new_fromdate_idx ON public.pos_mproductdiscountgrosir_new USING btree (fromdate);
+					CREATE INDEX pos_mproductdiscountgrosir_new_sku_idx ON public.pos_mproductdiscountgrosir_new USING btree (sku);
+					CREATE INDEX pos_mproductdiscountgrosir_new_todate_idx ON public.pos_mproductdiscountgrosir_new USING btree (todate);'];
+					
+					
+					$result_grosir_new = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'pos_mproductdiscountgrosir_new'" );
+					if($result_grosir_new->rowCount() == 1) {
+						
+						
+					}
+					else {
+					
+						foreach ($cmd_promo_grosir_new as $r1){
+					
+								$connec->exec($r1);
+						}
+					
+					
+					}
 					
 					
 					$cmd2_alter_piline = ['ALTER TABLE m_piline ADD COLUMN IF NOT EXISTS barcode varchar(30);'];
