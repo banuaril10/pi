@@ -21,7 +21,7 @@ foreach($cq as $r){
 	$cek_grosir = "select discount, discountname from pos_mproductdiscountgrosir_new where sku = '".$r['sku']."' and DATE(now()) between fromdate and todate order by minbuy asc";
 	$cv = $connec->query($cek_grosir);
 	foreach ($cv as $r1){
-		$discount_name .= $r1['discountname'].' Potongan '.rupiah($r1['discount']).'/Pcs <br>';
+		$discount_name .= $r1['discountname'].', Potongan '.rupiah($r1['discount']).'/Pcs <br>';
 	}
 	
 	$product = "select * from pos_mproduct where sku = '".$r['sku']."'";
