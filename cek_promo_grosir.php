@@ -129,7 +129,7 @@ function syncPromo(){
 		},
 		success: function(dataResult){
 			console.log(dataResult);
-			var dataResult = JSON.parse(dataResult);
+			// var dataResult = JSON.parse(dataResult);
 			location.reload();
 		}
 		});
