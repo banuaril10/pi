@@ -2047,10 +2047,17 @@ if($_GET['modul'] == 'inventory'){
 			
 			if($statement1){
 				
-				$statement2 = $connec->query("update pos_mproduct set isactived = '1' where sku in
-							(
-								select sku from m_piline where m_pi_key = '".$pi_key."'
-							)");
+				$list_items = $connec->query("select sku from m_piline where m_pi_key = '".$pi_key."'");
+				foreach($list_items as $rrr){
+					
+					$connec->query("update pos_mproduct set isactived = '1' where sku = '".$rrr['sku']."'");
+					
+				}
+				// $statement2 = $connec->query("update pos_mproduct set isactived = '1' where sku in
+							// (
+								// select sku from m_piline where m_pi_key = '".$pi_key."'
+							// )");
+							
 				
 				if($statement2){
 					$json = array('result'=>'1');
