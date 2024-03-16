@@ -2059,12 +2059,12 @@ if($_GET['modul'] == 'inventory'){
 							// )");
 							
 				
-				if($statement2){
+				// if($statement2){
 					$json = array('result'=>'1');
 					
-				}else{
-					$json = array('result'=>'1');
-				}
+				// }else{
+					// $json = array('result'=>'1');
+				// }
 				
 				
 					
