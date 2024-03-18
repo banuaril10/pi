@@ -798,14 +798,14 @@ function get_data_barcode(){
 					
 }
 
-function get_data_harga(){
+function get_data_harga($ad_morg_key){
 			
 			    
 	// $fields_string = http_build_query($postData);
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_price',
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_price&org='.$ad_morg_key,
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_ENCODING => '',
 	CURLOPT_MAXREDIRS => 10,
@@ -3849,7 +3849,7 @@ locator_name) VALUES (
 		// $sku = "8151000000129";
 		
 		
-		$hasil = get_data_harga();
+		$hasil = get_data_harga($ad_morg_key);
 		$j_hasil = json_decode($hasil, true);
 		
 		// $jum = count($hasil);
