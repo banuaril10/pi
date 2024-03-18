@@ -186,6 +186,9 @@
 						<li class="submenu-item ">
 							<a href="sync_edc.php">Sync EDC</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="sync_function.php">Sync Function</a>
+						</li>
 					</ul>
 				</li>
 				
