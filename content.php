@@ -62,10 +62,9 @@
 		<div class="card">
 			<div class="card-header">
 				<h4>INVENTORY LIST</h4>
-				
-				<form action="api/action.php?modul=inventory&act=reset_active" method="POST">
-					<button type="submit" class="btn btn-danger" name="reset">Active Product</button>
-				</form>
+
+				<button type="button" onclick="resetPI();" class="btn btn-danger" name="reset">Active Product</button>
+
 				
 				<p>Note : Proses input header sekaligus sync dari ERP, sedikit memakan waktu</p>
 				<?php if($status_gantung == 1){ ?>
@@ -351,6 +350,31 @@
 
 
 <script type="text/javascript">
+function resetPI(){ 
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=reset_active",
+		type: "GET",
+		beforeSend: function(){
+			$('#notif1').html("Proses active kembali product..");
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: green'>Berhasil active product!</font>");
+				$("#overlay").fadeOut(300);
+			}
+			$("#overlay").fadeOut(300);
+			
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+}
 
 function selectKat(){
 	var kat = document.getElementById( 'kat' ).value;
@@ -404,6 +428,7 @@ function syncErp(m_pi){
 	});
 	
 }
+
 
 
 function batalPI(m_pi_key){ 

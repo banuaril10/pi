@@ -2086,15 +2086,21 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else if($_GET['act'] == 'reset_active'){
 		
-		
-			$connec->query("update pos_mproduct set isactived ='1'
+		$statement1 = $connec->query("update pos_mproduct set isactived ='1'
 			where sku not in (select sku from m_piline a inner join m_pi b
 			on a.m_pi_key = b.m_pi_key
 			where date(b.insertdate) = date(now()) and b.status in ('1','2'))");
 			
-			header("Location: ../content.php");
-			
-			
+		if($statement1){
+			$json = array('result'=>'1');
+		}else{
+		
+			$json = array('result'=>'0');	
+		}
+		
+		$json_string = json_encode($json);
+		echo $json_string;
+		
 	}else if($_GET['act'] == 'send_cashier'){
 		
 		// $sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
