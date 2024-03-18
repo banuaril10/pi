@@ -62,6 +62,11 @@
 		<div class="card">
 			<div class="card-header">
 				<h4>INVENTORY LIST</h4>
+				
+				<form action="api/action.php?modul=inventory&act=reset_active" method="POST">
+					<button type="submit" class="btn btn-danger" name="reset">Active Product</button>
+				</form>
+				
 				<p>Note : Proses input header sekaligus sync dari ERP, sedikit memakan waktu</p>
 				<?php if($status_gantung == 1){ ?>
 					

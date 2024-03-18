@@ -2084,6 +2084,17 @@ if($_GET['modul'] == 'inventory'){
 			header("Location: ../pigantung.php");
 			
 			
+	}else if($_GET['act'] == 'reset_active'){
+		
+		
+			$connec->query("update pos_mproduct set isactived ='1'
+			where sku not in (select sku from m_piline a inner join m_pi b
+			on a.m_pi_key = b.m_pi_key
+			where date(b.insertdate) = date(now()) and b.status in ('1','2'))");
+			
+			header("Location: ../content.php");
+			
+			
 	}else if($_GET['act'] == 'send_cashier'){
 		
 		// $sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
