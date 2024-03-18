@@ -823,6 +823,31 @@ function get_data_harga($ad_morg_key){
 					
 }
 
+function get_data_harga_null($ad_morg_key){
+			
+			    
+	// $fields_string = http_build_query($postData);
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_price_null&org='.$ad_morg_key,
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+					
+					
+}
+
 function get_data_harga_khusus($ad_morg_key){
 			
 			    
@@ -3849,7 +3874,7 @@ locator_name) VALUES (
 		// $sku = "8151000000129";
 		
 		
-		$hasil = get_data_harga($ad_morg_key);
+		$hasil = get_data_harga_null($ad_morg_key);
 		$j_hasil = json_decode($hasil, true);
 		
 		// $jum = count($hasil);
@@ -3859,6 +3884,38 @@ locator_name) VALUES (
 		foreach($j_hasil as $r) {
 
 				$upcount = $connec->query("update pos_mproduct set price='".$r['price']."' where sku='".$r['sku']."' and price is null");
+	
+			if($upcount){
+				$no = $no + 1;
+				
+			}
+			
+		
+
+		}
+		
+		$data = array("result"=>1, "msg"=>"Berhasil sync ".$no." data");
+		
+		$json_string = json_encode($data);	
+		echo $json_string;
+		// echo $sql;
+		
+	}else if($_GET['act'] == 'sync_price_all'){
+		
+		
+		// $sku = "8151000000129";
+		
+		
+		$hasil = get_data_harga($ad_morg_key);
+		$j_hasil = json_decode($hasil, true);
+		
+		// $jum = count($hasil);
+		
+		// if($jum > 0){
+		$no = 0;	
+		foreach($j_hasil as $r) {
+
+				$upcount = $connec->query("update pos_mproduct set price='".$r['price']."' where sku='".$r['sku']."' ");
 	
 			if($upcount){
 				$no = $no + 1;

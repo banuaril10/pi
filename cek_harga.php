@@ -42,6 +42,7 @@
 			</font>
 			<br>
 			<button type="button" onclick="sync_price();" class="btn btn-danger">Sync Harga</button>
+			<button type="button" onclick="sync_price_all();" class="btn btn-primary">Sync Harga All</button>
 			<button type="button" onclick="sync_price_khusus();" class="btn btn-success">Sync Harga Khusus</button>
 			<p id="notif" style="color: green; font-weight: bold"></p>
 			<!--<button onclick="turnOn();" class="switch">On</button>
@@ -131,10 +132,27 @@ function sync_price(){
 			
 		}
 		});
-		
-	
-	
-	
+}
+
+function sync_price_all(){
+	$("#overlay").fadeIn(300);
+
+		$.ajax({
+		url: "api/action.php?modul=inventory&act=sync_price_all",
+		type: "POST",
+		beforeSend: function(){
+			$('#notif').html("Proses sync Barcode..");
+			
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			location.reload();
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#overlay").fadeOut(300);
+			
+		}
+		});
 	
 }
 
