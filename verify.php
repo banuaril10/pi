@@ -427,6 +427,10 @@ function batalPI(m_pi_key){
 		data : formData,
 		processData: false,
 		contentType: false,
+		beforeSend: function(){
+			$('#notif').html("Proses batalkan header, mohon tunggu..");
+			$("#overlay").fadeIn(300);
+		},
 		success: function(dataResult){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
@@ -434,7 +438,10 @@ function batalPI(m_pi_key){
 				$('#notif1').html("<font style='color: red'>Berhasil membatalkan PI!</font>");
 				$("#example").load(" #example");
 				$(".modal").modal('hide');
+				$("#overlay").fadeOut(300);
 			}
+			$("#overlay").fadeOut(300);
+			
 			// else {
 				// $('#notif').html(dataResult.msg);
 			// }
