@@ -41,7 +41,11 @@
 		
 ?>
 
-
+<div id="overlay">
+			<div class="cv-spinner">
+				<span class="spinner"></span>
+			</div>
+		</div>
 
 <div id="app">
 <div id="main">
@@ -250,11 +254,7 @@
 </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div id="overlay">
-			<div class="cv-spinner">
-				<span class="spinner"></span>
-			</div>
-		</div>
+
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -414,7 +414,7 @@ function batalPI(m_pi_key){
 		processData: false,
 		contentType: false,
 		beforeSend: function(){
-			$('#notif').html("Proses batalkan header, mohon tunggu..");
+			$('#notif1').html("Proses batalkan header, mohon tunggu..");
 			$("#overlay").fadeIn(300);
 		},
 		success: function(dataResult){
