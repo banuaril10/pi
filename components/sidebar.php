@@ -17,63 +17,7 @@
 		<div class="sidebar-menu">
 			<ul class="menu">
 				<li class="sidebar-title">Menu</li>
-				
-				<?php if($_SESSION['username'] != 'akunglobalit'){ ?>
-					
-					<li class="sidebar-item">
-					<a href="morder.php" class='sidebar-link'>
-						<i class="bi bi-cash-stack"></i>
-						<span>D Order</span>
-					</a>
-				</li>
-				<?php } ?>
-				
-				
-			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing' && $_SESSION['name'] != 'BAC'){ ?>
-			
-				<li class="sidebar-item">
-					<a href="capture_sku.php" class='sidebar-link'>
-						<i class="bi bi-camera"></i>
-						<span>Capture Price Tag</span>
-					</a>
-				</li>
-				
-				<li class="sidebar-item">
-					<a href="capture_jsm.php" class='sidebar-link'>
-						<i class="bi bi-camera"></i>
-						<span>Capture Price Tag JSM</span>
-					</a>
-				</li>
-			
-				<li class="sidebar-item">
-					<a href="mlomba.php" class='sidebar-link'>
-						<i class="bi bi-cash-stack"></i>
-						<span>Pendaftaran Lomba</span>
-					</a>
-				</li>
-				<li class="sidebar-item">
-					<a href="cekperubahanharga.php" class='sidebar-link'>
-						<i class="bi bi-tags-fill"></i>
-						<span>Perubahan Harga</span>
-					</a>
-				</li>
-				
-				<li class="sidebar-item">
-					<a href="mitemspromo_live.php" class='sidebar-link'>
-						<i class="bi bi-tags-fill"></i>
-						<span>Perubahan Harga Promo</span>
-					</a>
-				</li>
-			
-				<li class="sidebar-item">
-					<a href="document.php" class='sidebar-link'>
-						<i class="bi bi-box-seam"></i>
-						<span>Receiving Items</span>
-					</a>
-				</li>
-			
-			
-			
+							
 				<li class="sidebar-item">
 					<a href="monitoring.php" class='sidebar-link'>
 						<i class="bi bi-speedometer"></i>
@@ -89,7 +33,20 @@
 				</li>
 				
 				
-			<?php if($_SESSION['name'] != 'Cashier'){ ?>
+				<?php if($_SESSION['username'] != 'akunglobalit'){ ?>
+					
+					<li class="sidebar-item">
+					<a href="morder.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>D Order</span>
+					</a>
+				</li>
+				<?php } ?>
+				
+				
+			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing' && $_SESSION['name'] != 'BAC'){ ?>
+			
+				<?php if($_SESSION['name'] != 'Cashier'){ ?>
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-archive-fill"></i>
@@ -116,11 +73,28 @@
 					</ul>
 				</li>
 			<?php } ?>	
-				
-				
-				
-				
+			
+			
 				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-gift"></i>
+						<span>Promo</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="cek_promo.php">Reguler & Code</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="cek_promo_grosir.php">Grosir</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="cek_promo_buyget.php">Buy & Get</a>
+						</li>
+					</ul>
+				</li>
+			
+			
+							<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-stack"></i>
 						<span>Master Data</span>
@@ -218,6 +192,88 @@
 						</li>
 					</ul>
 				</li>
+			
+				<li class="sidebar-item">
+					<a href="cek_harga.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Cek Harga</span>
+					</a>
+				</li>
+			
+				<li class="sidebar-item">
+					<a href="capture_sku.php" class='sidebar-link'>
+						<i class="bi bi-camera"></i>
+						<span>Capture Price Tag</span>
+					</a>
+				</li>
+				
+				<li class="sidebar-item">
+					<a href="capture_jsm.php" class='sidebar-link'>
+						<i class="bi bi-camera"></i>
+						<span>Capture Price Tag JSM</span>
+					</a>
+				</li>
+			
+				<li class="sidebar-item">
+					<a href="mlomba.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Pendaftaran Lomba</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a href="cekperubahanharga.php" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Perubahan Harga</span>
+					</a>
+				</li>
+				
+				<li class="sidebar-item">
+					<a href="mitemspromo_live.php" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Perubahan Harga Promo</span>
+					</a>
+				</li>
+			
+				<li class="sidebar-item">
+					<a href="document.php" class='sidebar-link'>
+						<i class="bi bi-box-seam"></i>
+						<span>Receiving Items</span>
+					</a>
+				</li>
+			
+			
+
+				
+			
+				
+				
+				
+				
+
+				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Price Tag Baby Doll</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="mitems_baby.php">Harga Reguler</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemsold_baby.php">Harga Reguler Format Lama</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitems_alt_baby.php">Harga Reguler Per Rack</a>
+						</li>
+						<!--<li class="submenu-item ">
+							<a href="mitemspromo_baby.php">Harga Promo</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromocode_live_baby.php">Harga Bertingkat</a>
+						</li>-->
+					</ul>
+				</li>
 				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
@@ -240,26 +296,12 @@
 						<span>Cashier Balance</span>
 					</a>
 				</li>
-				<li class="sidebar-item">
-					<a href="cek_harga.php" class='sidebar-link'>
-						<i class="bi bi-cash-stack"></i>
-						<span>Cek Harga</span>
-					</a>
-				</li>
+
 				
-				<li class="sidebar-item">
-					<a href="cek_promo.php" class='sidebar-link'>
-						<i class="bi bi-gift"></i>
-						<span>Cek Promo</span>
-					</a>
-				</li>
 				
-				<li class="sidebar-item">
-					<a href="cek_promo_grosir.php" class='sidebar-link'>
-						<i class="bi bi-gift"></i>
-						<span>Cek Promo Grosir</span>
-					</a>
-				</li>
+
+				
+				
 			<?php }else if($_SESSION['name'] == 'Marketing'){ ?>
 				<li class="sidebar-item">
 					<a href="cekperubahanharga.php" class='sidebar-link'>
@@ -311,7 +353,31 @@
 						<li class="submenu-item ">
 							<a href="mitemspromocode_live.php">Harga Bertingkat</a>
 						</li>
-						
+					</ul>
+				</li>
+				
+				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Price Tag Baby Doll</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="mitems_baby.php">Harga Reguler</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemsold_baby.php">Harga Reguler Format Lama</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitems_alt_baby.php">Harga Reguler Per Rack</a>
+						</li>
+						<!--<li class="submenu-item ">
+							<a href="mitemspromo_baby.php">Harga Promo</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromocode_live_baby.php">Harga Bertingkat</a>
+						</li>-->
 					</ul>
 				</li>
 				
@@ -350,18 +416,22 @@
 					</a>
 				</li>
 				
-				<li class="sidebar-item">
-					<a href="cek_promo.php" class='sidebar-link'>
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
 						<i class="bi bi-gift"></i>
-						<span>Cek Promo</span>
+						<span>Promo</span>
 					</a>
-				</li>
-				
-				<li class="sidebar-item">
-					<a href="cek_promo_grosir.php" class='sidebar-link'>
-						<i class="bi bi-gift"></i>
-						<span>Cek Promo Grosir</span>
-					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="cek_promo.php">Reguler & Code</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="cek_promo_grosir.php">Grosir</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="cek_promo_buyget.php">Buy & Get</a>
+						</li>
+					</ul>
 				</li>
 				
 			<?php }else if($_SESSION['name'] == 'BAC'){ ?>	

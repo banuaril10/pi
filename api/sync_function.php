@@ -2,11 +2,29 @@
 include "../config/koneksi.php";
 
 $text = file_get_contents('https://pi.idolmartidolaku.com/api/function.txt');
+$text1 = file_get_contents('https://pi.idolmartidolaku.com/api/function1.txt');
+$text2 = file_get_contents('https://pi.idolmartidolaku.com/api/function2.txt');
+$text3 = file_get_contents('https://pi.idolmartidolaku.com/api/function3.txt');
+$text4 = file_get_contents('https://pi.idolmartidolaku.com/api/function4.txt');
+$text5 = file_get_contents('https://pi.idolmartidolaku.com/api/function5.txt');
+$text6 = file_get_contents('https://pi.idolmartidolaku.com/api/function6.txt');
+$text7 = file_get_contents('https://pi.idolmartidolaku.com/api/function7.txt');
+$text8 = file_get_contents('https://pi.idolmartidolaku.com/api/function8.txt');
+$text9 = file_get_contents('https://pi.idolmartidolaku.com/api/function9.txt');
 // echo $text;
 
 
 
 $cp = $connec->query($text);
+$cp1 = $connec->query($text1);
+$cp2 = $connec->query($text2);
+$cp3 = $connec->query($text3);
+$cp4 = $connec->query($text4);
+$cp5 = $connec->query($text5);
+$cp6 = $connec->query($text6);
+$cp7 = $connec->query($text7);
+$cp8 = $connec->query($text8);
+$cp9 = $connec->query($text9);
 
 if($cp){
 	$json = array('result'=>'1', 'msg'=>'Berhasil sync function');

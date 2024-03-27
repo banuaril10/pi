@@ -168,6 +168,29 @@ function get_data_promo_grosir($org){
 	
 }
 
+function get_data_promo_buyget($org){
+	
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_buyget&org_id=".$org,
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+	
+	
+}
+
 function get_data_sku(){
 			
 			    
@@ -2786,6 +2809,85 @@ if($_GET['modul'] == 'inventory'){
 
 	echo $json_string;	
 				
+
+	}else if($_GET['act'] == 'sync_promo_buyget'){
+		
+		$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
+		$results = $connec->query($sqll);
+		foreach ($results as $r) {
+			$org_keys = $r["ad_morg_key"];	
+		}
+		
+		
+		$jsons = get_data_promo_buyget($org_keys);
+		$arr = json_decode($jsons, true);
+		$jum = count($arr);
+		$s = array();
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductbuyget");
+		if($truncate){
+			
+			// echo $jum;
+			$no = 0;
+			
+			foreach($arr as $item) { //foreach element in $arr
+				$ad_mclient_key = $item['ad_mclient_key']; //etc
+				$ad_morg_key = $item['ad_morg_key']; //etc
+				$isactived = $item['isactived']; //etc
+				$insertdate = $item['insertdate']; //etc
+				$insertby = $item['insertby']; //etc
+				$postby = $item['postby']; //etc
+				$postdate = $item['postdate']; //etc
+				$discountname = 'Buy & Get'; //etc
+				$typepromo = $item['typepromo']; //etc
+				$skubuy = $item['skubuy']; //etc
+				$qtybuy = $item['qtybuy']; //etc
+				$skuget = $item['skuget']; //etc
+				$qtyget = $item['qtyget']; //etc
+				$priceget = $item['priceget']; //etc
+				$fromdate = $item['fromdate']; //etc
+				$todate = $item['todate']; //etc
+				$discount = $item['discount']; //etc
+					 
+				$s[] = "('".$isactived."','".$ad_mclient_key."', '".$ad_morg_key."', '".date("Y-m-d H:i:s")."','".$insertby."', '".$insertby."', '".$postdate."', '".$discountname."','".$typepromo."', '".$fromdate."', '".$todate."', '".$skubuy."', '".$qtybuy."', '".$skuget."', '".$qtyget."', '".$priceget."', '".$discount."')";	 
+			}
+			
+			
+			$jum_s = count($s);
+			
+			if($jum_s > 0){
+				$values = implode(", ",$s);
+					
+				$qqq = "insert into pos_mproductbuyget (isactived, ad_mclient_key, ad_morg_key, insertdate, insertby, postby, postdate, discountname, typepromo, fromdate, todate, skubuy, qtybuy, skuget, qtyget, priceget, discount) VALUES ".$values.";";
+					
+				$suc = $connec->query($qqq);
+				
+				
+				if($suc){
+					
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json_string = json_encode($json);	
+					
+				}else{
+					
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti', 'qq'=>$qqq);
+					$json_string = json_encode($json);	
+				}
+				
+			}else{
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+				
+			}
+		}	
+			
+		}else{
+			
+					$json = array('result'=>'1', 'msg'=>'Promo tidak ditemukan');
+					$json_string = json_encode($json);	
+			
+		}
+		echo $json_string;	
 
 	}else if($_GET['act'] == 'sync_promo_code'){
 		
