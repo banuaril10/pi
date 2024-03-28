@@ -480,4 +480,15 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 						}
 						
 					}
+					
+					$cmd_alter_pos_mproductbuyget = ['ALTER TABLE pos_mproductbuyget ADD discount numeric NULL DEFAULT 0;'];
+					
+					$result_bg1 = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'pos_mproductbuyget'" );
+					if($result_bg1->rowCount() == 1) {
+						foreach ($cmd_alter_pos_mproductbuyget as $r){
+					
+								$connec->exec($r);
+						}
+						
+					}
 ?>
