@@ -301,15 +301,27 @@ function syncPromo(){
 			var dataResult = JSON.parse(dataResult);
 			syncPromoCode();
 			syncPromoTebus();
+			syncPromoGrosir();
 		}
 		});
-		
-	
-	
-	
-	
 }
 		
+		
+function syncPromoGrosir(){
+		$.ajax({
+		url: "api/action.php?modul=inventory&act=sync_promo_grosir",
+		type: "POST",
+		beforeSend: function(){
+			$('#notif').html("Proses sync Promo..");
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			// var dataResult = JSON.parse(dataResult);
+			location.reload();
+		}
+		});
+}
 		
 function syncPromoCode(){
 	$("#overlay").fadeIn(300);
@@ -345,7 +357,7 @@ function syncPromoTebus(){
 		success: function(dataResult){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
-			location.reload();
+			// location.reload();
 			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 			$("#overlay").fadeOut(300);
 			
