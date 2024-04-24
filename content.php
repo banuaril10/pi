@@ -95,6 +95,7 @@
 							<tr>
 								<th>No</th>
 								<th>Document No</th>
+								<th>GR Area</th>
 								<th>Tanggal / Description</th>
 								<th>Post By</th>
 								<th>Type</th>
@@ -132,7 +133,13 @@
 							
 						}
 						
-						
+						$m_locator = "-";
+						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' group by locator_name";
+						foreach ($connec->query($get_locator) as $rrr) {
+							
+							$m_locator = $rrr['locator_name'];
+							
+						}
 						
 						$sql_amount = "select coalesce(SUM(CASE WHEN status=1 THEN 1 ELSE 0 END),0) jumsync, count(sku) jumline
 						from m_piline where m_pi_key = '".$row['m_pi_key']."'";
@@ -167,7 +174,7 @@
 						
 								
 								</td>
-								
+								<td><b><?php echo $m_locator; ?></b></td>
 								<td><?php echo $row['insertdate']; ?><br><?php echo $cat; ?> : <b><?php echo $row['rack_name']; ?></b></td>
 					
 					

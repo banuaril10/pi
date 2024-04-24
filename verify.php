@@ -33,6 +33,7 @@
 							<tr>
 								<th>No</th>
 								<th>Document No</th>
+								<th>GR Area</th>
 								<th>Tanggal / Rack Name</th>
 							
 								<th>Total Sistem</th>
@@ -110,6 +111,15 @@
 						
 						$jumrelease = '<font style="color: '.$color.'">'.$jumsync.' / '.$jumline.'</font>';
 						
+						$m_locator = "-";
+						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' group by locator_name";
+						foreach ($connec->query($get_locator) as $rrr) {
+							
+							$m_locator = $rrr['locator_name'];
+							
+						}
+						
+						
 						?>
 						
 						
@@ -122,7 +132,7 @@
 									<a href="detail.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-warning">Detail</a>
 								<?php } ?>
 								</td>
-								
+								<td><b><?php echo $m_locator; ?></b></td>
 								<td><?php echo $row['insertdate']; ?><br>RACK : <b><?php echo $row['rack_name']; ?></b></td>
 					
 								<td><?php echo rupiah($qtyerp); ?></td>
