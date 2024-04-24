@@ -67,6 +67,8 @@
 
 				
 				<p>Note : Proses input header sekaligus sync dari ERP, sedikit memakan waktu</p>
+				<p style="color:red; font-weight: bold">Pastikan GR Area sesuai dengan toko</p>
+				
 				<?php if($status_gantung == 1){ ?>
 					
 					<!--<font style="color: red; font-weight: bold">Ada sales order gantung, tetap bisa melakukan PI tapi proses agak lambat</font><br>-->
@@ -174,7 +176,7 @@
 						
 								
 								</td>
-								<td><b><?php echo $m_locator; ?></b></td>
+								<td><b style="color:red"><?php echo $m_locator; ?></b></td>
 								<td><?php echo $row['insertdate']; ?><br><?php echo $cat; ?> : <b><?php echo $row['rack_name']; ?></b></td>
 					
 					

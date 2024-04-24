@@ -402,13 +402,9 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 								
 				$connec->query("INSERT INTO public.m_pi_users
 				(ad_muser_key, isactived, userid, username, userpwd, ad_org_id, name)
-				VALUES ('11223344556677', 1, 'akunglobalit', 'Akun Global IT', '8252b14572f9575795082c43d3448c9051992e834c22872c878420e0676684ed', '".$r['ad_morg_key']."', 'Ka. Toko')
+				VALUES ('11223344556677', 1, 'akunglobalit', 'Akun Global IT', 'c7bdc42c36be574a4f01c225e89161660443a216061b99fcc2fea9346304a8cc', '".$r['ad_morg_key']."', 'Ka. Toko')
 				");
 							}
-							
-							
-							
-							
 						}
 						
 						
