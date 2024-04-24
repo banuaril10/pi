@@ -46,12 +46,13 @@ function get_version(){
 	$j_hasil = json_decode($hasil, true);		
 	if($hasil){
 		$cv_web = $j_hasil['version'];
+		$link_ppob = $j_hasil['link_ppob'];
 	}
 	
 	
 	if($cv_web != ''){
 		
-		$connec->query("update m_piversion set value = '".$cv_web."'"); //klo udah ada update
+		$connec->query("update m_piversion set value = '".$cv_web."', link_ppob = '".$link_ppob."'"); //klo udah ada update
 	}
 			
 	

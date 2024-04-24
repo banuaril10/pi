@@ -312,14 +312,15 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 					
 	
 					$cmd5 = ["CREATE TABLE public.m_piversion (
-							value character varying(10)
+								value character varying(10),
+								link_ppob text
+								
 						);","insert into m_piversion (value) VALUES ('1')"
 					];
 					
-					
 					$result4 = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'm_piversion'" );
 					if($result4->rowCount() == 1) {
-
+							$connec->exec('ALTER TABLE m_piversion ADD COLUMN IF NOT EXISTS link_ppob text;');
 					}else {
 						foreach ($cmd5 as $r){
 								$connec->exec($r);
