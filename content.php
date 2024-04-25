@@ -296,9 +296,15 @@
 			<select name="sl" id="sl" class="selectize">
 				<?php 
 				
+				$sqll = "select value as storecode,name from ad_morg";
+				$results = $connec->query($sqll);
+				foreach ($results as $r) {
+					$storecode = $r["storecode"];	
+					$name = $r["name"];	
+				}
 				
 				
-				$sql2 = "select m_locator_id ,locator_name from pos_mproduct WHERE locator_name ilike '%GR AREA BOS%' group by m_locator_id ,locator_name";
+				$sql2 = "select m_locator_id ,locator_name from pos_mproduct WHERE locator_name ilike '%GR AREA BOS%' and locator_name like '%".$name."%' group by m_locator_id ,locator_name";
 	
 				foreach ($connec->query($sql2) as $row) {
 					echo '<option value="'.$row['m_locator_id'].'">'.$row['locator_name'].'</option>';	    
