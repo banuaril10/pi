@@ -122,7 +122,7 @@ td {
 </div>
 </div>
 </div>
-<script src="https://unpkg.com/html5-qrcode@2.0.9/dist/html5-qrcode.min.js"></script>
+
 <script type="text/javascript">
   $(function(){
  

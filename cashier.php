@@ -249,8 +249,8 @@
     </div>
   </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-numeric@1.5.0/jquery.numeric.min.js"></script>
+<script src="assets/mask.js"></script>
+<script src="assets/numeric.js"></script>
 
 
 <script type="text/javascript">
