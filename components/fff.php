@@ -5,6 +5,8 @@
 <script src="styles/js/dataTables.bootstrap5.min.js"></script>
 <script src="styles/js/bootstrap.bundle.min.js"></script>
 <script src="styles/js/main.js"></script>
+<link href='styles/css/font.css' rel='stylesheet' type='text/css'>
+
 
 <script type="text/javascript">
 $(document).ready(function () {

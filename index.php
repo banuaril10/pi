@@ -9,6 +9,7 @@
 <link href="styles/css/font-awesome.css" rel="stylesheet"> 
 <script src="styles/js/jquery-1.11.1.min.js"></script>
 <script src="styles/js/modernizr.custom.js"></script>
+
 <link href="styles/css/animate.css" rel="stylesheet" type="text/css" media="all">
 <script src="styles/js/metisMenu.min.js"></script>
 <script src="styles/js/custom.js"></script>

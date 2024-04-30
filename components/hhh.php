@@ -31,4 +31,11 @@
 		.is-hide{
 		display:none;
 		}
+		
+		* {
+			font-size: 100%;
+			font-family: Tahoma;
+			font-weight: normal !important;
+		}
+		
 	</style>
