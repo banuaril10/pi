@@ -162,7 +162,7 @@
 								<td colspan="5"><font style="font-weight: bold"><?php echo $row1['sku']; ?> <?php echo $barc; ?></font> (<?php echo $row1['name']; ?>)</td>
 							</tr>
 	
-							<tr class="header1" style="background: #e1e5fa">
+							<tr class="header1" style="background: #f0f1f2">
 								<td style="width: 150px">Counter</td>
 								<td>ERP</td>
 								<td>Sales</td>
@@ -172,7 +172,7 @@
 								
 
 							</tr>
-							<tr class="header2" <?php echo $color; ?>>
+							<tr class="header2" <?php echo $color; ?> style="font-size: 16px">
 	
 								<td>
 								
