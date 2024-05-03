@@ -3593,7 +3593,8 @@ locator_name) VALUES (
 				
 				$data = array(
 					"result"=>1,
-					'msg'=>'Gagal update stock'
+					'msg'=>'Gagal update stock',
+					'q'=>'Gagal update stock '.$sql
 				);
 			}
 				

@@ -315,10 +315,10 @@
 				<option value="">Kategori PI</option>
 				
 				
-			<?php if($_SESSION['role'] == 'Global'){ ?>	
+			<?php //if($_SESSION['role'] == 'Global'){ ?>	
 				<option value="1">Product Category</option>
 				
-			<?php } ?>	
+			<?php //} ?>	
 				
 				<option value="2">Rack</option>
 				<option value="3">Items</option>
