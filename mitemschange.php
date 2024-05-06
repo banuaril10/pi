@@ -207,7 +207,7 @@
 						
 						
 							<tr>
-								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['ni']; ?>|<?php echo $row['price_new']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['barcode']; ?>|<?php echo $harga_last; ?>|<?php echo $row['tag']; ?>|<?php echo $storecode.'/'.date('dmy'); ?>"></td>
+								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $row['ni']; ?>|<?php echo $row['price_new']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['barcode']; ?>|<?php echo $harga_last; ?>|<?php echo $row['tag']; ?>|<?php echo $storecode.'/'.date('dmy'); ?>|<?php echo $row['barcode']; ?>"></td>
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $row['barcode']; ?></td>

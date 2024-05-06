@@ -110,8 +110,11 @@
 						<tbody>
 						
 						<?php 
+						
+						
+						
 						$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
-						where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						where status = '1' and (inventorytype = '".$_SESSION['role']."' or inventorytype = 'Nasional') and date(insertdate) = date(now()) order by insertdate desc";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
 						if($row['status'] == 1){

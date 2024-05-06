@@ -36,33 +36,44 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 						var panjangharga = parseInt(res[2]);
 	
 						
-						var sizeprice = "47px";
+						var sizeprice = "49px";
 						if(lengthh > 33){
 							
-							 sizeprice = "47px";
+							 sizeprice = "49px";
 						}
 						
 						if(panjangharga > 999999){
-							sizeprice = "43px";
+							sizeprice = "45px";
 							
 						}
 						
+						
+						var barcode = res[9];
+						if(barcode == ""){
+							
+							barcode = "";
+						}
+						
 						if(res[4] != ""){
-							var rack = res[8]+"/"+res[0]+"/"+res[4]+"/"+res[7];
+							var rack = res[8]+"/"+res[4]+"/"+res[7];
+							var rack2 = res[0]+"/"+barcode;
 							
 							
 						}else{
 							
-							var rack = res[8]+"/"+res[0]+"/NO_RACK/"+res[7];
+							var rack = res[8]+"/NO_RACK/"+res[7];
+							var rack2 = res[0]+"/"+barcode;
 						}
 						
 						// <br style='line-height: 70%;'>
 			
 
-						var newStr = rack.replace('-', '_');
+						var newStr = rack.replace('-', '_')+"<br>"+rack2.replace('-', '_');
 						var tgl_cetak = res[8];
 						
-							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div><label style='margin: -10px 0 0 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label><label style='text-align: left; font-size: 7px; width: 100%'>"+newStr+"</label><center><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0;'><label style='text-align: center; font-size: 8px; margin-top: 10px'>"+brand+" MURAH DAN LENGKAP</label></center></div></td>";
+							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div><label style='margin: -10px 0 0 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0; width: 100%'><label style='text-align: left; font-size: 10px; width: 100%'>"+newStr+"</label></div></td>";
+							
+							// text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div><label style='margin: -10px 0 0 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label><label style='text-align: left; font-size: 7px; width: 100%'>"+newStr+"</label><center><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0;'><label style='text-align: center; font-size: 8px; margin-top: 10px'>"+brand+" MURAH DAN LENGKAP</label></center></div></td>";
 							
 						
 						
