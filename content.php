@@ -64,6 +64,7 @@
 				<h4>INVENTORY LIST</h4>
 
 				<button type="button" onclick="resetPI();" class="btn btn-danger" name="reset">Active Product</button>
+				<button type="button" onclick="cleansingData();" class="btn btn-dark" name="clean">Cleansing Data PI Lama</button>
 
 				
 				<p>Note : Proses input header sekaligus sync dari ERP, sedikit memakan waktu</p>
@@ -390,6 +391,35 @@ function resetPI(){
 		}
 	});
 }
+
+
+function cleansingData(){ 
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=cleansing_data",
+		type: "GET",
+		beforeSend: function(){
+			$('#notif1').html("Proses active kembali product..");
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: green'>Berhasil cleansing data!</font>");
+				$("#overlay").fadeOut(300);
+			}
+			$("#overlay").fadeOut(300);
+			
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+}
+
+
 
 function selectKat(){
 	var kat = document.getElementById( 'kat' ).value;

@@ -1207,6 +1207,10 @@ if($_GET['modul'] == 'inventory'){
 	$pc = $_POST['pc'];
 	$ss = $_POST['sso'];
 	
+	if($it == 'Nasional'){
+		$ss = '0';
+	}
+	
 	// $it = 'Global';
 	// $sl = '4DC01BB67AB148C9A02C4F5DB39AF969';
 	// $kat = '1';
@@ -2140,6 +2144,23 @@ if($_GET['modul'] == 'inventory'){
 			where date(b.insertdate) = date(now()) and b.status in ('1','2'))");
 			
 		if($statement1){
+			$json = array('result'=>'1');
+		}else{
+		
+			$json = array('result'=>'0');	
+		}
+		
+		$json_string = json_encode($json);
+		echo $json_string;
+		
+	}else if($_GET['act'] == 'cleansing_data'){
+		
+		$yd = date('Y-m-d', strtotime("-2 days"));
+		
+		$delete_header = $connec->query("delete from m_pi where date(insertdate) < '".$yd."' ");
+		$delete_line = $connec->query("delete from m_piline where date(insertdate) < '".$yd."' ");
+			
+		if($delete_line){
 			$json = array('result'=>'1');
 		}else{
 		

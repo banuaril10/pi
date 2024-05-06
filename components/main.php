@@ -3,7 +3,6 @@ if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 	$org_key = $_SESSION['org_key'];
 	$username = $_SESSION['username'];
 }else{
-	
 	header("Location: index.php");
 }
 
@@ -11,6 +10,7 @@ $get_nama_toko = "select * from ad_morg where postby = 'SYSTEM'";
 $resultss = $connec->query($get_nama_toko);
 foreach ($resultss as $r) {
 	$storecode = $r["value"];	
+	$org_key = $r['ad_morg_key'];
 }
 
 ?>
