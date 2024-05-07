@@ -75,14 +75,14 @@
 				<?php if($status_gantung == 1){ ?>
 					
 					<!--<font style="color: red; font-weight: bold">Ada sales order gantung, tetap bisa melakukan PI tapi proses agak lambat</font><br>-->
-					<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
 					<!--<button type="button" class="btn btn-success" onclick="cekSalesOrder('<?php echo $org_key; ?>');">Cek Sales Gantung</button>-->
 				<?php }else if($status_gantung == 0){ ?>
 					<!--<font style="color: green; font-weight: bold">Sales order sudah komplit</font><br>-->
-					<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
 				<?php }else if($status_gantung == 2){ ?>
 					<!--<button type="button" class="btn btn-success" onclick="cekSalesOrder('<?php echo $org_key; ?>');">Cek Sales Gantung</button>-->
-					<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
 				<?php } ?>
 				
 				<font id="notif1" style="color: red; font-weight: bold"></font>	
@@ -116,7 +116,7 @@
 						// where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
-						where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						where status = '1' and inventorytype = 'Nasional' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
@@ -179,7 +179,7 @@
 								<td><?php echo $row['name']; ?><br>
 								
 								
-									<a href="invlist.php?m_pi=<?php echo $row['m_pi_key']; ?>&kat=<?php echo $row['category']; ?>" class="btn btn-primary">Counting</a>
+									<a href="invlist_nasional.php?m_pi=<?php echo $row['m_pi_key']; ?>&kat=<?php echo $row['category']; ?>" class="btn btn-primary">Counting</a>
 						
 								
 								</td>
@@ -295,13 +295,13 @@
       <div class="modal-body" style="background: #cacaca">
 	  
 	  
-	    <p id="notif" style="color: red; font-weight: bold; background: #fff; padding: 10px"></p>
+	    <p id="notif" style="color: red; font-weight: bold; background: #fff; padding: 10px">Pastikan proses Sales Order sudah complete...</p>
 		
 		<div class="row-info"> 
 			
 			<select name="it" id="it" class="selectize" required>
 				
-				<option value="<?php echo $_SESSION['role']; ?>"><?php echo $_SESSION['role']; ?></option>
+				<option value="Nasional">Nasional</option>
 				
 			</select>
 			
@@ -324,14 +324,6 @@
 				?>
 			</select>
 			<select name="kat" id="kat" onchange="selectKat();" class="selectize">
-				<option value="">Kategori PI</option>
-				
-				
-			<?php //if($_SESSION['role'] == 'Global'){ ?>	
-				<option value="1">Product Category</option>
-			<?php //} ?>	
-				
-				<option value="2">Rack</option>
 				<option value="3">Items</option>
 			</select>
 		<div id="pc" style="display: none">
@@ -681,7 +673,7 @@ $('#butsave').on('click', function() {
 			}else if(kat == '3'){
 					
 					$.ajax({
-						url: "api/action.php?modul=inventory&act=inputitems",
+						url: "api/action.php?modul=inventory&act=inputitemsnasional",
 						type: "POST",
 						data : formData,
 						processData: false,
@@ -693,14 +685,8 @@ $('#butsave').on('click', function() {
 						success: function(dataResult){
 							console.log(dataResult);
 							var dataResult = JSON.parse(dataResult);
-							if(dataResult.result=='2'){
-								$('#notif').html("Proses input ke inventory line");
-								$( "#butsave" ).prop( "disabled", false );
-								$("#overlay").fadeOut(300);
-								location.reload();
-								// $("#example").load(" #example");
-							}else if(dataResult.result=='1'){
-								$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
+							if(dataResult.result=='1'){
+								$('#notif').html("<font style='color: green'>Berhasil input semua items!</font>");
 								$("#overlay").fadeOut(300);
 								location.reload();
 								$( "#butsave" ).prop( "disabled", false );

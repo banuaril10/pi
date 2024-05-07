@@ -20,13 +20,14 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h4>VERIFIKASI LIST</h4>
+				<h4>VERIFIKASI LIST PI NASIONAL</h4>
 				 <button type="button" class="btn btn-primary" onclick="loopingLine();">Sync Approval</button>
 			</div>
 			<div class="card-body">
 			<div class="tables">		
 				<div class="table-responsive bs-example widget-shadow">	
 				<p id="notif" style="color: red; font-weight: bold"></p>
+				<p id="ce" style="color: red; font-weight: bold">Items Active adalah Items yg QTY Sistem dan QTY Fisik nya tidak sama dengan 0</p>
 				
 					<table class="table table-bordered" id="example">
 						<thead>
@@ -35,14 +36,10 @@
 								<th>Document No</th>
 								<th>GR Area</th>
 								<th>Tanggal / Rack Name</th>
-							
 								<th>Total Sistem</th>
 								<th>Total Fisik</th>
-								
 								<th>Selisih</th>
-								
-								
-								<th>Type</th>
+								<th>Items Active</th>
 								<th>Status</th>
 								<th>Aksi</th>
 								
@@ -62,7 +59,7 @@
 						// from m_pi where m_pi.status in ('2','3') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$sql_list = "select m_pi_key, m_pi.name ,m_pi.insertdate, m_pi.rack_name, m_pi.insertby, m_pi.status,m_pi. m_locator_id, m_pi.inventorytype
-						from m_pi where m_pi.status in ('2','3') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						from m_pi where m_pi.status in ('2','3') and inventorytype = 'Nasional' order by insertdate desc";
 						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
@@ -123,6 +120,15 @@
 							
 						}
 						
+						$jum_active = 0;
+						$get_active = "select count(*) jum from m_piline where m_piline.m_pi_key ='".$row['m_pi_key']."' and (m_piline.qtycount != 0 or m_piline.qtyerp != 0)";
+						foreach ($connec->query($get_active) as $rrr) {
+							
+							$jum_active = $rrr['jum'];
+							
+						}
+						
+						
 						
 						?>
 						
@@ -131,12 +137,12 @@
 								<th scope="row"><?php echo $no; ?></th>
 								<td><?php echo $row['name']; ?><br>
 								<?php if($row['status'] == 2){ ?>
-									<a href="invverif.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-danger">Proses</a>
+									<a href="invverif_nasional.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-danger">Proses</a>
 								<?php }else if($row['status'] == 3){ ?>
 									<a href="detail.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-warning">Detail</a>
 								<?php } ?>
 								</td>
-								<td><b><?php echo $m_locator; ?></b></td>
+								<td><b><?php echo $m_locator; ?></b><br><?php echo $row['inventorytype']; ?></td>
 								<td><?php echo $row['insertdate']; ?><br>RACK : <b><?php echo $row['rack_name']; ?></b></td>
 					
 								<td><?php echo rupiah($qtyerp); ?></td>
@@ -145,7 +151,7 @@
 								<td><?php echo rupiah($selisih); ?></td>
 								
 						
-								<td><?php echo $row['inventorytype']; ?></td>
+								<td><p id="ce" style="color: green; font-weight: bold !important"><?php echo $jum_active; ?></p></td>
 								<td style="color: <?php echo $colorr; ?>; font-weight: bold">
 								<?php echo $jumrelease; ?><br>
 								
@@ -468,7 +474,7 @@ function releasePI(m_pi){
 	var formData = new FormData();
 	formData.append('m_pi', m_pi);
 	$.ajax({
-		url: "api/action.php?modul=inventory&act=release_all",
+		url: "api/action.php?modul=inventory&act=release_all_nasional",
 		type: "POST",
 		data : formData,
 		processData: false,
@@ -481,55 +487,47 @@ function releasePI(m_pi){
 		success: function(dataResult){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
-			if(dataResult.result=='1'){
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#example").load(" #example");
+			$("#overlay").fadeOut(300);
+
+		}
+	});
+	
+	
+}
+
+
+// function updateStatusRelease(m_pi){
+	// var formData = new FormData();
+	// formData.append('m_pi', m_pi);
+	// $.ajax({
+		// url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=updatepi",
+		// type: "POST",
+		// data : formData,
+		// processData: false,
+		// contentType: false,
+		// beforeSend: function(){
+			// $('#notif').html("Proses update status di server, jangan close halaman ini sampai selesai..");
+
+		// },
+		// success: function(dataResult){
+			// console.log(dataResult);
+			// var dataResult = JSON.parse(dataResult);
+			// if(dataResult.result=='1'){
+				
+				// sendWa(m_pi);
+				
 				// $('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-				updateStatusRelease(m_pi);
 				// $("#example").load(" #example");
+				// $("#overlay").fadeOut(300);
 				
-			}
-			// else {
-				// $('#notif').html(dataResult.msg);
 			// }
-			
-		}
-	});
-	
-	
-}
 
-
-function updateStatusRelease(m_pi){
-	var formData = new FormData();
-	formData.append('m_pi', m_pi);
-	$.ajax({
-		url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=updatepi",
-		type: "POST",
-		data : formData,
-		processData: false,
-		contentType: false,
-		beforeSend: function(){
-			$('#notif').html("Proses update status di server, jangan close halaman ini sampai selesai..");
-			// $(".modal").modal('hide');
-		},
-		success: function(dataResult){
-			console.log(dataResult);
-			var dataResult = JSON.parse(dataResult);
-			if(dataResult.result=='1'){
-				
-				sendWa(m_pi);
-				
-				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-				$("#example").load(" #example");
-				$("#overlay").fadeOut(300);
-				
-			}
-			// else {
-				// $('#notif').html(dataResult.msg);
-			// }
 			
-		}
-	});
-}
+		// }
+	// });
+// }
 
 
 function releasePIGantung(m_pi){

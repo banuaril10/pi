@@ -191,7 +191,7 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 						filename varchar NULL,
 						tanggal timestamp NULL,
 						status numeric NULL
-					);'
+						);'
 					];
 					
 					$cmd_stock = ['CREATE TABLE public.m_pi_stock (tanggal TIMESTAMP,
@@ -406,6 +406,10 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 				VALUES ('11223344556677', 1, 'akunglobalit', 'Akun Global IT', 'c7bdc42c36be574a4f01c225e89161660443a216061b99fcc2fea9346304a8cc', '".$r['ad_morg_key']."', 'Ka. Toko')
 				");
 							}
+							
+							
+							
+							
 						}
 						
 						
@@ -478,6 +482,7 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 						
 					}
 					
+					
 					$cmd_alter_pos_mproductbuyget = ['ALTER TABLE pos_mproductbuyget ADD discount numeric NULL DEFAULT 0;'];
 					
 					$result_bg1 = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'pos_mproductbuyget'" );
@@ -488,4 +493,43 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 						}
 						
 					}
+					
+					$inv_temp_nasional = ['CREATE TABLE public.inv_temp_nasional (
+						id varchar not null primary key,
+						sku varchar NULL,
+						qty numeric NULL,
+						tanggal timestamp NULL,
+						status numeric NULL,
+						user_input varchar NULL
+						);', 'CREATE INDEX inv_temp_nasional_idx ON public.inv_temp_nasional USING btree (sku)'
+					];
+					
+					$result_inv = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'inv_temp_nasional'" );
+					if($result_inv->rowCount() == 0) {
+						foreach ($inv_temp_nasional as $rr){
+					
+								$connec->exec($rr);
+						}
+					}
+					
+					$inv_temp_nasional_header = ['CREATE TABLE public.inv_temp_nasional_header (
+						id varchar not null primary key,
+						name varchar null,
+						tanggal timestamp NULL,
+						toko varchar NULL,
+						user_input varchar NULL
+						);', 'CREATE INDEX inv_temp_nasional_header_idx ON public.inv_temp_nasional_header USING btree (sku)'
+					];
+					
+					$result_inv = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'inv_temp_nasional_header'" );
+					if($result_inv->rowCount() == 0) {
+						foreach ($inv_temp_nasional_header as $rr){
+					
+								$connec->exec($rr);
+						}
+					}
+				
+					
+					
+					
 ?>

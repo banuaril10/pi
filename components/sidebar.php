@@ -62,6 +62,9 @@
 						<li class="submenu-item ">
 							<a href="pigantung.php">List PI Expired</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="invscanheader.php">Inventory All</a>
+						</li>
 					<?php if($_SESSION['role'] == 'Global'){ ?>
 						
 						<li class="submenu-item ">
@@ -72,6 +75,23 @@
 						
 					</ul>
 				</li>
+				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-archive-fill"></i>
+						<span>PI Nasional</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="content_nasional.php">Inventory List</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="verify_nasional.php">Inventory Verify</a>
+						</li>
+					</ul>
+				</li>
+				
+				
 			<?php } ?>	
 			
 			

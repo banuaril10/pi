@@ -87,7 +87,7 @@ function cekVersion(){
 			// console.log(dataResult);
 			var dataResults = JSON.parse(dataResult);
 			if(dataResults.result=='1'){
-				$('#notif1').html("<font style='color: green'>Version up to date (ver "+dataResults.version+") <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a></font>");
+				$('#notif1').html("<font style='color: green'>Version up to date (ver "+dataResults.version+") <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp <button type='button' onclick='updateVersion();' class='btn btn-danger'>Update</button></font>");
 				$(':input[type="submit"]').prop('disabled', false);
 			}else{
 				
@@ -100,8 +100,9 @@ function cekVersion(){
 					
 				}
 				
-				$('#notif1').html(msg+" <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a>");
-				$(':input[type="submit"]').prop('disabled', true);
+				$('#notif1').html(msg+" <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp <button type='button' onclick='updateVersion();' class='btn btn-danger'>Update</button>");
+				// $(':input[type="submit"]').prop('disabled', true);
+				$(':input[type="submit"]').prop('disabled', false);
 			}
 			// else {
 				// $('#notif').html(dataResult.msg);
@@ -112,6 +113,44 @@ function cekVersion(){
 	
 }
 
+
+function updateVersion(){
+	$.ajax({
+		url: "api/update_version.php",
+		type: "GET",
+		beforeSend: function(){
+			$('#notif1').html("<font style='color: red'>Sedang melakukan update, mohon tunggu..</font>");
+		},
+		success: function(dataResult){
+			// console.log(dataResult);
+			$('#notif1').html("<font style='color: green'>"+dataResult+"</font>");
+			runPhp();
+			// location.reload();
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+	
+}
+
+function runPhp(){
+	$.ajax({
+		url: "update.php",
+		type: "GET",
+		success: function(dataResult){
+			// console.log(dataResult);
+			// $('#notif1').html("<font style='color: green'>"+dataResult+"</font>");
+			location.reload();
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+	
+}
 
 function syncUser(){
 	

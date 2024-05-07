@@ -4,8 +4,6 @@ if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
   
 }else{
 	$json = array('result'=>'3', 'msg'=>'Session telah habis, reload dulu halamannya');	
-	
-	// header("Location: ../index.php");
 }
 
 
@@ -38,6 +36,20 @@ foreach ($resultss as $r) {
 	$storecode = $r["value"];	
 	$ad_morg_key = $r["ad_morg_key"];	
 	$brand = strtoupper($r["address3"]);	
+}
+
+function guid($data = null) {
+    // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+    $data = $data ?? random_bytes(16);
+    assert(strlen($data) == 16);
+
+    // Set version to 0100
+    $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+    // Set bits 6-7 to 10
+    $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+    // Output the 36 character UUID.
+    return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 }
 
 function rupiah($angka){
@@ -121,12 +133,14 @@ function get_data_promo($org){
 	
 	
 }
-function get_data_promo_code($org){
+
+
+function get_data_promo_grosir($org){
 	
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_code&org_id=".$org,
+	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_grosir_new&org_id=".$org,
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_ENCODING => '',
 	CURLOPT_MAXREDIRS => 10,
@@ -145,12 +159,14 @@ function get_data_promo_code($org){
 }
 
 
-function get_data_promo_grosir($org){
+
+
+function get_data_promo_code($org){
 	
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_grosir_new&org_id=".$org,
+	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_code&org_id=".$org,
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_ENCODING => '',
 	CURLOPT_MAXREDIRS => 10,
@@ -633,6 +649,34 @@ function piline_semua($a){
 	return $response;
 }
 
+function piline_semua_nasional($a){
+
+			
+	$postData = array(
+		"data_line" => $a,
+    );				
+	$fields_string = http_build_query($postData);
+
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=piline_semua_new_nasional',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $fields_string,
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+}
+
 function get_data_erp_borongan($a,$b,$c,$d,$e,$f){
 			
 	$postData = array(
@@ -682,6 +726,35 @@ function get_data_erp_borongan_direct_webpos($a,$c,$d,$e,$f){
 
 	curl_setopt_array($curl, array(
 	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=get_data_direct_web_pos',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $fields_string,
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+					
+					
+}
+
+function get_data_all_items($a,$b){
+			
+	$postData = array(
+		"m_locator_id" => $a,
+		"org_key" => $b
+    );				    
+	$fields_string = http_build_query($postData);
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=get_data_all_items',
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_ENCODING => '',
 	CURLOPT_MAXREDIRS => 10,
@@ -1206,10 +1279,11 @@ if($_GET['modul'] == 'inventory'){
 	$rack = $_POST['rack'];
 	$pc = $_POST['pc'];
 	$ss = $_POST['sso'];
-	
 	if($it == 'Nasional'){
 		$ss = '0';
 	}
+	
+	
 	
 	// $it = 'Global';
 	// $sl = '4DC01BB67AB148C9A02C4F5DB39AF969';
@@ -1225,15 +1299,13 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and status != '3' and status != '5' and date(insertdate) = date(now())";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and (status != '5') and date(insertdate) = date(now())";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
 					$countrak = $ra['jum'];
 				}
-				
-				
-		
+
 			if($countrak > 0){
 				$json = array('result'=>'0', 'msg'=>'Rack sudah ada');
 				
@@ -1242,7 +1314,7 @@ if($_GET['modul'] == 'inventory'){
 			
 				
 				
-				$statement = $connec->query("insert into m_pi (
+			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
 			movementdate, approvedby, status, rack_name, postby, postdate, category
 			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."','".$kode_toko."-".date('YmdHis')."','PI-".$rack."', 
@@ -1286,6 +1358,7 @@ if($_GET['modul'] == 'inventory'){
 				
 
 				$hasil = get_data_erp_borongan_direct_webpos($sl, $org_key, $ss, $kode_toko, $rack); //php curl
+				
 				
 				// print_r ($hasil);
 				
@@ -1437,7 +1510,7 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '3' and status != '5' and date(insertdate) = date(now())";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and (status != '3' or status != '5') and date(insertdate) = date(now())";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -1454,7 +1527,7 @@ if($_GET['modul'] == 'inventory'){
 			
 				
 				
-				$statement = $connec->query("insert into m_pi (
+			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
 			movementdate, approvedby, status, rack_name, postby, postdate, category
 			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."','".$kode_toko."-".date('YmdHis')."','PI-".$namakat."', 
@@ -1606,9 +1679,7 @@ if($_GET['modul'] == 'inventory'){
 			echo $json_string;
 		 
 		
-	}else if($_GET['act'] == 'inputitems'){		
-			
-
+	}else if($_GET['act'] == 'inputitems'){
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
@@ -1630,13 +1701,80 @@ if($_GET['modul'] == 'inventory'){
 			$json = array('result'=>'3', 'msg'=>'Session telah habis, reload halaman dulu');
 			
 		}
-			
-
-			
-
 			$json_string = json_encode($json);
 			echo $json_string;
-		 
+		
+	}else if($_GET['act'] == 'inputitemsnasional'){
+		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+			$guid_mpi = str_replace('-','',guid());
+			
+			$q_header = "insert into m_pi (m_pi_key,
+			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
+			movementdate, approvedby, status, rack_name, postby, postdate, category
+			) VALUES ('".$guid_mpi."','','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."','".$kode_toko."-".date('YmdHis')."','PI-ITEMS', 
+			'".date('Y-m-d H:i:s')."','user spv','1','ALL','".$username."','".date('Y-m-d H:i:s')."', '3')";
+			
+			$statement = $connec->query($q_header);
+			
+			// echo $q_header;
+			
+			$qtysales = 0;
+			$qtycount = 0;
+			if($statement){
+				
+				$hasil = get_data_all_items($sl, $org_key); //php curl
+				$j_hasil = json_decode($hasil, true);
+
+				$num = count($j_hasil);
+				
+				if($num > 0){
+					$s = array();
+					foreach($j_hasil as $r) {
+						$qtyon= $r['qtyon'];			
+						$price= $r['price'];			
+						$pricebuy= $r['pricebuy'];			
+						$statuss= $r['statuss'];			
+						$qtyout= $r['qtyout'];			
+						$statusss= $r['statusss'];
+						$mpi= $r['mpi'];
+						$sku= $r['sku'];
+						$barcode= $r['barcode'];
+						$ketemu= $r['ketemu'];
+						
+						$s[] = "('".$guid_mpi."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."', '".$sl."','".$mpi."', 
+						'".$sku."', '".$qtyon."', '".$qtycount."', '".$qtysales."','".$price."', '".$statuss."', '".$qtyout."','".$statusss."', '".$barcode."','".$pricebuy."')";
+					}
+					
+					$values = implode(", ",$s);
+					$q_val = "insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1, barcode, hargabeli) 
+					VALUES ".$values."";
+					
+					$statement1 = $connec->query($q_val);
+				
+				if($statement1){
+					
+					$json = array('result'=>'1');
+
+				}
+				
+				$json = array('result'=>'1','msg'=>'Berhasil buat header');
+			}else{
+				
+				$json = array('result'=>'0', 'msg'=>'Gagal, coba lagi nanti');
+			}
+			
+			}else{
+			
+				$json = array('result'=>'3', 'msg'=>'Gagal input header');
+			
+			}
+		}else{
+			
+				$json = array('result'=>'3', 'msg'=>'Session telah habis, reload halaman dulu');
+			
+		}
+		$json_string = json_encode($json);
+		echo $json_string;
 		
 	}else if($_GET['act'] == 'sync_erp'){
 		
@@ -1702,10 +1840,7 @@ if($_GET['modul'] == 'inventory'){
 		
 		
 		$sql = "select m_piline.sku, m_piline.qtycount from m_piline where (m_piline.sku ='".$sku."' or m_piline.barcode ='".$sku."')
-		and date(m_piline.insertdate) = date(now()) ";
-		
-		// and m_pi_key = '".$mpi."'
-		
+		and date(m_piline.insertdate) = date(now()) and m_pi_key = '".$mpi."'";
 		$result = $connec->query($sql);
 		$count = $result->rowCount();
 		
@@ -1732,8 +1867,7 @@ if($_GET['modul'] == 'inventory'){
 			if($sku != ""){
 				
 				
-				$statement1 = $connec->query("update m_piline set qtycount = '".$lastqty."' where (sku = '".$sku."' or barcode = '".$sku."') and date(insertdate) = '".date('Y-m-d')."' ");
-				// and m_pi_key = '".$mpi."'
+				$statement1 = $connec->query("update m_piline set qtycount = '".$lastqty."' where (sku = '".$sku."' or barcode = '".$sku."') and date(insertdate) = '".date('Y-m-d')."' and m_pi_key = '".$mpi."'");
 			}else{
 				
 				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
@@ -1783,12 +1917,6 @@ if($_GET['modul'] == 'inventory'){
 				
 				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
 			}
-			
-			
-			
-			
-			
-			
 		}
 		$json_string = json_encode($json);
 		echo $json_string;
@@ -1796,12 +1924,6 @@ if($_GET['modul'] == 'inventory'){
 		
 		$sku = $_POST['sku'];
 		$mpi = $_GET['mpi'];
-		
-		// $sku = '80400172';
-		// $mpi = '9A9A49646582464DA72328F188BC640A';
-		
-		// $kat = $_POST['kat'];
-
 		
 		$sql = "select m_piline.qtycount, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where (m_piline.sku ='".$sku."' or m_piline.barcode ='".$sku."')
 		and m_piline.m_pi_key = '".$mpi."' and date(m_piline.insertdate) = '".date('Y-m-d')."'";
@@ -1887,15 +2009,6 @@ if($_GET['modul'] == 'inventory'){
 						
 							$qtysales = $rsa1['qtysales'];
 						}
-
-					
-					
-					
-			
-			
-			
-			
-			
 			foreach($gm as $rr){
 					
 				$hasil = get_data_erp($rr['m_locator_id'], $m_pro_id, $org_key, $ss); //php curl
@@ -1952,8 +2065,326 @@ if($_GET['modul'] == 'inventory'){
 		}
 		$json_string = json_encode($json);
 		echo $json_string;
-	}
-	else if($_GET['act'] == 'updatecounter'){
+	}else if($_GET['act'] == 'counteritemsnasional'){
+		
+		$sku = $_POST['sku'];
+		$mpi = $_GET['mpi'];
+		
+		$sql = "select * from m_piline where (m_piline.sku ='".$sku."' or m_piline.barcode ='".$sku."') and m_pi_key = '".$mpi."' ";
+		$result = $connec->query($sql);
+		$count = $result->rowCount();
+		
+		if($count > 0){
+			foreach ($result as $r) {
+			$qtyon = $r['qtycount'];
+			// $pn = $r['name'];	
+
+			$lastqty = $qtyon + 1;
+		
+			if($sku != ""){
+				$statement1 = $connec->query("update m_piline set qtycount = '".$lastqty."' where (sku = '".$sku."' or barcode = '".$sku."') ");
+			}else{
+				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
+			}
+		
+
+			
+			if($statement1){	
+				$json = array('result'=>'1', 'msg'=>$sku .', QUANTITY = <font style="color: red">'.$lastqty.'</font>');	
+			}else{
+				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
+				
+			}				
+			}
+			
+		}else{
+			
+			
+		// $result = $connec->query("select * from pos_mproduct limit 10000 offset 100");
+		// foreach ($result as $tot) {
+			// $sku = $tot['sku'];
+			
+
+			$qtysales = 0;
+			$qtyout= 0;
+			$count1 = 0;
+			if($sku != ""){
+				
+				$ceksku = "select m_product_id, sku, name, coalesce(price, 0) from pos_mproduct where (sku ='".$sku."' or barcode = '".$sku."')";
+				$cs = $connec->query($ceksku);
+				$count1 = $cs->rowCount();
+				
+			}
+			
+			if($count1 > 0){
+
+				foreach($cs as $mpii){
+					$m_pro_id = $mpii['m_product_id'];
+					$name = $mpii['name'];
+					$sku = $mpii['sku'];
+				}
+		
+				$getmpi = "select * from m_pi where m_pi_key ='".$mpi."'";
+				$gm = $connec->query($getmpi);
+		
+				foreach($gm as $rr){
+						
+					$hasil = get_data_erp($rr['m_locator_id'], $m_pro_id, $org_key, $ss); //php curl
+					
+				
+					$j_hasil = json_decode($hasil, true);
+					
+										
+					$qtyon= $j_hasil['qtyon'];			
+					$price= $j_hasil['price'];			
+					$pricebuy= $j_hasil['pricebuy'];			
+					$statuss= $j_hasil['statuss'];			
+					// $qtyout= $j_hasil['qtyout'];			
+					$statusss= $j_hasil['statusss'];			
+					$barcode= $j_hasil['barcode'];			
+		
+					$qtycount = 1;
+					$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate,m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1, barcode, hargabeli) 
+					VALUES ('".$rr['m_pi_key']."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."','".$rr['m_locator_id']."','".$m_pro_id."', '".$sku."', '".$qtyon."', '".$qtycount."', '".$qtysales."', '".$price."', '".$statuss."', '".$qtyout."', '".$statusss."', '".$barcode."','".$pricebuy."')"); 
+					
+					
+					if($statement1){
+						$connec->query("update pos_mproduct set isactived = 0 where sku = '".$sku."'");
+						$json = array('result'=>'1', 'msg'=>$sku .' ('.$name.'), QUANTITY = <font style="color: red">'.$qtycount.'</font>');	
+					}
+					
+				}
+			}else{
+				
+				$json = array('result'=>'0', 'msg'=>'ITEMS TIDAK ADA DI MASTER PRODUCT');	
+			}
+		// }	
+			
+		}
+		$json_string = json_encode($json);
+		echo $json_string;
+	}else if($_GET['act'] == 'listinvscan'){
+		$html = "";
+		$sku = $_GET['sku'];
+		if($sku != ""){
+			
+			$list_line = "select * from inv_temp_nasional where status != '1' and sku = '".$sku."' order by sku desc limit 100";
+			
+		}else{
+			
+			$list_line = "select * from inv_temp_nasional where status != '1' order by sku desc limit 100";
+			
+		}
+		
+		
+		
+		
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+		$nama_product = "-";
+		$pr = $connec->query("select * from pos_mproduct where sku = '".$row1['sku']."'");
+			foreach ($pr as $rows) {
+				$nama_product = $rows['name'];
+			}
+							$html .= '<tr>
+								<td>'.$no.'</td>
+								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal'.$row1['id'].'"><i class="fa fa-times"></i></button>
+								<br><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$nama_product.'</font></td>
+	
+								<td>
+								
+								<div class="form-inline"> 
+								<input type="number" onchange="changeQty(\''.$row1['id'].'\');" id="qty'.$row1['id'].'" class="form-control" value="'.$row1['qty'].'"> <br>
+									<button type="button" style="display: inline-block; background: blue; color: white" onclick="changeQtyPlus(\''.$row1['id'].'\');" class=""><i class="fa fa-plus"></i></button>
+									&nbsp
+									<button type="button" style="display: inline-block; background: #ba3737; color: white" onclick="changeQtyMinus(\''.$row1['id'].'\');" class=""><i class="fa fa-minus"></i></button>
+								</div>		
+										
+								
+								</td>
+								<td>'.$row1['status'].'</td>
+								<td>'.$row1['user_input'].'</td>
+							</tr>
+							
+							<div class="modal fade" id="exampleModal'.$row1['id'].'" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin delete items?</h5>
+								
+									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									SKU : <b>'.$row1['sku'].'</b><br>
+									Nama : <b>'.$nama_product.'</b>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+									<button type="button" class="btn btn-danger" onclick="deleteLine(\''.$row1['id'].'\');" class="">YAKIN</button>
+								</div>
+								</div>
+							</div>
+							</div>';
+			$no++;
+			
+		}
+		
+		echo $html;
+		
+	}else if($_GET['act'] == 'listinvnasional'){
+		$html = "";
+		$sku = str_replace(' ', '', $_GET['sku']);
+		if($sku != ""){
+			
+			$list_line = "select distinct m_piline.insertdate, m_piline.m_piline_key, m_piline.barcode, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' and 
+			(m_piline.sku like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by m_piline.insertdate desc limit 50";
+			
+		}else{
+			
+			$list_line = "select distinct m_piline.insertdate, m_piline.m_piline_key, m_piline.barcode, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' order by m_piline.insertdate desc limit 50";
+			
+		}
+
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+		
+		$barcode = "";
+		if(!empty($row1['barcode']) || $row1['barcode'] != ""){
+			$barcode = "(".$row1['barcode'].")";
+		}
+		
+							$html .= '<tr>
+								<td>'.$no.'</td>
+								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal'.$row1['m_piline_key'].'"><i class="fa fa-times"></i></button><br><font style="font-weight: bold">'.$row1['sku'].' '.$barcode.'</font><br> <font style="color: green;font-weight: bold">'.$row1['name'].'</font></td>
+	
+								<td>
+								
+								<div class="form-inline"> 
+								<input type="number" onchange="changeQty(\''.$row1['sku'].'\', \''.$row1['name'].'\', \''.$_GET['m_pi'].'\');" id="qtycount'.$row1['sku'].'" class="form-control" value="'.$row1['qtycount'].'"> <br>
+								
+									<button type="button" style="display: inline-block; background: blue; color: white" onclick="changeQtyPlus(\''.$row1['sku'].'\', \''.$row1['name'].'\', \''.$_GET['m_pi'].'\');" class=""><i class="fa fa-plus"></i></button>
+									&nbsp
+									<button type="button" style="display: inline-block; background: #ba3737; color: white" onclick="changeQtyMinus(\''.$row1['sku'].'\', \''.$row1['name'].'\', \''.$_GET['m_pi'].'\');" class=""><i class="fa fa-minus"></i></button>
+
+								</div>		
+								</td>
+							</tr>
+							<div class="modal fade" id="exampleModal'.$row1['m_piline_key'].'" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin delete line?</h5>
+								
+									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									SKU : <b>'.$row1['sku'].'</b><br>
+									Nama : <b>'.$row1['name'].'</b>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+									<button type="button" class="btn btn-danger" onclick="deleteLine(\''.$row1['m_piline_key'].'\');" class="">YAKIN</button>
+								</div>
+								</div>
+							</div>
+							</div>';
+			$no++;
+			
+		}
+		
+		echo $html;
+		
+	}else if($_GET['act'] == 'verifinvnasional'){
+		$html = "";
+		$sku = str_replace('', '', $_GET['sku']);
+								
+		
+		if($sku != ""){
+			
+			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and (m_piline.sku like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by variant asc limit 50";
+		}else{
+			
+			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2'  order by variant asc limit 50";
+			
+		}	
+		
+		
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+		$variant = (int)$row1['variant'];
+		$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
+		if($row1['verifiedcount'] == ''){
+			
+			$vc = 0;
+		}else{
+			
+			$vc = $row1['verifiedcount'];
+		}
+		
+		
+		if($vc > 0){
+			
+			$color = 'style="background-color: #ffa597"';
+			
+		}else{
+			$color = '';
+			
+		}
+		
+		if($row1['barcode'] != ""){
+			
+			$barc = '('.$row1['barcode'].')';
+		}else{
+			$barc = "";
+			
+		}
+
+							$html .= '<tr class="header" style="background: #e1e5fa">
+				
+							<td colspan="5"><font style="font-weight: bold">'.$row1['sku'].' '.$barc.'</font> ('.$row1['name'].')</td>
+							</tr>
+	
+							<tr class="header1" style="background: #f0f1f2">
+								<td style="width: 150px">Counter</td>
+								<td>ERP</td>
+								<td>Sales</td>
+								<td>Varian</td>
+								<td>Verif</td>
+								
+								
+
+							</tr>
+							<tr class="header2" '.$color.' style="font-size: 16px">
+	
+								<td>
+								
+								<div class="form-inline"> 
+								<input type="number" onkeydown="enterKey(this, event, \''.$row1['sku'].'\', \''.str_replace("'", "",$row1['name']).'\',\''.$_GET['m_pi'].'\');" name="qtycount'.$row1['sku'].'" id="qtycount'.$row1['sku'].'" class="form-control" value="'.$row1['qtycount'].'"> 
+								</div>		
+										
+								
+								</td>
+								<td>'.$qtyerpreal.'</td>
+								<td>'.$row1['qtysales'].'</td>
+								<td>'.$variant.'</td>
+								<td>'.$vc.'</td>
+							</tr>';
+					
+				
+					
+		$no++; 
+			
+		}
+		
+		echo $html;
+		
+	}else if($_GET['act'] == 'updatecounter'){
 		
 		$sku = $_POST['sku'];
 		$qtyon = $_POST['quan'];
@@ -1991,6 +2422,85 @@ if($_GET['modul'] == 'inventory'){
 
 		$json_string = json_encode($json);
 		echo $json_string;
+	}else if($_GET['act'] == 'updatecounterinvnasional'){
+		
+			$sku = $_POST['sku'];
+			$id = $_POST['id'];
+			$quan = $_POST['quan'];
+
+		
+			if($sku != ""){
+				$quan = 1;
+				$statement1 = $connec->query("INSERT INTO inv_temp_nasional
+				(id, sku, qty, tanggal, status, user_input)
+				VALUES('".guid()."', '".$sku."', ".$quan.", '".date('Y-m-d H:i:s')."', '0', '".$_SESSION['username']."');");
+			}else{
+				$statement1 = $connec->query("update inv_temp_nasional set qty = '".$quan."' where id = '".$id."'");
+				$getsku = $connec->query("select sku from inv_temp_nasional where id = '".$id."'");
+				foreach ($getsku as $gs) {
+					
+					$sku = $gs['sku'];
+				}
+			}
+			if($statement1){
+				$json = array('result'=>'1', 'msg'=>$sku .' | QUANTITY = <font style="color: red">'.$quan.'</font>');	
+			}else{
+				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
+				
+			}				
+			
+
+		$json_string = json_encode($json);
+		echo $json_string;
+	}else if($_GET['act'] == 'prosesdatanasional'){
+		$cekqty = "select * from inv_temp_nasional where status != 1 order by sku asc";
+		$result = $connec->query($cekqty);
+		$count = $result->rowCount();
+		$qqq ="";
+		$no = 0;
+		$nox = 0;
+		if($count > 0){
+			foreach ($result as $tot) {
+				if($tot['sku'] != ""){
+					$jum = 0;
+					$cekjum = "select count(m_piline_key) jum from m_piline where (sku='".$tot['sku']."' or barcode='".$tot['sku']."') ";
+					$result_jum = $connec->query($cekjum);
+					foreach($result_jum as $rrr){
+						$jum = $rrr['jum'];
+					}
+
+					if($jum > 0){
+						$upcount = $connec->query("update m_piline set qtycount = qtycount + ".$tot['qty']." where (sku='".$tot['sku']."' or barcode='".$tot['sku']."') ");
+						if($upcount){
+							$qqq = "update inv_temp_nasional set status = 1 where id = '".$tot['id']."' ";
+							$connec->query($qqq);
+							$no++;
+						}else{
+							$nox++;	
+						}
+					}else{
+						$nox++;	
+					}
+				}		
+			}
+			$json = array('result'=>'1', 'msg'=>'Berhasil proses '.$no.', Belum ada header '.$nox);
+		}else{
+			$json = array('result'=>'1', 'msg'=>'Tidak ada items yg diproses');
+			
+		}
+		$json_string = json_encode($json);	
+		echo $json_string;	
+	
+	}else if($_GET['act'] == 'loopall'){
+		$result = $connec->query("select * from pos_mproduct ");
+		foreach ($result as $tot) {
+			$connec->query("INSERT INTO inv_temp_nasional
+			(id, sku, qty, tanggal, status, user_input)
+			VALUES('".guid()."', '".$tot['sku']."', 1, '".date('Y-m-d H:i:s')."', '0', '".$_SESSION['username']."');");
+			
+		}
+		
+
 	}else if($_GET['act'] == 'deleteline'){
 		
 			$m_piline_key = $_POST['m_piline_key'];
@@ -2105,17 +2615,17 @@ if($_GET['modul'] == 'inventory'){
 					$connec->query("update pos_mproduct set isactived = '1' where sku = '".$rrr['sku']."'");
 					
 				}
+				
 				// $statement2 = $connec->query("update pos_mproduct set isactived = '1' where sku in
 							// (
 								// select sku from m_piline where m_pi_key = '".$pi_key."'
 							// )");
-							
 				
 				// if($statement2){
-					$json = array('result'=>'1');
+					// $json = array('result'=>'1');
 					
 				// }else{
-					// $json = array('result'=>'1');
+					$json = array('result'=>'1');
 				// }
 				
 				
@@ -2398,6 +2908,119 @@ if($_GET['modul'] == 'inventory'){
 
 		
 
+	}else if($_GET['act'] == 'release_all_nasional'){
+
+			$no = 0;
+			$items = array();
+			$pi_key = $_POST['m_pi'];
+			$sql = "select * from m_pi where m_pi_key ='".$pi_key."'";
+			$result = $connec->query($sql);
+			foreach ($result as $row) {
+				
+						$a = $row['ad_client_id'];
+						$b = $row['ad_org_id'];
+						$c = $row['insertdate'];
+						$d = $row['insertby'];
+						$e = $row['m_locator_id'];
+						$f = $row['inventorytype'];
+						$ff = $row['name'];
+						$g = $row['description'];
+						$h = $row['movementdate'];
+						$i = $row['approvedby'];
+						$j = $row['status'];
+						$k = $row['rack_name'];
+						$l = $row['postby'];
+						$m = $row['postdate'];
+						$cat = $row['category'];
+						$n = $row['isactived'];
+						$o = $row['insertfrommobile'];
+						$p = $row['insertfromweb'];
+						
+						
+						
+						$pi_cuy = array(
+							"pi_key"=>$pi_key,
+							"ad_client_id"=>$a,
+							"ad_org_id"=>$b,
+							"insertdate"=>$c,
+							"insertby"=>$d,
+							"m_locator_id"=>$e,
+							"inventorytype"=>$f,
+							"name"=>$ff,
+							"description"=>$g,
+							"movementdate"=>$h,
+							"approvedby"=>$i,
+							"status"=>$j,
+							"rack_name"=>$k,
+							"postby"=>$l,
+							"postdate"=>$m,
+							"category"=>$cat,
+							"isactived"=>$n,
+							"insertfrommobile"=>$o,
+							"insertfromweb"=>$p,
+							
+						);
+							$selisih = 0;
+							
+							$sql_selisih = "select sum((qtycount-qtyerp)*price) selisih from m_piline where m_piline.m_pi_key ='".$pi_key."' and m_piline.issync = 0 and (m_piline.qtycount != 0 or m_piline.qtyerp != 0)";
+							foreach ($connec->query($sql_selisih) as $rline) {
+								
+								$selisih = $rline['selisih'];
+								
+							}
+							$sql_line = "select m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='".$pi_key."' and m_piline.issync = 0 
+							and (m_piline.qtycount != 0 or m_piline.qtyerp != 0) ";
+							
+							foreach ($connec->query($sql_line) as $rline) {
+								$items[] = array(
+									'm_piline_key'	=>$rline['m_piline_key'], 
+									'm_pi_key' 		=>$rline['m_pi_key'], 
+									'ad_client_id' 	=>$rline['ad_client_id'], 
+									'ad_org_id' 	=>$rline['ad_org_id'], 
+									'isactived' 	=>$rline['isactived'], 
+									'insertdate' 	=>$rline['insertdate'], 
+									'insertby' 		=>$rline['insertby'], 
+									'postby' 		=>$rline['postby'], 
+									'postdate' 		=>$rline['postdate'], 
+									'm_storage_id' 	=>$rline['m_storage_id'], 
+									'm_product_id' 	=>$rline['m_product_id'], 
+									'sku' 			=>$rline['sku'], 
+									'name' 			=>$rline['name'], 
+									'qtyerp' 		=>$rline['qtyerp'], 
+									'qtycount' 		=>$rline['qtycount'], 
+									'issync' 		=>$rline['issync'], 
+									'status' 		=>$rline['status'], 
+									'verifiedcount' =>$rline['verifiedcount'], 
+									'qtysales' 		=>$rline['qtysales'], 
+									'price' 		=>$rline['price'], 
+									'qtysalesout' 	=>$rline['qtysalesout'],
+									'hargabeli' 	=>$rline['hargabeli']
+								);
+								
+							}	
+							
+								$allarray = array("pi"=>$pi_cuy, "piline"=>$items);
+							
+							
+								$items_json = json_encode($allarray);
+								$hasil = piline_semua_nasional($items_json);
+								$j_hasil = json_decode($hasil, true);
+								if(!empty($j_hasil)){
+									
+									get_spv($kode_toko, $ff, $selisih);
+									$connec->query("update m_pi set status = '3' where m_pi_key ='".$pi_key."'");
+									$connec->query("update m_piline set issync = '1' where m_pi_key = '".$pi_key."'");
+									$json = array('result'=>'1', 'msg'=>'Berhasil release document..');			
+									
+								}else{
+									$json = array('result'=>'0', 'msg'=>'Gagal release document..');			
+									
+									
+								}
+				$json_string = json_encode($json);
+				echo $json_string;		
+						
+			}
 	}else if($_GET['act'] == 'release'){
 
 			$no = 0;
@@ -2642,11 +3265,6 @@ if($_GET['modul'] == 'inventory'){
 				
 			}
 			
-			
-			
-			
-				
-			
 		}	
 			
 	}else{
@@ -2734,13 +3352,250 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else{
 		
-				$json = array('result'=>'1', 'msg'=>'Promo reguler tidak ada');
+				$json = array('result'=>'1', 'msg'=>'Promo reguler tidak ditemukan');
 				$json_string = json_encode($json);	
 		
 	}
 		
 
 	echo $json_string;	
+				
+
+	}else if($_GET['act'] == 'sync_promo_code'){
+		
+		$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
+		$results = $connec->query($sqll);
+		foreach ($results as $r) {
+			$org_keys = $r["ad_morg_key"];	
+		}
+		
+		
+		$jsons = get_data_promo_code($org_keys);
+		$arr = json_decode($jsons, true);
+		$jum = count($arr);
+		$s = array();
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountmember");
+		if($truncate){
+			
+		
+			// echo $jum;
+			$no = 0;
+			
+			foreach($arr as $item) { //foreach element in $arr
+				$amk = $item['ad_morg_key']; //etc
+				$isactived = $item['isactived']; //etc
+				$insertdate = $item['insertdate']; //etc
+				$insertby = $item['insertby']; //etc
+				$discountname = str_replace("'", "\'", $item['discountname']); //etc
+				$discounttype = $item['discounttype']; //etc
+				$sku = $item['sku']; //etc
+				$discount = $item['discount']; //etc
+				$fromdate = $item['fromdate']; //etc
+				$todate = $item['todate']; //etc
+				$typepromo = $item['typepromo']; //etc
+				$maxqty = $item['maxqty']; //etc
+				$afterdiscount = $item['afterdiscount']; //etc
+				$ad_mclient_key = $item['ad_mclient_key']; //etc
+					
+					 
+				$s[] = "('".$ad_mclient_key."','".$amk."', '".$isactived."', '".date("Y-m-d H:i:s")."','".$insertdate."', '".$insertby."', '".$discountname."','".$sku."', '".$afterdiscount."', '".$fromdate."', '".$todate."', '".$maxqty."')";	 
+					 
+				
+									
+			}
+			
+			$jum_s = count($s);
+			
+			if($jum_s > 0){
+				$values = implode(", ",$s);
+
+				$suc = $connec->query("insert into pos_mproductdiscountmember (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, sku, pricediscount, fromdate, todate, maxqty) 
+						VALUES ".$values.";");
+				
+				
+				if($suc){
+					
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json_string = json_encode($json);	
+					
+				}else{
+					
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
+					$json_string = json_encode($json);	
+				}
+				
+			}else{
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+				
+			}
+		}	
+			
+		}else{
+			
+					$json = array('result'=>'1', 'msg'=>'Promo code tidak ditemukan');
+					$json_string = json_encode($json);	
+			
+		}
+		echo $json_string;	
+
+	}else if($_GET['act'] == 'sync_promo_buyget'){
+		
+		$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
+		$results = $connec->query($sqll);
+		foreach ($results as $r) {
+			$org_keys = $r["ad_morg_key"];	
+		}
+		
+		
+		$jsons = get_data_promo_buyget($org_keys);
+		$arr = json_decode($jsons, true);
+		$jum = count($arr);
+		$s = array();
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductbuyget");
+		if($truncate){
+			
+			// echo $jum;
+			$no = 0;
+			
+			foreach($arr as $item) { //foreach element in $arr
+				$ad_mclient_key = $item['ad_mclient_key']; //etc
+				$ad_morg_key = $item['ad_morg_key']; //etc
+				$isactived = $item['isactived']; //etc
+				$insertdate = $item['insertdate']; //etc
+				$insertby = $item['insertby']; //etc
+				$postby = $item['postby']; //etc
+				$postdate = $item['postdate']; //etc
+				$discountname = 'Buy & Get'; //etc
+				$typepromo = $item['typepromo']; //etc
+				$skubuy = $item['skubuy']; //etc
+				$qtybuy = $item['qtybuy']; //etc
+				$skuget = $item['skuget']; //etc
+				$qtyget = $item['qtyget']; //etc
+				$priceget = $item['priceget']; //etc
+				$fromdate = $item['fromdate']; //etc
+				$todate = $item['todate']; //etc
+				$discount = $item['discount']; //etc
+					 
+				$s[] = "('".$isactived."','".$ad_mclient_key."', '".$ad_morg_key."', '".date("Y-m-d H:i:s")."','".$insertby."', '".$insertby."', '".$postdate."', '".$discountname."','".$typepromo."', '".$fromdate."', '".$todate."', '".$skubuy."', '".$qtybuy."', '".$skuget."', '".$qtyget."', '".$priceget."', '".$discount."')";	 
+			}
+			
+			
+			$jum_s = count($s);
+			
+			if($jum_s > 0){
+				$values = implode(", ",$s);
+					
+				$qqq = "insert into pos_mproductbuyget (isactived, ad_mclient_key, ad_morg_key, insertdate, insertby, postby, postdate, discountname, typepromo, fromdate, todate, skubuy, qtybuy, skuget, qtyget, priceget, discount) VALUES ".$values.";";
+					
+				$suc = $connec->query($qqq);
+				
+				
+				if($suc){
+					
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json_string = json_encode($json);	
+					
+				}else{
+					
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti', 'qq'=>$qqq);
+					$json_string = json_encode($json);	
+				}
+				
+			}else{
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+				
+			}
+		}	
+			
+		}else{
+			
+					$json = array('result'=>'1', 'msg'=>'Promo tidak ditemukan');
+					$json_string = json_encode($json);	
+			
+		}
+		echo $json_string;	
+
+	}else if($_GET['act'] == 'sync_promo_tebus'){
+		
+		$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
+		$results = $connec->query($sqll);
+		foreach ($results as $r) {
+			$org_keys = $r["ad_morg_key"];	
+		}
+		
+		
+		$jsons = get_data_promo_tebus($org_keys);
+		$arr = json_decode($jsons, true);
+		$jum = count($arr);
+		$s = array();
+		if($jum > 0){
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountmurah");
+		if($truncate){
+			
+			// echo $jum;
+			$no = 0;
+			
+			foreach($arr as $item) { //foreach element in $arr
+				$amk = $item['ad_org_id']; //etc
+				$insertdate = $item['insertdate']; //etc
+				$insertby = $item['insertby']; //etc
+				$discountname = str_replace("'", "\'", $item['headername']); //etc
+				$sku = $item['sku']; //etc
+				$pricediscount = $item['afterdiscount']; //etc
+				$fromdate = $item['fromdate']; //etc
+				$todate = $item['todate']; //etc
+				$maxqty = $item['maxqty']; //etc
+					
+					 
+				$s[] = "('D089DFFA729F4A22816BD8838AB0813C', '".$amk."', '1', '".$insertdate."', '".date('Y-m-d H:i:s')."', '".$insertby."', '".$discountname."', '".$sku."', '".$pricediscount."', 
+				'".$fromdate."', '".$todate."', '".$maxqty."')";	 
+							
+			}
+			
+			$jum_s = count($s);
+			
+			if($jum_s > 0){
+				$values = implode(", ",$s);
+
+				$ssql = "INSERT INTO pos_mproductdiscountmurah (ad_mclient_key, ad_morg_key, isactived, insertdate, postdate, insertby, discountname, sku, pricediscount, fromdate, todate, limitamount) VALUES ".$values.";";
+
+				$suc = $connec->query($ssql);
+				
+				
+				
+				
+				if($suc){
+					
+					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
+					$json_string = json_encode($json);	
+					
+				}else{
+					
+					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
+					$json_string = json_encode($json);	
+				}
+				
+			}else{
+				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json_string = json_encode($json);	
+				
+			}
+		}	
+			
+	}else{
+		
+				$json = array('result'=>'1', 'msg'=>'Promo tebus murah tidak ditemukan');
+				$json_string = json_encode($json);	
+		
+	}
+		
+
+	echo $json_string;	
+	// echo $ssql;	
 				
 
 	}else if($_GET['act'] == 'sync_promo_grosir'){
@@ -2831,244 +3686,6 @@ if($_GET['modul'] == 'inventory'){
 	echo $json_string;	
 				
 
-	}else if($_GET['act'] == 'sync_promo_buyget'){
-		
-		$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
-		$results = $connec->query($sqll);
-		foreach ($results as $r) {
-			$org_keys = $r["ad_morg_key"];	
-		}
-		
-		
-		$jsons = get_data_promo_buyget($org_keys);
-		$arr = json_decode($jsons, true);
-		$jum = count($arr);
-		$s = array();
-		if($jum > 0){
-		$truncate = $connec->query("TRUNCATE TABLE pos_mproductbuyget");
-		if($truncate){
-			
-			// echo $jum;
-			$no = 0;
-			
-			foreach($arr as $item) { //foreach element in $arr
-				$ad_mclient_key = $item['ad_mclient_key']; //etc
-				$ad_morg_key = $item['ad_morg_key']; //etc
-				$isactived = $item['isactived']; //etc
-				$insertdate = $item['insertdate']; //etc
-				$insertby = $item['insertby']; //etc
-				$postby = $item['postby']; //etc
-				$postdate = $item['postdate']; //etc
-				$discountname = 'Buy & Get'; //etc
-				$typepromo = $item['typepromo']; //etc
-				$skubuy = $item['skubuy']; //etc
-				$qtybuy = $item['qtybuy']; //etc
-				$skuget = $item['skuget']; //etc
-				$qtyget = $item['qtyget']; //etc
-				$priceget = $item['priceget']; //etc
-				$fromdate = $item['fromdate']; //etc
-				$todate = $item['todate']; //etc
-				$discount = $item['discount']; //etc
-					 
-				$s[] = "('".$isactived."','".$ad_mclient_key."', '".$ad_morg_key."', '".date("Y-m-d H:i:s")."','".$insertby."', '".$insertby."', '".$postdate."', '".$discountname."','".$typepromo."', '".$fromdate."', '".$todate."', '".$skubuy."', '".$qtybuy."', '".$skuget."', '".$qtyget."', '".$priceget."', '".$discount."')";	 
-			}
-			
-			
-			$jum_s = count($s);
-			
-			if($jum_s > 0){
-				$values = implode(", ",$s);
-					
-				$qqq = "insert into pos_mproductbuyget (isactived, ad_mclient_key, ad_morg_key, insertdate, insertby, postby, postdate, discountname, typepromo, fromdate, todate, skubuy, qtybuy, skuget, qtyget, priceget, discount) VALUES ".$values.";";
-					
-				$suc = $connec->query($qqq);
-				
-				
-				if($suc){
-					
-					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
-					$json_string = json_encode($json);	
-					
-				}else{
-					
-					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti', 'qq'=>$qqq);
-					$json_string = json_encode($json);	
-				}
-				
-			}else{
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
-				$json_string = json_encode($json);	
-				
-			}
-		}	
-			
-		}else{
-			
-					$json = array('result'=>'1', 'msg'=>'Promo tidak ditemukan');
-					$json_string = json_encode($json);	
-			
-		}
-		echo $json_string;	
-
-	}else if($_GET['act'] == 'sync_promo_code'){
-		
-		$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
-		$results = $connec->query($sqll);
-		foreach ($results as $r) {
-			$org_keys = $r["ad_morg_key"];	
-		}
-		
-		
-		$jsons = get_data_promo_code($org_keys);
-		$arr = json_decode($jsons, true);
-		$jum = count($arr);
-		$s = array();
-		if($jum > 0){
-		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountmember");
-		if($truncate){
-			
-		
-			// echo $jum;
-			$no = 0;
-			
-			foreach($arr as $item) { //foreach element in $arr
-				$amk = $item['ad_morg_key']; //etc
-				$isactived = $item['isactived']; //etc
-				$insertdate = $item['insertdate']; //etc
-				$insertby = $item['insertby']; //etc
-				$discountname = str_replace("'", "\'", $item['discountname']); //etc
-				$discounttype = $item['discounttype']; //etc
-				$sku = $item['sku']; //etc
-				$discount = $item['discount']; //etc
-				$fromdate = $item['fromdate']; //etc
-				$todate = $item['todate']; //etc
-				$typepromo = $item['typepromo']; //etc
-				$maxqty = $item['maxqty']; //etc
-				$afterdiscount = $item['afterdiscount']; //etc
-				$ad_mclient_key = $item['ad_mclient_key']; //etc
-					
-					 
-				$s[] = "('".$ad_mclient_key."','".$amk."', '".$isactived."', '".date("Y-m-d H:i:s")."','".$insertdate."', '".$insertby."', '".$discountname."','".$sku."', '".$afterdiscount."', '".$fromdate."', '".$todate."', '".$maxqty."')";	 
-					 
-				
-									
-			}
-			
-			$jum_s = count($s);
-			
-			if($jum_s > 0){
-				$values = implode(", ",$s);
-
-				$suc = $connec->query("insert into pos_mproductdiscountmember (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, sku, pricediscount, fromdate, todate, maxqty) 
-						VALUES ".$values.";");
-				
-				
-				if($suc){
-					
-					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
-					$json_string = json_encode($json);	
-					
-				}else{
-					
-					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
-					$json_string = json_encode($json);	
-				}
-				
-			}else{
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
-				$json_string = json_encode($json);	
-				
-			}
-		}	
-			
-	}else{
-		
-				$json = array('result'=>'1', 'msg'=>'Promo code tidak ada');
-				$json_string = json_encode($json);	
-		
-	}
-		
-
-	echo $json_string;	
-				
-
-	}else if($_GET['act'] == 'sync_promo_tebus'){
-		
-		$sqll = "select ad_morg_key from ad_morg where postby = 'SYSTEM'";
-		$results = $connec->query($sqll);
-		foreach ($results as $r) {
-			$org_keys = $r["ad_morg_key"];	
-		}
-		
-		
-		$jsons = get_data_promo_tebus($org_keys);
-		$arr = json_decode($jsons, true);
-		$jum = count($arr);
-		$s = array();
-		if($jum > 0){
-		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountmurah");
-		if($truncate){
-			
-			// echo $jum;
-			$no = 0;
-			
-			foreach($arr as $item) { //foreach element in $arr
-				$amk = $item['ad_org_id']; //etc
-				$insertdate = $item['insertdate']; //etc
-				$insertby = $item['insertby']; //etc
-				$discountname = str_replace("'", "\'", $item['headername']); //etc
-				$sku = $item['sku']; //etc
-				$pricediscount = $item['afterdiscount']; //etc
-				$fromdate = $item['fromdate']; //etc
-				$todate = $item['todate']; //etc
-				$maxqty = $item['maxqty']; //etc
-					
-					 
-				$s[] = "('D089DFFA729F4A22816BD8838AB0813C', '".$amk."', '1', '".$insertdate."', '".date('Y-m-d H:i:s')."', '".$insertby."', '".$discountname."', '".$sku."', '".$pricediscount."', 
-				'".$fromdate."', '".$todate."', '".$maxqty."')";	 
-							
-			}
-			
-			$jum_s = count($s);
-			
-			if($jum_s > 0){
-				$values = implode(", ",$s);
-
-				$ssql = "INSERT INTO pos_mproductdiscountmurah (ad_mclient_key, ad_morg_key, isactived, insertdate, postdate, insertby, discountname, sku, pricediscount, fromdate, todate, limitamount) VALUES ".$values.";";
-
-				$suc = $connec->query($ssql);
-				
-				
-				if($suc){
-					
-					$json = array('result'=>'1', 'msg'=>'Berhasil sync');
-					$json_string = json_encode($json);	
-					
-				}else{
-					
-					$json = array('result'=>'1', 'msg'=>'Gagal sync, coba lagi nanti');
-					$json_string = json_encode($json);	
-				}
-				
-			}else{
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
-				$json_string = json_encode($json);	
-				
-			}
-		}	
-			
-	}else{
-		
-				$json = array('result'=>'1', 'msg'=>'Promo tebus murah tidak ada');
-				$json_string = json_encode($json);	
-		
-	}
-		
-
-	echo $json_string;	
-	// echo $ssql;	
-				
-
 	}else if($_GET['act'] == 'sync_cat'){
 		$truncate = $connec->query("TRUNCATE TABLE inv_mproductcategory");
 		if($truncate){
@@ -3120,9 +3737,6 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 			$ss = $_GET['status_sales'];
 
-		
-		
-			
 			
 			$cek = $connec->query("select * from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'");
 			$count = $cek->rowCount();
@@ -3244,17 +3858,9 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 	}else if($_GET['act'] == 'nohp_spv'){
 		$kode_toko = $_SESSION['kode_toko'];
 		$m_pi = $_GET['m_pi'];	
-		// $m_pi = '0AA0C1F01AC64ED6BC6FD7C556495255';	
-		// sendWa('0AA0C1F01AC64ED6BC6FD7C556495255')
-		
 		$cek = $connec->query("select * from m_pi where m_pi_key = '".$m_pi."'");
-		
 		foreach ($cek as $row) {
-				
 			$doc_no = $row['name'];
-				
-				
-				
 		}
 		
 		$sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync, sum(qtysales * price) hargasales, sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline from m_piline where m_pi_key = '".$m_pi."'";
@@ -3567,7 +4173,6 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 				}
 				
 				$sql = "update pos_mproduct set stockqty='".$totqty."', name = '".substr($r['namaitem'], 0, 49)."', price = '".$price."' where sku='".$r['sku']."'";
-				
 				$upcount = $connec->query($sql);
 			}else{
 				
@@ -4727,6 +5332,47 @@ locator_name) VALUES (
 		
 		$json_string = json_encode($jj);	
 		echo $json_string;
+	}else if($_GET['act'] == 'total_pickup_perkasir'){
+		$userid = $_GET['userid'];
+		$tanggal = $_GET['tanggal'];
+	
+		$html = "<table>";
+		$jj = array();
+		$haha = array();
+		
+	if($_SESSION['name'] == 'Ka. Toko' || $_SESSION['name'] == 'Wk. Ka Toko'){
+		
+		if($userid == 'all'){
+			
+			$list_line = "select sum(cash) as total, nama_insert as userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' group by nama_insert";
+		}else{
+			
+			$list_line = "select sum(cash) as total, nama_insert as userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$userid."' group by nama_insert";
+		}
+		
+	}else{
+		
+		
+		$list_line = "select sum(cash) as total, nama_insert as userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$useridcuy."' group by nama_insert";
+		
+	}
+		
+		
+		
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+			$html .= "<tr><td><b>".$row1['userid']." (Approved): </b></td><td><b>Rp ".rupiah($row1['total'])."</b></td></tr>";
+		}
+		
+		$html .= "</table>";
+		
+		$jj = array(
+				"total"=> $html
+		);
+		
+		
+		$json_string = json_encode($jj);	
+		echo $json_string;
 	}else if($_GET['act'] == 'cek_session'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
@@ -4901,8 +5547,8 @@ locator_name) VALUES (
 				
 				
                 $nestedData['name'] = $r['name'];
-                $nestedData['stock'] = $r['stockqty'];
                 $nestedData['shortcut'] = $sc;
+                $nestedData['stock'] = $r['stockqty'];
                 $nestedData['price'] = rupiah($r['price']);
                 $nestedData['price_discount'] = rupiah($r['price_discount']);
                 $data[] = $nestedData;
@@ -5021,6 +5667,117 @@ locator_name) VALUES (
                 $nestedData['todate'] = $r['todate'];
                 $nestedData['price'] = rupiah($r['price']);
                 $nestedData['price_discount'] = rupiah($pd);
+                $data[] = $nestedData;
+                $no++;
+				
+			}
+			
+
+        }
+           
+        $json_data = array(
+                    "draw"            => intval($_POST['draw']),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data  
+                    );
+             
+        echo json_encode($json_data); 
+		
+	
+	}else if($_GET['act'] == 'api_datatable_promo_grosir'){
+
+		 $columns = array( 
+                               0 =>'postdate', 
+                               1 =>'sku',
+                               2=> 'hargareguler',
+                               3=> 'minbuy',
+                               4=> 'diskon',
+                               5=> 'name',
+                               6=> 'discountname',
+                               7=> 'fromdate',
+                               8=> 'todate',
+                           );
+ 
+      $querycount =  $connec->query("SELECT count(*) as jumlah FROM pos_mproductdiscountgrosir_new");
+    
+		foreach($querycount as $r){
+			$datacount = $r['jumlah'];
+			
+		}
+   
+        $totalData = $datacount;
+             
+        $totalFiltered = $totalData; 
+ 
+        $limit = $_POST['length'];
+        $start = $_POST['start'];
+        $order = $columns[$_POST['order']['0']['column']];
+        $dir = $_POST['order']['0']['dir'];
+             
+        if(empty($_POST['search']['value']))
+        {
+         $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku order by $order $dir
+                                                      LIMIT $limit
+                                                      OFFSET $start");
+        }
+        else {
+            $search = $_POST['search']['value']; 
+            $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
+                                                         or a.discountname ILIKE  '%$search%'
+                                                         or b.name ILIKE  '%$search%'
+                                                         order by $order $dir
+                                                         LIMIT $limit
+                                                         OFFSET $start");
+ 
+ 
+         $querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
+                                                         or a.discountname ILIKE  '%$search%'");
+        foreach($querycount as $rr){
+			$datacount = $rr['jumlah'];
+			
+		}
+           $totalFiltered = $datacount;
+        }
+ 
+        $data = array();
+        if(!empty($query))
+        {
+            $no = $start + 1;
+			foreach($query as $r){
+				
+				if($r['discountname'] != ''){
+					$discname = '<font style="color: blue; font-weight: bold">'.$r['discountname'].'</font>';
+					
+				}else{
+					
+					$discname = '';
+				}
+				
+				
+				
+				// $pd1 = $r['price'] - $r['discount_1'];
+				// $pd2 = $r['price'] - $r['discount_2'];
+				// $pd3 = $r['price'] - $r['discount_3'];
+				
+				
+				$pd = $r['price'] - $r['discount'];
+
+				
+				$nestedData['no'] = $no;
+				$nestedData['postdate'] = $r['postdate'];
+				$nestedData['discounttype'] = $r['discounttype'];
+                $nestedData['sku'] = '<font style="font-weight: bold">'.$r['sku'].'</font>';
+                $nestedData['name'] = $r['name'];
+                $nestedData['hargareguler'] = '<font style="color: blue;font-weight: bold">Rp. '.rupiah($r['price']).'</font>';
+                // $nestedData['potongan'] = '<font style="color: red;font-weight: bold">Rp. '.rupiah($r['discount']).'</font>';
+                $nestedData['discount'] = '<font style="color: green;font-weight: bold">Rp. '.rupiah($pd).'</font>';
+                $nestedData['minbuy'] = $r['minbuy'];
+                $nestedData['discountname'] = $discname;
+                $nestedData['fromdate'] = $r['fromdate'];
+                $nestedData['todate'] = $r['todate'];
+                $nestedData['price'] = rupiah($r['price']);
+                // $nestedData['price_discount'] = rupiah($pd);
                 $data[] = $nestedData;
                 $no++;
 				
@@ -5336,117 +6093,6 @@ locator_name) VALUES (
         echo json_encode($json_data); 
 		
 		
-		
-	
-	}else if($_GET['act'] == 'api_datatable_promo_grosir'){
-
-		 $columns = array( 
-                               0 =>'postdate', 
-                               1 =>'sku',
-                               2=> 'hargareguler',
-                               3=> 'minbuy',
-                               4=> 'diskon',
-                               5=> 'name',
-                               6=> 'discountname',
-                               7=> 'fromdate',
-                               8=> 'todate',
-                           );
- 
-      $querycount =  $connec->query("SELECT count(*) as jumlah FROM pos_mproductdiscountgrosir_new");
-    
-		foreach($querycount as $r){
-			$datacount = $r['jumlah'];
-			
-		}
-   
-        $totalData = $datacount;
-             
-        $totalFiltered = $totalData; 
- 
-        $limit = $_POST['length'];
-        $start = $_POST['start'];
-        $order = $columns[$_POST['order']['0']['column']];
-        $dir = $_POST['order']['0']['dir'];
-             
-        if(empty($_POST['search']['value']))
-        {
-         $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku order by $order $dir
-                                                      LIMIT $limit
-                                                      OFFSET $start");
-        }
-        else {
-            $search = $_POST['search']['value']; 
-            $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
-                                                         or a.discountname ILIKE  '%$search%'
-                                                         or b.name ILIKE  '%$search%'
-                                                         order by $order $dir
-                                                         LIMIT $limit
-                                                         OFFSET $start");
- 
- 
-         $querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
-                                                         or a.discountname ILIKE  '%$search%'");
-        foreach($querycount as $rr){
-			$datacount = $rr['jumlah'];
-			
-		}
-           $totalFiltered = $datacount;
-        }
- 
-        $data = array();
-        if(!empty($query))
-        {
-            $no = $start + 1;
-			foreach($query as $r){
-				
-				if($r['discountname'] != ''){
-					$discname = '<font style="color: blue; font-weight: bold">'.$r['discountname'].'</font>';
-					
-				}else{
-					
-					$discname = '';
-				}
-				
-				
-				
-				// $pd1 = $r['price'] - $r['discount_1'];
-				// $pd2 = $r['price'] - $r['discount_2'];
-				// $pd3 = $r['price'] - $r['discount_3'];
-				
-				
-				$pd = $r['price'] - $r['discount'];
-
-				
-				$nestedData['no'] = $no;
-				$nestedData['postdate'] = $r['postdate'];
-				$nestedData['discounttype'] = $r['discounttype'];
-                $nestedData['sku'] = '<font style="font-weight: bold">'.$r['sku'].'</font>';
-                $nestedData['name'] = $r['name'];
-                $nestedData['hargareguler'] = '<font style="color: blue;font-weight: bold">Rp. '.rupiah($r['price']).'</font>';
-                // $nestedData['potongan'] = '<font style="color: red;font-weight: bold">Rp. '.rupiah($r['discount']).'</font>';
-                $nestedData['discount'] = '<font style="color: green;font-weight: bold">Rp. '.rupiah($pd).'</font>';
-                $nestedData['minbuy'] = $r['minbuy'];
-                $nestedData['discountname'] = $discname;
-                $nestedData['fromdate'] = $r['fromdate'];
-                $nestedData['todate'] = $r['todate'];
-                $nestedData['price'] = rupiah($r['price']);
-                // $nestedData['price_discount'] = rupiah($pd);
-                $data[] = $nestedData;
-                $no++;
-				
-			}
-			
-
-        }
-           
-        $json_data = array(
-                    "draw"            => intval($_POST['draw']),  
-                    "recordsTotal"    => intval($totalData),  
-                    "recordsFiltered" => intval($totalFiltered), 
-                    "data"            => $data  
-                    );
-             
-        echo json_encode($json_data); 
 		
 	
 	}else if($_GET['act'] == 'api_datatable_promo_tebus_murah'){
@@ -6751,6 +7397,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		
 		$json_string = json_encode($data);	
 		echo $json_string;
+		// echo $j_hasil['edc'];
 	}								
 
 
