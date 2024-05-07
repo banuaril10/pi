@@ -2966,10 +2966,17 @@ if($_GET['modul'] == 'inventory'){
 								$selisih = $rline['selisih'];
 								
 							}
-							$sql_line = "select m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='".$pi_key."' and m_piline.issync = 0 
+							$sql_line = "select m_piline.* from m_piline where m_piline.m_pi_key ='".$pi_key."' and m_piline.issync = 0 
 							and (m_piline.qtycount != 0 or m_piline.qtyerp != 0) ";
 							
 							foreach ($connec->query($sql_line) as $rline) {
+								
+								$npp = "";
+								$sql_npp = "select name from pos_mproduct where sku = '".$rline['sku']."'";
+								foreach ($connec->query($sql_npp) as $rpp) {
+									$npp = $rpp['name'];
+								}
+								
 								$items[] = array(
 									'm_piline_key'	=>$rline['m_piline_key'], 
 									'm_pi_key' 		=>$rline['m_pi_key'], 
@@ -2983,7 +2990,7 @@ if($_GET['modul'] == 'inventory'){
 									'm_storage_id' 	=>$rline['m_storage_id'], 
 									'm_product_id' 	=>$rline['m_product_id'], 
 									'sku' 			=>$rline['sku'], 
-									'name' 			=>$rline['name'], 
+									'name' 			=>$npp, 
 									'qtyerp' 		=>$rline['qtyerp'], 
 									'qtycount' 		=>$rline['qtycount'], 
 									'issync' 		=>$rline['issync'], 
