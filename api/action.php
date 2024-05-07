@@ -3012,13 +3012,18 @@ if($_GET['modul'] == 'inventory'){
 								$j_hasil = json_decode($hasil, true);
 								if(!empty($j_hasil)){
 									
+									$qq_error = "";
+									foreach($j_hasil as $rf) {
+										$qq_error = $rf['qq'];
+									}
+									
 									get_spv($kode_toko, $ff, $selisih);
 									$connec->query("update m_pi set status = '3' where m_pi_key ='".$pi_key."'");
 									$connec->query("update m_piline set issync = '1' where m_pi_key = '".$pi_key."'");
-									$json = array('result'=>'1', 'msg'=>'Berhasil release document..');			
+									$json = array('result'=>'1', 'msg'=>'Berhasil release document..','qu'=>$qq_error);			
 									
 								}else{
-									$json = array('result'=>'0', 'msg'=>'Gagal release document..');			
+									$json = array('result'=>'0', 'msg'=>'Gagal release document..','qu'=>$qq_error);			
 									
 									
 								}
