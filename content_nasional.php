@@ -571,7 +571,7 @@ $('#butsave').on('click', function() {
 					
 					
 					$.ajax({
-						url: "api/action.php?modul=inventory&act=input_kat",
+						url: "api/action.php?modul=inventory&act=input_kat_nasional",
 						type: "POST",
 						data : formData,
 						processData: false,
