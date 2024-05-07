@@ -1510,7 +1510,7 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and (status != '3' or status != '5') and date(insertdate) = date(now())";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '5' and date(insertdate) = date(now())";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -2070,7 +2070,8 @@ if($_GET['modul'] == 'inventory'){
 		$sku = $_POST['sku'];
 		$mpi = $_GET['mpi'];
 		
-		$sql = "select * from m_piline where (m_piline.sku ='".$sku."' or m_piline.barcode ='".$sku."') and m_pi_key = '".$mpi."' ";
+		// $sql = "select * from m_piline where (m_piline.sku ='".$sku."' or m_piline.barcode ='".$sku."') and m_pi_key = '".$mpi."' ";
+		$sql = "select * from m_piline a inner join m_pi b on a.m_pi_key = b.m_pi_key where (a.sku ='".$sku."' or a.barcode ='".$sku."') and b.inventorytype = 'Nasional' ";
 		$result = $connec->query($sql);
 		$count = $result->rowCount();
 		
@@ -2100,65 +2101,59 @@ if($_GET['modul'] == 'inventory'){
 		}else{
 			
 			
-		// $result = $connec->query("select * from pos_mproduct limit 10000 offset 100");
-		// foreach ($result as $tot) {
-			// $sku = $tot['sku'];
 			
-
-			$qtysales = 0;
-			$qtyout= 0;
-			$count1 = 0;
-			if($sku != ""){
+			// $qtysales = 0;
+			// $qtyout= 0;
+			// $count1 = 0;
+			// if($sku != ""){
 				
-				$ceksku = "select m_product_id, sku, name, coalesce(price, 0) from pos_mproduct where (sku ='".$sku."' or barcode = '".$sku."')";
-				$cs = $connec->query($ceksku);
-				$count1 = $cs->rowCount();
+				// $ceksku = "select m_product_id, sku, name, coalesce(price, 0) from pos_mproduct where (sku ='".$sku."' or barcode = '".$sku."')";
+				// $cs = $connec->query($ceksku);
+				// $count1 = $cs->rowCount();
 				
-			}
+			// }
 			
 			if($count1 > 0){
 
-				foreach($cs as $mpii){
-					$m_pro_id = $mpii['m_product_id'];
-					$name = $mpii['name'];
-					$sku = $mpii['sku'];
-				}
+				// foreach($cs as $mpii){
+					// $m_pro_id = $mpii['m_product_id'];
+					// $name = $mpii['name'];
+					// $sku = $mpii['sku'];
+				// }
 		
-				$getmpi = "select * from m_pi where m_pi_key ='".$mpi."'";
-				$gm = $connec->query($getmpi);
+				// $getmpi = "select * from m_pi where m_pi_key ='".$mpi."'";
+				// $gm = $connec->query($getmpi);
 		
-				foreach($gm as $rr){
+				// foreach($gm as $rr){
 						
-					$hasil = get_data_erp($rr['m_locator_id'], $m_pro_id, $org_key, $ss); //php curl
-					
-				
-					$j_hasil = json_decode($hasil, true);
-					
-										
-					$qtyon= $j_hasil['qtyon'];			
-					$price= $j_hasil['price'];			
-					$pricebuy= $j_hasil['pricebuy'];			
-					$statuss= $j_hasil['statuss'];			
-					// $qtyout= $j_hasil['qtyout'];			
-					$statusss= $j_hasil['statusss'];			
-					$barcode= $j_hasil['barcode'];			
+					// $hasil = get_data_erp($rr['m_locator_id'], $m_pro_id, $org_key, $ss); //php curl
+					// $j_hasil = json_decode($hasil, true);
+								
+					// $qtyon= $j_hasil['qtyon'];			
+					// $price= $j_hasil['price'];			
+					// $pricebuy= $j_hasil['pricebuy'];			
+					// $statuss= $j_hasil['statuss'];			
 		
-					$qtycount = 1;
-					$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate,m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1, barcode, hargabeli) 
-					VALUES ('".$rr['m_pi_key']."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."','".$rr['m_locator_id']."','".$m_pro_id."', '".$sku."', '".$qtyon."', '".$qtycount."', '".$qtysales."', '".$price."', '".$statuss."', '".$qtyout."', '".$statusss."', '".$barcode."','".$pricebuy."')"); 
+					// $statusss= $j_hasil['statusss'];			
+					// $barcode= $j_hasil['barcode'];			
+		
+					// $qtycount = 1;
+					// $statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate,m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1, barcode, hargabeli) 
+					// VALUES ('".$rr['m_pi_key']."','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".date('Y-m-d H:i:s')."','".$rr['m_locator_id']."','".$m_pro_id."', '".$sku."', '".$qtyon."', '".$qtycount."', '".$qtysales."', '".$price."', '".$statuss."', '".$qtyout."', '".$statusss."', '".$barcode."','".$pricebuy."')"); 
 					
 					
-					if($statement1){
-						$connec->query("update pos_mproduct set isactived = 0 where sku = '".$sku."'");
-						$json = array('result'=>'1', 'msg'=>$sku .' ('.$name.'), QUANTITY = <font style="color: red">'.$qtycount.'</font>');	
-					}
+					// if($statement1){
+						// $connec->query("update pos_mproduct set isactived = 0 where sku = '".$sku."'");
+						// $json = array('result'=>'1', 'msg'=>$sku .' ('.$name.'), QUANTITY = <font style="color: red">'.$qtycount.'</font>');	
+					// }
 					
-				}
+				// }
 			}else{
 				
 				$json = array('result'=>'0', 'msg'=>'ITEMS TIDAK ADA DI MASTER PRODUCT');	
 			}
-		// }	
+			
+			$json = array('result'=>'0', 'msg'=>'ITEMS BELUM MEMILIKI HEADER');	
 			
 		}
 		$json_string = json_encode($json);
@@ -2238,7 +2233,10 @@ if($_GET['modul'] == 'inventory'){
 		$sku = str_replace(' ', '', $_GET['sku']);
 		if($sku != ""){
 			
-			$list_line = "select distinct m_piline.insertdate, m_piline.m_piline_key, m_piline.barcode, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' and 
+			// $list_line = "select distinct m_piline.insertdate, m_piline.m_piline_key, m_piline.barcode, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' and 
+			// (m_piline.sku like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by m_piline.insertdate desc limit 50";
+			
+			$list_line = "select distinct m_piline.insertdate, m_piline.m_piline_key, m_piline.barcode, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_pi.status = '1' and 
 			(m_piline.sku like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by m_piline.insertdate desc limit 50";
 			
 		}else{

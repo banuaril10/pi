@@ -302,7 +302,7 @@ input.addEventListener("keypress", function(event) {
 				$('#example1').load(' #example1', function() {
 					$('#search1').val(sku);
 				
-					filterTable();
+					getData(sku);
 				});
 			}else if(dataResult.result=='1'){
 				input.value = '';
@@ -312,7 +312,7 @@ input.addEventListener("keypress", function(event) {
 				$('#example1').load(' #example1', function() {
 					$('#search1').val(sku);
 				
-					filterTable();
+					getData(sku);
 				});
 				
 				
