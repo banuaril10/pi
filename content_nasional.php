@@ -326,7 +326,7 @@
 			<select name="kat" id="kat" onchange="selectKat();" class="selectize">
 				<option value="">Kategori PI</option>
 				<option value="1">Product Category</option>
-				<option value="3">Items</option>
+				<!--<option value="3">Items</option>-->
 				
 				
 			</select>
