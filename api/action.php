@@ -2712,6 +2712,62 @@ if($_GET['modul'] == 'inventory'){
 
 		$json_string = json_encode($json);
 		echo $json_string;
+	}else if($_GET['act'] == 'updateverifikasinasional'){
+		
+		
+		
+		
+		$sku = $_POST['sku'];
+		$qtyon = $_POST['quan'];
+		$nama = $_POST['nama'];
+		$mpi = $_GET['mpi'];
+		
+		if($insertfrom == 'M'){
+				
+				$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '".$mpi."'");
+			}else if($insertfrom == 'W'){
+				$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '".$mpi."'");
+				
+				
+			}
+		
+		$sql = "select m_piline.verifiedcount from m_piline where m_piline.sku ='".$sku."'";
+		$result = $connec->query($sql);
+		foreach ($result as $row) {
+				
+				if($row['verifiedcount'] == ''){
+					$vc = 0;
+					
+				}else{
+					
+					$vc = $row['verifiedcount'];
+				}
+				
+			}
+		
+			$totvc = $vc + 1;
+			
+			if($sku != ""){
+				
+				
+				$statement1 = $connec->query("update m_piline set qtycount = '".$qtyon."', verifiedcount = '".$totvc."' where sku = '".$sku."'");
+			}else{
+				
+				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
+			}
+		
+			
+			
+			if($statement1){
+				$json = array('result'=>'1', 'msg'=>$sku .' ('.$nama.') QUANTITY = <font style="color: red">'.$qtyon.'</font>');	
+			}else{
+				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
+				
+			}				
+			
+
+		$json_string = json_encode($json);
+		echo $json_string;
 	}else if($_GET['act'] == 'verifikasi'){
 		
 		$pi_key = $_POST['m_pi'];

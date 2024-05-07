@@ -390,7 +390,7 @@ function changeQty(sku, nama, mpi){
 	
 	if(parseInt(quan) >= 0){
 		$.ajax({
-		url: "api/action.php?modul=inventory&act=updateverifikasi&mpi="+mpi,
+		url: "api/action.php?modul=inventory&act=updateverifikasinasional&mpi="+mpi,
 		type: "POST",
 		data : {sku: sku, quan: quan, nama: nama},
 		success: function(dataResult){
