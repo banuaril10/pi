@@ -2551,6 +2551,44 @@ if($_GET['modul'] == 'inventory'){
 
 		$json_string = json_encode($json);
 		echo $json_string;
+	}else if($_GET['act'] == 'updatecounternasional'){
+		
+		$sku = $_POST['sku'];
+		$qtyon = $_POST['quan'];
+		$nama = $_POST['nama'];
+		$mpi = $_GET['mpi'];
+		
+		
+			if($insertfrom == 'M'){
+				
+				$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '".$mpi."'");
+			}else if($insertfrom == 'W'){
+				$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '".$mpi."'");
+				
+				
+			}
+		
+			if($sku != ""){
+				
+				
+				$statement1 = $connec->query("update m_piline set qtycount = '".$qtyon."' where sku = '".$sku."' ");
+			}else{
+				
+				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
+			}
+			
+			
+			
+			if($statement1){
+				$json = array('result'=>'1', 'msg'=>$sku .' ('.$nama.') QUANTITY = <font style="color: red">'.$qtyon.'</font>');	
+			}else{
+				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
+				
+			}				
+			
+
+		$json_string = json_encode($json);
+		echo $json_string;
 	}else if($_GET['act'] == 'updatecounterinvnasional'){
 		
 			$sku = $_POST['sku'];

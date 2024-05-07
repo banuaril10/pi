@@ -220,7 +220,7 @@ function changeQtyMinus(sku, nama, mpi){
 function changeQty(sku, nama, mpi){
 	var quan = document.getElementById("qtycount"+sku).value;
 	$.ajax({
-		url: "api/action.php?modul=inventory&act=updatecounter&mpi="+mpi,
+		url: "api/action.php?modul=inventory&act=updatecounternasional&mpi="+mpi,
 		type: "POST",
 		data : {sku: sku, quan: quan, nama: nama},
 		success: function(dataResult){
