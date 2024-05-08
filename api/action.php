@@ -4017,7 +4017,7 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 	}else if($_GET['act'] == 'cek_approval'){
 		
 	
-			$cek = $connec->query("select * from m_pi where date(insertdate) = '".date('Y-m-d')."' and status = '3'");
+			$cek = $connec->query("select * from m_pi where status = '3'");
 			$count = $cek->rowCount();
 				$no = 0;
 			
