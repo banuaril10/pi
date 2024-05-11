@@ -118,6 +118,8 @@
 						$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
 						where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						
+						
+						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
 						if($row['status'] == 1){
@@ -143,7 +145,7 @@
 						}
 						
 						$m_locator = "-";
-						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' group by locator_name";
+						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' and locator_name like '%GR AREA BOS%' group by locator_name";
 						foreach ($connec->query($get_locator) as $rrr) {
 							
 							$m_locator = $rrr['locator_name'];
