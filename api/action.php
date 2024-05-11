@@ -27,7 +27,7 @@ $useridcuy = $_SESSION['userid'];
 $org_key = $_SESSION['org_key'];
 $ss = $_SESSION['status_sales'];
 $kode_toko = $_SESSION['kode_toko'];
-
+$rand_no = rand(1,100);
 
 $get_nama_toko = "select * from ad_morg where postby = 'SYSTEM'";
 $resultss = $connec->query($get_nama_toko);
@@ -1709,12 +1709,12 @@ if($_GET['modul'] == 'inventory'){
 			}else{
 				
 			
-				
+			
 				
 			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
 			movementdate, approvedby, status, rack_name, postby, postdate, category
-			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."','".$kode_toko."-".date('YmdHis')."','PI-".$namakat."', 
+			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."', '".$kode_toko."-".date('YmdHis').$rand_no."','PI-".$namakat."', 
 			'".date('Y-m-d H:i:s')."','user spv','1','".$namakat."','".$username."','".date('Y-m-d H:i:s')."', '2') RETURNING m_pi_key");
 			
 			
@@ -1918,14 +1918,9 @@ if($_GET['modul'] == 'inventory'){
 				$count = $result->rowCount();
 				
 				
-				
-				
 				$no = 0;
 				foreach ($connec->query($sql1) as $row) {
 	
-					
-					
-					
 				$hasil = get_data_erp($row['m_storage_id'], $row['m_product_id'], $org_key, $ss); //php curl
 				
 		
@@ -1938,13 +1933,7 @@ if($_GET['modul'] == 'inventory'){
 				$qtyout= $j_hasil['qtyout'];			
 				$statusss= $j_hasil['statusss'];
 					
-					
-					
 					$connec->query("update m_piline set qtysalesout = '".$qtyout."', qtyerp = '".$qtyon."', price = '".$price."', status = '".$statuss."', status1 = '".$statusss."' where m_piline_key ='".$row['m_piline_key']."'");
-					
-						
-					
-					
 					
 					$json = array('result'=>'1', 'msg'=>'Telah sync '.$no.' dari '.$count.' items');	
 					
@@ -2435,7 +2424,7 @@ if($_GET['modul'] == 'inventory'){
 		if($sku != ""){
 			
 			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and (m_piline.sku like '%".$sku."%' or m_piline.barcode like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by variant asc limit 50";
+			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and (m_piline.sku like '%".$sku."%' or m_piline.barcode like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by variant asc ";
 		}else{
 			
 			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 

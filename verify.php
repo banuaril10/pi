@@ -116,7 +116,7 @@
 						$jumrelease = '<font style="color: '.$color.'">'.$jumsync.' / '.$jumline.'</font>';
 						
 						$m_locator = "-";
-						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' group by locator_name";
+						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' and locator_name like '%GR AREA BOS%' group by locator_name";
 						foreach ($connec->query($get_locator) as $rrr) {
 							
 							$m_locator = $rrr['locator_name'];
