@@ -5157,6 +5157,8 @@ locator_name) VALUES (
 				$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) > 0";
 			}
 			
+		}else{
+			$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) != 0";
 		}
 		
 		// $list_line .= " order by variant asc";
