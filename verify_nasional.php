@@ -129,6 +129,17 @@
 						}
 						
 						
+						$r_qtyerp = rupiah($qtyerp);
+						$r_qtycount = rupiah($qtycount);
+						$r_selisih = rupiah($selisih);
+						
+						
+						
+						if($row['status'] == 3){
+							$r_qtyerp = "Lihat di Newpos";
+							$r_qtycount = "Lihat di Newpos";
+							$r_selisih = "Lihat di Newpos";
+						}
 						
 						?>
 						
@@ -145,10 +156,9 @@
 								<td><b><?php echo $m_locator; ?></b><br><?php echo $row['inventorytype']; ?></td>
 								<td><?php echo $row['insertdate']; ?><br>RACK : <b><?php echo $row['rack_name']; ?></b></td>
 					
-								<td><?php echo rupiah($qtyerp); ?></td>
-								<td><?php echo rupiah($qtycount); ?></td>
-								
-								<td><?php echo rupiah($selisih); ?></td>
+								<td><?php echo $r_qtyerp; ?></td>
+								<td><?php echo $r_qtycount; ?></td>
+								<td><?php echo $r_selisih; ?></td>
 								
 						
 								<td><p id="ce" style="color: green; font-weight: bold !important"><?php echo $jum_active; ?></p></td>
