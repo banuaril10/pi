@@ -48,7 +48,6 @@
 							$selisih = $qtycount - $qtyerp;
 							echo "<font>SELISIH : <b>".rupiah($selisih)."</b></font>";
 						}
-						
 				?>
 				<table>
 				<tr>
@@ -60,15 +59,33 @@
 				</table>
 				<font style="color: red; font-weight: bold">Data diurutkan dari selisih terbesar</font>
 				</div>
-				
-				
 			</div>
+			
+			
+
+			
 		
 			<div class="card-body">
 			<div class="tables">
 						
 				<div class="table-responsive bs-example widget-shadow">				
 
+				
+							<form action="">
+							<input type="hidden" name="m_pi" value="<?php echo $_GET['m_pi']; ?>">
+									<table>
+									<tr><td>Show Data : </td><td><select id="show">
+										<option value="1">Semua Items</option>
+										<option value="2">Minus</option>
+										<option value="3">Plus</option>
+									</select></td>
+									</tr>
+									
+									<tr><td> <button type="button" onclick="getData('');"  class="btn btn-success">Filter</button>	</td></tr>
+									
+									</table>
+							</form>
+				
 				
 
 					<div class="form-group">
@@ -140,8 +157,9 @@ getData("");
 function getData(sku){
 	
 	var m_pi = document.getElementById("m_pi").value;
+	var show = document.getElementById("show").value;
 	$.ajax({
-		url: "api/action.php?modul=inventory&act=verifinvnasional&sku="+sku+"&m_pi="+m_pi,
+		url: "api/action.php?modul=inventory&act=verifinvnasional&sku="+sku+"&m_pi="+m_pi+"&show="+show,
 		type: "GET",
 		beforeSend: function(){
 			$("#overlay").fadeIn(300);
@@ -519,11 +537,12 @@ function cetakPdf(mpi, rn, dn){
 				
 		var sort = document.getElementById("sort").value;
 		var warna = document.getElementById("warna").value;
-		// alert(html);
+		var show = document.getElementById("show").value;
+		
 		$.ajax({
 			url: "api/action.php?modul=inventory&act=cetak_generic",
 			type: "POST",
-			data : {mpi: mpi, sort: sort},
+			data : {mpi: mpi, sort: sort, show: show},
 			success: function(dataResult){
 			
 				

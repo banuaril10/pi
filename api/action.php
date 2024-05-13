@@ -1709,7 +1709,7 @@ if($_GET['modul'] == 'inventory'){
 			}else{
 				
 			
-			
+				
 				
 			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
@@ -1757,9 +1757,6 @@ if($_GET['modul'] == 'inventory'){
 					
 							// $qtycount = $rrr['qtycount'];
 						// }
-						
-					// }else{
-						// $qtycount = 0;
 						
 					// }
 
@@ -1918,9 +1915,14 @@ if($_GET['modul'] == 'inventory'){
 				$count = $result->rowCount();
 				
 				
+				
+				
 				$no = 0;
 				foreach ($connec->query($sql1) as $row) {
 	
+					
+					
+					
 				$hasil = get_data_erp($row['m_storage_id'], $row['m_product_id'], $org_key, $ss); //php curl
 				
 		
@@ -1933,7 +1935,13 @@ if($_GET['modul'] == 'inventory'){
 				$qtyout= $j_hasil['qtyout'];			
 				$statusss= $j_hasil['statusss'];
 					
+					
+					
 					$connec->query("update m_piline set qtysalesout = '".$qtyout."', qtyerp = '".$qtyon."', price = '".$price."', status = '".$statuss."', status1 = '".$statusss."' where m_piline_key ='".$row['m_piline_key']."'");
+					
+						
+					
+					
 					
 					$json = array('result'=>'1', 'msg'=>'Telah sync '.$no.' dari '.$count.' items');	
 					
@@ -2291,9 +2299,6 @@ if($_GET['modul'] == 'inventory'){
 			
 		}
 		
-		
-		
-		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
 		$nama_product = "-";
@@ -2303,21 +2308,16 @@ if($_GET['modul'] == 'inventory'){
 			}
 							$html .= '<tr>
 								<td>'.$no.'</td>
-								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal'.$row1['id'].'"><i class="fa fa-times"></i></button>
-								<br><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$nama_product.'</font></td>
+								<td><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$nama_product.'</font></td>
 	
 								<td>
 								
 								<div class="form-inline"> 
-								<input type="number" onchange="changeQty(\''.$row1['id'].'\');" id="qty'.$row1['id'].'" class="form-control" value="'.$row1['qty'].'"> <br>
-									<button type="button" style="display: inline-block; background: blue; color: white" onclick="changeQtyPlus(\''.$row1['id'].'\');" class=""><i class="fa fa-plus"></i></button>
-									&nbsp
-									<button type="button" style="display: inline-block; background: #ba3737; color: white" onclick="changeQtyMinus(\''.$row1['id'].'\');" class=""><i class="fa fa-minus"></i></button>
+									'.$row1['qty'].' <br>
 								</div>		
 										
 								
 								</td>
-								<td>'.$row1['status'].'</td>
 								<td>'.$row1['user_input'].'</td>
 							</tr>
 							
@@ -2419,19 +2419,37 @@ if($_GET['modul'] == 'inventory'){
 	}else if($_GET['act'] == 'verifinvnasional'){
 		$html = "";
 		$sku = str_replace('', '', $_GET['sku']);
+		$show = str_replace('', '', $_GET['show']);
 								
+		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2'   ";
 		
 		if($sku != ""){
+			$list_line .= " and (m_piline.sku like '%".$sku."%' or m_piline.barcode like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%'))";
 			
-			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and (m_piline.sku like '%".$sku."%' or m_piline.barcode like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by variant asc ";
-		}else{
-			
-			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2'  order by variant asc";
-			
-		}	
+		}
 		
+		if($show != "1"){
+			if($show == '2'){
+				
+				$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) < 0";
+			}
+			
+			if($show == '3'){
+				
+				$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) > 0";
+			}
+			
+		}
+		// else{
+			
+			// $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+			// where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2'  order by variant asc";
+			
+		// }	
+		
+		
+		$list_line .= " order by variant asc";
 		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
@@ -2540,44 +2558,6 @@ if($_GET['modul'] == 'inventory'){
 
 		$json_string = json_encode($json);
 		echo $json_string;
-	}else if($_GET['act'] == 'updatecounternasional'){
-		
-		$sku = $_POST['sku'];
-		$qtyon = $_POST['quan'];
-		$nama = $_POST['nama'];
-		$mpi = $_GET['mpi'];
-		
-		
-			if($insertfrom == 'M'){
-				
-				$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '".$mpi."'");
-			}else if($insertfrom == 'W'){
-				$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '".$mpi."'");
-				
-				
-			}
-		
-			if($sku != ""){
-				
-				
-				$statement1 = $connec->query("update m_piline set qtycount = '".$qtyon."' where sku = '".$sku."' ");
-			}else{
-				
-				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
-			}
-			
-			
-			
-			if($statement1){
-				$json = array('result'=>'1', 'msg'=>$sku .' ('.$nama.') QUANTITY = <font style="color: red">'.$qtyon.'</font>');	
-			}else{
-				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
-				
-			}				
-			
-
-		$json_string = json_encode($json);
-		echo $json_string;
 	}else if($_GET['act'] == 'updatecounterinvnasional'){
 		
 			$sku = $_POST['sku'];
@@ -2642,6 +2622,18 @@ if($_GET['modul'] == 'inventory'){
 			$json = array('result'=>'1', 'msg'=>'Berhasil proses '.$no.', Belum ada header '.$nox);
 		}else{
 			$json = array('result'=>'1', 'msg'=>'Tidak ada items yg diproses');
+			
+		}
+		$json_string = json_encode($json);	
+		echo $json_string;	
+	
+	}else if($_GET['act'] == 'hapusdatanasional'){
+		$cekqty = "delete from inv_temp_nasional where user_input = '".$useridcuy."'";
+		$result = $connec->query($cekqty);
+		if($result){
+			$json = array('result'=>'1', 'msg'=>'Berhasil hapus items');
+		}else{
+			$json = array('result'=>'1', 'msg'=>'Tidak ada items yg dihapus');
 			
 		}
 		$json_string = json_encode($json);	
@@ -2739,6 +2731,44 @@ if($_GET['modul'] == 'inventory'){
 
 		$json_string = json_encode($json);
 		echo $json_string;
+	}else if($_GET['act'] == 'updatecounternasional'){
+		
+		$sku = $_POST['sku'];
+		$qtyon = $_POST['quan'];
+		$nama = $_POST['nama'];
+		$mpi = $_GET['mpi'];
+		
+		
+			if($insertfrom == 'M'){
+				
+				$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '".$mpi."'");
+			}else if($insertfrom == 'W'){
+				$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '".$mpi."'");
+				
+				
+			}
+		
+			if($sku != ""){
+				
+				
+				$statement1 = $connec->query("update m_piline set qtycount = '".$qtyon."' where sku = '".$sku."' ");
+			}else{
+				
+				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
+			}
+			
+			
+			
+			if($statement1){
+				$json = array('result'=>'1', 'msg'=>$sku .' ('.$nama.') QUANTITY = <font style="color: red">'.$qtyon.'</font>');	
+			}else{
+				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
+				
+			}				
+			
+
+		$json_string = json_encode($json);
+		echo $json_string;
 	}else if($_GET['act'] == 'updateverifikasinasional'){
 		
 		
@@ -2777,7 +2807,7 @@ if($_GET['modul'] == 'inventory'){
 			if($sku != ""){
 				
 				
-				$statement1 = $connec->query("update m_piline set qtycount = '".$qtyon."', verifiedcount = '".$totvc."' where sku = '".$sku."'");
+				$statement1 = $connec->query("update m_piline set qtycount = '".$qtyon."', verifiedcount = '".$totvc."' where sku = '".$sku."' ");
 			}else{
 				
 				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
@@ -3224,10 +3254,12 @@ if($_GET['modul'] == 'inventory'){
 								$items_json = json_encode($allarray);
 								$hasil = piline_semua_nasional($items_json);
 								$j_hasil = json_decode($hasil, true);
+								// print_r($hasil);
+								
 								if(!empty($j_hasil)){
-									
 									$qq_error = "";
 									foreach($j_hasil as $rf) {
+										
 										$qq_error = $rf['qq'];
 									}
 									
@@ -4005,7 +4037,6 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 		
 	}else if($_GET['act'] == 'cek_approval'){
 		
-	
 			$yd = date('Y-m-d',strtotime(date('Y-m-d') . "-1 days"));
 			$cek = $connec->query("select * from m_pi where date(insertdate) between '".$yd."' and '".date('Y-m-d')."' and status = '3'");
 			$count = $cek->rowCount();
@@ -5107,21 +5138,57 @@ locator_name) VALUES (
 	}else if($_GET['act'] == 'cetak_generic'){
 		$mpi = $_POST['mpi'];
 		$sort = $_POST['sort'];
+		$show = $_POST['show'];
 		$jj = array();
+		
+		
+		
+		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2'   ";
+
+		if($show != '1'){
+			if($show == '2'){
+				
+				$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) < 0";
+			}
+			
+			if($show == '3'){
+				
+				$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) > 0";
+			}
+			
+		}
+		
+		// $list_line .= " order by variant asc";
 		
 		if($sort == '1'){
 			
-			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku,m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by pos_mproduct.name asc";
+			$list_line .= " order by pos_mproduct.name asc";
 		}else if($sort == '3'){
 			
-			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku,m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by m_piline.sku asc";
+			$list_line .= " order by m_piline.sku asc";
 		}else{
 			
-			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku,m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by variant asc";
+			$list_line .= " order by variant asc";
 		}
+		
+		
+		
+		
+		
+		// if($sort == '1'){
+			
+			// $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku,m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		// where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by pos_mproduct.name asc";
+		// }else if($sort == '3'){
+			
+			// $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku,m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		// where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by m_piline.sku asc";
+		// }else{
+			
+			// $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku,m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		// where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by variant asc";
+		// }
 		
 		// $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
 		// where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and m_piline.qtycount != (m_piline.qtyerp - m_piline.qtysalesout - m_piline.qtysales) order by pos_mproduct.name asc";
