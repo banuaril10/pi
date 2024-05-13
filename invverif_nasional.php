@@ -456,11 +456,12 @@ function cetakGeneric(mpi, rn, dn){
 		var no = 1;	
 				
 		var sort = document.getElementById("sort").value;
+		var show = document.getElementById("show").value;
 		// alert(html);
 		$.ajax({
 			url: "api/action.php?modul=inventory&act=cetak_generic",
 			type: "POST",
-			data : {mpi: mpi, sort: sort},
+			data : {mpi: mpi, sort: sort, show: show},
 			success: function(dataResult){
 			
 				
