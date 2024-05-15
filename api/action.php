@@ -2302,7 +2302,7 @@ if($_GET['modul'] == 'inventory'){
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
 		$nama_product = "-";
-		$pr = $connec->query("select * from pos_mproduct where sku = '".$row1['sku']."'");
+		$pr = $connec->query("select * from pos_mproduct where (sku = '".$row1['sku']."' or barcode = '".$row1['sku']."') ");
 			foreach ($pr as $rows) {
 				$nama_product = $rows['name'];
 			}
