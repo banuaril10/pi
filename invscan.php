@@ -121,6 +121,7 @@
 								<th>SKU / Barcode Int.</th>
 								<th>QTY</th>
 								<th>User Input</th>
+								<th>Status</th>
 
 							</tr>
 						</thead>
