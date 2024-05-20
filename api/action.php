@@ -2291,21 +2291,16 @@ if($_GET['modul'] == 'inventory'){
 		$sku = $_GET['sku'];
 		if($sku != ""){
 			
-			$list_line = "select * from inv_temp_nasional where sku = '".$sku."' order by sku desc ";
+			$list_line = "select * from inv_temp_nasional where status != '1' and sku = '".$sku."' order by sku desc limit 100";
 			
 		}else{
 			
-			$list_line = "select * from inv_temp_nasional order by sku desc ";
+			$list_line = "select * from inv_temp_nasional where status != '1' order by sku desc limit 100";
 			
 		}
 		
 		$no = 1;
-		foreach ($connec->query($list_line) as $row1) {
-		$status = "<font style='color: red'><b>NOT YET</b></font>";
-		if($row1['status'] == '1'){
-			$status = "<font style='color: green'><b>IMPORTED</b></font>";
-		}
-		
+		foreach ($connec->query($list_line) as $row1) {	
 		$nama_product = "-";
 		$pr = $connec->query("select * from pos_mproduct where (sku = '".$row1['sku']."' or barcode = '".$row1['sku']."') ");
 			foreach ($pr as $rows) {
@@ -2324,7 +2319,6 @@ if($_GET['modul'] == 'inventory'){
 								
 								</td>
 								<td>'.$row1['user_input'].'</td>
-								<td>'.$status.'</td>
 							</tr>
 							
 							<div class="modal fade" id="exampleModal'.$row1['id'].'" aria-labelledby="exampleModalLabel" aria-hidden="true">
