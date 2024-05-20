@@ -2291,11 +2291,11 @@ if($_GET['modul'] == 'inventory'){
 		$sku = $_GET['sku'];
 		if($sku != ""){
 			
-			$list_line = "select * from inv_temp_nasional where sku = '".$sku."' order by sku desc limit 100";
+			$list_line = "select * from inv_temp_nasional where sku = '".$sku."' order by sku desc ";
 			
 		}else{
 			
-			$list_line = "select * from inv_temp_nasional order by sku desc limit 100";
+			$list_line = "select * from inv_temp_nasional order by sku desc ";
 			
 		}
 		
