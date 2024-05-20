@@ -2295,7 +2295,7 @@ if($_GET['modul'] == 'inventory'){
 			
 		}else{
 			
-			$list_line = "select * from inv_temp_nasional where order by sku desc limit 100";
+			$list_line = "select * from inv_temp_nasional order by sku desc limit 100";
 			
 		}
 		
