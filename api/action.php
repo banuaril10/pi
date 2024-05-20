@@ -2301,9 +2301,9 @@ if($_GET['modul'] == 'inventory'){
 		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {
-		$status = "<font style='color: red'>NOT YET</font>";
+		$status = "<font style='color: red'><b>NOT YET</b></font>";
 		if($row1['status'] == '1'){
-			$status = "<font style='color: red'>IMPORTED</font>";
+			$status = "<font style='color: green'><b>IMPORTED</b></font>";
 		}
 		
 		$nama_product = "-";
