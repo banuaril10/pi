@@ -21,57 +21,64 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 				for (let i = 0; i < array.length; i++) {
 						var res = array[i].split("|");
 						
-						if(res[5] === 'undefined' || res[5] === 'null' || res[5] === ''){
+					
+						var sku = res[0];
+						var name = res[1];
+						var normal = res[2];
+						var dates = res[3];
+						var rack = res[4];
+						var shortcut = res[5];
+						var afterdiscount = res[6];
+						var tag = res[7];
+						var kodetoko_tgl = res[8];
+						var barcode = res[9];
+						
+						if(shortcut === 'undefined' || shortcut === 'null' || shortcut === ''){
 							
 							var sc = '';
 						}else{
-							var sc = ' / '+res[5];
+							var sc = '/'+shortcut;
 						}
 						
 						if(x==5){
 							var x = 1;
 						}
 
-						var lengthh = res[1].length;
-						var panjangharga = parseInt(res[2]);
+						var lengthh = name.length;
+						var panjangharga = parseInt(normal);
 	
 						
 						var sizeprice = "49px";
-						if(lengthh > 33){
-							
-							 sizeprice = "49px";
-						}
-						
+						var margin_bot = "0";
 						if(panjangharga > 999999){
-							sizeprice = "45px";
-							
+							sizeprice = "40px";
+							margin_bot = "9px";
 						}
-						
-						
-						var barcode = res[9];
-						if(barcode == ""){
-							
-							barcode = "";
-						}
-						
-						if(res[4] != ""){
-							var rack = res[8]+"/"+res[4]+"/"+res[7];
-							var rack2 = res[0]+"/"+barcode;
-							
-							
-						}else{
-							
-							var rack = res[8]+"/NO_RACK/"+res[7];
-							var rack2 = res[0]+"/"+barcode;
-						}
-						
-						// <br style='line-height: 70%;'>
-			
 
-						var newStr = rack.replace('-', '_')+"<br>"+rack2.replace('-', '_');
-						var tgl_cetak = res[8];
+						var newStr = "";
 						
-							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div><label style='margin: -10px 0 0 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0; width: 100%'><label style='text-align: left; font-size: 10px; width: 100%'>"+newStr+"</label></div></td>";
+						if(kodetoko_tgl != ""){
+							newStr = kodetoko_tgl;
+						}
+						
+						if(rack != ""){
+							newStr += "/"+rack;
+						}
+						
+						if(tag != ""){
+							newStr += "/"+tag;
+						}
+						
+						if(sku != ""){
+							newStr += "<br>"+sku;
+						}
+						
+						if(barcode != ""){
+							newStr += "/"+barcode;
+						}
+
+						
+							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:30px; text-align: left; font-size: 10px'><b>"+name.toUpperCase()+"</b></div><label style='color: red; margin: -10px 0 "+margin_bot+" 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(normal, '')+"</b></label><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0; width: 100%'><label style='text-align: left; font-size: 10px; width: 100%'>"+newStr+"</label></div></td>";
 							
 							// text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div><label style='margin: -10px 0 0 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label><label style='text-align: left; font-size: 7px; width: 100%'>"+newStr+"</label><center><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0;'><label style='text-align: center; font-size: 8px; margin-top: 10px'>"+brand+" MURAH DAN LENGKAP</label></center></div></td>";
 							
