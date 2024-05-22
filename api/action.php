@@ -1694,7 +1694,7 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '5' and date(insertdate) = date(now())";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '5' and inventorytype = 'Nasional'";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -2290,25 +2290,18 @@ if($_GET['modul'] == 'inventory'){
 		$html = "";
 		$sku = $_GET['sku'];
 		if($sku != ""){
-			
-			$list_line = "select * from inv_temp_nasional where status != '1' and sku = '".$sku."' order by sku desc limit 100";
-			
+			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
+			where a.status != '1' and a.sku = '".$sku."' order by a.sku desc ";
 		}else{
-			
-			$list_line = "select * from inv_temp_nasional where status != '1' order by sku desc limit 100";
-			
+			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
+			where a.status != '1' order by a.sku desc ";
 		}
 		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
-		$nama_product = "-";
-		$pr = $connec->query("select * from pos_mproduct where (sku = '".$row1['sku']."' or barcode = '".$row1['sku']."') ");
-			foreach ($pr as $rows) {
-				$nama_product = $rows['name'];
-			}
 							$html .= '<tr>
 								<td>'.$no.'</td>
-								<td><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$nama_product.'</font></td>
+								<td><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$row1['name'].'</font></td>
 	
 								<td>
 								
@@ -2319,29 +2312,7 @@ if($_GET['modul'] == 'inventory'){
 								
 								</td>
 								<td>'.$row1['user_input'].'</td>
-							</tr>
-							
-							<div class="modal fade" id="exampleModal'.$row1['id'].'" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin delete items?</h5>
-								
-									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									SKU : <b>'.$row1['sku'].'</b><br>
-									Nama : <b>'.$nama_product.'</b>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-									<button type="button" class="btn btn-danger" onclick="deleteLine(\''.$row1['id'].'\');" class="">YAKIN</button>
-								</div>
-								</div>
-							</div>
-							</div>';
+							</tr>';
 			$no++;
 			
 		}
