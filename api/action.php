@@ -2291,14 +2291,18 @@ if($_GET['modul'] == 'inventory'){
 		$sku = $_GET['sku'];
 		if($sku != ""){
 			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			where a.status != '1' and a.sku = '".$sku."' order by a.sku desc ";
+			where a.sku = '".$sku."' order by a.sku desc ";
 		}else{
 			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			where a.status != '1' order by a.sku desc ";
+			where order by a.sku desc ";
 		}
 		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
+			$stst = "<font style='font-weight: bold; color: red'>NOT YET</font>";
+			if($row1['status'] == '1'){
+				$stst = "<font style='font-weight: bold; color: red'>IMPORTED</font>";
+			}
 							$html .= '<tr>
 								<td>'.$no.'</td>
 								<td><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$row1['name'].'</font></td>
@@ -2312,6 +2316,7 @@ if($_GET['modul'] == 'inventory'){
 								
 								</td>
 								<td>'.$row1['user_input'].'</td>
+								<td>'.$stst.'</td>
 							</tr>';
 			$no++;
 			
