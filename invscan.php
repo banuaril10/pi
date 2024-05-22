@@ -121,7 +121,7 @@
 								<th>SKU / Barcode Int.</th>
 								<th>QTY</th>
 								<th>User Input</th>
-								<th>Status</th>
+								<th>Status Proses</th>
 
 							</tr>
 						</thead>
@@ -320,17 +320,17 @@ function prosesData(){
 			if(dataResult.result=='0'){
 				$('#notif').html(dataResult.msg);
 				$("#overlay").fadeOut(300);
+				getData("");
 			}else if(dataResult.result=='1'){
-				
 				$("#overlay").fadeOut(300);
 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 				$("#example1").load(" #example1");
-				
-				
+				getData("");
 			}
 			else {
 				$("#overlay").fadeOut(300);
 				$('#notif').html("Gagal sync coba lagi nanti!");
+				getData("");
 			}
 			
 		}
