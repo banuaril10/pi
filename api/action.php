@@ -2291,17 +2291,17 @@ if($_GET['modul'] == 'inventory'){
 		$sku = $_GET['sku'];
 		if($sku != ""){
 			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			where a.sku = '".$sku."' order by a.sku desc ";
+			where a.sku = '".$sku."' order by a.status asc";
 		}else{
 			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			order by a.sku desc ";
+			order by a.status asc ";
 		}
 		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
 			$stst = "<font style='font-weight: bold; color: red'>NOT YET</font>";
 			if($row1['status'] == '1'){
-				$stst = "<font style='font-weight: bold; color: red'>IMPORTED</font>";
+				$stst = "<font style='font-weight: bold; color: green'>IMPORTED</font>";
 			}
 							$html .= '<tr>
 								<td>'.$no.'</td>
