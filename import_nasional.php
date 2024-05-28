@@ -37,23 +37,40 @@ $useridcuy = $_SESSION['userid'];
     {
             $csvFile = fopen($_FILES['import']['tmp_name'], 'r');
             //fgetcsv($csvFile);
-			
-					while (($getData = fgetcsv($csvFile, 100000, ";")) !== FALSE)
-					{
-						$sku = str_replace(' ', '', $getData[0]);
-						if($sku != ""){
-							
-							$qty = $getData[1];
-							$sqll = "INSERT INTO inv_temp_nasional
-							(id, sku, qty, tanggal, status, user_input)
-							VALUES('".guid()."', '".$sku."', '".$qty."', '".date('Y-m-d')."', '0', '".$useridcuy."');";
-							$import = $connec->query($sqll);
-							
-							if($import){
-								$no = $no + 1;
-							}
-						}	 
+					$jum_file = 0;
+					$cek_file = $connec->query("select count(*) jum from inv_temp_nasional where filename = '".$_FILES['import']['name']."' ");
+					foreach($cek_file as $rc){
+						$jum_file = $rc['jum'];
 					}
+					
+					if($jum_file == 0){
+						while (($getData = fgetcsv($csvFile, 100000, ";")) !== FALSE)
+						{
+							$sku = str_replace(' ', '', $getData[0]);
+							if($sku != ""){
+								
+								$qty = $getData[1];
+								$sqll = "INSERT INTO inv_temp_nasional
+								(id, sku, qty, tanggal, status, user_input,filename)
+								VALUES('".guid()."', '".$sku."', '".$qty."', '".date('Y-m-d H:i:s')."', '0', '".$useridcuy."','".$_FILES['import']['name']."');";
+								$import = $connec->query($sqll);
+								
+								if($import){
+									$no = $no + 1;
+								}
+							}	 
+						}
+					}else{
+						
+						echo ("<script LANGUAGE='JavaScript'>
+						window.alert('File sudah pernah diimport');
+						window.location.href='invscan.php';
+						</script>");
+						
+					}
+			
+			
+
             fclose($csvFile);
     }
     else

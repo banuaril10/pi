@@ -1694,7 +1694,7 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '5' and inventorytype = 'Nasional'";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '5' and inventorytype = 'Nasional' ";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -2290,40 +2290,37 @@ if($_GET['modul'] == 'inventory'){
 		$html = "";
 		$sku = $_GET['sku'];
 		if($sku != ""){
-			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			where a.sku = '".$sku."' order by a.status asc";
+			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku or a.sku = b.barcode
+			where a.sku like '%".$sku."%' order by a.status, a.sku asc ";
 		}else{
-			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			order by a.status asc ";
+			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku or a.sku = b.barcode
+			order by a.status, a.sku asc ";
 		}
-		
+
 		$no = 1;
-		foreach ($connec->query($list_line) as $row1) {	
+		foreach ($connec->query($list_line) as $row1){
 			$stst = "<font style='font-weight: bold; color: red'>BELUM</font>";
 			if($row1['status'] == '1'){
 				$stst = "<font style='font-weight: bold; color: green'>SUDAH</font>";
 			}
-							$html .= '<tr>
-								<td>'.$no.'</td>
-								<td><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$row1['name'].'</font></td>
+			
+			$html .= '<tr>
+				<td>'.$no.'</td>
+				<td><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$row1['name'].'</font></td>
 	
-								<td>
-								
-								<div class="form-inline"> 
-									'.$row1['qty'].' <br>
-								</div>		
-										
-								
-								</td>
-								<td>'.$row1['user_input'].'</td>
-								<td>'.$stst.'</td>
-							</tr>';
+				<td>
+				
+				<div class="form-inline"> 
+					'.$row1['qty'].' <br>
+				</div>
+				</td>
+				<td>'.$row1['user_input'].'</td>
+				<td>'.$stst.'</td>
+			</tr>';
 			$no++;
 			
 		}
-		
 		echo $html;
-		
 	}else if($_GET['act'] == 'listinvnasional'){
 		$html = "";
 		$sku = str_replace(' ', '', $_GET['sku']);
@@ -2575,7 +2572,7 @@ if($_GET['modul'] == 'inventory'){
 			foreach ($result as $tot) {
 				if($tot['sku'] != ""){
 					$jum = 0;
-					$cekjum = "select count(m_piline_key) jum from m_piline where (sku='".$tot['sku']."' or barcode='".$tot['sku']."') ";
+					$cekjum = "select count(m_piline_key) jum from m_piline a inner join m_pi b on a.m_pi_key = b.m_pi_key where (a.sku='".$tot['sku']."' or a.barcode='".$tot['sku']."') and b.status in ('1','2') and inventorytype = 'Nasional'";
 					$result_jum = $connec->query($cekjum);
 					foreach($result_jum as $rrr){
 						$jum = $rrr['jum'];
@@ -2595,7 +2592,7 @@ if($_GET['modul'] == 'inventory'){
 					}
 				}		
 			}
-			$json = array('result'=>'1', 'msg'=>'Berhasil proses '.$no.' items, dan '.$nox.' items tidak terproses!');
+			$json = array('result'=>'1', 'msg'=>'Berhasil proses '.$no.', Belum ada header '.$nox);
 		}else{
 			$json = array('result'=>'1', 'msg'=>'Tidak ada items yg diproses');
 			
@@ -5120,7 +5117,7 @@ locator_name) VALUES (
 		
 		
 		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2'  and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) != 0 ";
+		where m_pi.m_pi_key = '".$mpi."' and m_pi.status = '2' and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) != 0  ";
 
 		if($show != '1'){
 			if($show == '2'){
