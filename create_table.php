@@ -504,12 +504,21 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 						);', 'CREATE INDEX inv_temp_nasional_idx ON public.inv_temp_nasional USING btree (sku)'
 					];
 					
+					
+					$cmd_alter_inv_temp_nasional = ['ALTER TABLE inv_temp_nasional ADD filename varchar NULL;'];
 					$result_inv = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'inv_temp_nasional'" );
 					if($result_inv->rowCount() == 0) {
 						foreach ($inv_temp_nasional as $rr){
 					
 								$connec->exec($rr);
 						}
+					}else{
+						
+						foreach ($cmd_alter_inv_temp_nasional as $r){
+					
+								$connec->exec($r);
+						}
+						
 					}
 					
 					$inv_temp_nasional_header = ['CREATE TABLE public.inv_temp_nasional_header (

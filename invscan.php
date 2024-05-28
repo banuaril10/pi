@@ -27,7 +27,7 @@
 			
 			<h4>INVENTORY IMPORTER</h4>
 			
-			<font style="color: red; font-weight: bold"> Notes : Nama file yg sama tidak bisa diimport dua kali, pastikan tidak melakukan import file yg sama 2 kali agar tidak terjadi double qty ketika di proses data</font>
+			<font style="color: red; font-weight: bold !important"> Notes : Nama file yg sama tidak bisa diimport dua kali, pastikan tidak melakukan import file yg sama 2 kali agar tidak terjadi double qty ketika di proses data</font>
 			<form method="post" enctype="multipart/form-data" action="import_nasional.php">
 
                   <div class="form-group">
@@ -52,7 +52,7 @@
 				<div class="table-responsive bs-example widget-shadow">				
 				 <label><b>List File Imported & Summary Items Scan</b></label>
 				 <br>
-				 <font style="color: red; font-weight: bold"> Notes : Periksa apakah file sudah terimport dengan benar</font>
+				 <font style="color: red; font-weight: bold !important"> Notes : Periksa apakah file sudah terimport dengan benar</font>
 				 
 					<table class="table table-striped" id="example1">
 						<thead>
