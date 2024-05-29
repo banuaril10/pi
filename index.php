@@ -50,6 +50,9 @@
 							<input type="submit" name="Sign In" id="login" value="Continue"></input>
 							
 						</form>
+						
+						<br>
+						<p>Download apk inventory pada link berikut : <a style="font-weight: bold" href="https://pi.idolmartidolaku.com/api/pos/inventory-counter.apk"> Download</a></p>
 					</div>
 				</div>
 			</div>
