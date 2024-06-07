@@ -53,6 +53,7 @@
 						
 						<br>
 						<p>Download apk inventory pada link berikut : <a style="font-weight: bold" href="https://pi.idolmartidolaku.com/api/pos/inventory-counter.apk"> Download</a></p>
+						<p>Download POS Versi terbaru pada link berikut : <a style="font-weight: bold" href="https://pi.idolmartidolaku.com/api/pos/pos-winlin-v3.0.1.deb"> Download</a></p>
 					</div>
 				</div>
 			</div>
