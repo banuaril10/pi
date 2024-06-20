@@ -19,7 +19,7 @@ if($rows > 0){
 			$_SESSION['org_key'] = $row["ad_org_id"];
 			$_SESSION['name'] = $row["name"];
 			
-			if($row["name"] == 'Audit'){
+			if($row["name"] == 'Audit' || $row["name"] == 'IC'){
 				
 				$_SESSION['role'] = "Global";
 			}else{
