@@ -19,10 +19,10 @@ $cp3 = $connec->query($order);
 $cp4 = $connec->query($orderline);
 
 
-if($cp1){$text .= "Berhasil Sales, <br>";}else{$text .= "Gagal Sales, <br>";}
-if($cp2){$text .= "Berhasil Sales line, <br> ";}else{$text .= "Gagal Sales line, <br> ";}
-if($cp3){$text .= "Berhasil Order,<br> ";}else{$text .= "Gagal Order,<br> ";}
-if($cp4){$text .= "Berhasil Order line";}else{$text .= "Gagal Order line";}
+if($cp1){$text .= "Berhasil Clear Sales, <br>";}else{$text .= "Gagal Clear Sales, <br>";}
+if($cp2){$text .= "Berhasil Clear Sales line, <br> ";}else{$text .= "Gagal Clear Sales line, <br> ";}
+if($cp3){$text .= "Berhasil Clear Order,<br> ";}else{$text .= "Gagal Clear Order,<br> ";}
+if($cp4){$text .= "Berhasil Clear Order line";}else{$text .= "Gagal Clear Order line";}
 
 echo $text;
 // $json = array('result'=>'1', 'msg'=>$text);
