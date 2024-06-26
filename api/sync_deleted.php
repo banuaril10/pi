@@ -6,10 +6,10 @@ include "../config/koneksi.php";
 
 
 
-$sales = "delete from pos_dsales where date(insertdate) between current_date - 800 and current_date - 60;";
-$salesline = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 60;";
-$order = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 60;";
-$orderline = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 60;";
+$sales = "delete from pos_dsales where date(insertdate) between current_date - 800 and current_date - 90;";
+$salesline = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 90;";
+$order = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 90;";
+$orderline = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 90;";
 
 $text = "";
 
