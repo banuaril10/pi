@@ -189,6 +189,9 @@
 						<li class="submenu-item ">
 							<a href="sync_items_nonaktif.php">Sync Items Nonaktif</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="sync_deleted_sales_old.php">Reset Penjualan</a>
+						</li>
 					</ul>
 				</li>
 				
