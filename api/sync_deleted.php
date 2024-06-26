@@ -13,8 +13,8 @@ $orderline = "delete from pos_dsalesline where date(insertdate) between current_
 
 $text = "Berhasil sync ";
 
-$cp1 = $connec->query($sales);
 $cp2 = $connec->query($salesline);
+$cp1 = $connec->query($sales);
 $cp3 = $connec->query($order);
 $cp4 = $connec->query($orderline);
 
