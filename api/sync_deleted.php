@@ -11,7 +11,7 @@ $salesline = "delete from pos_dsalesline where date(insertdate) between current_
 $order = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 60;";
 $orderline = "delete from pos_dsalesline where date(insertdate) between current_date - 800 and current_date - 60;";
 
-$text = "Berhasil sync ";
+$text = "";
 
 $cp2 = $connec->query($salesline);
 $cp1 = $connec->query($sales);
@@ -19,10 +19,10 @@ $cp3 = $connec->query($order);
 $cp4 = $connec->query($orderline);
 
 
-if($cp1){$text .= "Sales, ";}
-if($cp2){$text .= "Sales line, ";}
-if($cp3){$text .= "Order, ";}
-if($cp4){$text .= "Order line, ";}
+if($cp1){$text .= "Berhasil Sales, <br>";}else{$text .= "Gagal Sales, <br>";}
+if($cp2){$text .= "Berhasil Sales line, <br> ";}else{$text .= "Gagal Sales line, <br> ";}
+if($cp3){$text .= "Berhasil Order,<br> ";}else{$text .= "Gagal Order,<br> ";}
+if($cp4){$text .= "Berhasil Order line";}else{$text .= "Gagal Order line";}
 
 echo $text;
 // $json = array('result'=>'1', 'msg'=>$text);
