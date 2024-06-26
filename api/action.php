@@ -232,6 +232,32 @@ function get_data_sku(){
 					
 }
 
+function get_data_sku_nonaktif(){
+			
+			    
+	// $fields_string = http_build_query($postData);
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_sku_nonaktif',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'GET',
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+					
+					
+}
+
+
 function get_data_grab($kt){
 			
 			    
@@ -2316,6 +2342,7 @@ if($_GET['modul'] == 'inventory'){
 				</td>
 				<td>'.$row1['user_input'].'</td>
 				<td>'.$stst.'</td>
+				<td>'.$row1['filename'].'</td>
 			</tr>';
 			$no++;
 			
@@ -5013,6 +5040,27 @@ locator_name) VALUES (
 		$json_string = json_encode($data);	
 		echo $json_string;
 		
+	}else if($_GET['act'] == 'sync_items_nonaktif'){
+		
+		$hasil = get_data_sku_nonaktif();
+		$j_hasil = json_decode($hasil, true);
+		
+		$no = 0;	
+		foreach($j_hasil as $r) {
+
+			$upcount = $connec->query("delete from pos_mproduct where sku='".$r['sku']."' ");
+	
+			if($upcount){
+				$no = $no + 1;
+				
+			}
+		}
+		
+		$data = array("result"=>1, "msg"=>"Berhasil sync data");
+		
+		$json_string = json_encode($data);	
+		echo $json_string;
+		
 	}else if($_GET['act'] == 'load_product'){
 		$sku = $_POST['sku'];
 		$list_line = "select sku, name, coalesce(stockqty,0) as stock from pos_mproduct where sku = '".$sku."' order by name asc";
@@ -5100,6 +5148,7 @@ locator_name) VALUES (
 								<td>".$no."</td>
 								<td>".$row1['sku']."<br> ".$row1['name']."</td>
 								<td>".$row1['barcode']."</td>
+								<td>".$row1['shortcut']."</td>
 
 							</tr>";
 							
@@ -5108,6 +5157,28 @@ locator_name) VALUES (
 		 $no++;}
 		
 		
+	}else if($_GET['act'] == 'load_product_nonaktif'){
+		
+		$hasil = get_data_sku_nonaktif();
+		$j_hasil = json_decode($hasil, true);
+		
+		$no = 1;	
+		foreach($j_hasil as $r) {
+			
+			$count = $connec->query("select name, barcode from pos_mproduct where sku = '".$r['sku']."'");
+			foreach ($count as $rr){
+				
+				
+				echo "<tr>
+				<td>".$no."</td>
+				<td>".$r['sku']."</td>
+				<td>".$rr['name']."</td>
+				<td>".$r['updated']."</td>
+
+				</tr>";
+				$no++;
+			}
+		}
 	}else if($_GET['act'] == 'cetak_generic'){
 		$mpi = $_POST['mpi'];
 		$sort = $_POST['sort'];

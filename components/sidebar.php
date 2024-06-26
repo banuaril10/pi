@@ -186,6 +186,9 @@
 						<li class="submenu-item ">
 							<a href="sync_function.php">Sync Function</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="sync_items_nonaktif.php">Sync Items Nonaktif</a>
+						</li>
 					</ul>
 				</li>
 				
