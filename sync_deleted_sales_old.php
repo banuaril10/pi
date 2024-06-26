@@ -74,9 +74,7 @@ function sync_deleted(){
 		},
 		success: function(dataResult){
 			console.log(dataResult);
-			var dataResult = JSON.parse(dataResult);
-
-			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$('#notif').html("<font style='color: green'>"+dataResult+"</font>");
 			$("#overlay").fadeOut(300);
 			// location.reload();
 			
