@@ -15,7 +15,6 @@ $html .= '\r\n';
 $html .= '\r\n';
 $html .= '\r\n';
 $html .= '\r\n';
-$html .= '\r\n';
 
 	$cmd='';
     $cmd='echo "'.$html.'" | lpr -o raw'; //linux
