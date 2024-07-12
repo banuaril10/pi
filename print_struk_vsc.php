@@ -50,35 +50,18 @@ $html = $_POST['html'];
 $html = str_replace(" :         ", " : ", $html);
 $html = str_replace(" :    ", " : ", $html);
 
-$ip_printer = $_POST['ip_printer'];
-
-
-require __DIR__ . '/vendor/autoload.php';
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-
-try {
-	
-	$connector = new FilePrintConnector("//".$ip_printer."/pos");
-
-    $printer = new Printer($connector);
-	$printer -> initialize();
-
-
-	$printer -> setFont(Printer::FONT_B);
-	$printer -> setTextSize(1, 1);
-	$printer -> text($html);
-	
-
-    $printer -> cut();
-    
-    $printer -> close();
+	$cmd='';
+    $cmd='echo "'.$html.'" | lpr -o raw'; //linux
 	
 	
-	 echo "Proses Print\n";
-} catch (Exception $e) {
-    echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
-}
+	
+    $child = shell_exec($cmd); 
+	
+	
+	
+	$data = array("result"=>1, "msg"=>$child);
+		
+		$json_string = json_encode($data);	
+		echo $json_string;
 
 ?>
