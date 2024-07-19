@@ -81,7 +81,7 @@ function rupiah($angka){
 			}
 		}else{
 			
-			echo "Scan items dibawah";
+			echo "Scan product dibawah";
 			echo "<br><img src='images/down.gif' style='width: 100px'>";
 		}
 		
