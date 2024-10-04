@@ -77,11 +77,11 @@ function rupiah($angka){
 				<font style="font-size: 30px" id="price"> Rp. '.rupiah($priceend).'</font>
 				</center>';
 			}else{
-				echo '<font style="color: red">Product tidak ditemukan</font>';
+				echo '<font style="color: red">Barang tidak ditemukan</font>';
 			}
 		}else{
 			
-			echo "Scan barang dibawah";
+			echo "Scan dibawah";
 			echo "<br><img src='images/down.gif' style='width: 100px'>";
 		}
 		

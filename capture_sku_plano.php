@@ -12,10 +12,10 @@
 </style>
 
 <div id="overlay">
-			<div class="cv-spinner">
-				<span class="spinner"></span>
-			</div>
-		</div>
+	<div class="cv-spinner">
+		<span class="spinner"></span>
+	</div>
+</div>
 <div id="app">
 <div id="main">
 
@@ -32,7 +32,7 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h4>CAPTURE DISPLAY EVENT</h4>
+				<h4>CAPTURE DISPLAY PLANOGRAM</h4>
 			</div>
 			<div class="card-body">
 			<div class="tables">			
@@ -55,7 +55,8 @@
 					<table class="table table-bordered table-striped" id="">
 						<thead>
 							<tr>
-								<th>Image</th>
+								<th>Gambar Contoh</th>
+								<th>Gambar Upload</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -93,7 +94,7 @@
 						$date_now = date("Y-m-d");
 						// $date_now = '2023-10-10';
 						
-						$json_url = "https://mkt.idolmartidolaku.com/api/get_sku.php?tgl=".$date_now;
+						$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_plano.php?tgl=".$date_now;
 						$options = stream_context_create(array('http'=>
 							array(
 							'timeout' => 10 //10 seconds
@@ -127,6 +128,7 @@
 							// print_r($json1);
 							
 							$img = '<img src="images/no-image.png" style="width: 200px"></img>';
+							$img_sample = '<img src="images/no-image.png" style="width: 400px"></img>';
 							if($jum1 > 0){
 								foreach ($arr1 as $row_img) {
 									$img = $row_img['image'];
@@ -136,18 +138,34 @@
 							}
 							
 							
+							if($row1['file'] != ""){
+								$img_sample = '<img src="'.$row1['base_url'].$row1['file'].'" style="width: 400px"></img>';
+							}
+							
+							
+							
 						?>
 						
 						
 							<tr>
+							
+								<td>
+									<?php echo $img_sample; ?>
+								
+								</td>
 
 	
 								<td>
-								<?php echo $no; ?>. <b>SKU : </b><?php echo $row1['sku']; ?> (<?php echo $row1['desk']; ?>)
+								<?php echo $no; ?>. <?php echo $row1['desk']; ?>
 								
 								<form id="file-info<?php echo $row1['id']; ?>">
 								
-								<center><div id="file-load<?php echo $row1['id']; ?>"><?php echo $img; ?></div></center>
+								<center>
+								
+								
+								<div id="file-load<?php echo $row1['id']; ?>"><?php echo $img; ?></div>
+								
+								</center>
 								<br>
 								<br>
 								
