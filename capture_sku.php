@@ -45,6 +45,7 @@
 				foreach ($connec->query($cek_brand) as $row) {
 					
 					$toko = $row['name'];
+					$value = $row['value'];
 					
 				}
 				
@@ -93,7 +94,7 @@
 						$date_now = date("Y-m-d");
 						// $date_now = '2023-10-10';
 						
-						$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_event.php?tgl=".$date_now;
+						$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_event.php?tgl=".$date_now."&toko=".$value;
 						$options = stream_context_create(array('http'=>
 							array(
 							'timeout' => 10 //10 seconds
