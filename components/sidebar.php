@@ -18,7 +18,6 @@
 			<ul class="menu">
 				<li class="sidebar-title">Menu</li>
 				
-							
 				<li class="sidebar-item">
 					<a href="capture_sku_plano.php" class='sidebar-link'>
 						<i class="bi bi-camera"></i>
@@ -30,6 +29,13 @@
 					<a href="capture_sku.php" class='sidebar-link'>
 						<i class="bi bi-camera"></i>
 						<span>Capture Event</span>
+					</a>
+				</li>
+				
+				<li class="sidebar-item">
+					<a href="capture_sku_go.php" class='sidebar-link'>
+						<i class="bi bi-camera"></i>
+						<span>Dokumentasi GO / Relaunching</span>
 					</a>
 				</li>
 							
@@ -47,7 +53,18 @@
 					</a>
 				</li>
 				
-			
+				
+				<?php if($_SESSION['username'] != 'akunglobalit'){ ?>
+					
+					<li class="sidebar-item">
+					<a href="morder.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>D Order</span>
+					</a>
+				</li>
+				<?php } ?>
+				
+				
 			<?php if($_SESSION['org_key'] != '112233445566' && $_SESSION['name'] != 'Promo' && $_SESSION['name'] != 'Marketing' && $_SESSION['name'] != 'BAC'){ ?>
 			
 				<?php if($_SESSION['name'] != 'Cashier'){ ?>
@@ -232,7 +249,8 @@
 						<span>Cek Harga</span>
 					</a>
 				</li>
-
+			
+			
 				
 				<li class="sidebar-item">
 					<a href="capture_jsm.php" class='sidebar-link'>
@@ -268,6 +286,15 @@
 					</a>
 				</li>
 			
+			
+
+				
+			
+				
+				
+				
+				
+
 				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
