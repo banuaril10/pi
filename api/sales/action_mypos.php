@@ -230,7 +230,7 @@ if($_GET['modul'] == 'sales_order'){
 									}
 								}
 								
-								echo "Berhasil kirim ".$jum_sales." data";
+								echo "Berhasil kirim ".$jum_sales." data, <br>Items : ".print_r($hasil);
 								
 	}
 }
