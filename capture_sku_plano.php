@@ -1,5 +1,51 @@
 <?php include "config/koneksi.php"; ?>
-<?php include "components/main.php"; ?>
+<?php session_start();
+if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+	$org_key = $_SESSION['org_key'];
+	$username = $_SESSION['username'];
+}else{
+	header("Location: index.php");
+}
+
+$get_nama_toko = "select * from ad_morg where postby = 'SYSTEM'";
+$resultss = $connec->query($get_nama_toko);
+foreach ($resultss as $r) {
+	$storecode = $r["value"];	
+	$org_key = $r['ad_morg_key'];
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Store Apps</title>
+    <link rel="stylesheet" href="styles/css/bootstrap.css">
+    <link rel="stylesheet" href="styles/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="styles/css/selectize4.css">
+    <link rel="stylesheet" href="styles/css/font-awesome.css">
+	
+	<style>
+		.selectize {
+			
+			border-color: #000;
+			margin-bottom: 10px;
+			
+		}
+	</style>
+
+    <link rel="stylesheet" href="assets/vendors/iconly/bold.css">
+
+    <link rel="stylesheet" href="assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles/css/app.css">
+	<script src="styles/js/jquery-3.5.1.js"></script>	
+</head>
+<body>
+
+
 <?php include "components/sidebar.php"; ?>
 
 <style>
@@ -53,13 +99,8 @@
 				?>
 				
 				
-					<table class="table table-bordered table-striped" id="">
-						<thead>
-							<tr>
-								<th>Gambar Contoh</th>
-								<th>Gambar Upload</th>
-							</tr>
-						</thead>
+					<table class="table table-bordered table-striped" id="" style="width: 100%">
+						
 						<tbody>
 						
 						<?php 
@@ -159,18 +200,20 @@
 							
 						?>
 						
+				
+							<tr>
+								<td colspan="3" style="background-color: #629584; color: #fff; font-size: 35px"><center>Contoh Foto <b><?php echo $row1['nama']; ?></center></b></td>
+							</tr>
+			
+						
 						
 							<tr>
-							
-								<td>
-									<?php echo $img_sample; ?><br>
-									<?php echo $img_sample2; ?><br>
-									<?php echo $img_sample3; ?>
-								
-								</td>
-
-	
-								<td>
+									<td><?php echo $img_sample; ?></td>
+									<td><?php echo $img_sample2; ?></td>
+									<td><?php echo $img_sample3; ?></td>
+							</tr>
+							<tr>
+								<td colspan="3">
 								<?php echo $no; ?>. <?php echo $row1['desk']; ?>
 								
 								<form id="file-info<?php echo $row1['id']; ?>">
