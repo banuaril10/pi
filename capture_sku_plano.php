@@ -138,9 +138,21 @@
 								
 							}
 							
-							
+							$img_sample = "";
+							$img_sample2 = "";
+							$img_sample3 = "";
 							if($row1['file'] != ""){
 								$img_sample = '<img src="'.$row1['base_url'].$row1['file'].'" style="width: 400px"></img>';
+								
+								
+							}
+							
+							if($row1['file2'] != ""){
+								$img_sample2 = '<img src="'.$row1['base_url'].$row1['file2'].'" style="width: 400px"></img>';
+							}
+							
+							if($row1['file3'] != ""){
+								$img_sample3 = '<img src="'.$row1['base_url'].$row1['file3'].'" style="width: 400px"></img>';
 							}
 							
 							
@@ -151,7 +163,9 @@
 							<tr>
 							
 								<td>
-									<?php echo $img_sample; ?>
+									<?php echo $img_sample; ?><br>
+									<?php echo $img_sample2; ?><br>
+									<?php echo $img_sample3; ?>
 								
 								</td>
 
