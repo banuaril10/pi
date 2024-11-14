@@ -152,6 +152,9 @@
 								<br>
 								<br>
 								
+								<textarea class="form-control" id="alasan<?php echo $row1['id']; ?>" placeholder="Masukan alasan jika ada.. (tidak wajib)"><?php echo $row1['alasan']; ?></textarea>
+								<br>
+								
 								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload<?php echo $row1['id']; ?>" id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
 								<br>
 								<input type="hidden" id="sku<?php echo $row1['id']; ?>" value="<?php echo $row1['sku']; ?>">
@@ -216,6 +219,7 @@ function uploadImage(id){
 				
 				var sku = $("#sku"+id).val();
 				var toko = $("#toko"+id).val();
+				var alasan = $("#alasan"+id).val();
 				
 				
 				let formData = new FormData();
@@ -223,6 +227,7 @@ function uploadImage(id){
 				formData.append('id', id);
 				formData.append('sku', sku);
 				formData.append('toko', toko);
+				formData.append('alasan', alasan);
 				
 				$.ajax({
 					xhr: function() {
