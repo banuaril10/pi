@@ -176,7 +176,7 @@
 								
 								<!-- <input class="dropzone" type="file" id="fileupload<?php echo $row1['id']; ?>" name="fileupload" accept="image/*" /> -->
 
-								<input type="file" id="fileupload<?php echo $row1['id']; ?>" name="fileupload" accept="image/*" />
+								<input type="file" id="fileupload<?php echo $row1['id']; ?>" name="fileupload" accept="image/*,video/*" />
 
 
 
