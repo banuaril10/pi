@@ -144,8 +144,20 @@ foreach ($resultss as $r) {
 						));
 						
 						$json = file_get_contents($json_url, false, $options);
-						
 						$arr = json_decode($json, true);
+						
+						
+						// $json_url_approve = "https://mkt.idolmartidolaku.com/api/get_sku_plano_approve.php?tgl=".$date_now."&toko=".$value;
+						// $options = stream_context_create(array('http'=>
+							// array(
+							// 'timeout' => 10 //10 seconds
+							// )
+						// ));
+						
+						// $json_approve = file_get_contents($json_url_approve, false, $options);
+						// $arr_approve = json_decode($json_approve, true);
+						
+						
 						$jum = count($arr);
 					
 					
@@ -182,10 +194,9 @@ foreach ($resultss as $r) {
 							$img_sample = "";
 							$img_sample2 = "";
 							$img_sample3 = "";
+							$img_sample4 = "";
 							if($row1['file'] != ""){
 								$img_sample = '<img src="'.$row1['base_url'].$row1['file'].'" style="width: 400px"></img>';
-								
-								
 							}
 							
 							if($row1['file2'] != ""){
@@ -196,13 +207,17 @@ foreach ($resultss as $r) {
 								$img_sample3 = '<img src="'.$row1['base_url'].$row1['file3'].'" style="width: 400px"></img>';
 							}
 							
+							if($row1['file4'] != ""){
+								$img_sample4 = '<img src="'.$row1['base_url'].$row1['file4'].'" style="width: 400px"></img>';
+							}
+							
 							
 							
 						?>
 						
 				
 							<tr>
-								<td colspan="3" style="background-color: #629584; color: #fff; font-size: 35px"><center>Contoh Foto <b><?php echo $row1['nama']; ?></center></b></td>
+								<td colspan="4" style="background-color: #629584; color: #fff; font-size: 35px"><center>Contoh Foto <b><?php echo $row1['nama']; ?></center></b></td>
 							</tr>
 			
 						
@@ -211,9 +226,10 @@ foreach ($resultss as $r) {
 									<td><?php echo $img_sample; ?></td>
 									<td><?php echo $img_sample2; ?></td>
 									<td><?php echo $img_sample3; ?></td>
+									<td><?php echo $img_sample4; ?></td>
 							</tr>
 							<tr>
-								<td colspan="3">
+								<td colspan="4">
 								<?php echo $no; ?>. <?php echo $row1['desk']; ?>
 								
 								<form id="file-info<?php echo $row1['id']; ?>">
