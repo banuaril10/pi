@@ -180,7 +180,8 @@ foreach ($resultss as $r) {
 							
 							// print_r($json1);
 							
-							$img = '<img src="images/no-image.png" style="width: 200px"></img>';
+							// $img = '<img src="images/no-image.png" style="width: 200px"></img>';
+							$img = 'No Image';
 							$img_sample = '<img src="images/no-image.png" style="width: 400px"></img>';
 
 							if($row1['image'] != ""){
