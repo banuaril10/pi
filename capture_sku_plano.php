@@ -107,31 +107,31 @@ foreach ($resultss as $r) {
 						
 						
 						
-						function get_data_image($sku, $tgl, $toko){
-							$postData = array("sku" => $sku,"tgl" => $tgl,"toko" => $toko);				    
-							// $postData = array('sku' => '456','tgl' => '2023-10-10','toko' => 'BOSOL-ONLINE SHOP');				    
-							$fields_string = http_build_query($postData);
-							$curl = curl_init();
+						// function get_data_image($sku, $tgl, $toko){
+						// 	$postData = array("sku" => $sku,"tgl" => $tgl,"toko" => $toko);				    
+						// 	// $postData = array('sku' => '456','tgl' => '2023-10-10','toko' => 'BOSOL-ONLINE SHOP');				    
+						// 	$fields_string = http_build_query($postData);
+						// 	$curl = curl_init();
 						
-							curl_setopt_array($curl, array(
-							CURLOPT_URL => "https://mkt.idolmartidolaku.com/api/image_sku.php",
-							CURLOPT_RETURNTRANSFER => true,
-							CURLOPT_ENCODING => '',
-							CURLOPT_MAXREDIRS => 10,
-							CURLOPT_TIMEOUT => 0,
-							CURLOPT_FOLLOWLOCATION => true,
-							CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-							CURLOPT_CUSTOMREQUEST => 'POST',
-							CURLOPT_POSTFIELDS => $fields_string,
-							));
+						// 	curl_setopt_array($curl, array(
+						// 	CURLOPT_URL => "https://mkt.idolmartidolaku.com/api/image_sku.php",
+						// 	CURLOPT_RETURNTRANSFER => true,
+						// 	CURLOPT_ENCODING => '',
+						// 	CURLOPT_MAXREDIRS => 10,
+						// 	CURLOPT_TIMEOUT => 0,
+						// 	CURLOPT_FOLLOWLOCATION => true,
+						// 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+						// 	CURLOPT_CUSTOMREQUEST => 'POST',
+						// 	CURLOPT_POSTFIELDS => $fields_string,
+						// 	));
 							
-							$response = curl_exec($curl);
+						// 	$response = curl_exec($curl);
 							
-							curl_close($curl);
-							return $response;
+						// 	curl_close($curl);
+						// 	return $response;
 					
 					
-						}
+						// }
 						
 						$date_now = date("Y-m-d");
 						// $date_now = '2023-10-10';
@@ -175,21 +175,26 @@ foreach ($resultss as $r) {
 								$name = $row_dis['name'];
 							}
 							
-							$json1 = get_data_image($row1['sku'], $date_now, $toko);
-							$arr1 = json_decode($json1, true);
-							$jum1 = count($arr1);
+							// $json1 = get_data_image($row1['sku'], $date_now, $toko);
+							// $arr1 = json_decode($json1, true);
+							// $jum1 = count($arr1);
 							
 							// print_r($json1);
 							
 							$img = '<img src="images/no-image.png" style="width: 200px"></img>';
 							$img_sample = '<img src="images/no-image.png" style="width: 400px"></img>';
-							if($jum1 > 0){
-								foreach ($arr1 as $row_img) {
-									$img = $row_img['image'];
-									
+
+								if ($row1['image'] != "") {
+									$img = $row1['image'];
+
 								}
+							// if($jum1 > 0){
+							// 	foreach ($arr1 as $row_img) {
+							// 		$img = $row_img['image'];
+									
+							// 	}
 								
-							}
+							// }
 							
 							$img_sample = "";
 							$img_sample2 = "";
