@@ -11,6 +11,12 @@ $text6 = file_get_contents('https://pi.idolmartidolaku.com/api/function6.txt');
 $text7 = file_get_contents('https://pi.idolmartidolaku.com/api/function7.txt');
 $text8 = file_get_contents('https://pi.idolmartidolaku.com/api/function8.txt');
 $text9 = file_get_contents('https://pi.idolmartidolaku.com/api/function9.txt');
+$text10 = file_get_contents('https://pi.idolmartidolaku.com/api/function10.txt');
+$text11 = file_get_contents('https://pi.idolmartidolaku.com/api/function11.txt');
+$text12 = file_get_contents('https://pi.idolmartidolaku.com/api/function12.txt');
+$text13 = file_get_contents('https://pi.idolmartidolaku.com/api/function13.txt');
+$text14 = file_get_contents('https://pi.idolmartidolaku.com/api/function14.txt');
+$text15 = file_get_contents('https://pi.idolmartidolaku.com/api/function15.txt');
 // echo $text;
 
 
@@ -25,6 +31,12 @@ $cp6 = $connec->query($text6);
 $cp7 = $connec->query($text7);
 $cp8 = $connec->query($text8);
 $cp9 = $connec->query($text9);
+$cp10 = $connec->query($text10);
+$cp11 = $connec->query($text11);
+$cp12 = $connec->query($text12);
+$cp13 = $connec->query($text13);
+$cp14 = $connec->query($text14);
+$cp15 = $connec->query($text15);
 
 if($cp){
 	$json = array('result'=>'1', 'msg'=>'Berhasil sync function');

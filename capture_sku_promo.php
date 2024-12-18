@@ -240,7 +240,12 @@ foreach ($resultss as $r) {
 								
 								<textarea class="form-control" id="alasan<?php echo $row1['id']; ?>" placeholder="Masukan alasan jika ada.. (tidak wajib)"><?php echo $row1['alasan']; ?></textarea>
 								<br>
-								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload<?php echo $row1['id']; ?>" id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
+
+
+								<input type="file" accept=".jpg, .png, .jpeg, .gif" capture="camera" name="fileupload<?php echo $row1['id']; ?>" 
+								id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
+
+
 								<br>
 								<input type="hidden" id="sku<?php echo $row1['id']; ?>" value="<?php echo $row1['sku']; ?>">
 								<input type="hidden" id="toko<?php echo $row1['id']; ?>" value="<?php echo $toko; ?>">
