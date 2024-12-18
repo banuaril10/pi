@@ -38,12 +38,109 @@ $cp13 = $connec->query($text13);
 $cp14 = $connec->query($text14);
 $cp15 = $connec->query($text15);
 
+$text = "";
 if($cp){
-	$json = array('result'=>'1', 'msg'=>'Berhasil sync function');
+	$text .='Berhasil sync function 1';
+}else{
+	$text .= 'Gagal sync function 1';
+}
+
+if($cp1){
+	$text .='Berhasil sync function 2';
+}else{
+	$text .= 'Gagal sync function 2';
+}
+
+if($cp2){
+	$text .='Berhasil sync function 3';
+}else{
+	$text .= 'Gagal sync function 3';
+}
+
+if($cp3){
+	$text .='Berhasil sync function 4';
+}else{
+	$text .= 'Gagal sync function 4';
+}
+
+if($cp4){
+	$text .='Berhasil sync function 5';
+}else{
+	$text .= 'Gagal sync function 5';
+}
+
+if($cp5){
+	$text .='Berhasil sync function 6';
 }else{
 
-	$json = array('result'=>'0', 'msg'=>'Gagal sync function');	
+	$text .= 'Gagal sync function 6';
 }
+
+if($cp6){
+	$text .='Berhasil sync function 7';
+}else{
+	$text .= 'Gagal sync function 7';
+}
+
+if($cp7){
+	$text .='Berhasil sync function 8';
+}else{
+	$text .= 'Gagal sync function 8';
+}
+
+if($cp8){
+	$text .='Berhasil sync function 9';
+}else{
+	$text .= 'Gagal sync function 9';
+}
+
+if($cp9){
+	$text .='Berhasil sync function 10';
+}else{
+	$text .= 'Gagal sync function 10';
+}
+
+if($cp10){
+	$text .='Berhasil sync function 11';
+}else{
+	$text .= 'Gagal sync function 11';
+}
+
+if($cp11){
+	$text .='Berhasil sync function 12';
+}else{
+	$text .= 'Gagal sync function 12';
+}
+
+if($cp12){
+	$text .='Berhasil sync function 13';
+}else{
+	$text .= 'Gagal sync function 13';
+}
+
+if($cp13){
+	$text .='Berhasil sync function 14';
+}else{
+	$text .= 'Gagal sync function 14';
+}
+
+if($cp14){
+	$text .='Berhasil sync function 15';
+}else{
+	$text .= 'Gagal sync function 15';
+}
+
+if($cp15){
+	$text .='Berhasil sync function 16';
+}else{
+	$text .= 'Gagal sync function 16';
+}
+
+
+
+$json = array('result' => '1', 'msg' => $text);
+
+
 
 $json_string = json_encode($json);
 echo $json_string;
