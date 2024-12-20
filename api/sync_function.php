@@ -40,100 +40,100 @@ $cp15 = $connec->query($text15);
 
 $text = "";
 if($cp){
-	$text .='Berhasil sync function 1';
+	$text .='Berhasil sync function 1<br>';
 }else{
-	$text .= 'Gagal sync function 1';
+	$text .= 'Gagal sync function 1<br>';
 }
 
 if($cp1){
-	$text .='Berhasil sync function 2';
+	$text .='Berhasil sync function 2<br>';
 }else{
-	$text .= 'Gagal sync function 2';
+	$text .= 'Gagal sync function 2<br>';
 }
 
 if($cp2){
-	$text .='Berhasil sync function 3';
+	$text .='Berhasil sync function 3<br>';
 }else{
-	$text .= 'Gagal sync function 3';
+	$text .= 'Gagal sync function 3<br>';
 }
 
 if($cp3){
-	$text .='Berhasil sync function 4';
+	$text .='Berhasil sync function 4<br>';
 }else{
-	$text .= 'Gagal sync function 4';
+	$text .= 'Gagal sync function 4<br>';
 }
 
 if($cp4){
-	$text .='Berhasil sync function 5';
+	$text .='Berhasil sync function 5<br>';
 }else{
-	$text .= 'Gagal sync function 5';
+	$text .= 'Gagal sync function 5<br>';
 }
 
 if($cp5){
-	$text .='Berhasil sync function 6';
+	$text .='Berhasil sync function 6<br>';
 }else{
 
-	$text .= 'Gagal sync function 6';
+	$text .= 'Gagal sync function 6<br>';
 }
 
 if($cp6){
-	$text .='Berhasil sync function 7';
+	$text .='Berhasil sync function 7<br>';
 }else{
-	$text .= 'Gagal sync function 7';
+	$text .= 'Gagal sync function 7<br>';
 }
 
 if($cp7){
-	$text .='Berhasil sync function 8';
+	$text .='Berhasil sync function 8<br>';
 }else{
-	$text .= 'Gagal sync function 8';
+	$text .= 'Gagal sync function 8<br>';
 }
 
 if($cp8){
-	$text .='Berhasil sync function 9';
+	$text .='Berhasil sync function 9<br>';
 }else{
-	$text .= 'Gagal sync function 9';
+	$text .= 'Gagal sync function 9<br>';
 }
 
 if($cp9){
-	$text .='Berhasil sync function 10';
+	$text .='Berhasil sync function 10<br>';
 }else{
-	$text .= 'Gagal sync function 10';
+	$text .= 'Gagal sync function 10<br>';
 }
 
 if($cp10){
-	$text .='Berhasil sync function 11';
+	$text .='Berhasil sync function 11<br>';
 }else{
-	$text .= 'Gagal sync function 11';
+	$text .= 'Gagal sync function 11<br>';
 }
 
 if($cp11){
-	$text .='Berhasil sync function 12';
+	$text .='Berhasil sync function 12<br>';
 }else{
-	$text .= 'Gagal sync function 12';
+	$text .= 'Gagal sync function 12<br>';
 }
 
 if($cp12){
-	$text .='Berhasil sync function 13';
+	$text .='Berhasil sync function 13<br>';
 }else{
-	$text .= 'Gagal sync function 13';
+	$text .= 'Gagal sync function 13<br>';
 }
 
 if($cp13){
-	$text .='Berhasil sync function 14';
+	$text .='Berhasil sync function 14<br>';
 }else{
-	$text .= 'Gagal sync function 14';
+	$text .= 'Gagal sync function 14<br>';
 }
 
 if($cp14){
-	$text .='Berhasil sync function 15';
+	$text .='Berhasil sync function 15<br>';
 }else{
-	$text .= 'Gagal sync function 15';
+	$text .= 'Gagal sync function 15<br>';
 }
 
 if($cp15){
-	$text .='Berhasil sync function 16';
+	$text .='Berhasil sync function 16<br>';
 }else{
-	$text .= 'Gagal sync function 16';
+	$text .= 'Gagal sync function 16<br>';
 }
 
 

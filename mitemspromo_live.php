@@ -213,36 +213,23 @@
 								<th>Price</th>
 								<th>Price Discount</th>
 								<th>Rack Name</th>
+								<th>Copy</th>
 							</tr>
 						</thead>
 						<tbody>
 						
 						<?php 
-						
-						
-						
 						$cek_brand = "select * from ad_morg where postby = 'SYSTEM'";
-				
 						foreach ($connec->query($cek_brand) as $row) {
-					
 							$ad_org_id = $row['ad_morg_key'];
-					
 						}
 						$hn = $_GET['headerpromo'];
-						
-						
 						$jsons = get_data_pricetag($hn, $ad_org_id);
-						
 						// echo "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=list_price_tag&header_name=".$hn."&org_id=".$ad_org_id
 						$arrs = json_decode($jsons, true);
 						// $jums = count($arrs);
 						
 						// var_dump($jsons);
-						
-						
-						
-				
-				
 						$s = array();
 						// if($jums > 0){
 						$no = 1;
@@ -276,6 +263,7 @@
 								<td><?php echo $row['normal']; ?></td>
 								<td><?php echo $row['afterdiscount']; ?></td>
 								<td><?php echo $row['rack']; ?></td>
+								<td><input type="number" id="copy<?php echo $row['sku']; ?>" value="1"></td>
 								
 							</tr>
 							
@@ -295,6 +283,7 @@
 								<td><?php echo $row['normal']; ?></td>
 								<td><?php echo $row['afterdiscount']; ?></td>
 								<td><?php echo $row['rack']; ?></td>
+								<td><input type="number" id="copy<?php echo $row['sku']; ?>" value="1"></td>
 								
 							</tr>
 							
@@ -327,7 +316,7 @@
 </div>
 </div>
 
-<script src="styles/js/price-promo.js"></script>
+<script src="styles/js/price-promo.js?id=424364"></script>
 <script type="text/javascript">
 $(document).ready( function () {
     $('#example').DataTable({
@@ -579,8 +568,6 @@ function formatRupiah(angka, prefix){
 
 			});
 			
-			
-		
 			
 			document.getElementById("btn-cetak1-tinta").addEventListener("click", function() { //cetak besar
 				var array = [];
