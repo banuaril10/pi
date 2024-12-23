@@ -160,6 +160,7 @@
 								<th>Price Discount</th>
 								<th>Rack Name</th>
 								<th>Tag</th>
+								<th>Copy</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -207,9 +208,9 @@
 								<td><?php echo $row['name']; ?></td>
 								<td><?php echo $row['price']; ?></td>
 								<td><?php echo $harga_last; ?></td>
-								
 								<td><?php echo $row['rack_name']; ?></td>
 								<td><?php echo $row['tag']; ?></td>
+								<td><input type="number" id="copy<?php echo $row['sku']; ?>" value="1"></td>
 								
 							</tr>
 							
@@ -232,7 +233,7 @@
 </div>
 </div>
 
-<script src="styles/js/price-promo.js"></script>
+<script src="styles/js/price-promo.js?id=321"></script>
 <script type="text/javascript">
 $(document).ready( function () {
     $('#example').DataTable({
