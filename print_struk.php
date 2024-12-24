@@ -1,5 +1,7 @@
 <?php
 $html = $_POST['html'];
+$html .= chr(29) . "V" . 0; 
+
 	$cmd='';
     $cmd='echo "'.$html.'" | lpr -o raw'; //linux
 	
