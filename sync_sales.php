@@ -78,7 +78,7 @@ function SalesLine(){
 			$('#notif').html("<font style='color: red'>Sedang melakukan send, mohon tunggu..</font>");
 		},
 		success: function(dataResult){
-			 console.log(dataResult);
+			// console.log(dataResult);
 			$("#overlay").fadeOut(300);
 			$('#notif').html("<font style='color: green'>"+dataResult+"</font>");
 		}

@@ -26,6 +26,9 @@ document.getElementById("btn-cetak-tinta-promo").addEventListener("click", funct
 				var todate = res[7];
 				var price = res[8];
 				
+				var minbuy1 = res[9];
+				var minbuy2 = res[10];
+
 				// alert(price);
 						if(x==5){
 							var x = 1;
@@ -61,13 +64,13 @@ document.getElementById("btn-cetak-tinta-promo").addEventListener("click", funct
 						
 						if(price1 != '0'){
 							// harga += "<label style='font-size: 10px'>Beli 3 </label>  <div style='float: right !important'><label style='font-size: 8px'><b>Rp </b></label><b>"+formatRupiah(price1, '')+"</b></div><br>";
-							harga += "<tr style='font-size: 10px'><td>Beli 3 </td>   <td style='text-align: right'><label style='font-size: 8px'><b>Rp </b></label> <b style='font-size: 17px'>"+formatRupiah(price1, '')+"</b>/pcs</td></tr> ";
+							harga += "<tr style='font-size: 10px'><td>Beli "+minbuy1+" </td>   <td style='text-align: right'><label style='font-size: 8px'><b>Rp </b></label> <b style='font-size: 17px'>"+formatRupiah(price1, '')+"</b>/pcs</td></tr> ";
 							
 						}
 						
 						if(price2 != '0'){
 							// harga += "<label style='font-size: 10px'>Beli 12 </label>  <div style='float: right !important'><label style='font-size: 8px'><b>Rp </b></label><b>"+formatRupiah(price2, '')+"</b></div><br>";
-							harga += "<tr style='font-size: 10px'><td>Beli 6 </td>   <td style='text-align: right'><label style='font-size: 8px'><b>Rp </b></label> <b style='font-size: 17px'>"+formatRupiah(price2, '')+"</b>/pcs</td></tr> ";
+							harga += "<tr style='font-size: 10px'><td>Beli "+minbuy2+" </td>   <td style='text-align: right'><label style='font-size: 8px'><b>Rp </b></label> <b style='font-size: 17px'>"+formatRupiah(price2, '')+"</b>/pcs</td></tr> ";
 							
 						}
 						

@@ -174,9 +174,8 @@
 								<th>SKU</th>
 								<th>Name</th>
 								<th>Beli 1</th>
-								<th>Beli 3</th>
-								<!--<th>Beli 6/12</th>-->
-								<th>Beli 12</th>
+								<th>Grosir 1</th>
+								<th>Grosir 2</th>
 								<th>Rack</th>
 							</tr>
 						</thead>
@@ -242,13 +241,13 @@
 							
 						<?php if($q_stock > 0){ ?>
 							<tr>
-								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $name; ?>|<?php echo $row['price1']; ?>|<?php echo $row['price2']; ?>|<?php echo $row['price3']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>|<?php echo $row['todate']; ?>|<?php echo $price; ?>"></td>
+								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $name; ?>|<?php echo $row['price1']; ?>|<?php echo $row['price2']; ?>|<?php echo $row['price3']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>|<?php echo $row['todate']; ?>|<?php echo $price; ?>|<?php echo $row['minbuy1']; ?>|<?php echo $row['minbuy2']; ?>"></td>
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $name; ?></td>
 								<td><?php echo $price; ?></td>
-								<td><?php echo $row['price1']; ?></td>
-								<td><?php echo $row['price2']; ?></td>
+								<td><?php echo $row['price1']; ?> (Beli <?php echo $row['minbuy1']; ?>)</td>
+								<td><?php echo $row['price2']; ?> (Beli <?php echo $row['minbuy2']; ?>)</td>
 								<!--<td><?php echo $row['price3']; ?></td>-->
 								<td><?php echo $row['rack']; ?></td>
 								
@@ -263,13 +262,13 @@
 						<?php }else{ ?>
 							
 								<tr>
-								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $name; ?>|<?php echo $row['price1']; ?>|<?php echo $row['price2']; ?>|<?php echo $row['price3']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>|<?php echo $row['todate']; ?>|<?php echo $price; ?>"></td>
+								<td><input type="checkbox" id="checkbox" name="checkbox[]" value="<?php echo $row['sku']; ?>|<?php echo $name; ?>|<?php echo $row['price1']; ?>|<?php echo $row['price2']; ?>|<?php echo $row['price3']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>|<?php echo $row['todate']; ?>|<?php echo $price; ?>|<?php echo $row['minbuy1']; ?>|<?php echo $row['minbuy2']; ?>"></td>
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $name; ?></td>
 								<td><?php echo $price; ?></td>
-								<td><?php echo $row['price1']; ?></td>
-								<td><?php echo $row['price2']; ?></td>
+								<td><?php echo $row['price1']; ?> (Beli <?php echo $row['minbuy1']; ?>)</td>
+								<td><?php echo $row['price2']; ?> (Beli <?php echo $row['minbuy2']; ?>)</td>
 								<!--<td><?php echo $row['price3']; ?></td>-->
 								<td><?php echo $row['rack']; ?></td>
 								
@@ -304,8 +303,8 @@
 </div>
 </div>
 
+<!--<script src="styles/js/price-promo-tingkat.js"></script>-->
 <script src="https://pi.idolmartidolaku.com/api/js/price-promo-tingkat.js"></script>
-
 <script type="text/javascript">
 $(document).ready( function () {
     $('#example').DataTable({

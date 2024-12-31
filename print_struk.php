@@ -1,19 +1,48 @@
 <?php
-$html = $_POST['html'];
-$html .= chr(29) . "V" . 0; 
+require __DIR__ . '/vendor/autoload.php';
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+// $html = "PRINT PRINT
+// PRINT
+// PRINTPRINT
+// PRINT
+// PRINT
+// PRINT";
 
-	$cmd='';
-    $cmd='echo "'.$html.'" | lpr -o raw'; //linux
+
+
+$html = $_POST['html'];
+// $data = file_get_contents('http://localhost/pi/api/cek_printer.php');
+// echo $data;
+
+$ip_printer = $_POST['ip_printer'];
+
+
+
+
+try {
 	
 	
+	$connector = new FilePrintConnector("//".$ip_printer."/pos");
+
+    $printer = new Printer($connector);
+	$printer -> initialize();
+
+
+	$printer -> setFont(Printer::FONT_B);
+	$printer -> setTextSize(1, 1);
+	$printer -> text($html);
 	
-    $child = shell_exec($cmd); 
+
+    $printer -> cut();
+    
+    $printer -> close();
 	
 	
-	
-	$data = array("result"=>1, "msg"=>$child);
-		
-		$json_string = json_encode($data);	
-		echo $json_string;
+	 echo "Proses Print\n";
+} catch (Exception $e) {
+    echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
+}
 
 ?>

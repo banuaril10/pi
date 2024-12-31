@@ -3,14 +3,8 @@
                 Bekasi                
 REPRINT
 =======================================
-KASIR      :                         pos
-TANGGAL    :                   12-Dec-23
-SALDO AWAL :                      50,000
+KASIR      :                 pos
+TANGGAL    :                   02-Jul-24
+SALDO AWAL :                      10,000
 =======================================
-12-Dec-23 09:34:43
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
+02-Jul-24 11:23:05

@@ -218,7 +218,6 @@
 								
 								<td><?php echo $row['rack_name']; ?></td>
 								<td><?php echo $row['tag']; ?></td>
-								
 							</tr>
 							
 							

@@ -34,8 +34,8 @@
 		
 		* {
 			font-size: 100%;
-			font-family: Tahoma;
-			font-weight: normal !important;
+			font-family: Helvetica;
+			font-weight: normal;
 		}
 		
 	</style>

@@ -77,8 +77,8 @@ td {
 				foreach($querycount as $r){ 
 					$np_buy = "-";
 					$np_get = "-";
-					$price_get = "-";
-					$price_buy = "-";
+					$price_get = "0";
+					$price_buy = "0";
 					
 					$gp_buy =  $connec->query("select * from pos_mproduct where sku = '".$r['skubuy']."'");
 					foreach($gp_buy as $r1){

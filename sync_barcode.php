@@ -57,6 +57,7 @@
 								<th>No</th>
 								<th>SKU / Nama</th>
 								<th>Barcode</th>
+								<th>Shortcut</th>
 
 							</tr>
 						</thead>

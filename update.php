@@ -1,22 +1,5 @@
 <?php 
 include "config/koneksi.php";
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-// function execPrint($command) {
-	// $result = array();
-	// exec($command, $result);
-	// print("<pre>");
-	// foreach ($result as $line) {
-		// print($line . "\n");
-	// }
-	// print("</pre>");
-// }
-
-// execPrint("git pull");
-
-// execPrint("git status");
-
 
 function get_version(){
 			
@@ -54,6 +37,7 @@ function get_version(){
 		
 		$connec->query("update m_piversion set value = '".$cv_web."', link_ppob = '".$link_ppob."'"); //klo udah ada update
 	}
+	
 			
 	
 

@@ -2,9 +2,6 @@
 <?php include "components/main.php"; ?>
 <?php include "components/sidebar.php"; ?>
 
-
-
-
 <div id="app" onload="cekTotal();">
 <div id="main">
 <header class="mb-3">
@@ -85,11 +82,20 @@
 			
 			<div class="table-responsive bs-example widget-shadow">		
 			<table>
-						
+							
+							<div id="totalperkasir"></div>
+							
+							<tr>
+								<th>-----------------------------------</th>
+							</tr>
+							
+							
 							<tr>
 								<th>Total Cash In (Approved) : <font id="total"></font> </th>
 							</tr>
-						
+							
+							
+					
 						
 					</table>
 			
@@ -249,17 +255,19 @@
     </div>
   </div>
 </div>
-<script src="assets/mask.js"></script>
-<script src="assets/numeric.js"></script>
+<script src="js/mask.js"></script>
+<script src="js/numeric.js"></script>
 
 
 <script type="text/javascript">
 cekTotal();
+cekTotalPerkasir();
 function filter(){
 	
 	//$('#example').DataTable().ajax.reload();
 	loadTable();
 	cekTotal();
+	cekTotalPerkasir();
 	// $('#reload').load(" #reload");
 	
 }
@@ -288,9 +296,31 @@ function cekTotal(){
 				
 			}
 		});
-	
-	
 }
+
+
+function cekTotalPerkasir(){
+			var userid = document.getElementById("userid").value;		
+			var tanggal = document.getElementById("tanggal").value;		
+			
+			
+		$.ajax({
+			url: "api/action.php?modul=inventory&act=total_pickup_perkasir&userid="+userid+"&tanggal="+tanggal,
+			type: "GET",
+			success: function(dataResult){
+				
+				
+				
+				// console.log(dataResult);
+				var dataResult = JSON.parse(dataResult);
+				document.getElementById("totalperkasir").innerHTML = dataResult.total;
+				
+				
+			}
+		});
+}
+
+
 
 $("#exampleModal").on('shown.bs.modal', function () {
                 $(this).find('#cash').focus();
@@ -350,7 +380,7 @@ $("#exampleModal").on('shown.bs.modal', function () {
 function print_text(html){
 	// console.log(html);
 	$.ajax({
-		url: "print.php",
+		url: "print_cashin.php",
 		type: "POST",
 		data : {html: html},
 		success: function(dataResult){
@@ -435,20 +465,13 @@ function cetakStruk(){
 					no++;
 				
 				}
-				
-				html += "------------------------------\n";
+				html+='==========================\n';
 				
 				number++;
 				
 				
 				if(number == panjangkasir){
 							
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
 								print_text(html);
 								console.log(html);
 							}
@@ -490,6 +513,7 @@ function syncNewpos(){
 						$("#overlay").fadeOut(300);　
 						loadTable();
 						cekTotal();
+						cekTotalPerkasir();
 						
 					}
 					else {
@@ -497,6 +521,7 @@ function syncNewpos(){
 						$('#notif1').html(dataResult.msg);
 						loadTable();
 						cekTotal();
+						cekTotalPerkasir();
 					}
 				
 				
@@ -527,6 +552,7 @@ function syncNewposAll(){
 						$("#overlay").fadeOut(300);　
 						loadTable();
 						cekTotal();
+						cekTotalPerkasir();
 						
 					}
 					else {
@@ -534,6 +560,7 @@ function syncNewposAll(){
 						$('#notif1').html(dataResult.msg);
 						loadTable();
 						cekTotal();
+						cekTotalPerkasir();
 					}
 				
 				
@@ -712,14 +739,9 @@ function cetakStrukDetail(id){
 								html+='\n';
 								html+='\n';
 								html+='\n';
-								html+='___________________________';
-							
+								html+='==========================';
 								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
+					
 								print_text(html);
 								console.log(html);
 							}
@@ -737,10 +759,7 @@ function cetakStrukDetail(id){
 
 	function loadTable(){
 			var userid = document.getElementById("userid").value;		
-			var tanggal = document.getElementById("tanggal").value;		
-			
-			
-			
+			var tanggal = document.getElementById("tanggal").value;	
 			
            $('.table').DataTable({
               "processing": true,
@@ -839,12 +858,7 @@ function cetakStrukDetail(id){
 					if(dataResult.result=='1'){
 						$('#notif').html('<font style="color: green">'+dataResult.msg+'</font>');
 						$("#overlay").fadeOut(300);　
-						
-						
-						
 						location.reload();
-						
-						
 					}
 					else {
 						$("#overlay").fadeOut(300);　
@@ -852,8 +866,7 @@ function cetakStrukDetail(id){
 					}
 					
 				}
-			});
-
+		});
 	}
 	
 	
@@ -922,6 +935,7 @@ function cetakStrukDetail(id){
 						$("#overlay").fadeOut(300);　
 						loadTable();
 						cekTotal();
+						cekTotalPerkasir();
 						cetakStrukDetail(idcashin);
 					
 						$('.modal').modal('hide');

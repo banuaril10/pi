@@ -32,6 +32,12 @@
 					<button type="submit" class="btn btn-danger" name="reset">Active Product</button>
 					<button type='button' onclick='SalesLine();' class='btn btn-primary'>Sales Line</button>
 				</form>
+				<br>
+				
+				<form action="api/create_function_grosir.php" method="POST">
+					<button type="submit" class="btn btn-success" name="reset">Create Function Grosir</button>
+				</form>
+				
 			<?php } ?>	
 					<table class="table table-bordered" id="example">
 						<thead>

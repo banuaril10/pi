@@ -231,6 +231,7 @@ function changeQty(sku, nama, mpi){
 				// $("#example").load(" #example");
 			}else if(dataResult.result=='1'){
 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+				$('#sku').focus();
 				// $("#example1").load(" #example1");
 			}
 			else {

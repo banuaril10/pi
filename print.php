@@ -1,19 +1,18 @@
 <?php 
 $html = $_POST['html'];
-$html .= chr(29) . "V" . 0; 
 // $html = "TEST PRINNNTT";
 
 
-// $myfile = fopen("print_cashin.txt", "w") or die("Unable to open file!");
-// $txt = $html;
-// fwrite($myfile, $txt);
-// fclose($myfile);
-// $cmd='print_cash.bat'; //windows
+$myfile = fopen("print_cashin.txt", "w") or die("Unable to open file!");
+$txt = $html;
+fwrite($myfile, $txt);
+fclose($myfile);
+$cmd='print_cash.bat'; //windows
 	  
 	  
 
-	$cmd='';
-    $cmd='echo "'.$html.'" | lpr -o raw'; //linux
+	// $cmd='';
+    // $cmd='echo "'.$html.'" | lpr -o raw'; //linux
 	
 	
 	

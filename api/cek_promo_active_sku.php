@@ -21,21 +21,32 @@ $discount_name = "";
 // foreach($cq as $r){
 	$notes = "";
 	
-	
+	$price = 0;
 	$product = "select * from pos_mproduct where sku = '".$sku."'";
 	$cp = $connec->query($product);
 	foreach ($cp as $r1){
 		$nama_product = $r1['name'];
+		$price = $r1['price'];
 	}
 	
-	$cek_grosir = "select discount, discountname from pos_mproductdiscountgrosir_new where sku = '".$sku."' and DATE(now()) between fromdate and todate order by minbuy asc";
+	
+	
+	$cek_reguler = "select discount, discountname from pos_mproductdiscount where sku = '".$sku."' and DATE(now()) between fromdate and todate ";
+	$cr = $connec->query($cek_reguler);
+	foreach ($cr as $r1){
+		$diskon = $price - $r1['discount'];
+		$discount_name .= 'Diskon <font style="color: red">'.rupiah($r1['discount']).'</font> Menjadi <font style="color: red">'.rupiah($diskon).'</font><br>';
+	}
+	
+	$cek_grosir = "select discount, discountname, minbuy from pos_mproductdiscountgrosir_new where sku = '".$sku."' and DATE(now()) between fromdate and todate and minbuy > 1 order by minbuy asc";
 	$cv = $connec->query($cek_grosir);
 	foreach ($cv as $r1){
-		$discount_name .= $r1['discountname'].', Potongan '.rupiah($r1['discount']).'/Pcs <br>';
-		$info = $nama_product.'<br> '.$discount_name.'';
+		$diskon = $price - $r1['discount'];
+		$discount_name .= 'Beli '.$r1['minbuy'].', Diskon <font style="color: red">'.rupiah($r1['discount']).' </font> Menjadi <font style="color: red">'.rupiah($diskon).'</font><br>';
+		
 	}
 	
-	
+	$info = $nama_product.'<br> '.$discount_name.'';
 	
 	// $info = $nama_product.'<br> '.$discount_name.'';
 // }

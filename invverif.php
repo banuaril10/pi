@@ -208,6 +208,7 @@
 
 
 <script type="text/javascript">
+// onchange="changeKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo str_replace("'", "",$row1['name']); ?>','<?php echo $_GET['m_pi']; ?>');" 
 $(window).bind('beforeunload', function(){
   myFunction();
   return 'Apakah kamu yakin?';
@@ -225,6 +226,10 @@ function enterKey(obj, e, sku, name, mpi) {
        changeQty(sku, name, mpi);
        // I will forward to a new page here. Not an issue.
     }
+}
+
+function changeKey(obj, e, sku, name, mpi) {
+    changeQty(sku, name, mpi);
 }
 					
 
@@ -432,7 +437,7 @@ function changeQty(sku, nama, mpi){
 				search.value = '';
 				search.focus();
 				// $('#search1').val(sku);
-				filterTable(sku);
+				// filterTable(sku);
 			}
 			else {
 				$('#notif').html("Gagal sync coba lagi nanti!");

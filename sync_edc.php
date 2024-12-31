@@ -142,6 +142,7 @@ function sync_edc(){
 
 			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 			$("#overlay").fadeOut(300);
+			location.reload();
 			
 		}
 		});

@@ -21,7 +21,7 @@
 		<div class="card">
 			<div class="card-header">
 				<h4>VERIFIKASI LIST</h4>
-				 <button type="button" class="btn btn-primary" onclick="loopingLine();">Sync Approval</button>
+				 <button type="button" class="btn btn-primary" onclick="loopingLine();">Sync Status</button>
 			</div>
 			<div class="card-body">
 			<div class="tables">		
@@ -35,17 +35,12 @@
 								<th>Document No</th>
 								<th>GR Area</th>
 								<th>Tanggal / Rack Name</th>
-							
 								<th>Total Sistem</th>
 								<th>Total Fisik</th>
-								
 								<th>Selisih</th>
-								
-								
 								<th>Type</th>
 								<th>Status</th>
 								<th>Aksi</th>
-								
 							</tr>
 						</thead>
 						<tbody>
@@ -62,7 +57,7 @@
 						// from m_pi where m_pi.status in ('2','3') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$sql_list = "select m_pi_key, m_pi.name ,m_pi.insertdate, m_pi.rack_name, m_pi.insertby, m_pi.status,m_pi. m_locator_id, m_pi.inventorytype
-						from m_pi where m_pi.status in ('2','3') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						from m_pi where m_pi.status in ('2','3') and inventorytype = 'Daily' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
@@ -116,7 +111,7 @@
 						$jumrelease = '<font style="color: '.$color.'">'.$jumsync.' / '.$jumline.'</font>';
 						
 						$m_locator = "-";
-						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' and locator_name like '%GR AREA BOS%' group by locator_name";
+						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' group by locator_name";
 						foreach ($connec->query($get_locator) as $rrr) {
 							
 							$m_locator = $rrr['locator_name'];
@@ -210,32 +205,6 @@
 							
 							
 							
-							
-							
-							<div class="modal fade" id="exampleModall<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-								
-								
-								
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin melanjutkan release items yg gantung?</h5>
-									
-									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-									<button onclick="releasePIGantung('<?php echo $row['m_pi_key']; ?>');" class="btn btn-success">YAKIN</button>
-								</div>
-								</div>
-							</div>
-							</div>
-							
-							
-							
 							<div class="modal fade" id="batal<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -288,69 +257,21 @@ function cekSession(){
 				
 				if(dataResult.result=='1'){
 					$('#notif_sess').html("<font style='color: green'>"+dataResult.msg+"</font>");
-					 $(".modal-content").show();
-					
-				
+					$(".modal-content").show();
 				}else{
-					
-					
 					$('#notif_sess').html("<font style='color: red'>"+dataResult.msg+"</font>");
-					
-					 $(".modal-content").hide();
+					$(".modal-content").hide();
 				
 				}
-				
-				
-				
 			}
-					
-				
-				
-				
-			
 		});
-	
-	
 }
 
-function sendWa(m_pi){
-	
-	$.ajax({
-			url: "api/action.php?modul=inventory&act=nohp_spv&m_pi="+m_pi,
-			type: "GET",
-			beforeSend: function(){
-				$('#notif').html("Proses kirim notif ke SPV..");
-			},
-			success: function(dataResult){
-				console.log(dataResult);
-				var dataResults = JSON.parse(dataResult);
-				
-				if(dataResults.result=='1'){
-					$('#notif').html("<font style='color: green'>"+dataResults.msg+"</font>");
-					// $("#example").load(" #example");
-				
-				}else{
-					
-					$('#notif').html("<font style='color: red'>"+dataResults.msg+"</font>");
-					
-				}
-				
-				
-				
-			}
-					
-				
-				
-				
-			
-		});
-	
-}
 
 function loopingLine(){
 	
 	$.ajax({
-			url: "api/action.php?modul=inventory&act=cek_approval",
+			url: "api/cyber/cek_status_pi.php",
 			type: "GET",
 			beforeSend: function(){
 				$('#notif').html("Proses sync approval..");
@@ -368,11 +289,6 @@ function loopingLine(){
 				
 				
 			}
-					
-				
-				
-				
-			
 		});
 	
 }
@@ -399,35 +315,6 @@ function selectKat(){
 	
 }
 
-
-function ubahStatus(m_pi_key){
-	// alert(m_pi_key);
-	var formData = new FormData();
-		
-	formData.append('m_pi', m_pi_key);
-	
-	$.ajax({
-		url: "api/action.php?modul=inventory&act=verifikasi",
-		type: "POST",
-		data : formData,
-		processData: false,
-		contentType: false,
-		success: function(dataResult){
-			console.log(dataResult);
-			var dataResult = JSON.parse(dataResult);
-			if(dataResult.result=='1'){
-				// $('#notif').html("<font style='color: green'>Berhasil input dengan product category!</font>");
-				$("#example").load(" #example");
-				
-			}
-			// else {
-				// $('#notif').html(dataResult.msg);
-			// }
-			
-		}
-	});
-	
-}
 
 function batalPI(m_pi_key){ 
 
@@ -468,7 +355,7 @@ function releasePI(m_pi){
 	var formData = new FormData();
 	formData.append('m_pi', m_pi);
 	$.ajax({
-		url: "api/action.php?modul=inventory&act=release_all",
+		url: "api/cyber/release_pi.php",
 		type: "POST",
 		data : formData,
 		processData: false,
@@ -481,52 +368,34 @@ function releasePI(m_pi){
 		success: function(dataResult){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
-			if(dataResult.result=='1'){
-				// $('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-				updateStatusRelease(m_pi);
-				// $("#example").load(" #example");
-				
-			}
-			// else {
-				// $('#notif').html(dataResult.msg);
+
+			location.reload();
+
+			// if(dataResult.result=='OK'){
+			// 	updateStatusRelease(m_pi);
 			// }
-			
 		}
 	});
-	
-	
 }
 
 
 function updateStatusRelease(m_pi){
-	var formData = new FormData();
-	formData.append('m_pi', m_pi);
 	$.ajax({
-		url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=updatepi",
-		type: "POST",
-		data : formData,
+		url: "api/cyber/check_status_pi.php?m_pi="+m_pi,
+		type: "GET",
 		processData: false,
 		contentType: false,
 		beforeSend: function(){
 			$('#notif').html("Proses update status di server, jangan close halaman ini sampai selesai..");
-			// $(".modal").modal('hide');
 		},
 		success: function(dataResult){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
 			if(dataResult.result=='1'){
-				
-				sendWa(m_pi);
-				
 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 				$("#example").load(" #example");
 				$("#overlay").fadeOut(300);
-				
 			}
-			// else {
-				// $('#notif').html(dataResult.msg);
-			// }
-			
 		}
 	});
 }
@@ -542,7 +411,7 @@ function releasePIGantung(m_pi){
 		processData: false,
 		contentType: false,
 		beforeSend: function(){
-			$('#notif').html("Proses release, jangan close halaman ini sampai selesai..");
+			$('#notif').html("Proses chevck status..");
 			$(".modal").modal('hide');
 			$("#overlay").fadeIn(300);
 		},

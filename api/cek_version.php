@@ -26,9 +26,15 @@ function get_version(){
 					
 					
 }
+
+$jum = 0;
+$get_orgtype = "select count(*) jum from ad_morg where orgtype = 'oracle'";
+$orgtype = $connec->query($get_orgtype);
+foreach ($orgtype as $r){
+	$jum = $r['jum'];
+}
 			
 			$hasil = get_version(); //php curl
-				
 			$j_hasil = json_decode($hasil, true);
 				
 				
@@ -49,9 +55,9 @@ function get_version(){
 			
 				if($cv_lokal == $cv_web){
 					
-					$json = array('result'=>'1', 'version'=>$cv_web);
+					$json = array('result'=>'1', 'version'=>$cv_web, 'oracle'=>$jum);
 				}else{
-					$json = array('result'=>'0', 'version'=>$cv_web);
+					$json = array('result'=>'0', 'version'=>$cv_web, 'oracle' => $jum);
 					
 				}
 			

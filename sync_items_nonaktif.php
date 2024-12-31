@@ -25,6 +25,7 @@
 
 				<h4>SYNC ITEMS NON AKTIF SEBULAN TERAKHIR</h4>
 				<font style="color: red"> Loading check data items non active from ERP</font>
+			
 			</div>
 			<div class="card-body">
 			<div class="tables">

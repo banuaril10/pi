@@ -1,0 +1,109 @@
+<script>
+ strtext = "               Idolmart               \n\n"+
+"              Jalan Caman              \n"+
+"                Bekasi                \n"+
+"STRUK   :BOS125-00010I4DUQ      09:08:47\n"+
+"TANGGAL :22-Jul-24               Widya\n"+
+"=======================================\n"+
+"Nama Barang Qty  Harga  Disc      Total\n"+
+"=======================================\n"+
+"Paket Hanasui Flawless Glow 10 Set + Pouch\n"+
+"          238  99,500      0     99,500\n"+
+"Paket Hanasui Flawless Glow 10 Set + Pouch\n"+
+"            1  99,500      0     99,500\n"+
+"=======================================\n"+
+"TOTAL                            99,500\n"+
+"DISKON                                0\n"+
+"GRAND TOTAL                      99,500\n"+
+"BAYAR D/C                             0\n"+
+"BAYAR CASH                      100,000\n"+
+"INFAK                                 0\n"+
+"KEMBALI                             500\n"+
+"=======================================\n"+
+"DPP :     90,455    PPN :      1,990,045\n"+
+"=======================================\n"+
+"      NPWP :31.188.370.6-407.000      \n"+
+"            IDOLMART Group            \n"+
+"***************************************\n"+
+"            #TERIMA KASIH#            \n"+
+" BARANG YANG SUDAH DIBELI TIDAK DAPAT \n"+
+"         DITUKAR/DIKEMBALIKAN         \n"+
+"***************************************\r\n\r\n\r\n\r\n\r\n\r\n";
+
+<!-- function escapeRegExp(string) { -->
+  <!-- return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string -->
+<!-- } -->
+<!-- function replaceAlls(str, match, replacement){ -->
+   <!-- return str.replace(new RegExp(escapeRegExp(match), 'g'), ()=>replacement); -->
+<!-- } -->
+
+function replaceAlls(str, find, replace) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
+
+<!-- console.log(replaceAlls(strtext,'a.b.c.d.e', '.', '__')); -->
+<!-- console.log(replaceAlls(strtext,'a.b.c.d.e', '.', '$&')); -->
+
+
+
+   	 strtext = replaceAlls(strtext,'       Idolmart              ', 'Idolmart');
+	 strtext = replaceAlls(strtext,'       IDOLMART', 'IDOLMART');
+	 strtext = replaceAlls(strtext,'       Jalan','Jalan');
+	 strtext = replaceAlls(strtext,'       Jl.','Jl.');
+	 strtext = replaceAlls(strtext,'       JL.','JL.');
+	for (let i = 0; i < 10; i++) {
+         strtext = replaceAlls(strtext,'        '+i+'', i+'');
+    }
+	
+	for (let i = 24; i < 30; i++) {
+         strtext = replaceAlls(strtext,'-'+i+'           ', '-'+i+'');
+    }
+	
+	<!-- for (let i = 24; i < 30; i++) { -->
+         <!-- strtext = replaceAlls(strtext,'-'+i+'           ', '-'+i+''); -->
+    <!-- } -->
+	
+	for (let i = 1; i < 10; i++) {
+         strtext = replaceAlls(strtext,'     0'+i+':', '0'+i+':');
+        
+    }
+	
+	for (let i = 10; i < 25; i++) {
+         strtext = replaceAlls(strtext,'     '+i+':', ''+i+':');
+    }
+	
+	
+
+     strtext = replaceAlls(strtext,'STRUK   :', 'STRUK:');
+     strtext = replaceAlls(strtext,'STRUK   :', 'STRUK:');
+     strtext = replaceAlls(strtext,'KASIR      :     ', 'KASIR      :');
+     strtext = replaceAlls(strtext,' BARANG', 'BARANG');
+     strtext = replaceAlls(strtext,'TANGGAL', 'TGL ');
+     strtext = replaceAlls(strtext,'SALDO AWAL :           ', 'SALDO AWAL :');
+	 //strtext = replaceAlls(strtext,'TOTAL', 'TOTAL'); 
+	 //strtext = replaceAlls(strtext,'DISKON        ', 'DISKON'); 
+	 //strtext = replaceAlls(strtext,'BAYAR D/C        ', 'BAYAR D/C'); 
+	 //strtext = replaceAlls(strtext,'BAYAR CASH', 'BAYAR CASH');  
+	 //strtext = replaceAlls(strtext,'INFAK        ', 'INFAK'); 
+	 //strtext = replaceAlls(strtext,'KEMBALI        ', 'KEMBALI'); 
+	 strtext = replaceAlls(strtext,'MEMBER       ', 'MEMBER');
+	 strtext = replaceAlls(strtext,'POINT       ', 'POINT');
+     strtext = replaceAlls(strtext,'  PPN :    ', 'PPN :');
+	 strtext = replaceAlls(strtext,'      NPWP', 'NPWP');
+	 strtext = replaceAlls(strtext,':31.188.370.6-407.000    ', ':31.188.370.6-407.000');
+	 strtext = replaceAlls(strtext,'     IDOLMART Group   ', 'IDOLMART Group');
+	 strtext = replaceAlls(strtext,'     #TERIMA KASIH#   ', '  #TERIMA KASIH#');
+	 
+	 strtext = replaceAlls(strtext,'BARANG YANG SUDAH DIBELI TIDAK DAPAT', '     BARANG YG SUDAH DIBELI');
+	 strtext = replaceAlls(strtext,'         DITUKAR/DIKEMBALIKAN', 'TIDAK DAPAT DITUKAR/DIKEMBALIKAN');
+	 strtext = replaceAlls(strtext,'================================', '========================');
+	 strtext = strtext.replace('***************************************', '*******************************');
+	 strtext = strtext.replace('***************************************', '*******************************');
+	 strtext = strtext.replace('***************************************', '*******************************');
+	 strtext = replaceAlls(strtext,'Nama Barang', 'Brg');
+	 strtext = replaceAlls(strtext,'Disc  ', 'Disc');
+     strtext = replaceAlls(strtext,' :         ', ' : ');
+     strtext = replaceAlls(strtext,' :    ', ' : ');
+	console.log(strtext);
+	
+</script>

@@ -1,11 +1,7 @@
 <?php session_start();
 include "../config/koneksi.php";
 
-function push_to_newpos($a){
-	
-			
-		
-			
+function push_to_newpos($a){	
 	$postData = array(
 		"data" => $a,
     );				

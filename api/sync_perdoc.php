@@ -8,7 +8,6 @@ function get_data_stock_all($a, $b, $c, $d){
 		"sdate" => $b,
 		"doc_no" => $c,
 		"username" => $d,
-	
     );				    
 	// $fields_string = http_build_query($postData);
 	$curl = curl_init();

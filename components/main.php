@@ -3,6 +3,7 @@ if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 	$org_key = $_SESSION['org_key'];
 	$username = $_SESSION['username'];
 }else{
+	
 	header("Location: index.php");
 }
 
@@ -22,6 +23,7 @@ foreach ($resultss as $r) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Apps</title>
+
     <link rel="stylesheet" href="styles/css/bootstrap.css">
     <link rel="stylesheet" href="styles/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="styles/css/selectize4.css">
