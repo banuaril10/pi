@@ -716,5 +716,13 @@ foreach ($send_to_pos_dsalesline as $r) {
 }
 
 
+$remove_primary_edc_key = [
+	'ALTER TABLE pos_medc DROP CONSTRAINT pos_medc_pkey'
+];
+
+foreach ($remove_primary_edc_key as $r) {
+	$connec->exec($r);
+}
+
 ?>
 
