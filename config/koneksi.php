@@ -2,7 +2,8 @@
 date_default_timezone_set('Asia/Jakarta');
 error_reporting(0);
 
-$base_url = 'https://intransit.idolmartidolaku.com/apiidolmart';
+// $base_url = 'https://intransit.idolmartidolaku.com/apiidolmart';
+$base_url = 'https://api.idolmartidolaku.com/apiidolmart';
 // $base_url = 'https://pi.idolmartidolaku.com/api/apiidolmart';
 $ad_mclient_key = 'D089DFFA729F4A22816BD8838AB0813C';
 $key = '5ea1a9b9-f403-4175-bc49-9daa896125b3'; // Previously used in encryption 
