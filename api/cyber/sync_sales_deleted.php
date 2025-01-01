@@ -42,7 +42,7 @@ $jj_deleted = array();
 if ($tanggal != "now") {
     $list_deleted = "select * from pos_dsalesdeleted where date(insertdate) = '" . $tanggal . "' and status_intransit is null";
 } else {
-    $list_deleted = "select * from pos_dsalesdeleted where status_intransit is null";
+    $list_deleted = "select * from pos_dsalesdeleted where status_intransit is null and date(insertdate) = date(now())";
 }
 
 
