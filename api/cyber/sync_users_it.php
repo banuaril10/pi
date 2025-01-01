@@ -28,9 +28,9 @@ function get_category($url)
     curl_close($curl);
     return $response;
 }
-// $url = $base_url.'/store/users/get_users_it.php';
+$url = $base_url.'/store/users/get_users_it.php';
 // https://pi.idolmartidolaku.com/api/get_users_it.php
-$url = 'https://pi.idolmartidolaku.com/api/get_users_it.php';
+// $url = 'https://pi.idolmartidolaku.com/api/get_users_it.php';
 
 
 // echo $idstore;
