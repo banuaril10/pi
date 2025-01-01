@@ -148,6 +148,33 @@
 						</li>
 					</ul>
 				</li>
+				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Price Tag</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="mitems.php">Harga Reguler</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemsold.php">Harga Reguler Format Lama</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitems_alt.php">Harga Reguler Per Rack</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromo.php">Harga Promo</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemsspecial.php">Harga Khusus</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromocode_live.php">Harga Bertingkat</a>
+						</li>
+					</ul>
+				</li>
 
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
