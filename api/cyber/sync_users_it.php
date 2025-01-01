@@ -31,7 +31,7 @@ function get_category($url)
 
 
 $jum = 0;
-$check = $connec->query("select count(ad_morg_key) jum from ad_morg where ad_morg_key = '" . $locationid . "'");
+$check = $connec->query("select count(ad_morg_key) jum from ad_morg where ad_morg_key = '" . $idstore . "'");
 foreach ($check as $row) {
     $jum = $row["jum"];
 }
