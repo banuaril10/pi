@@ -44,9 +44,9 @@ $jj_line = array();
 
 
 if ($tanggal != "now") {
-    $list_line = "select * from pos_dsalesline where date(insertdate) = '" . $tanggal . "' and isactived = '1' and status_intransit is null ";
+    $list_line = "select * from pos_dsalesline where date(insertdate) = '" . $tanggal . "' and isactived = '1' and status_intransit is null and date(insertdate) > '2024-12-31'";
 } else {
-    $list_line = "select * from pos_dsalesline where isactived = '1' and status_intransit is null ";
+    $list_line = "select * from pos_dsalesline where isactived = '1' and status_intransit is null and date(insertdate) > '2024-12-31'";
 }
 
 

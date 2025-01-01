@@ -38,10 +38,9 @@ function push_to_header($url, $header, $idstore)
 $jj_header = array();
 
 if($tanggal != "now"){
-    $list_header = "select * from pos_dsales where date(insertdate) = '" . $tanggal . "' 
-    and isactived = '1' and status_intransit is null";
+    $list_header = "select * from pos_dsales where date(insertdate) = '" . $tanggal . "' and isactived = '1' and status_intransit is null and date(insertdate) > '2024-12-31'";
 }else{
-    $list_header = "select * from pos_dsales where isactived = '1' and status_intransit is null";
+    $list_header = "select * from pos_dsales where isactived = '1' and status_intransit is null and date(insertdate) > '2024-12-31'";
 }
 
 
