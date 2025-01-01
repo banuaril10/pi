@@ -106,6 +106,23 @@
 					</ul>
 				</li>
 
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-gift"></i>
+						<span>Promo</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="cek_promo.php">Reguler & Code</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="cek_promo_grosir.php">Grosir</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="cek_promo_buyget.php">Buy & Get</a>
+						</li>
+					</ul>
+				</li>
 
 				<li class="sidebar-item">
 					<a href="mitemspromo_live.php" class='sidebar-link'>
