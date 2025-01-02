@@ -46,6 +46,16 @@ foreach ($j_hasil as $key => $value) {
     $isactived = $value['isactived'];
     
     //update pos_product
+
+    //dikurang sales hari ini dari table pos_salesline
+    $sql = "select sum(qty) as qty from pos_dsalesline where sku = '".$itemsid."' and date(insertdate) = date(now())";
+    $query = $connec->query($sql);
+    $qty = 0;
+    foreach ($query as $row) {
+        $qty = $row['qty'];
+    }
+    $stock = $stock - $qty;
+
     
     $update = "UPDATE pos_mproduct SET stockqty = '".$stock."', postdate = '".date('Y-m-d H:i:s')."' WHERE sku = '".$itemsid."'";
     $result = $connec->exec($update);
