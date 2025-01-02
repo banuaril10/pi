@@ -41,7 +41,7 @@
 					
 						
 						<?php 
-						$sql_list = "select * from m_pi_users order by username asc";
+						$sql_list = "select * from ad_muser order by username asc";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
 						
@@ -50,8 +50,8 @@
 						
 							<tr>
 								<th scope="row"><?php echo $no; ?></th>
-								<td><?php echo $row['username']; ?></td>
-								<td><?php echo $row['name']; ?> </td>
+								<td><?php echo $row['userid']; ?></td>
+								<td><?php echo $row['username']; ?> </td>
 								
 				
 								

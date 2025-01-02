@@ -16,6 +16,14 @@
 			<ul class="menu">
 				<li class="sidebar-title">Menu</li>
 				
+				
+				<li class="sidebar-item">
+					<a href="muser.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>User POS</span>
+					</a>
+				</li>
+				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-camera"></i>
@@ -105,7 +113,7 @@
 						</li>
 					</ul>
 				</li>
-
+				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-gift"></i>
@@ -123,6 +131,7 @@
 						</li>
 					</ul>
 				</li>
+
 
 				<li class="sidebar-item">
 					<a href="mitemspromo_live.php" class='sidebar-link'>
