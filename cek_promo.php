@@ -32,7 +32,7 @@
 			
 			<div class="card-body">
 			
-			<button type="button" onclick="syncPromo();" class="btn btn-primary">Sync Promo</button>
+			<!--<button type="button" onclick="syncPromo();" class="btn btn-primary">Sync Promo</button>-->
 			
 			<div class="tables">	
 			<p id="notif" style="color: red; font-weight: bold"></p>
