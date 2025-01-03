@@ -202,11 +202,11 @@
 						
 						
 						
-						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name,a.barcode, a.price, a.tag from ".$table." a left join inv_mproduct b on a.sku = b.sku where a.sku != '' ";
+						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,a.rack,a.barcode, a.price, a.tag from ".$table." a where a.sku != '' ";
 						
 						if($_GET['rak'] && !empty($_GET['rak'])){
 							
-							$sql_list .= " and b.rack_name = '".$_GET['rak']."'";
+							$sql_list .= " and a.rack = '".$_GET['rak']."'";
 							
 						}
 						
@@ -245,7 +245,7 @@
 								
 								<td><?php echo $harga_last; ?></td>
 								
-								<td><?php echo $row['rack_name']; ?></td>
+								<td><?php echo $row['rack']; ?></td>
 								<td><?php echo $row['tag']; ?></td>
 								
 							</tr>
