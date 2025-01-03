@@ -119,10 +119,10 @@
 					<td><select id="rak" name="rak" class="form-control text-search">
 				<option value="">Pilih Rack</option>
 					<?php 
-						$rack = "select rack_name from inv_mproduct group by rack_name order by rack_name";
+						$rack = "select rack from pos_mproduct where rack != '' group by rack";
 						$no = 1;
 						foreach ($connec->query($rack) as $sr) { ?>
-							<option value="<?php echo $sr['rack_name']; ?>"><?php echo $sr['rack_name']; ?></option>
+							<option value="<?php echo $sr['rack']; ?>"><?php echo $sr['rack']; ?></option>
 							
 						
 						<?php } ?>
@@ -168,11 +168,11 @@
 						<?php 
 						
 						
-						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,b.rack_name, a.price, a.barcode, a.tag from pos_mproduct a left join inv_mproduct b on a.sku = b.sku where a.sku != ''";
+						$sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,a.rack, a.price, a.barcode, a.tag from pos_mproduct a where a.sku != ''";
 						
 						if($_GET['rak'] && !empty($_GET['rak'])){
 							
-							$sql_list .= " and b.rack_name = '".$_GET['rak']."'";
+							$sql_list .= " and a.rack = '".$_GET['rak']."'";
 							
 						}
 						
@@ -208,7 +208,7 @@
 								<td><?php echo $row['name']; ?></td>
 								<td><?php echo $row['price']; ?></td>
 								<td><?php echo $harga_last; ?></td>
-								<td><?php echo $row['rack_name']; ?></td>
+								<td><?php echo $row['rack']; ?></td>
 								<td><?php echo $row['tag']; ?></td>
 								<td><input type="number" id="copy<?php echo $row['sku']; ?>" value="1"></td>
 								
