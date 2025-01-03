@@ -119,10 +119,10 @@
 					<td><select id="rak" name="rak" class="form-control text-search">
 				<option value="">Pilih Rack</option>
 					<?php 
-						$rack = "select rack_name from inv_mproduct group by rack_name order by rack_name";
+						$rack = "select rack from pos_mproduct where rack != '' group by rack";
 						$no = 1;
 						foreach ($connec->query($rack) as $sr) { ?>
-							<option value="<?php echo $sr['rack_name']; ?>"><?php echo $sr['rack_name']; ?></option>
+							<option value="<?php echo $sr['rack']; ?>"><?php echo $sr['rack']; ?></option>
 							
 						
 						<?php } ?>
