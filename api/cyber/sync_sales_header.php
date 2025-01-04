@@ -39,9 +39,9 @@ $jj_header = array();
 
 if($tanggal != "now"){
     $list_header = "select * from pos_dsales where date(insertdate) = '" . $tanggal . "' 
-    and isactived = '1' and status_intransit is null";
+    and isactived = '1' and status_intransit is null and ad_morg_key is not null";
 }else{
-    $list_header = "select * from pos_dsales where isactived = '1' and status_intransit is null and date(insertdate) = date(now())";
+    $list_header = "select * from pos_dsales where isactived = '1' and status_intransit is null and date(insertdate) = date(now()) and ad_morg_key is not null";
 }
 
 
