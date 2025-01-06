@@ -2,6 +2,8 @@
 date_default_timezone_set('Asia/Jakarta');
 error_reporting(0);
 
+ini_set('max_execution_time', '600');
+
 // $base_url = 'https://intransit.idolmartidolaku.com/apiidolmart';
 $base_url = 'https://api.idolmartidolaku.com/apiidolmart';
 // $base_url = 'https://pi.idolmartidolaku.com/api/apiidolmart';
