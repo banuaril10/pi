@@ -99,7 +99,7 @@ function cekVersion(){
 			if(dataResults.result=='1'){
 				$('#notif1').html("<font style='color: green'>Version up to date (ver "+dataResults.version+") "+
 				"<a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp "+
-				"<button type='button' onclick='updateVersion();' class='btn btn-danger'>Update</button></font> ");
+				"</font> ");
 				$(':input[type="submit"]').prop('disabled', false);
 			}else{
 				
@@ -112,8 +112,7 @@ function cekVersion(){
 					
 				}
 				
-				$('#notif1').html(msg+" <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp <button type='button'"+
-					"onclick='updateVersion();' class='btn btn-danger'>Update</button> ");
+				$('#notif1').html(msg+" <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp");
 				// $(':input[type="submit"]').prop('disabled', true);
 				$(':input[type="submit"]').prop('disabled', false);
 			}
