@@ -33,6 +33,18 @@ $hasil = get($url);
 $j_hasil = json_decode($hasil, true);
 $items_updated = 0;
 $s = array();
+
+$arr_qty_sales = array();
+
+$sql = "select sku, sum(qty) as qty from pos_dsalesline where date(insertdate) = date(now()) group by sku";
+$query = $connec->query($sql);
+
+foreach ($query as $row) {
+    $arr_qty_sales[$row['sku']] = $row['qty'];
+}
+
+
+
 foreach ($j_hasil as $key => $value) {
     $itemsid = $value['itemsid'];
     $id = $value['id'];
@@ -48,17 +60,16 @@ foreach ($j_hasil as $key => $value) {
     //update pos_product
 
     //dikurang sales hari ini dari table pos_salesline
-    $sql = "select sum(qty) as qty from pos_dsalesline where sku = '".$itemsid."' and date(insertdate) = date(now())";
-    $query = $connec->query($sql);
     $qty = 0;
-    foreach ($query as $row) {
-        $qty = $row['qty'];
+    if (isset($arr_qty_sales[$itemsid])) {
+        $qty = $arr_qty_sales[$itemsid];
     }
+    
     $stock = $stock - $qty;
 
     
     $update = "UPDATE pos_mproduct SET stockqty = '".$stock."', postdate = '".date('Y-m-d H:i:s')."' WHERE sku = '".$itemsid."'";
-    $result = $connec->exec($update);
+    $result = $connec->query($update);
    
     if ($result) {
         $items_updated++;
