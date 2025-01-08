@@ -111,6 +111,10 @@
 						<li class="submenu-item ">
 							<a href="sync_function.php">Sync Function</a>
 						</li>
+						
+						<li class="submenu-item ">
+							<a href="sync.php">Sync All</a>
+						</li>
 					</ul>
 				</li>
 				
