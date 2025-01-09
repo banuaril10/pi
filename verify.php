@@ -57,7 +57,7 @@
 						// from m_pi where m_pi.status in ('2','3') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$sql_list = "select m_pi_key, m_pi.name ,m_pi.insertdate, m_pi.rack_name, m_pi.insertby, m_pi.status,m_pi. m_locator_id, m_pi.inventorytype
-						from m_pi where m_pi.status in ('2','3') and inventorytype = 'Daily' and date(insertdate) = date(now()) order by insertdate desc";
+						from m_pi where m_pi.status in ('2','3') and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {

@@ -203,6 +203,18 @@
 						</li>
 					</ul>
 				</li>
+				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-file-bar-graph"></i>
+						<span>Report</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="report_sales_item_today.php">Sales Items Today</a>
+						</li>
+					</ul>
+				</li>
 
 				<li class="sidebar-item">
 					<a href="logout.php" class='sidebar-link'>

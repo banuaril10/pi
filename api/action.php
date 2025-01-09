@@ -328,6 +328,17 @@ if ($_GET['modul'] == 'inventory') {
 					$total = 0;
 
 					$j_hasil = json_decode($hasil, true);
+					
+					
+					$arr_qty_sales = array();
+
+					$sql = "select sku, sum(qty) as qty from pos_dsalesline where date(insertdate) = date(now()) group by sku";
+					$query = $connec->query($sql);
+
+					foreach ($query as $row) {
+						$arr_qty_sales[$row['sku']] = $row['qty'];
+					}
+					
 
 					foreach ($j_hasil as $r) {
 						$qtyon = $r['qtyon'];
@@ -339,14 +350,19 @@ if ($_GET['modul'] == 'inventory') {
 						$namaitem = $r['namaitem'];
 						$barcode = $r['barcode'];
 
-						$sql_sales = "select case when sum(qty) is null THEN '0' ELSE sum(qty) END as qtysales from pos_dsalesline 
-						where date(insertdate)=date(now()) and sku='" . $r['sku'] . "'";
+						// $sql_sales = "select case when sum(qty) is null THEN '0' ELSE sum(qty) END as qtysales from pos_dsalesline 
+						// where date(insertdate)=date(now()) and sku='" . $r['sku'] . "'";
 
-						$rsa = $connec->query($sql_sales);
+						// $rsa = $connec->query($sql_sales);
+						// $qtysales = 0;
+						// foreach ($rsa as $rsa1) {
+
+							// $qtysales = $rsa1['qtysales'];
+						// }
+						
 						$qtysales = 0;
-						foreach ($rsa as $rsa1) {
-
-							$qtysales = $rsa1['qtysales'];
+						if (isset($arr_qty_sales[$sku])) {
+							$qtysales = $arr_qty_sales[$sku];
 						}
 
 						$cek_count = "select qtycount from m_piline where sku = '" . $r['sku'] . "' and date(insertdate)=date(now())"; //mencari apakah items sdh ada di rack piline
