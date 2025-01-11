@@ -23,6 +23,7 @@ const btnproductbarcode = document.getElementById("btnproductbarcode");
 const btnproductshortcut = document.getElementById("btnproductshortcut");
 const btnproductpricesync = document.getElementById("btnproductpricesync");
 const btnracksync = document.getElementById("btnracksync");
+const btnsynclpk = document.getElementById("btnsynclpk");
 
 btnproductpricesync.addEventListener("click", async function (event) {
   $("#loaderpos").show();
@@ -356,6 +357,67 @@ function sync_items() {
   });
 }
 
+
+
+
+
+
+function syncSalesHeader() {
+  var date = $("#date").val();
+  var url = "api/cyber/sync_sales_header.php?date=" + date;
+  $.get(url, function (data, status) {
+    console.log(data);
+    // alert("Proses sync, klik tombol refresh setelah beberapa saat..");
+  });
+}
+
+function syncSalesLine() {
+  var date = $("#date").val();
+  var url = "api/cyber/sync_sales_line.php?date=" + date;
+  $.get(url, function (data, status) {
+    console.log(data);
+    // alert("Proses sync, klik tombol refresh setelah beberapa saat..");
+  });
+}
+
+function syncSalesCashierBalance() {
+  var date = $("#date").val();
+  var url =
+    "api/cyber/sync_sales_cashierbalance.php?date=" + date;
+  $.get(url, function (data, status) {
+    console.log(data);
+    // alert("Proses sync, klik tombol refresh setelah beberapa saat..");
+  });
+}
+
+function syncSalesDeleted() {
+  var date = $("#date").val();
+  var url =
+    "api/cyber/sync_sales_deleted.php?date=" + date;
+  $.get(url, function (data, status) {
+    console.log(data);
+    // alert("Proses sync, klik tombol refresh setelah beberapa saat..");
+  });
+}
+
+function syncSalesShopSales() {
+  var date = $("#date").val();
+  var url =
+    "api/cyber/sync_sales_shopsales.php?date=" + date;
+  $.get(url, function (data, status) {
+    console.log(data);
+    // alert("Proses sync, klik tombol refresh setelah beberapa saat..");
+  });
+}
+
+
+function syncSalesAuto() {
+  syncSalesHeader();
+  syncSalesLine();
+  syncSalesCashierBalance();
+  syncSalesDeleted();
+  syncSalesShopSales();
+}
 
 
 

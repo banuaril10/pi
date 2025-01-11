@@ -34,7 +34,7 @@
               <p id="notif" style="color: red; font-weight: bold"></p>
               <!--<button onclick="turnOn();" class="switch">On</button>
             <button onclick="turnOff();" class="switch1">Off</button>
-            
+				
             
             <div id="qr-reader" style="width: 100%"></div>-->
 
@@ -255,6 +255,21 @@
                     </div>
                   </div>
                   <br>
+
+					
+					
+					
+					
+
+				 <div class="row">
+				  <div class="col-md-6">
+                     <input type="date" class="form-control" id="date" value="<?php echo date('Y-m-d'); ?>">
+                    </div>
+                    <div class="col-md-6">
+                      <button type="button" id="btnsynclpk" class="btn btn-danger btn-lg btn-block">Sync LPK</button>
+                    </div>
+                  </div>
+
 
 
                 </div>
