@@ -89,7 +89,7 @@ foreach ($result as $row) {
 
     );
 
-    $sql_line = "select m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='" . $pi_key . "' and m_piline.issync =0";
+    $sql_line = "select distinct m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='" . $pi_key . "' and m_piline.issync =0";
 
 
 
@@ -127,7 +127,7 @@ foreach ($result as $row) {
     
     $items_json = json_encode($allarray);
 
-	var_dump($items_json);
+	// var_dump($items_json);
 
     $hasil = piline_semua($url, $items_json);
     // var_dump($hasil);
