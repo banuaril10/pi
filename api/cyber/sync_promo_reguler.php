@@ -34,6 +34,11 @@ $j_hasil = json_decode($hasil, true);
 try {
 
     $s = array();
+
+    $truncate = "TRUNCATE pos_mproductdiscount";
+    $statement = $connec->prepare($truncate);
+    $statement->execute();
+
     foreach ($j_hasil as $key => $value) {
         $amk = $value['ad_morg_key'];
         $isactived = $value['isactived'];
@@ -50,7 +55,9 @@ try {
         $jenis_promo = $value['jenis_promo'];
 
 
-        $s[] = "('" . $ad_mclient_key . "', 
+        $insert = "insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, 
+        fromdate, todate, typepromo, maxqty, jenis_promo) 
+						VALUES ('" . $ad_mclient_key . "', 
     '" . $amk . "', 
     '" . $isactived . "', 
     '" . date("Y-m-d H:i:s") . "',
@@ -66,32 +73,53 @@ try {
      '" . $maxqty . "',
      '" . $jenis_promo . "'
      
-     )";
+     );";
+
+
+        $statement = $connec->prepare($insert);
+        $statement->execute();
+
+
+    //     $s[] = "('" . $ad_mclient_key . "', 
+    // '" . $amk . "', 
+    // '" . $isactived . "', 
+    // '" . date("Y-m-d H:i:s") . "',
+    // '" . date("Y-m-d H:i:s") . "', 
+    // '" . $insertby . "',
+    //  '" . $discountname . "', 
+    //  '" . $discounttype . "',
+    //  '" . $sku . "', 
+    //  '" . $discount . "', 
+    //  '" . $fromdate . "', 
+    //  '" . $todate . "', 
+    //  '" . $typepromo . "', 
+    //  '" . $maxqty . "',
+    //  '" . $jenis_promo . "'
+     
+    //  )";
 
     }
 
-    if ($s == null) {
-        $json = array(
-            "status" => "FAILED",
-            "message" => "Data Not Found",
-        );
-        echo json_encode($json);
-        die();
-    }
+    // if ($s == null) {
+    //     $json = array(
+    //         "status" => "FAILED",
+    //         "message" => "Data Not Found",
+    //     );
+    //     echo json_encode($json);
+    //     die();
+    // }
 
     //truncate
-    $truncate = "TRUNCATE pos_mproductdiscount";
-    $statement = $connec->prepare($truncate);
-    $statement->execute();
+    
 
-    $values = implode(", ", $s);
-    $insert = "insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, 
-fromdate, todate, typepromo, maxqty, jenis_promo) 
-						VALUES " . $values . ";";
+    // $values = implode(", ", $s);
+//     $insert = "insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, 
+// fromdate, todate, typepromo, maxqty, jenis_promo) 
+// 						VALUES " . $values . ";";
 
-    $statement = $connec->prepare($insert);
-    $statement->execute();
-    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+//     $statement = $connec->prepare($insert);
+//     $statement->execute();
+//     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     if ($result) {
         $json = array(
