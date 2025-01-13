@@ -121,17 +121,17 @@ try {
 //     $statement->execute();
 //     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($result) {
+    // if ($result) {
         $json = array(
             "status" => "OK",
             "message" => "Data Inserted",
         );
-    } else {
-        $json = array(
-            "status" => "FAILED",
-            "message" => "Data Not Inserted, Query = " . $insert,
-        );
-    }
+    // } else {
+    //     $json = array(
+    //         "status" => "FAILED",
+    //         "message" => "Data Not Inserted, Query = " . $insert,
+    //     );
+    // }
 
     echo json_encode($json);
 
