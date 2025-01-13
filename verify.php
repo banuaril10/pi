@@ -369,7 +369,7 @@ function releasePI(m_pi){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
 
-			location.reload();
+			// location.reload();
 
 			// if(dataResult.result=='OK'){
 			// 	updateStatusRelease(m_pi);
