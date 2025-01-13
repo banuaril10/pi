@@ -133,7 +133,7 @@ foreach ($result as $row) {
 
     $j_hasil = json_decode($hasil, true);
 
-    // print_r($j_hasil['data']);
+    print_r($j_hasil['data']);
 
     if (!empty($j_hasil['data'])) {
         $connec->query("update m_pi set status = '3' where m_pi_key ='" . $pi_key . "'");
