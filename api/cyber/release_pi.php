@@ -39,7 +39,7 @@ $items = array();
 $pi_key = $_POST['m_pi'];
 $sql = "select * from m_pi where m_pi_key ='" . $pi_key . "'";
 $result = $connec->query($sql);
-echo "select * from m_pi where m_pi_key ='" . $pi_key . "'";
+// echo "select * from m_pi where m_pi_key ='" . $pi_key . "'";
 
 foreach ($result as $row) {
 	
@@ -127,7 +127,7 @@ foreach ($result as $row) {
     
     $items_json = json_encode($allarray);
 
-
+	var_dump($items_json);
 
     $hasil = piline_semua($url, $items_json);
     // var_dump($hasil);
