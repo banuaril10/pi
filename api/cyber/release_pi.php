@@ -39,7 +39,11 @@ $items = array();
 $pi_key = $_POST['m_pi'];
 $sql = "select * from m_pi where m_pi_key ='" . $pi_key . "'";
 $result = $connec->query($sql);
+
+
 foreach ($result as $row) {
+	
+	print_r($row);
 
     $a = $row['ad_client_id'];
     $b = $row['ad_org_id'];
@@ -133,7 +137,7 @@ foreach ($result as $row) {
 
     $j_hasil = json_decode($hasil, true);
 
-    print_r($j_hasil['data']);
+    // print_r($j_hasil['data']);
 
     if (!empty($j_hasil['data'])) {
         $connec->query("update m_pi set status = '3' where m_pi_key ='" . $pi_key . "'");
