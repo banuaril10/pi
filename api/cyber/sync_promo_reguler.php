@@ -26,7 +26,7 @@ function get_category($url)
     curl_close($curl);
     return $response;
 }
-$url = $base_url.'/store/promo/get_promo_reguler.php?idstore='. $idstore;
+$url = $base_url . '/store/promo/get_promo_reguler.php?idstore=' . $idstore;
 
 $hasil = get_category($url);
 $j_hasil = json_decode($hasil, true);
@@ -34,6 +34,17 @@ $j_hasil = json_decode($hasil, true);
 try {
 
     $s = array();
+
+    //if j_hasil exist, truncate
+
+    if ($j_hasil == null) {
+        $json = array(
+            "status" => "FAILED",
+            "message" => "Data Not Found",
+        );
+        echo json_encode($json);
+        die();
+    }
 
     $truncate = "TRUNCATE pos_mproductdiscount";
     $statement = $connec->prepare($truncate);
@@ -80,23 +91,23 @@ try {
         $statement->execute();
 
 
-    //     $s[] = "('" . $ad_mclient_key . "', 
-    // '" . $amk . "', 
-    // '" . $isactived . "', 
-    // '" . date("Y-m-d H:i:s") . "',
-    // '" . date("Y-m-d H:i:s") . "', 
-    // '" . $insertby . "',
-    //  '" . $discountname . "', 
-    //  '" . $discounttype . "',
-    //  '" . $sku . "', 
-    //  '" . $discount . "', 
-    //  '" . $fromdate . "', 
-    //  '" . $todate . "', 
-    //  '" . $typepromo . "', 
-    //  '" . $maxqty . "',
-    //  '" . $jenis_promo . "'
-     
-    //  )";
+        //     $s[] = "('" . $ad_mclient_key . "', 
+        // '" . $amk . "', 
+        // '" . $isactived . "', 
+        // '" . date("Y-m-d H:i:s") . "',
+        // '" . date("Y-m-d H:i:s") . "', 
+        // '" . $insertby . "',
+        //  '" . $discountname . "', 
+        //  '" . $discounttype . "',
+        //  '" . $sku . "', 
+        //  '" . $discount . "', 
+        //  '" . $fromdate . "', 
+        //  '" . $todate . "', 
+        //  '" . $typepromo . "', 
+        //  '" . $maxqty . "',
+        //  '" . $jenis_promo . "'
+
+        //  )";
 
     }
 
@@ -110,22 +121,22 @@ try {
     // }
 
     //truncate
-    
+
 
     // $values = implode(", ", $s);
 //     $insert = "insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, 
 // fromdate, todate, typepromo, maxqty, jenis_promo) 
 // 						VALUES " . $values . ";";
 
-//     $statement = $connec->prepare($insert);
+    //     $statement = $connec->prepare($insert);
 //     $statement->execute();
 //     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     // if ($result) {
-        $json = array(
-            "status" => "OK",
-            "message" => "Data Inserted",
-        );
+    $json = array(
+        "status" => "OK",
+        "message" => "Data Inserted",
+    );
     // } else {
     //     $json = array(
     //         "status" => "FAILED",
@@ -135,7 +146,7 @@ try {
 
     echo json_encode($json);
 
-}catch (Exception $e) {
+} catch (Exception $e) {
     $json = array(
         "status" => "FAILED",
         "message" => $e->getMessage(),
