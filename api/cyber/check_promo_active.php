@@ -26,45 +26,49 @@ $no_berakhir = 1;
 
 
 $promo_mulai = $connec->query("SELECT fromdate, todate, discountname, COUNT(sku) AS jum
-FROM pos_mproductdiscount WHERE fromdate = '".$tommorow."' group by fromdate, todate, discountname");
+FROM pos_mproductdiscount WHERE fromdate = '" . $tommorow . "' group by fromdate, todate, discountname");
 foreach ($promo_mulai as $row) {
-    $discountmul_arr[] = array('discountname'=>$row["discountname"], 'jum'=>$row["jum"]);
+    $discountmul_arr[] = array('discountname' => $row["discountname"], 'jum' => $row["jum"]);
     $jum_mulai += $row["jum"];
 
-    $nama_promo_mulai .= '-'.$row["discountname"];
+    $nama_promo_mulai .= '-' . $row["discountname"];
 
 
     //format date d F Y
-    $text_periode = date("d F Y", strtotime($row['fromdate']))." s.d. ".date("d F Y", strtotime($row['todate']));
+    $text_periode = date("d F Y", strtotime($row['fromdate'])) . " s.d. " . date("d F Y", strtotime($row['todate']));
 
-    $text_mulai .= $no_mulai.'. '.$row["discountname"]." Periode ". $text_periode." <br> ";
-    $list_promo =  $connec->query("select * from pos_mproductdiscount where discountname = '".$row["discountname"]."' and fromdate = '".$tommorow."'");
+    $text_mulai .= $no_mulai . '. ' . $row["discountname"] . " Periode " . $text_periode . " <br> ";
+    $list_promo = $connec->query("select * from pos_mproductdiscount where discountname = '" . $row["discountname"] . "' and fromdate = '" . $tommorow . "'");
     foreach ($list_promo as $row_list) {
 
 
         $name = "";
         $rack = "";
+        $barcode = "";
         $price = 0;
         //get name product
-        $product = $connec->query("select price, rack, name from pos_mproduct where sku = '" . $row_list["sku"] . "'");
+        $product = $connec->query("select price, rack, name, barcode from pos_mproduct where sku = '" . $row_list["sku"] . "'");
         foreach ($product as $row_product) {
             $name = $row_product["name"];
             $rack = $row_product["rack"];
             $price = $row_product["price"];
+            $barcode = $row_product["barcode"];
         }
 
         $after_discount = $price - $row_list["discount"];
 
 
         $list_discountmul_arr[] = array(
-            'sku'=>$row_list["sku"], 
-            'name'=>$name,
+            'sku' => $row_list["sku"],
+            'barcode' => $barcode,
+            'name' => $name,
             'rack' => $rack,
             'price' => $price,
             'afterdiscount' => $after_discount,
-            'discountname'=>$row_list["discountname"], 
-            'fromdate'=>$row_list["fromdate"], 
-            'todate'=>$row_list["todate"]);
+            'discountname' => $row_list["discountname"],
+            'fromdate' => $row_list["fromdate"],
+            'todate' => $row_list["todate"]
+        );
     }
 
     $no_mulai++;
@@ -76,39 +80,43 @@ $promo_berakhir = $connec->query("SELECT fromdate, todate, discountname, COUNT(s
 FROM pos_mproductdiscount
 WHERE todate = '" . $tommorow . "' group by fromdate, todate, discountname");
 foreach ($promo_berakhir as $row) {
-    $discountber_arr[] = array('discountname'=>$row["discountname"], 'jum'=>$row["jum"]);
+    $discountber_arr[] = array('discountname' => $row["discountname"], 'jum' => $row["jum"]);
     $jum_berakhir += $row["jum"];
 
     $nama_promo_berakhir .= '-' . $row["discountname"];
 
     //format date d F Y
-    $text_periode = date("d F Y", strtotime($row['fromdate']))." s.d. ".date("d F Y", strtotime($row['todate']));
-    $text_berakhir .= $no_berakhir.'. '.$row["discountname"]." Periode " . $text_periode . " <br> ";
-    $list_promo =  $connec->query("select * from pos_mproductdiscount where discountname = '".$row["discountname"]."' and todate = '".$tommorow."'");
+    $text_periode = date("d F Y", strtotime($row['fromdate'])) . " s.d. " . date("d F Y", strtotime($row['todate']));
+    $text_berakhir .= $no_berakhir . '. ' . $row["discountname"] . " Periode " . $text_periode . " <br> ";
+    $list_promo = $connec->query("select * from pos_mproductdiscount where discountname = '" . $row["discountname"] . "' and todate = '" . $tommorow . "'");
     foreach ($list_promo as $row_list) {
 
         $name = "";
         $rack = "";
         $price = 0;
         //get name product
-        $product = $connec->query("select price, rack, name from pos_mproduct where sku = '" . $row_list["sku"] . "'");
+        $product = $connec->query("select price, rack, name, barcode from pos_mproduct where sku = '" . $row_list["sku"] . "'");
         foreach ($product as $row_product) {
             $name = $row_product["name"];
             $rack = $row_product["rack"];
             $price = $row_product["price"];
+            $barcode = $row_product["barcode"];
+
         }
 
         $after_discount = $price - $row_list["discount"];
 
         $list_discountber_arr[] = array(
-            'sku'=>$row_list["sku"], 
-            'name'=>$name,
-            'rack'=>$rack,
-            'price'=>$price,
-            'afterdiscount'=>$after_discount,
-            'discountname'=>$row_list["discountname"], 
-            'fromdate'=>$row_list["fromdate"], 
-            'todate'=>$row_list["todate"]);
+            'sku' => $row_list["sku"],
+            'barcode' => $barcode,
+            'name' => $name,
+            'rack' => $rack,
+            'price' => $price,
+            'afterdiscount' => $after_discount,
+            'discountname' => $row_list["discountname"],
+            'fromdate' => $row_list["fromdate"],
+            'todate' => $row_list["todate"]
+        );
     }
     $no_berakhir++;
 }

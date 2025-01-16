@@ -46,7 +46,7 @@ try {
         die();
     }
 
-    $truncate = "TRUNCATE pos_mproductdiscount";
+    $truncate = "TRUNCATE table pos_mproductdiscount";
     $statement = $connec->prepare($truncate);
     $statement->execute();
 
