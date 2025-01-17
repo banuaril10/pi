@@ -4,8 +4,20 @@
 // SELECT pos_dshopsales_key, ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, postdate, pos_mshift_key, ad_muser_key, salesdate, closedate, balanceamount, salesamount, salescashamount, salesdebitamount, salescreditamount, status, actualamount, remark, issync, refundamount, discountamount, cancelcount, cancelamount, donasiamount, variantmin, variantplus, pointamount, pointdebitamout, pointcreditamount, status_intransit
 // FROM public.pos_dshopsales;
 
+$date_awal = $_GET['date_awal'];
+$date_akhir = $_GET['date_akhir'];
 
-$query = "SELECT * FROM pos_dshopsales WHERE isactived = '1' order by date(insertdate) desc";
+
+$query = "SELECT * FROM pos_dshopsales WHERE isactived = '1' ";
+
+if ($date_awal != '' && $date_akhir != '') {
+    $query .= " and date(insertdate) between '$date_awal' and '$date_akhir' ";
+} else {
+    $query .= " and date(insertdate) = date(now()) ";
+}
+
+$query .= ' order by date(insertdate) desc';
+
 
 $json = array();
 $no = 1;

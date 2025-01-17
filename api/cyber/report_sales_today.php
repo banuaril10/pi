@@ -13,8 +13,21 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 //group by date(insertdate)
 $json = array();
-$groupdate = "SELECT date(insertdate) as date FROM pos_dsales WHERE isactived = '1' and ad_morg_key = '".$ad_org_id."' group by date(insertdate) order by 
-date(insertdate) desc";
+
+$date_awal = $_GET['date_awal'];
+$date_akhir = $_GET['date_akhir'];
+
+$groupdate = "SELECT date(insertdate) as date FROM pos_dsales WHERE isactived = '1' and ad_morg_key = '".$ad_org_id."' ";
+
+if ($date_awal != '' && $date_akhir != '') {
+    $groupdate .= " and date(insertdate) between '$date_awal' and '$date_akhir' ";
+} else {
+    $groupdate .= " and date(insertdate) = date(now()) ";
+}
+
+$groupdate .= ' group by date(insertdate) order by date(insertdate) desc';
+
+
 $statement_groupdate = $connec->query($groupdate);
 foreach ($statement_groupdate as $r_groupdate) {
     $date = $r_groupdate['date'];

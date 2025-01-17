@@ -1,6 +1,18 @@
 <?php include "../../config/koneksi.php";
 //get
-$query = "SELECT * FROM pos_dcashierbalance WHERE isactived = '1' and status = 'DONE' order by date(insertdate) desc";
+
+$date_awal = $_GET['date_awal'];
+$date_akhir = $_GET['date_akhir'];
+
+$query = "SELECT * FROM pos_dcashierbalance WHERE isactived = '1' and status = 'DONE' ";
+
+if ($date_awal != '' && $date_akhir != '') {
+    $query .= " and date(insertdate) between '$date_awal' and '$date_akhir' ";
+} else {
+    $query .= " and date(insertdate) = date(now()) ";
+}
+
+$query .= ' order by date(insertdate) desc';
 
 $json = array();
 $no = 1;

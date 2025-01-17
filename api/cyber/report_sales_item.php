@@ -1,21 +1,23 @@
 <?php include "../../config/koneksi.php";
 //get
 
-$tgl_filter = $_GET['date'];
+$date_awal = $_GET['date_awal'];
+$date_akhir = $_GET['date_akhir'];
+
 
 $query = "SELECT date(a.insertdate) date, a.sku, b.name, sum(a.qty) qty, sum(a.price * a.qty) amount FROM pos_dsalesline a 
 left join pos_mproduct b on a.sku = b.sku where a.sku != '' ";
 
 
-if ($tgl_filter != "") {
-    $query .= " and date(a.insertdate) = '".$tgl_filter."' ";
+if ($date_awal != '' && $date_akhir != '' ) {
+    $query .= " and date(a.insertdate) between '$date_awal' and '$date_akhir' ";
 }else{
     $query .= " and date(a.insertdate) = date(now()) ";
 }
 
 
-$query .= ' group by date(a.insertdate), a.sku, b.name
-order by date(a.insertdate) desc';
+$query .= ' group by a.sku, b.name
+order by b.name asc';
 
 // echo $query;
 

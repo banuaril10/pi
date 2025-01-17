@@ -3,10 +3,23 @@
 
 // SELECT pos_dsalesdeleted_key, ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, postdate, ad_muser_key, pos_dcashierbalance_key, sku, qty, price, discount, billno, approvedby, issync, status_intransit
 // FROM public.pos_dsalesdeleted;
+$date_awal = $_GET['date_awal'];
+$date_akhir = $_GET['date_akhir'];
 
+$query = "SELECT * FROM pos_dsalesdeleted WHERE isactived = '1' ";
+$query_qty = "SELECT * FROM pos_dsalesqtylog WHERE isactived = '1' ";
 
-$query = "SELECT * FROM pos_dsalesdeleted WHERE isactived = '1' order by date(insertdate) desc";
-$query_qty = "SELECT * FROM pos_dsalesqtylog WHERE isactived = '1' order by date(insertdate) desc";
+if ($date_awal != '' && $date_akhir != '') {
+    $query .= " and date(insertdate) between '$date_awal' and '$date_akhir' ";
+    $query_qty .= " and date(insertdate) between '$date_awal' and '$date_akhir' ";
+} else {
+    $query .= " and date(insertdate) = date(now()) ";
+    $query_qty .= " and date(insertdate) = date(now()) ";
+}
+
+$query .= ' order by date(insertdate) desc';
+$query_qty .= ' order by date(insertdate) desc';
+
 
 
 

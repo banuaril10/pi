@@ -47,9 +47,16 @@
 
 		
 				<div class="form-group">
-					<label for="date">Date</label>
+					<label for="date">From Date</label>
 					<input type="date" class="form-control" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
 				</div>
+
+
+				<div class="form-group">
+					<label for="date">To Date</label>
+					<input type="date" class="form-control" id="todate" name="date" value="<?php echo date('Y-m-d'); ?>">
+				</div>
+
 				<button type="button" class="btn btn-primary" onclick="search()">Search</button>
 				<br><br>
 
@@ -114,7 +121,9 @@
 
 	function search(){
 		var date = $('#date').val();
-		$('#example').DataTable().ajax.url('api/cyber/report_sales_item.php?date='+date).load();
+		var todate = $('#todate').val();
+
+		$('#example').DataTable().ajax.url('api/cyber/report_sales_item.php?date_awal='+date+'&date_akhir='+todate).load();
 	}
 
 </script>
