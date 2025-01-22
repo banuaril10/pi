@@ -31,7 +31,7 @@ function push_cashin($url, $data)
 $jj_header = array();
 
 
-$list_header = "SELECT cashinid, org_key, userid, nama_insert, cash, insertdate, status, approvedby, syncnewpos, setoran FROM public.cash_in where syncnewpos = '0' and status = '1'";
+$list_header = "SELECT cashinid, org_key, userid, nama_insert, cash, insertdate, status, approvedby, syncnewpos, setoran FROM public.cash_in where syncnewpos = '0' and status = '1' and date(insertdate) >= '2025-01-01'";
 
 
 foreach ($connec->query($list_header) as $row1) {
