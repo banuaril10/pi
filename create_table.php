@@ -724,5 +724,78 @@ foreach ($remove_primary_edc_key as $r) {
 	$connec->exec($r);
 }
 
+$pos_dsales_ppob = [
+	'CREATE TABLE public.pos_dsales_ppob (
+	pos_dsales_key varchar(32) NOT NULL DEFAULT get_uuid(),
+	ad_mclient_key varchar(32) NULL,
+	ad_morg_key varchar(32) NULL,
+	isactived varchar(2) NULL,
+	insertdate timestamp NULL,
+	insertby varchar(50) NULL,
+	postby varchar(50) NULL,
+	postdate timestamp NULL,
+	pos_medc_key varchar(32) NULL,
+	pos_dcashierbalance_key varchar(32) NULL,
+	pos_mbank_key varchar(32) NULL,
+	ad_muser_key varchar(32) NULL,
+	billno varchar(50) NULL,
+	billamount numeric NULL,
+	paymentmethodname varchar(50) NULL,
+	membercard varchar(50) NULL,
+	cardno varchar(50) NULL,
+	approvecode varchar(50) NULL,
+	edcno varchar(50) NULL,
+	bankname varchar(50) NULL,
+	serialno numeric NULL,
+	billstatus varchar(50) NULL,
+	paycashgiven numeric NULL,
+	paygiven numeric NULL,
+	printcount int4 NULL,
+	issync bool NULL,
+	donasiamount numeric NULL,
+	dpp numeric NULL,
+	ppn numeric NULL,
+	billcode varchar(20) NULL,
+	ispromomurah bool NULL,
+	point numeric NULL,
+	pointgive numeric NULL,
+	membername varchar(255) NULL,
+	status_intransit varchar(2) NULL,
+	keterangan text NULL,
+	trxid varchar(75) NULL,
+	reqid varchar NULL,
+	CONSTRAINT pos_dsales_ppob_pkey PRIMARY KEY (pos_dsales_key)
+);', 'create trigger trig_pos_dsales_update after
+insert
+    or
+delete
+    or
+update
+    on
+    public.pos_dsales_ppob for each row execute procedure trig_pos_dcashierbalance_amount_update();',
+	'CREATE TABLE public.in_struk_category_header (
+			in_struk_category_header_id varchar(36) NOT NULL,
+			fromdate date NULL,
+			todate date NULL,
+			category varchar(15) NULL,
+			insertdate timestamp NULL,
+			minprice numeric NULL,
+			template text NULL,
+			CONSTRAINT in_struk_category_header_pkey PRIMARY KEY (in_struk_category_header_id)
+		);',
+	'CREATE TABLE public.in_struk_sponsor (
+		in_struk_sponsor_id varchar(36) NOT NULL,
+		fromdate date NULL,
+		todate date NULL,
+		sku varchar(15) NULL,
+		insertdate timestamp NULL,
+		CONSTRAINT in_struk_sponsor_pkey PRIMARY KEY (in_struk_sponsor_id)
+	);'
+];
+
+foreach ($pos_dsales_ppob as $r) {
+	$connec->exec($r);
+}
+
 ?>
 

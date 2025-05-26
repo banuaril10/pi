@@ -113,6 +113,10 @@
 						</li>
 						
 						<li class="submenu-item ">
+							<a href="sync_struk_category.php">Sync Struk Undian</a>
+						</li>
+						
+						<li class="submenu-item ">
 							<a href="sync.php">Sync All</a>
 						</li>
 					</ul>
