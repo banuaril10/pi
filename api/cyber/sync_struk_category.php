@@ -1,6 +1,13 @@
 <?php
 include "../../config/koneksi.php";
 
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $idstore = $row['ad_morg_key'];
+}
+
 function get_category($url)
 {
     $curl = curl_init();
@@ -24,7 +31,7 @@ function get_category($url)
 }
 
 // Ganti URL ke endpoint yang sesuai
-$url = $base_url . '/store/struk/category.php';
+$url = $base_url . '/store/struk/category.php?idstore=' . $idstore;
 
 $hasil = get_category($url);
 $j_hasil = json_decode($hasil, true);
