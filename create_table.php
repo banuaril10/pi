@@ -790,7 +790,26 @@ update
 		sku varchar(15) NULL,
 		insertdate timestamp NULL,
 		CONSTRAINT in_struk_sponsor_pkey PRIMARY KEY (in_struk_sponsor_id)
-	);'
+	);','CREATE TABLE public.pos_mproductdiscount_bundling (
+	pos_mproductdiscount_key varchar(32) NOT NULL DEFAULT get_uuid(),
+	ad_mclient_key varchar(32) NULL,
+	ad_morg_key varchar(32) NULL,
+	isactived varchar(2) NULL,
+	insertdate timestamp(6) NULL,
+	insertby varchar(50) NULL,
+	postby varchar(50) NULL,
+	postdate timestamp(6) NULL,
+	discountname varchar(30) NULL,
+	discounttype int4 NULL,
+	sku varchar(32) NULL,
+	discount numeric NULL,
+	fromdate date NULL,
+	todate date NULL,
+	typepromo varchar(20) NULL,
+	maxqty int4 NULL,
+	headername varchar(100) NULL,
+	jenis_promo varchar(20) NULL
+);'
 ];
 
 foreach ($pos_dsales_ppob as $r) {

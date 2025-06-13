@@ -2002,6 +2002,118 @@ if ($_GET['modul'] == 'inventory') {
 
 
 
+	} else if ($_GET['act'] == 'api_datatable_promo_bundling') {
+
+
+		$columns = array(
+			0 => 'postdate',
+			1 => 'discountname',
+			2 => 'discounttype',
+			3 => 'sku',
+			4 => 'nama',
+			5 => 'price',
+			6 => 'price_discount',
+			7 => 'price_after_discount',
+			8 => 'fromdate',
+			9 => 'todate',
+		);
+
+		$querycount = $connec->query("SELECT count(*) as jumlah FROM pos_mproductdiscount_bundling");
+
+		foreach ($querycount as $r) {
+			$datacount = $r['jumlah'];
+
+		}
+
+		$totalData = $datacount;
+
+		$totalFiltered = $totalData;
+
+		$limit = $_POST['length'];
+		$start = $_POST['start'];
+		$order = $columns[$_POST['order']['0']['column']];
+		$dir = $_POST['order']['0']['dir'];
+
+		if (empty($_POST['search']['value'])) {
+			$query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscount_bundling a left join pos_mproduct b on a.sku = b.sku order by $order $dir
+                                                      LIMIT $limit
+                                                      OFFSET $start");
+		} else {
+			$search = $_POST['search']['value'];
+			$query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscount_bundling a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
+                                                         or a.discountname ILIKE  '%$search%'
+                                                         or b.name ILIKE  '%$search%'
+                                                         order by $order $dir
+                                                         LIMIT $limit
+                                                         OFFSET $start");
+
+
+			$querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscount_bundling a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
+                                                         or a.discountname ILIKE  '%$search%'");
+			foreach ($querycount as $rr) {
+				$datacount = $rr['jumlah'];
+
+			}
+			$totalFiltered = $datacount;
+		}
+
+		$data = array();
+		if (!empty($query)) {
+			$no = $start + 1;
+			foreach ($query as $r) {
+
+				if ($r['discountname'] != '') {
+					$discname = '<font style="color: blue; font-weight: bold">' . $r['discountname'] . '</font>';
+
+				} else {
+
+					$discname = '';
+				}
+
+				$pd = $r['price'] - $r['discount'];
+
+				if ($r['price'] != $pd) {
+
+					$fontdiskon = '<br> <font style="color: red; font-weight: bold">Setelah Diskon : ' . rupiah($pd) . '</font>';
+				} else {
+
+					$fontdiskon = '';
+				}
+
+
+
+				$nestedData['no'] = $no;
+				$nestedData['postdate'] = $r['postdate'];
+				$nestedData['discounttype'] = $r['discounttype'];
+				$nestedData['sku'] = '<font style="font-weight: bold">' . $r['sku'] . '</font>';
+				$nestedData['name'] = $r['name'];
+				$nestedData['hargareguler'] = '<font style="color: blue;font-weight: bold">Rp. ' . rupiah($r['price']) . '</font>';
+				$nestedData['potongan'] = '<font style="color: red;font-weight: bold">Rp. ' . rupiah($r['discount']) . '</font>';
+				$nestedData['afterdiscount'] = '<font style="color: green;font-weight: bold">Rp. ' . rupiah($pd) . '</font>';
+				$nestedData['discountname'] = $discname;
+				$nestedData['fromdate'] = $r['fromdate'];
+				$nestedData['qtybundling'] = $r['maxqty'];
+				$nestedData['todate'] = $r['todate'];
+				$nestedData['price'] = rupiah($r['price']);
+				$nestedData['price_discount'] = rupiah($pd);
+				$data[] = $nestedData;
+				$no++;
+
+			}
+
+
+		}
+
+		$json_data = array(
+			"draw" => intval($_POST['draw']),
+			"recordsTotal" => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data" => $data
+		);
+
+		echo json_encode($json_data);
+
+
 	} else if ($_GET['act'] == 'api_datatable_promo') {
 
 
