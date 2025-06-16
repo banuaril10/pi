@@ -5,9 +5,13 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 
+
+header("Access-Control-Allow-Origin: *"); // Atau ganti * sesuai domain yang diijinkan
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
+header("Access-Control-Allow-Headers: Content-Type");
+
 header('Content-Type: application/json');
-
-
 // Mengambil data yang akan dicetak
 $html = $_POST['html'];
 $ip_printer = 'localhost'; // jika windows
@@ -39,7 +43,7 @@ if ($os == 'windows') {
 
         $response = ['result' => 1, 'msg' => 'Cetakan sukses (Windows)'];
     } catch (Exception $e) {
-        $response = ['result' => 0, 'msg' => $e->getMessage()];
+        $response = ['result' => 0, 'msg' => $e->getMessage() . '//' . $ip_printer . '/pos'];
     }
 } else {
     // Linux Printing
