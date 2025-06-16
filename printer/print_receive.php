@@ -1,5 +1,5 @@
 <?php
-require  '../vendor/autoload.php';
+require '../vendor/autoload.php';
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
@@ -8,8 +8,8 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 header('Content-Type: application/json');
 
 // Mengambil data yang akan dicetak
-$html = $_POST['html']; 
-$ip_printer = 'localhost'; // jika windows
+$html = $_POST['html'];
+$ip_printer = $_POST['ip_printer']; // jika windows
 
 // Deteksi OS
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -24,9 +24,9 @@ if ($os == 'windows') {
     // Windows Printing
 
     try {
-		$connector = new FilePrintConnector("//" . $ip_printer . "/pos");
+        $connector = new FilePrintConnector("//" . $ip_printer . "/pos");
 
-		$printer = new Printer($connector);
+        $printer = new Printer($connector);
         $printer->initialize();
 
         $printer->setFont(Printer::FONT_B);
@@ -49,10 +49,10 @@ if ($os == 'windows') {
     $html .= '\r\n';
     $html .= chr(29) . "V" . 0;
 
-    $cmd = 'echo "'.$html.'" | lpr -o raw';
+    $cmd = 'echo "' . $html . '" | lpr -o raw';
     $child = shell_exec($cmd);
     $response = ['result' => 1, 'msg' => 'Cetakan sukses (Linux)', 'child' => $child];
 }
 
- echo json_encode($response);
+echo json_encode($response);
 ?>
