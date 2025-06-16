@@ -7,9 +7,10 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 header('Content-Type: application/json');
 
+
 // Mengambil data yang akan dicetak
 $html = $_POST['html'];
-$ip_printer = $_POST['ip_printer']; // jika windows
+$ip_printer = 'localhost'; // jika windows
 
 // Deteksi OS
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
