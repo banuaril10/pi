@@ -306,8 +306,6 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 				} else {
 					alert("Struk gagal dicetak!");
 				}
-			}, "json").fail(function () {
-				alert("Terjadi kesalahan saat mencetak.");
 			});
 		}
 
