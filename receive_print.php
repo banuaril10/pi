@@ -300,12 +300,12 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			}, 
 			function (data) {
 				console.log(data);
-				if (data.result == 1) {
-					alert("Struk berhasil dicetak!");
+				// if (data.result == 1) {
+					// alert("Struk berhasil dicetak!");
 					console.log("Struk berhasil dicetak:\n" + struk);
-				} else {
-					alert("Struk gagal dicetak!");
-				}
+				// } else {
+					// alert("Struk gagal dicetak!");
+				// }
 			});
 		}
 
