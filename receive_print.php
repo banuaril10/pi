@@ -49,31 +49,33 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-						<h4>RECEIVE PRINT</h4>
+						<h4>Receive Print</h4>
 						<div class="form-inline">
-							<input id="tglAwal" type="date" class="form-control mr-2"
+							<input id="tglAwal" type="date" class="form-control mr-2 p-2"
 								value="<?php echo date('Y-m-d'); ?>">
-							<input id="tglAkhir" type="date" class="form-control mr-2"
+							<input id="tglAkhir" type="date" class="form-control mr-2 p-2"
 								value="<?php echo date('Y-m-d'); ?>">
-
-							<button id="filterBtn" class="btn btn-primary mr-2">Filter</button>
+							<button id="filterBtn" class="btn btn-primary mr-2 px-4">Filter</button>
 						</div>
 						<br>
-						<button class='btn btn-info' onclick='printReceiveAll()'>Cetak All</button>
+						<button class='btn btn-info px-4' onclick='printReceiveAll()'>Cetak All</button>
 
-						<p id="notif1" style="color: red; font-weight: bold;"></p>
+						<p id="notif1">Jika ada perbarui data, reload dahulu sebelum cetak kembali, data yang tampil
+							adalah yang sesuai tanggal yang dipilih</p>
 					</div>
+					
+					<!-- <div class="card-body">
+						<p style="color: red; font-weight: bold;">Jika ada perbarui data, reload dulu baru cetak kembali, data yg tampil default hari berjalan</p>
+					</div> -->
 
 					<div class="card-body">
-						<p style="color: red; font-weight: bold;">Jika ada perbarui data, reload dulu baru cetak
-							kembali, data yg tampil default hari berjalan</p>
+					IP PRINTER (Jika localhost tidak bisa / printer struk tidak ada di server, masukan ip komputer yg ada printernya) : 
+					<div class="input-group mb-3">
+					<input id="ip_printer" type="text" class=" mr-2" value="localhost" style="width: 200px;"
+						placeholder="Masukkan IP Printer"> &nbsp <button id="save_ip" class="btn btn-primary ml-2">Save</button>
 					</div>
-
-					<div class="card-body">
-						IP PRINTER (Jika localhost tidak bisa / printer struk tidak ada di server, masukan ip komputer
-						yg ada printernya) : <input id="ip_printer" type="text" class="form-control mr-2"
-							value="localhost">
-						<br>
+					<br>
+					<br>
 						<table class="table table-bordered" id="example">
 							<thead>
 								<tr>
@@ -163,8 +165,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 
 		function printReceive(id) {
-			// cari row yang sesuai
-			var row = $('#example tbody tr').filter(function () {
+    // cari row yang sesuai
+			var row =$('#example tbody tr').filter(function(){
 				return $(this).find("td").first().text() == id;
 			});
 
@@ -176,46 +178,60 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			var receipt_date = row.find("td").eq(5).text();
 
 
-			var header = "Driver : " + driver + "\n" +
+			var header = "Driver : " + driver + "\n" + 
 				// "Keycode : " + keycode + "\n" + 
 				// "Insert Date : " + insertdate + "\n" + 
 				// "Is Receipt : " + is_receipt + "\n" + 
-				"Receipt Date : " + receipt_date + "\n" +
+				"Receipt Date : " + receipt_date + "\n" + 
 				"________________________________\n";
 
 
 			// susun struknya sesuai data yang tersedia
-			var struk =
-				"DOCUMENT NO : " + documentno + "\n" +
-				"________________________________\n" +
+			var struk = 
+				"DOCUMENT NO : " + documentno + "\n" + 
+				"________________________________\n" + 
+				
 
 
+			// Kirim ke server untuk dicetak
+			$.post("printer/print_receive.php", {html: struk}, function(data) {
+				console.log(data);
+				if (data.result == 1) {
+					alert("Struk berhasil dicetak!");
+					console.log("Struk berhasil dicetak: " + struk);
+				} else {
+					alert("Struk gagal dicetak!");
+				}
+			}, "json").fail(function(){
+				alert("Terjadi kesalahan saat mencetak.");
+			});
+		}
 
-				// Kirim ke server untuk dicetak
-				$.post("printer/print_receive.php", { html: struk }, function (data) {
-					console.log(data);
-					if (data.result == 1) {
-						alert("Struk berhasil dicetak!");
-						console.log("Struk berhasil dicetak: " + struk);
-					} else {
-						alert("Struk gagal dicetak!");
-					}
-				}, "json").fail(function () {
-					alert("Terjadi kesalahan saat mencetak.");
-				});
+		function detectOS(){
+			var platform = navigator.platform.toLowerCase();
+
+			if (platform.indexOf('win') !== -1) {
+				return 'Windows';
+			} else if (platform.indexOf('linux') !== -1) {
+				return 'Linux';
+			} else if (platform.indexOf('mac') !== -1) {
+				return 'macOS';
+			} else {
+				return 'Unknown';
+			}
 		}
 
 
 		function printReceiveAll() {
 			var struk = '';
-			var ip_printer = $('#ip_printer').val();
+			var ip_printer =$('#ip_printer').val();
 
 			var lastReceiptDate = '';
 			var lastReceiptBy = '';
 			var header = '';
 			var sectionStruk = '';
-
-			$('#example tbody tr').each(function () {
+		
+		$('#example tbody tr').each(function(){
 				var row = $(this);
 				var documentno = row.find("td").eq(0).text().trim();
 				var driver = row.find("td").eq(1).text().trim();
@@ -236,11 +252,11 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 					}
 
 					// Header baru
-					header =
-						"STRUK PENERIMAAN BARANG \n" +
-						"Toko : <?php echo $name; ?>\n" +
-						"Receipt Date : " + receipt_date + "\n" +
-						"Receipt By : " + receipt_by + "\n" +
+					header = 
+						"STRUK PENERIMAAN BARANG \n" + 
+						"Toko : <?php echo $name; ?>\n" + 
+						"Receipt Date : " + receipt_date + "\n" + 
+						"Receipt By : " + receipt_by + "\n" + 
 						"________________________________\n";
 
 					struk += header;
@@ -264,8 +280,25 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			struk += "STRUK INI SEBAGAI BUKTI\n";
 			struk += "PENERIMAAN BARANG YANG SAH OLEH TOKO\n";
 
+			// Deteksi OS
+			var platform = navigator.platform.toLowerCase();
+
+			var printURL = '';
+			if (platform.indexOf('win') !== -1) {
+				printURL = "print_struk.php";
+			} else if (platform.indexOf('linux') !== -1) {
+				printURL = "print_struk_linux.php";
+			} else {
+				printURL = "print_struk.php";
+			}
+
 			// Kirim ke server untuk dicetak
-			$.post("http://" + ip_printer + "/pi/printer/print_receive.php", { html: struk, ip_printer: ip_printer }, function (data) {
+			$.post("http://" + ip_printer + "/pi/printer/" + printURL, 
+			{ 
+				html: struk, 
+				ip_printer: ip_printer 
+			}, 
+			function (data) {
 				console.log(data);
 				if (data.result == 1) {
 					alert("Struk berhasil dicetak!");
@@ -281,8 +314,30 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 
 
+		document.getElementById('save_ip').addEventListener('click', function(){
+        var ip = document.getElementById('ip_printer').value.trim();
+
+        // Set cookie yang expire 5 tahun ke depan
+        var expire = new Date();
+        expire.setFullYear(expire.getFullYear() + 5);
+        document.cookie = "ip_printer=" + ip + ";expires=" + expire.toUTCString() + ";path=/";
+
+        alert("IP printer disimpan.");
+    });
 
 
+	function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(^|;)\\s*' + name + '=([^;]+)'));
+        return match ? match[2] : '';
+    }
+
+    window.onload = function(){
+        var ip = getCookie("ip_printer");
+
+        if (ip) {
+            document.getElementById("ip_printer").value = ip;
+        }
+    };
 	</script>
 
 </div>
