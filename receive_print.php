@@ -231,7 +231,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			var header = '';
 			var sectionStruk = '';
 		
-		$('#example tbody tr').each(function(){
+			$('#example tbody tr').each(function(){
 				var row = $(this);
 				var documentno = row.find("td").eq(0).text().trim();
 				var driver = row.find("td").eq(1).text().trim();
