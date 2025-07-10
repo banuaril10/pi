@@ -7,8 +7,21 @@ header('Content-Type: application/json');
 if (isset($_GET['sku']) || isset($_GET['barcode'])) {
     $sku_or_barcode = isset($_GET['sku']) ? $_GET['sku'] : $_GET['barcode'];
 
-    // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku atau barcode
-    $sqlPrice = "SELECT price, sku, name FROM pos_mproduct WHERE (sku = :sku_or_barcode OR barcode = :sku_or_barcode) AND isactived = '1'";
+    // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku, barcode, barcode1-4
+    $sqlPrice = "
+        SELECT price, sku, name 
+        FROM pos_mproduct 
+        WHERE isactived = '1'
+        AND (
+            sku = :sku_or_barcode 
+            OR barcode = :sku_or_barcode 
+            OR barcode1 = :sku_or_barcode 
+            OR barcode2 = :sku_or_barcode 
+            OR barcode3 = :sku_or_barcode 
+            OR barcode4 = :sku_or_barcode
+        )
+        LIMIT 1
+    ";
     $stmtPrice = $connec->prepare($sqlPrice);
     $stmtPrice->bindParam(':sku_or_barcode', $sku_or_barcode);
     $stmtPrice->execute();
@@ -21,9 +34,13 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         $sku = $product['sku'];
 
         // Query untuk mendapatkan diskon dari tabel pos_mproductdiscount
-        $sqlDiscount = "SELECT discount, fromdate, todate FROM pos_mproductdiscount 
-                        WHERE sku = :sku AND isactived = '1' 
-                        AND CURRENT_DATE BETWEEN fromdate AND todate";
+        $sqlDiscount = "
+            SELECT discount, fromdate, todate 
+            FROM pos_mproductdiscount 
+            WHERE sku = :sku 
+            AND isactived = '1' 
+            AND CURRENT_DATE BETWEEN fromdate AND todate
+        ";
         $stmtDiscount = $connec->prepare($sqlDiscount);
         $stmtDiscount->bindParam(':sku', $sku);
         $stmtDiscount->execute();
@@ -31,7 +48,6 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
         // Cek apakah diskon ditemukan
         if ($discount) {
-            // Menghitung harga diskon
             $discountedPrice = $regularPrice - $discount['discount'];
             $response = [
                 'sku' => $sku,
@@ -43,7 +59,6 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'valid_to' => $discount['todate']
             ];
         } else {
-            // Tidak ada diskon, hanya mengembalikan harga reguler
             $response = [
                 'sku' => $sku,
                 'name' => $name,
