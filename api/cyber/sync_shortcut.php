@@ -37,7 +37,7 @@ foreach ($j_hasil as $key => $value) {
     $sku = $value['sku'];
     $barcode = $value['shortcut'];
     
-    $update = "UPDATE pos_mproduct SET shortcut = '".$shortcut."', postdate = '".date('Y-m-d H:i:s')."' WHERE sku = '".$sku."'";
+    $update = "UPDATE pos_mproduct SET shortcut = '".$barcode."', postdate = '".date('Y-m-d H:i:s')."' WHERE sku = '".$sku."'";
     $result = $connec->exec($update);
 
     if ($result) {
