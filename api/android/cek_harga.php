@@ -40,7 +40,10 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             WHERE sku = :sku 
             AND isactived = '1' 
             AND CURRENT_DATE BETWEEN fromdate AND todate
+            ORDER BY discount DESC
+            LIMIT 1
         ";
+
         $stmtDiscount = $connec->prepare($sqlDiscount);
         $stmtDiscount->bindParam(':sku', $sku);
         $stmtDiscount->execute();
