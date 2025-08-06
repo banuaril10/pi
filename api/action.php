@@ -1800,7 +1800,8 @@ if ($_GET['modul'] == 'inventory') {
 				"barcode" => $row1['barcode'],
 				"name" => $row1['name'],
 				"qtyvariant" => $variant,
-				"qtycount" => $row1['qtycount']
+				"qtycount" => $row1['qtycount'],
+				"qtysales" => $row1['qtysales']
 			);
 		}
 

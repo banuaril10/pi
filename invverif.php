@@ -559,7 +559,8 @@ var html = '<font style="color: '+warna+'">No Document  : '+dn+'</font> <br>';
    html += '<font style="color: '+warna+'">Rack         : '+rn+'</font> <br>';
    
    
-html += '<table ><tr><td style="color: '+warna+'; border-color: '+warna+';">No</td><td style="color: '+warna+'; border-color: '+warna+'">SKU</td><td style="color: '+warna+'; border-color: '+warna+'">Nama</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Count',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Varian',6,'right')+'</td></tr>';
+html += '<table ><tr><td style="color: '+warna+'; border-color: '+warna+';">No</td><td style="color: '+warna+'; border-color: '+warna+'">SKU</td><td style="color: '+warna+'; border-color: '+warna+'">Nama</td>'+
+'<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Count',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Varian',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('QTY Sales',6,'right')+'</td></tr>';
 			
 				
 				var dataResult = JSON.parse(dataResult);
@@ -574,11 +575,13 @@ html += '<table ><tr><td style="color: '+warna+'; border-color: '+warna+';">No</
 						var name = data.name;
 						var qtyvariant = parseInt(data.qtyvariant);
 						var qtycount = data.qtycount;
+						var qtysales = data.qtysales;
 						var barcode = data.barcode;
 							
 							html += '<tr>';
 							html += '<td style="color: '+warna+'; border-color: '+warna+'">'+no+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+sku+'</td>';
-							html +='<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline(name,1,'left')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtyvariant+'',10,'right')+'</td>';
+							html +='<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline(name,1,'left')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td>'+
+							'<td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtyvariant+'',10,'right')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtysales+'',10,'right')+'</td>';
 							// html += "\n\r";
 							// html += barcode;
 	
