@@ -26,7 +26,7 @@ foreach ($get_store_code as $r) {
 
 $implode = implode("','", $data);
 
-$qq = "select a.*, (a.price - b.discount) afterdiscount, b.todate from pos_mproduct a
+$qq = "select a.*, (a.price - b.discount) afterdiscount, b.fromdate, b.todate from pos_mproduct a
 inner join (select * from pos_mproductdiscount where date(now()) between fromdate and todate) b on a.sku = b.sku
 where a.sku in ('" . $implode . "')";
 $statement = $connec->query($qq);
@@ -46,10 +46,10 @@ foreach ($statement as $r) {
     }
 
     for ($i = 0; $i < $copy; $i++) {
-        $products[] = $r['sku'] . "|" . $r['name'] . "|" . $r['price'] . "|" . $date_now . "|" . $r['rack'] . "|" . $r['afterdiscount'] . "|" . $r['todate'] . "|" . $r['barcode'];
+        $products[] = $r['sku'] . "|" . $r['name'] . "|" . $r['price'] . "|" . $date_now . "|" . $r['rack'] . "|" . $r['afterdiscount'] . "|" . $r['todate'] . "|" . $r['barcode'] . "|" . $r['fromdate'];
     }
 
-    
+
     $noarr++;
 }
 
