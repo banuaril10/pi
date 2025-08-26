@@ -9,8 +9,7 @@ $sql = "
     FROM pos_dshopsales
     WHERE status = 'DONE'
       AND salesdate::date = :today
-    LIMIT 1
-";
+    LIMIT 1";
 
 $stmt = $connec->prepare($sql);
 $stmt->execute(['today' => $tanggalHariIni]);
