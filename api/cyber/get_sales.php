@@ -77,11 +77,24 @@ foreach ($gtk as $r) {
     $gtk_amount = $r['salesamount'];
 }
 
+// ambil total PPOB (billamount) pada tanggal yg sama
+// $ppob = $connec->query("
+//     SELECT COALESCE(SUM(billamount),0) as ppobamount 
+//     FROM pos_dsales_ppob 
+//     WHERE DATE(insertdate) = '" . $tanggal . "'
+// ");
+// $ppob_amount = 0;
+// foreach ($ppob as $p) {
+//     $ppob_amount = $p['ppobamount'];
+// }
+
+// $gtk_amount = $gtk_amount - $ppob_amount;
+
 $selisih_gtk = $gtk_amount - $j_hasil['line_amount'];
 
-if($selisih_gtk != 0){
+if ($selisih_gtk != 0) {
     $msg_gtk = "<font style='color: red; font-weight: bold'> Masih ada selisih : " . rupiah($selisih_gtk) . "</font>";
-}else{
+} else {
     $msg_gtk = "<font style='color: green; font-weight: bold'> Tidak ada selisih..</font>";
 }
 
@@ -92,11 +105,6 @@ if ($selisih != 0 || $selisih_line != 0) {
 }
 
 echo "<table border='1'>";
-echo "<tr>
-        <th>Tgl Sales Order</th>
-        <th>Lokal vs InTransit</th>
-        <th>Status Tutup Harian</th>
-        </tr>";
 echo "<tr style='background: #fff'>";
 echo "
         <td>" . $tanggal . "</td>

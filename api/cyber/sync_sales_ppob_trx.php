@@ -19,11 +19,10 @@ try {
     }
 
     // ambil tanggal (opsional)
-    $date = $_POST['date'] ?? $_GET['date'] ?? null;
-    $lastsync = $date ? ($date . " 00:00:00") : '';
+    $trxid = $_GET['trxid'];
 
     // ambil dari server
-    $url = $base_url . '/store/ppob/get_sales_ppob.php?idstore=' . urlencode($idstore);
+    $url = $base_url.'/store/ppob/get_sales_ppob_trx.php?idstore=' . urlencode($idstore) . '&trxid=' . urlencode($trxid);
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [

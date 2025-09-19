@@ -555,6 +555,14 @@ $cmd_alter_sync_transit = [
 	'ALTER TABLE pos_mproductdiscountgrosir_new ADD COLUMN IF NOT EXISTS jenis_promo varchar(20);',
 	'ALTER TABLE pos_mproductbuyget ADD COLUMN IF NOT EXISTS jenis_promo varchar(20);',
 	'ALTER TABLE pos_medc ADD COLUMN IF NOT EXISTS jenis varchar(20);',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobcashamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobdebitamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobcreditamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobcashamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobdebitamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobcreditamount numeric DEFAULT 0;',
 ];
 
 foreach ($cmd_alter_sync_transit as $r) {
@@ -815,6 +823,27 @@ update
 foreach ($pos_dsales_ppob as $r) {
 	$connec->exec($r);
 }
+
+
+$pos_mproductdiscount_bundling = [
+	'CREATE TABLE pos_mproductdiscount_bundling_header (
+		pos_mproductdiscount_key varchar(32) NOT NULL DEFAULT get_uuid(),
+		ad_mclient_key varchar(32) NULL,
+		ad_morg_key varchar(32) NULL,
+		bundling_code varchar(25) NULL,
+		minbuy varchar(25) NULL,
+		isactived varchar(2) NULL,
+		insertdate timestamp(6) NULL,
+		insertby varchar(50) NULL,
+		postby varchar(50) NULL,
+		postdate timestamp(6) NULL
+	);'
+];
+
+foreach ($pos_mproductdiscount_bundling as $r) {
+	$connec->exec($r);
+}
+
 
 ?>
 
