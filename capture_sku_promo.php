@@ -139,7 +139,7 @@ foreach ($resultss as $r) {
 						$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_promo.php?tgl=".$date_now."&toko=".$value;
 						$options = stream_context_create(array('http'=>
 							array(
-							'timeout' => 10 //10 seconds
+							'timeout' => 30 //10 seconds
 							)
 						));
 						
