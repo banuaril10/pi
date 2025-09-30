@@ -82,7 +82,11 @@ foreach ($connec->query($list_posdshopsales) as $row5) {
         "pointamount" => $row5['pointamount'],
         "pointdebitamout" => $row5['pointdebitamout'],
         "pointcreditamount" => $row5['pointcreditamount'],
-        "status_intransit" => $row5['status_intransit']
+        "status_intransit" => $row5['status_intransit'],
+        "ppobamount" => $row5['ppobamount'],
+        "ppobcashamount" => $row5['ppobcashamount'],
+        "ppobdebitamount" => $row5['ppobdebitamount'],
+        "ppobcreditamount" => $row5['ppobcreditamount']
     );
 }
 
