@@ -901,6 +901,13 @@ foreach ($create_table_combo as $r) {
 }
 
 
+$alter_tempsales = [
+	'ALTER TABLE public.pos_dtempsalesline ADD COLUMN IF NOT EXISTS reference_id varchar NULL;'
+];
+foreach ($alter_tempsales as $r) {
+	$connec->exec($r);
+}
+
 
 ?>
 
