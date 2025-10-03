@@ -864,5 +864,43 @@ foreach ($pos_mproductdiscount_bundling as $r) {
 }
 
 
+
+
+$create_table_combo = [
+	'CREATE TABLE IF NOT EXISTS pos_mcombo_promo_header (
+		pos_mcombo_promo_header_key varchar(36) NOT NULL DEFAULT get_uuid(),
+		promo_name varchar(100) NOT NULL,
+		promo_type varchar(30) NULL DEFAULT \'BUY_2_PAY_HIGHEST\'::character varying,
+		min_items int4 NULL DEFAULT 2,
+		max_items int4 NULL DEFAULT 2,
+		fromdate date NULL,
+		todate date NULL,
+		isactived varchar(1) NULL DEFAULT \'1\'::character varying,
+		insertdate timestamp NULL DEFAULT now(),
+		insertby varchar(50) NULL,
+		postdate timestamp NULL,
+		postby varchar(50) NULL,
+		id_location varchar(10) NULL,
+		CONSTRAINT pos_mcombo_promo_header_pkey PRIMARY KEY (pos_mcombo_promo_header_key)
+	);',
+	'CREATE TABLE IF NOT EXISTS pos_mcombo_promo_detail (
+		pos_mcombo_promo_detail_key varchar(36) NOT NULL DEFAULT get_uuid(),
+		pos_mcombo_promo_header_key varchar(36) NULL,
+		sku varchar(50) NOT NULL,
+		is_required varchar(1) NULL DEFAULT \'1\'::character varying,
+		min_qty int4 NULL DEFAULT 1,
+		insertdate timestamp NULL DEFAULT now(),
+		insertby varchar(50) NULL,
+		CONSTRAINT pos_mcombo_promo_detail_pkey PRIMARY KEY (pos_mcombo_promo_detail_key),
+		CONSTRAINT pos_mcombo_promo_detail_pos_mcombo_promo_header_key_fkey FOREIGN KEY (pos_mcombo_promo_header_key) REFERENCES pos_mcombo_promo_header(pos_mcombo_promo_header_key)
+	);'
+];
+
+foreach ($create_table_combo as $r) {
+	$connec->exec($r);
+}
+
+
+
 ?>
 
