@@ -1,6 +1,11 @@
 <?php
 include "../../config/koneksi.php";
 
+//show error
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+
 // Ambil org aktif
 $ll = "SELECT * FROM ad_morg WHERE isactived = 'Y'";
 $query = $connec->query($ll);
@@ -9,7 +14,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $idstore = $row['ad_morg_key'];
 }
 
-function get_category($url)
+function get_data($url)
 {
     $curl = curl_init();
     curl_setopt_array($curl, array(
@@ -27,9 +32,11 @@ function get_category($url)
     return $response;
 }
 
-// Panggil API bundling
+// =====================
+// SYNC PROMO BUNDLING
+// =====================
 $url = $base_url . '/store/promo/get_promo_bundling.php?idstore=' . $idstore;
-$hasil = get_category($url);
+$hasil = get_data($url);
 $j_hasil = json_decode($hasil, true);
 
 try {
@@ -55,7 +62,7 @@ try {
     $bundlingData = isset($j_hasil['bundling']) ? $j_hasil['bundling'] : $j_hasil;
     $filesData = isset($j_hasil['files']) ? $j_hasil['files'] : [];
 
-    // Simpan header (file bundling)
+    // Simpan header bundling
     foreach ($filesData as $file) {
         $insertHeader = "INSERT INTO pos_mproductdiscount_bundling_header 
             (ad_mclient_key, ad_morg_key, bundling_code, minbuy, isactived, insertdate, insertby)
@@ -102,10 +109,81 @@ try {
         ]);
     }
 
-    echo json_encode([
-        "status" => "OK",
-        "message" => "Data Inserted"
-    ]);
+    $url_combo = $base_url . '/store/promo/get_promo_combo.php?idstore=' . $idstore;
+    $hasil_combo = get_data($url_combo);
+    $j_combo = json_decode($hasil_combo, true);
+
+    if (!empty($j_combo) && !empty($j_combo['promo_combo_header'])) {
+
+        // Kosongkan tabel lama
+        $connec->exec("TRUNCATE TABLE pos_mcombo_promo_detail RESTART IDENTITY CASCADE");
+        $connec->exec("TRUNCATE TABLE pos_mcombo_promo_header RESTART IDENTITY CASCADE");
+
+        // --- Insert Header ---
+        $sqlHeader = "
+        INSERT INTO pos_mcombo_promo_header 
+            (pos_mcombo_promo_header_key, promo_name, promo_type, min_items, max_items, fromdate, todate, isactived, insertdate, insertby, id_location)
+        VALUES 
+            (:pos_mcombo_promo_header_key, :promo_name, :promo_type, :min_items, :max_items, :fromdate, :todate, :isactived, :insertdate, :insertby, :id_location)
+        RETURNING pos_mcombo_promo_header_key
+    ";
+        $stmtHeader = $connec->prepare($sqlHeader);
+
+        // --- Insert Detail ---
+        $sqlDetail = "
+        INSERT INTO pos_mcombo_promo_detail 
+            (pos_mcombo_promo_detail_key, pos_mcombo_promo_header_key, sku, is_required, min_qty, insertdate, insertby, id_location)
+        VALUES 
+            (:pos_mcombo_promo_detail_key, :pos_mcombo_promo_header_key, :sku, :is_required, :min_qty, :insertdate, :insertby, :id_location)
+    ";
+        $stmtDetail = $connec->prepare($sqlDetail);
+
+        // Loop setiap header promo combo
+        foreach ($j_combo['promo_combo_header'] as $hdr) {
+            $stmtHeader->execute([
+                ':pos_mcombo_promo_header_key' => $hdr['pos_mcombo_promo_header_key'],
+                ':promo_name' => $hdr['promo_name'] ?? '',
+                ':promo_type' => $hdr['promo_type'] ?? 'BUY_2_PAY_HIGHEST',
+                ':min_items' => $hdr['min_items'] ?? 2,
+                ':max_items' => $hdr['max_items'] ?? 2,
+                ':fromdate' => $hdr['fromdate'] ?? null,
+                ':todate' => $hdr['todate'] ?? null,
+                ':isactived' => $hdr['isactived'] ?? '1',
+                ':insertdate' => $hdr['insertdate'] ?? date("Y-m-d H:i:s"),
+                ':insertby' => $hdr['insertby'] ?? 'SYSTEM',
+                ':id_location' => $hdr['id_location'] ?? $idstore
+            ]);
+
+            $headerKey = $stmtHeader->fetchColumn();
+
+            // Masukkan detail berdasarkan header key
+            foreach ($j_combo['promo_combo_detail'] as $dtl) {
+                if ($dtl['pos_mcombo_promo_header_key'] === $hdr['pos_mcombo_promo_header_key']) {
+                    $stmtDetail->execute([
+                        ':pos_mcombo_promo_detail_key' => $dtl['pos_mcombo_promo_detail_key'],
+                        ':pos_mcombo_promo_header_key' => $headerKey,
+                        ':sku' => $dtl['sku'],
+                        ':is_required' => $dtl['is_required'] ?? '1',
+                        ':min_qty' => $dtl['min_qty'] ?? 1,
+                        ':insertdate' => $dtl['insertdate'] ?? date("Y-m-d H:i:s"),
+                        ':insertby' => $dtl['insertby'] ?? 'SYSTEM',
+                        ':id_location' => $dtl['id_location'] ?? $idstore
+                    ]);
+                }
+            }
+        }
+
+        echo json_encode([
+            "status" => "OK",
+            "message" => "Promo Combo synced successfully"
+        ]);
+    } else {
+        echo json_encode([
+            "status" => "OK",
+            "message" => "No Promo Combo found"
+        ]);
+    }
+
 
 } catch (Exception $e) {
     echo json_encode([
