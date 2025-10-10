@@ -86,19 +86,19 @@ foreach ($resultss as $r) {
   <form id="formPromo" enctype="multipart/form-data">
     <div class="row mb-3">
 		<input type="hidden" name="org_key" value="<?php echo $org_key; ?>">
-      <div class="col-md-3">
+      <div class="col-md-4">
         <label>SKU</label>
         <input type="text" name="sku" class="form-control" required>
       </div>
-      <div class="col-md-3">
-        <label>Stock</label>
+      <div class="col-md-4">
+        <label>Stock Fisik</label>
         <input type="number" name="stock" class="form-control" required>
       </div>
       <div class="col-md-3">
         <label>Harga Promo Rekomendasi</label>
         <input type="number" name="harga_promo_rekomendasi" class="form-control" required>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <label>Jenis Promo</label>
         <select name="jenis_promo" class="form-control" required>
           <option value="">-- Pilih Jenis Promo --</option> 
@@ -107,7 +107,7 @@ foreach ($resultss as $r) {
           <option value="PROMO GROSIR">PROMO GROSIR</option>
       </select>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <label>Upload Foto (maks 2)</label>
         <input type="file" name="foto[]" id="foto" class="form-control" accept="image/*" multiple required>
         <small class="text-muted">*Maksimum 2 foto</small>
@@ -128,7 +128,7 @@ foreach ($resultss as $r) {
         <tr>
           <th>No</th>
           <th>SKU</th>
-          <th>Stock</th>
+          <th>Stock Fisik</th>
           <th>Harga Jual</th>
           <th>Aging</th>
           <th>Akhir Masuk Toko</th>
