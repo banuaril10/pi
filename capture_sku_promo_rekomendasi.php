@@ -113,7 +113,7 @@ foreach ($resultss as $r) {
                 </div>
 
                 <button type="submit" class="btn btn-primary mt-2">
-                  <i class="bi bi-upload"></i> Upload Promo
+                  <i class="bi bi-upload"></i> Kirim Request
                 </button>
               </form>
 
