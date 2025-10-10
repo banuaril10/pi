@@ -99,6 +99,15 @@ foreach ($resultss as $r) {
         <input type="number" name="harga_promo_rekomendasi" class="form-control" required>
       </div>
       <div class="col-md-3">
+        <label>Jenis Promo</label>
+        <select name="jenis_promo" class="form-control" required>
+          <option value="">-- Pilih Jenis Promo --</option> 
+          <option value="PROMO REGULER">PROMO REGULER</option>
+          <option value="PROMO BUNDLING">PROMO BUNDLING</option>
+          <option value="PROMO GROSIR">PROMO GROSIR</option>
+      </select>
+      </div>
+      <div class="col-md-3">
         <label>Upload Foto (maks 2)</label>
         <input type="file" name="foto[]" id="foto" class="form-control" accept="image/*" multiple required>
         <small class="text-muted">*Maksimum 2 foto</small>
@@ -120,10 +129,14 @@ foreach ($resultss as $r) {
           <th>No</th>
           <th>SKU</th>
           <th>Stock</th>
+          <th>Harga Jual</th>
+          <th>Aging</th>
+          <th>Akhir Masuk Toko</th>
           <th>Harga Promo Rekomendasi</th>
           <th>Harga Promo Approved</th>
           <th>Foto</th>
           <th>Tanggal</th>
+          <th>Jenis Promo</th>
           <th>Status Approval</th>
         </tr>
       </thead>
@@ -224,10 +237,14 @@ $(document).ready(function () {
                 <td>${i + 1}</td>
                 <td>${row.sku}</td>
                 <td>${row.stock}</td>
+                <td>${row.harga_jual}</td>
+                <td>${row.aging}</td>
+                <td>${row.akhir_masuk_toko}</td>
                 <td>${row.harga_promo_rekomendasi}</td>
                 <td>${row.harga_promo_approved}</td>
                 <td>${fotoHTML}</td>
                 <td>${row.tanggal ?? '-'}</td>
+                <td>${row.jenis_promo ?? '-'}</td>
                 <td>${row.status_approval ?? '-'}</td>
               </tr>
             `;
