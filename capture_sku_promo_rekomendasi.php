@@ -135,6 +135,7 @@ foreach ($resultss as $r) {
                       <th>Foto</th>
                       <th>Tanggal</th>
                       <th>Jenis Promo</th>
+                      <th>Notes</th>
                       <th>Status Approval</th>
                     </tr>
                   </thead>
@@ -275,6 +276,7 @@ foreach ($resultss as $r) {
                 <td>${fotoHTML}</td>
                 <td>${row.tanggal ?? '-'}</td>
                 <td>${row.jenis_promo ?? '-'}</td>
+                <td>${row.notes ?? '-'}</td>
                 <td>${row.status_approval ?? '-'}</td>
               </tr>
             `;
