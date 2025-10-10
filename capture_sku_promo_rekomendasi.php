@@ -254,7 +254,7 @@ foreach ($resultss as $r) {
           success: function (data) {
             let html = "";
             if (data.length === 0) {
-              html = `<tr><td colspan="8" class="text-center text-muted">Belum ada data promo</td></tr>`;
+              html = `<tr><td colspan="13" class="text-center text-muted">Belum ada data promo</td></tr>`;
             } else {
               data.forEach((row, i) => {
                 let fotoHTML = "";
