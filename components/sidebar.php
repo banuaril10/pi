@@ -52,6 +52,9 @@
 						<li class="submenu-item ">
 							<a href="capture_sku_promo.php">Promo</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="capture_sku_promo_rekomendasi.php">Rekomendasi Promo</a>
+						</li>
 					</ul>
 				</li>
 
