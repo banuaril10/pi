@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 if (isset($_GET['sku']) || isset($_GET['barcode'])) {
     $sku_or_barcode = isset($_GET['sku']) ? $_GET['sku'] : $_GET['barcode'];
 
-    // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku, barcode, barcode1-4
+    // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku/barcode/barcode1-4
     $sqlPrice = "
         SELECT price, sku, name 
         FROM pos_mproduct 
@@ -49,7 +49,74 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         $stmtDiscount->execute();
         $discount = $stmtDiscount->fetch(PDO::FETCH_ASSOC);
 
-        // Cek apakah diskon ditemukan
+        // --- TAMBAHAN: Ambil semua promo aktif dari ketiga tabel ---
+        $promo_headers = [];
+
+        // Reguler
+        $sqlReguler = "
+            SELECT discountname, jenis_promo, fromdate, todate 
+            FROM pos_mproductdiscount
+            WHERE sku = :sku AND isactived = '1'
+            AND CURRENT_DATE BETWEEN fromdate AND todate
+        ";
+        $stmtReguler = $connec->prepare($sqlReguler);
+        $stmtReguler->bindParam(':sku', $sku);
+        $stmtReguler->execute();
+        $promoReguler = $stmtReguler->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($promoReguler as $p) {
+            $promo_headers[] = [
+                'type' => 'Reguler',
+                'discountname' => $p['discountname'],
+                'jenis_promo' => $p['jenis_promo'],
+                'fromdate' => $p['fromdate'],
+                'todate' => $p['todate']
+            ];
+        }
+
+        // Bundling
+        $sqlBundling = "
+            SELECT discountname, headername, jenis_promo, fromdate, todate 
+            FROM pos_mproductdiscount_bundling
+            WHERE sku = :sku AND isactived = '1'
+            AND CURRENT_DATE BETWEEN fromdate AND todate
+        ";
+        $stmtBundling = $connec->prepare($sqlBundling);
+        $stmtBundling->bindParam(':sku', $sku);
+        $stmtBundling->execute();
+        $promoBundling = $stmtBundling->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($promoBundling as $p) {
+            $promo_headers[] = [
+                'type' => 'Bundling',
+                'discountname' => $p['discountname'],
+                'headername' => $p['headername'],
+                'jenis_promo' => $p['jenis_promo'],
+                'fromdate' => $p['fromdate'],
+                'todate' => $p['todate']
+            ];
+        }
+
+        // Grosir
+        $sqlGrosir = "
+            SELECT discountname, jenis_promo, fromdate, todate 
+            FROM pos_mproductdiscountgrosir_new
+            WHERE sku = :sku AND isactived = '1'
+            AND CURRENT_DATE BETWEEN fromdate AND todate
+        ";
+        $stmtGrosir = $connec->prepare($sqlGrosir);
+        $stmtGrosir->bindParam(':sku', $sku);
+        $stmtGrosir->execute();
+        $promoGrosir = $stmtGrosir->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($promoGrosir as $p) {
+            $promo_headers[] = [
+                'type' => 'Grosir',
+                'discountname' => $p['discountname'],
+                'jenis_promo' => $p['jenis_promo'],
+                'fromdate' => $p['fromdate'],
+                'todate' => $p['todate']
+            ];
+        }
+
+        // --- Lanjut struktur lama ---
         if ($discount) {
             $discountedPrice = $regularPrice - $discount['discount'];
             $response = [
@@ -59,7 +126,8 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'discount' => $discount['discount'],
                 'discounted_price' => $discountedPrice,
                 'valid_from' => $discount['fromdate'],
-                'valid_to' => $discount['todate']
+                'valid_to' => $discount['todate'],
+                'promo_headers' => $promo_headers // ✅ tambahan
             ];
         } else {
             $response = [
@@ -69,11 +137,12 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'discount' => null,
                 'discounted_price' => null,
                 'valid_from' => null,
-                'valid_to' => null
+                'valid_to' => null,
+                'promo_headers' => $promo_headers // ✅ tetap muncul meski kosong
             ];
         }
 
-        echo json_encode($response);
+        echo json_encode($response, JSON_PRETTY_PRINT);
 
     } else {
         echo json_encode(['error' => 'Product not found']);

@@ -3,7 +3,7 @@
 $stock = $_GET['stock'];
 $rack = $_GET['rack'];
 
-$query = "SELECT a.*, b.discountname, coalesce(b.discount,0) discount, b.fromdate, b.todate, coalesce((a.price - b.discount),0) afterdiscount FROM pos_mproduct a inner join 
+$query = "SELECT distinct a.*, b.discountname, coalesce(b.discount,0) discount, b.fromdate, b.todate, coalesce((a.price - b.discount),0) afterdiscount FROM pos_mproduct a inner join 
 (select * from pos_mproductdiscount where date(now()) between fromdate and todate) b on a.sku = b.sku where a.sku != '' ";
 
 if($stock > 0){

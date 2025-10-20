@@ -908,6 +908,23 @@ foreach ($alter_tempsales as $r) {
 	$connec->exec($r);
 }
 
+$create_voucher_store = [
+	'CREATE TABLE IF NOT EXISTS in_config_voucher_store (
+	id serial4 NOT NULL,
+	id_store varchar(50) NOT NULL,
+	nominal numeric NOT NULL,
+	max_qty int4 NULL DEFAULT 0,
+	isactive bool NULL DEFAULT true,
+	insertby varchar(50) NULL,
+	insertdate timestamp NULL DEFAULT now(),
+	updatedate timestamp NULL,
+	CONSTRAINT in_config_voucher_store_pkey PRIMARY KEY (id)
+);'
+];
+foreach ($create_voucher_store as $r) {
+	$connec->exec($r);
+}
+
 
 ?>
 

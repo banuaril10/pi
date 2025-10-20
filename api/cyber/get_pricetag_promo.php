@@ -26,7 +26,7 @@ foreach ($get_store_code as $r) {
 
 $implode = implode("','", $data);
 
-$qq = "select a.*, (a.price - b.discount) afterdiscount, b.fromdate, b.todate from pos_mproduct a
+$qq = "select distinct a.*, (a.price - b.discount) afterdiscount, b.fromdate, b.todate from pos_mproduct a
 inner join (select * from pos_mproductdiscount where date(now()) between fromdate and todate) b on a.sku = b.sku
 where a.sku in ('" . $implode . "')";
 $statement = $connec->query($qq);
