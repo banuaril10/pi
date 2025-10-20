@@ -58,6 +58,8 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             FROM pos_mproductdiscount
             WHERE sku = :sku AND isactived = '1'
             AND CURRENT_DATE BETWEEN fromdate AND todate
+            ORDER BY discount DESC
+            LIMIT 1
         ";
         $stmtReguler = $connec->prepare($sqlReguler);
         $stmtReguler->bindParam(':sku', $sku);
