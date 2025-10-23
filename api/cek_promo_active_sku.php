@@ -48,6 +48,39 @@ foreach ($cv as $r1) {
 }
 
 // Promo bundling
+// $cek_bundling = "SELECT b.bundling_code, b.minbuy
+//                  FROM pos_mproductdiscount_bundling a
+//                  JOIN pos_mproductdiscount_bundling_header b 
+//                     ON a.discountname = b.bundling_code
+//                  WHERE a.sku = '" . $sku . "'
+//                    AND DATE(now()) BETWEEN a.fromdate AND a.todate
+//                  LIMIT 1";
+
+// $cb = $connec->query($cek_bundling);
+// foreach ($cb as $b1) {
+//   $bundling_code = $b1['bundling_code'];
+//   $minbuy = $b1['minbuy'];
+
+//   $discount_name .= '<b>Promo Bundling:</b><br>Minimal beli <b>' . $minbuy . '</b> item:<br>';
+
+//   // Ambil hanya potongan harga dari semua item di bundling ini
+//   $list_items = "SELECT discount
+//                    FROM pos_mproductdiscount_bundling 
+//                    WHERE discountname = '" . $bundling_code . "'
+// 				   and sku = '" . $sku . "'
+//                      AND DATE(now()) BETWEEN fromdate AND todate";
+
+//   $li = $connec->query($list_items);
+//   foreach ($li as $itm) {
+//     if ($itm['discount'] > 0) {
+//       $discount_name .= '- Potongan ' . rupiah($itm['discount']) . '<br>';
+//     }
+//   }
+// }
+
+
+
+// Promo bundling
 $cek_bundling = "SELECT b.bundling_code, b.minbuy
                  FROM pos_mproductdiscount_bundling a
                  JOIN pos_mproductdiscount_bundling_header b 
@@ -63,20 +96,23 @@ foreach ($cb as $b1) {
 
   $discount_name .= '<b>Promo Bundling:</b><br>Minimal beli <b>' . $minbuy . '</b> item:<br>';
 
-  // Ambil hanya potongan harga dari semua item di bundling ini
+  // Ambil potongan harga dan tampilkan harga setelah diskon
   $list_items = "SELECT discount
                    FROM pos_mproductdiscount_bundling 
                    WHERE discountname = '" . $bundling_code . "'
-				   and sku = '" . $sku . "'
+                     AND sku = '" . $sku . "'
                      AND DATE(now()) BETWEEN fromdate AND todate";
 
   $li = $connec->query($list_items);
   foreach ($li as $itm) {
     if ($itm['discount'] > 0) {
-      $discount_name .= '- Potongan ' . rupiah($itm['discount']) . '<br>';
+      $harga_setelah = $price - $itm['discount'];
+      $discount_name .= '- Harga setelah bundling: <font style="color:red">' . rupiah($harga_setelah) . '</font><br>';
     }
   }
 }
+
+
 
 
 // Promo combo (A + B bayar harga termahal)
