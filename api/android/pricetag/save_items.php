@@ -1,14 +1,37 @@
 <?php
 include "../../../config/koneksi.php";
+header('Content-Type: application/json; charset=UTF-8');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST");
 
-header('Content-Type: application/json');
+// Ambil JSON dari body
+$input = file_get_contents("php://input");
+$data = json_decode($input, true);
 
-$header_id = $_POST['header_id'] ?? 0;
-$sku = $_POST['sku'] ?? '';
+// Ambil data
+$header_id = isset($data['header_id']) ? intval($data['header_id']) : 0;
+$sku = isset($data['sku']) ? trim($data['sku']) : '';
 
-$stmt = $connec->prepare("INSERT INTO price_tag_items(header_id, sku) VALUES(:hid, :sku)");
-$stmt->execute(['hid' => $header_id, 'sku' => $sku]);
+if ($header_id <= 0 || empty($sku)) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Data tidak lengkap (header_id atau sku kosong)'
+    ]);
+    exit;
+}
 
-echo json_encode(['success' => true]);
+try {
+    $stmt = $connec->prepare("INSERT INTO price_tag_items (header_id, sku) VALUES (:hid, :sku)");
+    $stmt->execute(['hid' => $header_id, 'sku' => $sku]);
 
+    echo json_encode([
+        'success' => true,
+        'message' => 'Item berhasil disimpan'
+    ]);
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error: ' . $e->getMessage()
+    ]);
+}
 ?>
