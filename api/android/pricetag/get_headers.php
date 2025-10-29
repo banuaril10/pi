@@ -10,6 +10,7 @@ try {
             created_by,
             created_at,
             status,
+            description,
             total_items
         FROM price_tag_headers
         ORDER BY created_at DESC

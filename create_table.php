@@ -951,9 +951,9 @@ foreach ($create_price_tag as $r) {
 }
 
 
-//add column keterangan di price_tag_headers
+//add column description di price_tag_headers
 $alter_price_tag = [
-	'ALTER TABLE price_tag_headers ADD COLUMN IF NOT EXISTS keterangan TEXT;'
+	'ALTER TABLE price_tag_headers ADD COLUMN IF NOT EXISTS description TEXT;'
 ];
 foreach ($alter_price_tag as $r) {
 	$connec->exec($r);
