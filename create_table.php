@@ -926,5 +926,30 @@ foreach ($create_voucher_store as $r) {
 }
 
 
+
+$create_price_tag = [
+	'CREATE TABLE IF NOT EXISTS price_tag_headers (
+	id SERIAL PRIMARY KEY,
+	header_number VARCHAR(50) UNIQUE NOT NULL,
+	created_by VARCHAR(100) NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	status VARCHAR(20) DEFAULT \'DRAFT\', -- DRAFT, COMPLETED
+	total_items INTEGER DEFAULT 0
+);',
+	'CREATE TABLE IF NOT EXISTS price_tag_items (
+	id SERIAL PRIMARY KEY,
+	header_id INTEGER REFERENCES price_tag_headers(id),
+	sku VARCHAR(50) NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);',
+	'CREATE INDEX IF NOT EXISTS idx_price_tag_header_number ON price_tag_headers(header_number);',
+	'CREATE INDEX IF NOT EXISTS idx_price_tag_items_header_id ON price_tag_items(header_id);',
+	'CREATE INDEX IF NOT EXISTS idx_price_tag_items_sku ON price_tag_items(sku);'
+];
+foreach ($create_price_tag as $r) {
+	$connec->exec($r);
+}
+
+
 ?>
 
