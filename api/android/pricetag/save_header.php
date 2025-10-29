@@ -17,6 +17,7 @@ if (!$data) {
 }
 
 $header_number = $data['header_number'] ?? '';
+$description = $data['description'] ?? '';
 $created_by = $data['created_by'] ?? '';
 
 if (empty($header_number) || empty($created_by)) {
@@ -26,10 +27,10 @@ if (empty($header_number) || empty($created_by)) {
 
 try {
     $stmt = $connec->prepare("
-        INSERT INTO price_tag_headers (header_number, created_by, created_at, status, total_items)
-        VALUES (:hn, :cb, NOW(), 'DRAFT', 0)
+        INSERT INTO price_tag_headers (header_number, created_by, created_at, status, total_items, description)
+        VALUES (:hn, :cb, NOW(), 'DRAFT', 0, :desc)
     ");
-    $stmt->execute(['hn' => $header_number, 'cb' => $created_by]);
+    $stmt->execute(['hn' => $header_number, 'cb' => $created_by, 'desc' => $description]);
 
     $header_id = $connec->lastInsertId();
     echo json_encode(['success' => true, 'message' => 'Header created', 'header_id' => (int) $header_id]);
