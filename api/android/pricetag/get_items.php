@@ -16,7 +16,7 @@ if ($header_id <= 0) {
 }
 
 try {
-    $stmt = $connec->prepare("SELECT sku FROM price_tag_items WHERE header_id = :hid ORDER BY id DESC");
+    $stmt = $connec->prepare("SELECT id,sku FROM price_tag_items WHERE header_id = :hid ORDER BY id DESC");
     $stmt->execute(['hid' => $header_id]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
