@@ -21,6 +21,20 @@ if ($header_id <= 0 || empty($sku)) {
 }
 
 try {
+    // Cek apakah kombinasi header_id + sku sudah ada
+    $check = $connec->prepare("SELECT COUNT(*) FROM price_tag_items WHERE header_id = :hid AND sku = :sku");
+    $check->execute(['hid' => $header_id, 'sku' => $sku]);
+    $exists = $check->fetchColumn();
+
+    if ($exists > 0) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Item dengan SKU ini sudah ada pada header yang sama'
+        ]);
+        exit;
+    }
+
+    // Jika belum ada, baru insert
     $stmt = $connec->prepare("INSERT INTO price_tag_items (header_id, sku) VALUES (:hid, :sku)");
     $stmt->execute(['hid' => $header_id, 'sku' => $sku]);
 
