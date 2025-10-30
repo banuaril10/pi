@@ -1,27 +1,51 @@
-<?php 
-include "config/koneksi.php"; 
-include "components/main.php"; 
-include "components/sidebar.php"; 
-?>
-
+<?php include "config/koneksi.php"; ?>
+<?php include "components/main.php"; ?>
+<?php include "components/sidebar.php"; ?>
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+</style>
+<div id="overlay">
+			<div class="cv-spinner">
+				<span class="spinner"></span>
+			</div>
+		</div>
+<div id="app">
 <div id="main">
-    <header class="mb-3">
-        <a href="#" class="burger-btn d-block d-xl-none">
-            <i class="bi bi-justify fs-3"></i>
-        </a>
-    </header>
 
-    <div class="page-heading">
-        <h3>Daftar Price Tag Header</h3>
-    </div>
 
-    <section class="section">
-        <div class="card">
-            <div class="card-header">
-                <h5>List Price Tag Headers</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered table-striped" id="headerTable">
+
+<header class="mb-3">
+	<a href="#" class="burger-btn d-block d-xl-none">
+		<i class="bi bi-justify fs-3"></i>
+	</a>
+</header>
+<?php include "components/hhh.php"; ?>
+
+<!------ CONTENT AREA ------->
+<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h4>HARGA PROMO</h4>
+			</div>
+			<div class="card-body">
+			<div class="tables">			
+				<div class="table-responsive bs-example widget-shadow">	
+				<p id="notif1" style="color: red; font-weight: bold"></p>		
+
+			<table class="table table-bordered table-striped" id="headerTable">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -35,49 +59,72 @@ include "components/sidebar.php";
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                        $sql = "SELECT * FROM price_tag_headers ORDER BY id DESC";
-                        $no = 1;
-                        foreach ($connec->query($sql) as $row) { ?>
-                            <tr>
-                                <td><?= $no++; ?></td>
-                                <td><?= htmlspecialchars($row['header_number']); ?></td>
-                                <td>
-                                    <?php if ($row['status'] == 'DRAFT') { ?>
-                                        <span class="badge bg-warning">DRAFT</span>
-                                    <?php } else { ?>
-                                        <span class="badge bg-success"><?= htmlspecialchars($row['status']); ?></span>
-                                    <?php } ?>
-                                </td>
-                                <td><?= $row['total_items']; ?></td>
-                                <td><?= htmlspecialchars($row['created_by']); ?></td>
-                                <td><?= date('d-m-Y H:i', strtotime($row['created_at'])); ?></td>
-                                <td><?= nl2br(htmlspecialchars($row['keterangan'])); ?></td>
-                                <td>
-                                    <a href="print_promo.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
-                                        <i class="bi bi-printer"></i> Cetak Promo
-                                    </a>
-                                    <a href="print_reguler.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-primary">
-                                        <i class="bi bi-printer"></i> Cetak Reguler
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+                    <?php
+                    $sql = "SELECT * FROM price_tag_headers ORDER BY id DESC";
+                    $no = 1;
+                    foreach ($connec->query($sql) as $row) { ?>
+                        <tr>
+                            <td>
+                                <?= $no++; ?>
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($row['header_number']); ?>
+                            </td>
+                            <td>
+                                <?php if ($row['status'] == 'DRAFT') { ?>
+                                    <span class="badge bg-warning">DRAFT</span>
+                                <?php } else { ?>
+                                    <span class="badge bg-success">
+                                        <?= htmlspecialchars($row['status']); ?>
+                                    </span>
+                                <?php } ?>
+                            </td>
+                            <td>
+                                <?= $row['total_items']; ?>
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($row['created_by']); ?>
+                            </td>
+                            <td>
+                                <?= date('d-m-Y H:i', strtotime($row['created_at'])); ?>
+                            </td>
+                            <td>
+                                <?= nl2br(htmlspecialchars($row['keterangan'])); ?>
+                            </td>
+                            <td>
+                                <a href="print_promo.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-printer"></i> Cetak Promo
+                                </a>
+                                <a href="print_reguler.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-printer"></i> Cetak Reguler
+                                </a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+				
+
+					
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
 </div>
 
-<script>
-$(document).ready(function () {
-    $('#headerTable').DataTable({
-        pageLength: 25,
+<script src="styles/js/price-promo.js?id=321"></script>
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#example').DataTable({
         lengthMenu: [
             [10, 25, 50, -1],
-            [10, 25, 50, 'Semua']
-        ]
+            [10, 25, 50, 'All'],
+        ],
     });
-});
+} );
 </script>
+</div>
+<?php include "components/fff.php"; ?>
