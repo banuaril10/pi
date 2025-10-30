@@ -62,7 +62,14 @@
                     <?php
                     $sql = "SELECT * FROM price_tag_headers ORDER BY id DESC";
                     $no = 1;
-                    foreach ($connec->query($sql) as $row) { ?>
+                    foreach ($connec->query($sql) as $row) {
+                        $count_items = 0;
+                        $stmt = $connec->prepare("SELECT COUNT(*) as item_count FROM price_tag_items WHERE header_id = :hid");
+                        $stmt->execute(['hid' => $row['id']]);
+                        $count_items = $stmt->fetchColumn();
+
+                        $row['total_items'] = $count_items;
+                        ?>
                         <tr>
                             <td>
                                 <?= $no++; ?>
