@@ -395,7 +395,9 @@
 		</div>
 	</div>
 
-	<script src="styles/js/price-promo.js?id=424364"></script>
+	<!-- <script src="styles/js/price-promo.js?id=424364"></script> -->
+	<script src="styles/js/jsbarcode.js"></script>
+ 	<script src="https://intransit.idolmartidolaku.com/apiidolmart/pricetag/price-promo-store-apps.js?id=dwa"></script>
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$('#example').DataTable({
