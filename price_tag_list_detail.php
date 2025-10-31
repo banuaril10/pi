@@ -189,26 +189,22 @@ $(document).ready( function () {
     });
 } );
 
-document.getElementById("checkall").addEventListener("click", function() {	
+            document.getElementById("checkall").addEventListener("click", function() {	
 
 				var checkboxes = document.querySelectorAll('input[type="checkbox"]');
 				
 		
 				for (var i = 0; i < checkboxes.length; i++) {
 				if (checkboxes[i].type == 'checkbox'){
-					if(checkboxes[i].checked == true){
-						
-						checkboxes[i].checked = false;
-					}else if(checkboxes[i].checked == false){
-						checkboxes[i].checked = true;
-						
-					}
-					
-					
+                        if(checkboxes[i].checked == true){
+                            
+                            checkboxes[i].checked = false;
+                        }else if(checkboxes[i].checked == false){
+                            checkboxes[i].checked = true;
+                            
+                        }
 					}	
 				}
-				
-
 			});
 
 
