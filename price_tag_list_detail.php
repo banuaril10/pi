@@ -47,12 +47,12 @@
                 $sql_header = "select * from price_tag_headers where id = '" . $header_id . "'";
                 foreach ($connec->query($sql_header) as $row_header) {
                     ?>
-                    <p><b>Header Number : </b> <?= $row_header['header_number']; ?></p>
-                    <p><b>Status : </b> <?= $row_header['status']; ?></p>
-                    <p><b>Total Items : </b> <?= $row_header['total_items']; ?></p>
-                    <p><b>Dibuat Oleh : </b> <?= $row_header['created_by']; ?></p>
-                    <p><b>Tanggal : </b> <?= $row_header['created_at']; ?></p>
-                    <p><b>Keterangan : </b> <?= nl2br(htmlspecialchars($row_header['keterangan'])); ?></p>
+                    <p><b>Header Number : </b> <?= $row_header['header_number']; ?><br>
+                    <b>Status : </b> <?= $row_header['status']; ?><br>
+                    <b>Total Items : </b> <?= $row_header['total_items']; ?><br>
+                    <b>Dibuat Oleh : </b> <?= $row_header['created_by']; ?><br>
+                    <b>Tanggal : </b> <?= $row_header['created_at']; ?><br>
+                    <b>Keterangan : </b> <?= nl2br(htmlspecialchars($row_header['keterangan'])); ?></p>
                     <?php
                 }
             ?>
