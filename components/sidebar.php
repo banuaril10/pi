@@ -213,6 +213,9 @@
 						<li class="submenu-item ">
 							<a href="mitemspromocode_live.php">Harga Bertingkat</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="price_tag_list.php">From IdolScan</a>
+						</li>
 					</ul>
 				</li>
 
