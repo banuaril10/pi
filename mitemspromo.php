@@ -233,7 +233,7 @@
 </div>
 </div>
 
-<script src="styles/js/price-promo.js?id=321"></script>
+ <script src="https://intransit.idolmartidolaku.com/apiidolmart/pricetag/price-promo.js?id=dwa"></script>
 <script type="text/javascript">
 $(document).ready( function () {
     $('#example').DataTable({

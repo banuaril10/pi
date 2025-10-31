@@ -99,11 +99,8 @@
                                 <?= nl2br(htmlspecialchars($row['keterangan'])); ?>
                             </td>
                             <td>
-                                <a href="print_promo.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
-                                    <i class="bi bi-printer"></i> Cetak Promo
-                                </a>
-                                <a href="print_reguler.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-printer"></i> Cetak Reguler
+                                <a href="price_tag_detail.php?header_id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-printer"></i>Detail
                                 </a>
                             </td>
                         </tr>
