@@ -38,9 +38,25 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h4>HARGA PROMO DETAIL</h4>
+				<h4>DETAIL ITEMS IDOLSCAN</h4>
 			</div>
 			<div class="card-body">
+
+            <?php
+                $header_id = $_GET['header_id'];
+                $sql_header = "select * from price_tag_header where id = '" . $header_id . "'";
+                foreach ($connec->query($sql_header) as $row_header) {
+                    ?>
+                    <p><b>Header Number : </b> <?= $row_header['header_number']; ?></p>
+                    <p><b>Status : </b> <?= $row_header['status']; ?></p>
+                    <p><b>Total Items : </b> <?= $row_header['total_items']; ?></p>
+                    <p><b>Dibuat Oleh : </b> <?= $row_header['created_by']; ?></p>
+                    <p><b>Tanggal : </b> <?= $row_header['created_at']; ?></p>
+                    <p><b>Keterangan : </b> <?= nl2br(htmlspecialchars($row_header['keterangan'])); ?></p>
+                    <?php
+                }
+            ?>
+
 			<div class="tables">			
 				<div class="table-responsive bs-example widget-shadow">	
 				<p id="notif1" style="color: red; font-weight: bold"></p>		
@@ -165,6 +181,30 @@ $(document).ready( function () {
         ],
     });
 } );
+
+document.getElementById("checkall").addEventListener("click", function() {	
+
+				var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+				
+		
+				for (var i = 0; i < checkboxes.length; i++) {
+				if (checkboxes[i].type == 'checkbox'){
+					if(checkboxes[i].checked == true){
+						
+						checkboxes[i].checked = false;
+					}else if(checkboxes[i].checked == false){
+						checkboxes[i].checked = true;
+						
+					}
+					
+					
+					}	
+				}
+				
+
+			});
+
+
 </script>
 </div>
 <?php include "components/fff.php"; ?>
