@@ -45,6 +45,7 @@
             <?php
                 $header_id = $_GET['header_id'];
                 $sql_header = "select * from price_tag_header where id = '" . $header_id . "'";
+                echo $sql_header;
                 foreach ($connec->query($sql_header) as $row_header) {
                     ?>
                     <p><b>Header Number : </b> <?= $row_header['header_number']; ?></p>
