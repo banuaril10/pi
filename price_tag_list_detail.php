@@ -76,6 +76,7 @@
 								<th>Rack Name</th>
 								<th>Tag</th>
 								<th>Copy</th>
+								<th>Periode</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -106,12 +107,15 @@
                             $no = 1;
                             foreach ($connec->query($sql_list) as $row) {
                                 $disk = 0;
-                                $cek_disc = "select todate, discount from pos_mproductdiscount where todate >= '" . date('Y-m-d') . "' and sku = '" . $row['sku'] . "'";
+                                $cek_disc = "select fromdate, todate, discount from 
+                                pos_mproductdiscount where fromdate <= '" . date('Y-m-d') . "' and todate >= '" . date('Y-m-d') . "' and sku = '" . $row['sku'] . "' and discount > 0 order by discount desc limit 1";
                                 foreach ($connec->query($cek_disc) as $row_dis) {
 
                                     $disk = $row_dis['discount'];
                                     // $tgl_todate = $row_dis['todate'];
                                     $tgl_todate = date('d/m/Y', strtotime($row_dis['todate']));
+                                    $tgl_fromdate = date('d/m/Y', strtotime($row_dis['fromdate']));
+
                                     $harga_last = $row['price'] - $disk;
 
                                     ?>
@@ -119,7 +123,7 @@
                     
                                     <tr>
                                         <td><input type="checkbox" id="checkbox" name="checkbox[]"
-                                                value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['price']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['shortcut']; ?>|<?php echo $harga_last; ?>|<?php echo $tgl_todate; ?>|<?php echo $row['tag']; ?>|<?php echo $row['barcode']; ?>">
+                                                value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['price']; ?>|<?php echo $row['tgl_sekarang']; ?>|<?php echo $row['rack_name']; ?>|<?php echo $row['shortcut']; ?>|<?php echo $harga_last; ?>|<?php echo $tgl_todate; ?>|<?php echo $row['tag']; ?>|<?php echo $row['barcode']; ?>|<?php echo $tgl_fromdate; ?>">
                                         </td>
                                         <td scope="row">
                                             <?php echo $no; ?>
@@ -146,6 +150,9 @@
                                             <?php echo $row['tag']; ?>
                                         </td>
                                         <td><input type="number" id="copy<?php echo $row['sku']; ?>" value="1"></td>
+                                        <td>
+                                            <?php echo $tgl_fromdate; ?> - <?php echo $tgl_todate; ?>
+                                        </td>
                     
                                     </tr>
                     
@@ -171,7 +178,7 @@
 </div>
 </div>
 
- <script src="https://intransit.idolmartidolaku.com/apiidolmart/pricetag/price-promo.js?id=dwa"></script>
+ <script src="https://intransit.idolmartidolaku.com/apiidolmart/pricetag/price-promo-store-apps.js?id=dwa"></script>
 <script type="text/javascript">
 $(document).ready( function () {
     $('#example').DataTable({
