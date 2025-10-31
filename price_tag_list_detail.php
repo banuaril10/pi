@@ -52,7 +52,7 @@
                     <b>Total Items : </b> <?= $row_header['total_items']; ?><br>
                     <b>Dibuat Oleh : </b> <?= $row_header['created_by']; ?><br>
                     <b>Tanggal : </b> <?= $row_header['created_at']; ?><br>
-                    <b>Keterangan : </b> <?= nl2br(htmlspecialchars($row_header['keterangan'])); ?></p>
+                    <b>Keterangan : </b> <?= nl2br(htmlspecialchars($row_header['description'])); ?></p>
                     <?php
                 }
             ?>
@@ -178,6 +178,7 @@
 </div>
 </div>
 
+ <script src="styles/js/jsbarcode.js"></script>
  <script src="https://intransit.idolmartidolaku.com/apiidolmart/pricetag/price-promo-store-apps.js?id=dwa"></script>
 <script type="text/javascript">
 $(document).ready( function () {
