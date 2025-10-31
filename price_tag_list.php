@@ -99,7 +99,7 @@
                                 <?= nl2br(htmlspecialchars($row['keterangan'])); ?>
                             </td>
                             <td>
-                                <a href="price_tag_detail.php?header_id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
+                                <a href="price_tag_list_detail.php?header_id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
                                     <i class="bi bi-printer"></i>Detail
                                 </a>
                             </td>
