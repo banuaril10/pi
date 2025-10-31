@@ -101,7 +101,7 @@
 
 
 
-                            $sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,a.rack, a.price, a.barcode, a.tag from pos_mproduct a where a.sku in (" . $sku_in . ") order by a.name";
+                            $sql_list = "select date(now()) as tgl_sekarang, a.sku, a.name ,a.rack, a.price, a.barcode, a.tag from pos_mproduct a where (a.sku in (" . $sku_in . ") or a.barcode in (" . $sku_in . ")) order by a.name";
 
 
                             $no = 1;
