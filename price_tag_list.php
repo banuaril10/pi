@@ -100,7 +100,10 @@
                             </td>
                             <td>
                                 <a href="price_tag_list_detail.php?header_id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
-                                    <i class="bi bi-printer"></i>Detail
+                                    <i class="bi bi-printer"></i> Cetak Promo
+                                </a>
+                                <a href="price_tag_list_detail_reguler.php?header_id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-printer"></i> Cetak Reguler
                                 </a>
                             </td>
                         </tr>
