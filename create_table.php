@@ -959,7 +959,12 @@ foreach ($alter_price_tag as $r) {
 	$connec->exec($r);
 }
 
-
+$indexing_table_promo_new = [
+	'CREATE INDEX IF NOT EXISTS pos_dsalesline_insertdate_idx ON public.pos_dsalesline USING btree (insertdate, sku);'
+];
+foreach ($indexing_table_promo_new as $r) {
+	$connec->exec($r);
+}
 
 ?>
 

@@ -2,95 +2,112 @@
 <?php include "components/main.php"; ?>
 <?php include "components/sidebar.php"; ?>
 <div id="app">
-<div id="main">
-<header class="mb-3">
-	<a href="#" class="burger-btn d-block d-xl-none">
-		<i class="bi bi-justify fs-3"></i>
-	</a>
-</header>
-<?php include "components/hhh.php"; ?>
+	<div id="main">
+		<header class="mb-3">
+			<a href="#" class="burger-btn d-block d-xl-none">
+				<i class="bi bi-justify fs-3"></i>
+			</a>
+		</header>
+		<?php include "components/hhh.php"; ?>
 
-<!------ CONTENT AREA ------->
-<div class="row">
-	<div class="col-12">
-		<div class="card">
-			<div style="font-size: 15px" class="card-header">
-				<font><b>INVENTORY VERIFICATION</b></font><br>
-				<?php 
-				function rupiah($angka){
-	
-							$hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+		<!------ CONTENT AREA ------->
+		<div class="row">
+			<div class="col-12">
+				<div class="card">
+					<div style="font-size: 15px" class="card-header">
+						<font><b>INVENTORY VERIFICATION</b></font><br>
+						<?php
+						function rupiah($angka)
+						{
+
+							$hasil_rupiah = "Rp " . number_format($angka, 0, ',', '.');
 							return $hasil_rupiah;
- 
+
 						}
-				$sql_list = "select m_pi_key, name ,insertdate, rack_name from m_pi where status = '2' and m_pi_key = '".$_GET['m_pi']."' order by insertdate desc"; 
-				foreach ($connec->query($sql_list) as $tot) {
-					$rack_name = $tot['rack_name'];
-					$dn = $tot['name'];
+						$sql_list = "select m_pi_key, name ,insertdate, rack_name from m_pi where status = '2' and m_pi_key = '" . $_GET['m_pi'] . "' order by insertdate desc";
+						foreach ($connec->query($sql_list) as $tot) {
+							$rack_name = $tot['rack_name'];
+							$dn = $tot['name'];
 
-					?>
-						<font>RACK : <b><?php echo $tot['rack_name']; ?></b></font><br>
-						<font>DOCUMENT NO : <b><?php echo $tot['name']; ?></b></font><br>
-					
-					
-				<?php } ?>
-				
-				<div id="info">
-				<?php $sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync,  sum(qtysales * price) hargasales, sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline
-						from m_piline where m_pi_key = '".$_GET['m_pi']."'";
-						foreach ($connec->query($sql_amount) as $tot) {
-							
-							$qtyerp = $tot['hargaerp'] - $tot['hargagantung'] - $tot['hargasales'];
-							$qtycount = $tot['hargafisik'];
+							?>
+						<font>RACK : <b>
+								<?php echo $tot['rack_name']; ?>
+							</b></font><br>
+						<font>DOCUMENT NO : <b>
+								<?php echo $tot['name']; ?>
+							</b></font><br>
 
-							$jumline = $tot['jumline'];
-							$jumsync = $tot['jumsync'];
-							$selisih = $qtycount - $qtyerp;
-							echo "<font>SELISIH : <b>".rupiah($selisih)."</b></font>";
-						}
-						
-				?>
-				<table>
-				<tr>
-					<td style="width: 40px; background-color: #ffa597"></td>
-					<td> : </td>
-					<td>Sudah verifikasi</td>
-				
-				</tr>
-				</table>
-				<font style="color: red; font-weight: bold">Data diurutkan dari selisih terbesar</font>
-				</div>
-				
-				
-			</div>
-		
-			<div class="card-body">
-			<div class="tables">
-						
-				<div class="table-responsive bs-example widget-shadow">				
 
-				
+						<?php } ?>
 
-					<div class="form-group">
-					<p id="notif" style="color: red; font-weight: bold"></p>
+						<div id="info">
+							<?php $sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync,  sum(qtysales * price) hargasales, sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline
+						from m_piline where m_pi_key = '" . $_GET['m_pi'] . "'";
+							foreach ($connec->query($sql_amount) as $tot) {
+
+								$qtyerp = $tot['hargaerp'] - $tot['hargagantung'] - $tot['hargasales'];
+								$qtycount = $tot['hargafisik'];
+
+								$jumline = $tot['jumline'];
+								$jumsync = $tot['jumsync'];
+								$selisih = $qtycount - $qtyerp;
+								echo "<font>SELISIH : <b>" . rupiah($selisih) . "</b></font>";
+							}
+
+							?>
+							<table>
+								<tr>
+									<td style="width: 40px; background-color: #ffa597"></td>
+									<td> : </td>
+									<td>Sudah verifikasi</td>
+
+								</tr>
+							</table>
+							<font style="color: red; font-weight: bold">Data diurutkan dari selisih terbesar</font>
+						</div>
+
+
 					</div>
-					<div class="form-inline"> 
-					
-					
-					<div class="form-group"> 
-					<table>
-					<tr><td>Sort By : </td><td><select id="sort">
-						<option value="1">Nama</option>
-						<option value="2">Variant</option>
-						<option value="3">SKU</option>
-					</select></td>
-					
-					<td>Warna : </td>
-					<td><select id="warna">
-						<option value="black">Hitam</option>
-						<option value="blue">Biru</option>
-						<option value="red">Merah</option>
-						<option value="green">Hijau</option>
+
+					<div class="card-body">
+						<div class="tables">
+
+							<div class="table-responsive bs-example widget-shadow">
+
+
+
+								<div class="form-group">
+									<p id="notif" style="color: red; font-weight: bold"></p>
+								</div>
+								<div class="form-inline">
+
+
+									<div class="form-group">
+										<table>
+											<tr>
+												<td>Sort By : </td>
+												<td><select id="sort">
+														<option value="1">Nama</option>
+														<option value="2">Variant</option>
+														<option value="3">SKU</option>
+													</select></td>
+
+												<td>Warna : </td>
+												<td><select id="warna">
+														<option value="black">Hitam</option>
+														<option value="blue">Biru</option>
+														<option value="red">Merah</option>
+														<option value="green">Hijau</option>
+													</select>
+												</td>
+
+											<td> Verifikasi Ke</td>
+					<td><select id="verifikasiKe">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
 					</select>
 					</td>
 					
@@ -100,7 +117,7 @@
 					<br>
 					
 					<button onclick="cetakGeneric('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>');" class="btn btn-primary">Cetak Selisih</button>	
-					<button onclick="cetakPdf('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>');" class="btn btn-warning">Cetak Selisih PDF</button>	
+					<button onclick="cetakPdf('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>','<?php echo $selisih; ?>');" class="btn btn-warning">Cetak Selisih PDF</button>	
 					<button onclick="testPrint();" class="btn btn-success">Test Print</button>	
 					<br>
 					<br>
@@ -119,40 +136,40 @@
 						<tbody>
 			
 		<?php $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' order by variant asc";
+		where m_pi.m_pi_key = '" . $_GET['m_pi'] . "' and m_pi.status = '2' order by variant asc";
 		$no = 1;
-		foreach ($connec->query($list_line) as $row1) {	
-		// $variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);
-		$variant = (int)$row1['variant'];
-		$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
-		if($row1['verifiedcount'] == ''){
-			
-			$vc = 0;
-		}else{
-			
-			$vc = $row1['verifiedcount'];
-		}
-		
-		
-		if($vc > 0){
-			
-			$color = 'style="background-color: #ffa597"';
-			
-		}else{
-			$color = '';
-			
-		}
-		
-		if($row1['barcode'] != ""){
-			
-			$barc = '('.$row1['barcode'].')';
-		}else{
-			$barc = "";
-			
-		}
-		
-		
-		?>
+		foreach ($connec->query($list_line) as $row1) {
+			// $variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);
+			$variant = (int) $row1['variant'];
+			$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
+			if ($row1['verifiedcount'] == '') {
+
+				$vc = 0;
+			} else {
+
+				$vc = $row1['verifiedcount'];
+			}
+
+
+			if ($vc > 0) {
+
+				$color = 'style="background-color: #ffa597"';
+
+			} else {
+				$color = '';
+
+			}
+
+			if ($row1['barcode'] != "") {
+
+				$barc = '(' . $row1['barcode'] . ')';
+			} else {
+				$barc = "";
+
+			}
+
+
+			?>
 		
 		
 							
@@ -177,22 +194,23 @@
 								<td>
 								
 								<div class="form-inline"> 
-								<input type="number" onkeydown="enterKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo str_replace("'", "",$row1['name']); ?>','<?php echo $_GET['m_pi']; ?>');" name="qtycount<?php echo $row1['sku']; ?>" id="qtycount<?php echo $row1['sku']; ?>" class="form-control" value="<?php echo $row1['qtycount']; ?>"> 
+								<input type="number" onkeydown="enterKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo str_replace("'", "", $row1['name']); ?>','<?php echo $_GET['m_pi']; ?>');" name="qtycount<?php echo $row1['sku']; ?>" id="qtycount<?php echo $row1['sku']; ?>" class="form-control" value="<?php echo $row1['qtycount']; ?>"> 
 								<!--<button type="button" id="btn-verifikasi" style="background: green; color: white" onclick="changeQty('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class="">Verifikasi</button>-->
 										
-								</div>		
+									</div>		
 										
 								
-								</td>
-								<td><?php echo $qtyerpreal; ?></td>
-								<td><?php echo $row1['qtysales']; ?></td>
-								<td><?php echo $variant; ?></td>
-								<td><?php echo $vc; ?></td>
-							</tr>
+									</td>
+									<td><?php echo $qtyerpreal; ?></td>
+									<td><?php echo $row1['qtysales']; ?></td>
+									<td><?php echo $variant; ?></td>
+									<td><?php echo $vc; ?></td>
+								</tr>
 					
 				
 					
-		<?php $no++;} ?>
+			<?php $no++;
+		} ?>
 			
 				</tbody>
 			</table>
@@ -208,28 +226,28 @@
 
 
 <script type="text/javascript">
-// onchange="changeKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo str_replace("'", "",$row1['name']); ?>','<?php echo $_GET['m_pi']; ?>');" 
+// onchange="changeKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo str_replace("'", "", $row1['name']); ?>','<?php echo $_GET['m_pi']; ?>');" 
 $(window).bind('beforeunload', function(){
   myFunction();
   return 'Apakah kamu yakin?';
 });
 
 function myFunction(){
-     // Write your business logic here
-     alert('Bye');
+	 // Write your business logic here
+	 alert('Bye');
 }
 
 
 function enterKey(obj, e, sku, name, mpi) {
  var key = document.all ? window.event.keyCode : e.which;	
-    if(key == 13) {         
-       changeQty(sku, name, mpi);
-       // I will forward to a new page here. Not an issue.
-    }
+	if(key == 13) {         
+	   changeQty(sku, name, mpi);
+	   // I will forward to a new page here. Not an issue.
+	}
 }
 
 function changeKey(obj, e, sku, name, mpi) {
-    changeQty(sku, name, mpi);
+	changeQty(sku, name, mpi);
 }
 					
 
@@ -241,27 +259,27 @@ function changeKey(obj, e, sku, name, mpi) {
 // });
 
 window.onbeforeunload = function () {
-    return 'Are you sure? Your work will be lost. ';
+	return 'Are you sure? Your work will be lost. ';
 };
 
 
 function textbyline(str,intmax,stralign){
-    var strresult='';
+	var strresult='';
   if (stralign=='right'){
-    strresult=str.padStart(intmax);
+	strresult=str.padStart(intmax);
   } else if (stralign=='center'){
-    var l = str.length;
-    var w2 = Math.floor(intmax / 2);
-    var l2 = Math.floor(l / 2);
-    var s = new Array(w2 - l2 + 1).join(" ");
-    str = s + str + s;
-    if (str.length < intmax)
-    {
-        str += new Array(intmax - str.length + 1).join(" ");
-    }
-    strresult=str;
+	var l = str.length;
+	var w2 = Math.floor(intmax / 2);
+	var l2 = Math.floor(l / 2);
+	var s = new Array(w2 - l2 + 1).join(" ");
+	str = s + str + s;
+	if (str.length < intmax)
+	{
+		str += new Array(intmax - str.length + 1).join(" ");
+	}
+	strresult=str;
   } else {
-    strresult=str;
+	strresult=str;
   }
   return strresult;
 };
@@ -295,21 +313,21 @@ var input, filter, table, tr, td, i, txtValue;
   trrr = table.getElementsByClassName("header2");
    // tr.style.display = "none";
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
+	td = tr[i].getElementsByTagName("td")[0];
   
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-     
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-        trr[i].style.display = "";
-        trrr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-        trr[i].style.display = "none";
-        trrr[i].style.display = "none";
-      }
-    }       
+	if (td) {
+	  txtValue = td.textContent || td.innerText;
+	 
+	  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		tr[i].style.display = "";
+		trr[i].style.display = "";
+		trrr[i].style.display = "";
+	  } else {
+		tr[i].style.display = "none";
+		trr[i].style.display = "none";
+		trrr[i].style.display = "none";
+	  }
+	}       
   }
 	
 	
@@ -327,21 +345,21 @@ var input, filter, table, tr, td, i, txtValue;
   trrr = table.getElementsByClassName("header2");
    // tr.style.display = "none";
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
+	td = tr[i].getElementsByTagName("td")[0];
   
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-     
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-        trr[i].style.display = "";
-        trrr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-        trr[i].style.display = "none";
-        trrr[i].style.display = "none";
-      }
-    }       
+	if (td) {
+	  txtValue = td.textContent || td.innerText;
+	 
+	  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		tr[i].style.display = "";
+		trr[i].style.display = "";
+		trrr[i].style.display = "";
+	  } else {
+		tr[i].style.display = "none";
+		trr[i].style.display = "none";
+		trrr[i].style.display = "none";
+	  }
+	}       
   }
 	
 	
@@ -359,21 +377,21 @@ function filterTable(sku){
   trrr = table.getElementsByClassName("header2");
    // tr.style.display = "none";
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
+	td = tr[i].getElementsByTagName("td")[0];
   
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-     
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-        trr[i].style.display = "";
-        trrr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-        trr[i].style.display = "none";
-        trrr[i].style.display = "none";
-      }
-    }       
+	if (td) {
+	  txtValue = td.textContent || td.innerText;
+	 
+	  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		tr[i].style.display = "";
+		trr[i].style.display = "";
+		trrr[i].style.display = "";
+	  } else {
+		tr[i].style.display = "none";
+		trr[i].style.display = "none";
+		trrr[i].style.display = "none";
+	  }
+	}       
   }
 	
 }
@@ -538,91 +556,141 @@ html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Var
 
 
 
-function cetakPdf(mpi, rn, dn){
-		
-		// alert(mpi+'<br>'+rn+'<br>'+dn);		
-		var number = 0;	
-		var no = 1;	
-				
-		var sort = document.getElementById("sort").value;
-		var warna = document.getElementById("warna").value;
-		// alert(html);
-		$.ajax({
-			url: "api/action.php?modul=inventory&act=cetak_generic",
-			type: "POST",
-			data : {mpi: mpi, sort: sort},
-			success: function(dataResult){
+function cetakPdf(mpi, rn, dn, selisih) {
+	var number = 0;	
+	var no = 1;	
 			
-				
-				
-var html = '<font style="color: '+warna+'">No Document  : '+dn+'</font> <br>';
-   html += '<font style="color: '+warna+'">Rack         : '+rn+'</font> <br>';
-   
-   
-html += '<table ><tr><td style="color: '+warna+'; border-color: '+warna+';">No</td><td style="color: '+warna+'; border-color: '+warna+'">SKU</td><td style="color: '+warna+'; border-color: '+warna+'">Nama</td>'+
-'<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Count',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Varian',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('QTY Sales',6,'right')+'</td></tr>';
-			
-				
-				var dataResult = JSON.parse(dataResult);
-				
-				var panjang = dataResult.length;
-				$('#notif').html("Proses print");
-				
-				for(let i = 0; i < dataResult.length; i++) {
-						let data = dataResult[i];
+	var sort = document.getElementById("sort").value;
+	var warna = document.getElementById("warna").value;
+	var verifikasiKe = document.getElementById("verifikasiKe").value;
 
-						var sku = data.sku;
-						var name = data.name;
-						var qtyvariant = parseInt(data.qtyvariant);
-						var qtycount = data.qtycount;
-						var qtysales = data.qtysales;
-						var barcode = data.barcode;
-							
-							html += '<tr>';
-							html += '<td style="color: '+warna+'; border-color: '+warna+'">'+no+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+sku+'</td>';
-							html +='<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline(name,1,'left')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td>'+
-							'<td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtyvariant+'',10,'right')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtysales+'',10,'right')+'</td>';
-							// html += "\n\r";
-							// html += barcode;
-	
-							html += '</tr>';
-						
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=cetak_generic",
+		type: "POST",
+		data : { mpi: mpi, sort: sort },
+		success: function(dataResult) {
+			var dataResult = JSON.parse(dataResult);
+			var panjang = dataResult.length;
 
-								
-			
-							number++;
-							no++;
-							
-							
-							
-							if(number == panjang){
-							
-								html+='<br>';
-								html+='<br>';
+			// ===== HEADER UTAMA =====
+			var html = `
+				<div style="text-align:left; font-family:Arial;">
+					<h3 style="color:${warna}; margin-bottom:2px;">KERTAS VERIFIKASI PI KE-${verifikasiKe}</h3>
+					<font style="color:${warna};">No Document : ${dn}</font><br>
+					<font style="color:${warna};">Rack : ${rn}</font><br>
+					<font style="color:${warna};">Selisih : ${formatRupiah(selisih)}</font><br>
+					<br>
+				</div>
+			`;
 
-								var mywindow = window.open('', 'my div', 'height=600,width=800');
-							/*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-							mywindow.document.write('<style>table, th, td {border: 1px solid black;border-collapse: collapse;}@media print{@page {size: potrait; width: 216mm;height: 280mm;}}table { page-break-inside:auto }tr{ page-break-inside:avoid; page-break-after:auto }</style>');
-							mywindow.document.write(html);
+			// ===== TABLE HEADER =====
+			html += `
+				<table style="width:100%; border-collapse:collapse; font-family:Arial; font-size:12px;">
+					<thead>
+						<tr>
+							<th style="border:1px solid ${warna}; color:${warna};">No</th>
+							<th style="border:1px solid ${warna}; color:${warna};">SKU</th>
+							<th style="border:1px solid ${warna}; color:${warna};">Nama Barang</th>
+							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Count</th>
+							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Varian</th>
+							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Sales</th>
+							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Nota</th>
+							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Verif</th>
+							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Jumlah Verif</th>
+						</tr>
+					</thead>
+					<tbody>
+			`;
 
-					
-							mywindow.print();
-								
-							}
-					
-				
-				}
-				
-				
-				
-				html += '</table>';
-				
-				
+			// ===== TABLE BODY =====
+			for (let i = 0; i < panjang; i++) {
+				let data = dataResult[i];
+				let sku = data.sku || '';
+				let name = data.name || '';
+				let qtyvariant = parseInt(data.qtyvariant || 0);
+				let qtycount = parseInt(data.qtycount || 0);
+				let qtysales = parseInt(data.qtysales || 0);
+				let nota = data.m_pi_line_key;
+				let qtyverif = parseInt(data.verifiedcount || 0);
+				let harga = parseFloat(data.price || 0);
+				let jumlahVerif = qtyverif * harga;
+				let selisihRp = (qtycount - qtyverif) * harga;
+				let verifiedcount = data.verifiedcount || 0;
+
+				html += `
+					<tr>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${no}</td>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${sku}</td>
+						<td style="border:1px solid ${warna}; color:${warna};">${name}</td>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtycount}</td>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtyvariant}</td>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtysales}</td>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;"></td>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;"></td>
+						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${verifiedcount}</td>
+					</tr>
+				`;
+				no++;
+				number++;
 			}
-		});
 
-				
+			html += `
+					</tbody>
+				</table>
+				<br>
+			`;
+
+			// ===== FOOTER / TANDA TANGAN =====
+			let today = new Date();
+			let tgl = today.getDate();
+			let bulan = today.toLocaleString('id-ID', { month: 'long' });
+			let tahun = today.getFullYear();
+
+			html += `
+				<table style="width:100%; border:none; margin-top:10px; font-family:Arial; font-size:13px; text-align:center;">
+					<tr>
+						<td style="border:none;"><b>Diverifikasi</b></td>
+						<td style="border:none;">Bekasi, ${tgl} ${bulan} ${tahun}<br>Dibuat</td>
+					</tr>
+					<tr><td colspan="2" style="height:60px;">&nbsp;</td></tr>
+					<tr>
+						<td style="border:none;"><b>(Tim Toko)</b></td>
+						<td style="border:none;"><b>(Tim PI)</b></td>
+					</tr>
+				</table>
+			`;
+
+			// ===== CETAK KE WINDOW BARU =====
+			var mywindow = window.open('', 'Cetak PI', 'height=700,width=900');
+			mywindow.document.write(`
+				<html><head>
+				<title>Kertas Verifikasi PI</title>
+				<style>
+					table, th, td { border-collapse: collapse; font-size:12px; }
+					th, td { padding:4px; }
+					@media print {
+						@page { size: A4 portrait; margin: 8mm; }
+						table { page-break-inside:auto; }
+						tr { page-break-inside:avoid; page-break-after:auto; }
+					}
+				</style>
+				</head><body>
+				${html}
+				</body></html>
+			`);
+			mywindow.document.close();
+			mywindow.focus();
+			mywindow.print();
+		}
+	});
+
+	// helper format rupiah
+	function formatRupiah(angka) {
+		if (!angka) return '-';
+		return 'Rp ' + parseFloat(angka).toLocaleString('id-ID');
+	}
 }
+
 
 
 
