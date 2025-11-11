@@ -370,7 +370,7 @@ if ($_GET['modul'] == 'inventory') {
 
 						if ($statement1) {
 
-							$connec->query("update pos_mproduct set isactived = 0 where sku = '" . $sku . "'");
+							$connec->query("update pos_mproduct set isactived = '0' where sku = '" . $sku . "'");
 							$no = $no + 1;
 							if ($no == $count) {
 								$json = array('result' => '1');

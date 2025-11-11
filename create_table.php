@@ -925,7 +925,13 @@ foreach ($create_voucher_store as $r) {
 	$connec->exec($r);
 }
 
-
+$alter_voucher_store = [
+	'ALTER TABLE in_config_voucher_store ADD COLUMN IF NOT EXISTS startdate date;',
+	'ALTER TABLE in_config_voucher_store ADD COLUMN IF NOT EXISTS enddate date;'
+];
+foreach ($alter_voucher_store as $r) {
+	$connec->exec($r);
+}
 
 $create_price_tag = [
 	'CREATE TABLE IF NOT EXISTS price_tag_headers (

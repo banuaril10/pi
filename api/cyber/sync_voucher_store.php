@@ -38,6 +38,8 @@ foreach ($data as $d) {
     $id_store = $d['id_store'] ?? '';
     $nominal = $d['nominal'] ?? 0;
     $max_qty = $d['max_qty'] ?? 0;
+    $startdate = $d['startdate'] ?? null;
+    $enddate = $d['enddate'] ?? null;
     $isactive = isset($d['isactive']) ? ($d['isactive'] ? 'TRUE' : 'FALSE') : 'TRUE';
 
     if ($id_store == '' || $nominal == 0)
@@ -48,7 +50,9 @@ foreach ($data as $d) {
         " . floatval($nominal) . ",
         " . intval($max_qty) . ",
         $isactive,
-        'system'
+        'system',
+        " . ($startdate ? "'" . addslashes($startdate) . "'" : "NULL") . ",
+        " . ($enddate ? "'" . addslashes($enddate) . "'" : "NULL") . "
     )";
 }
 
@@ -70,7 +74,7 @@ try {
     $values = implode(", ", $rows);
     $insert = "
         INSERT INTO in_config_voucher_store 
-        (id_store, nominal, max_qty, isactive, insertby) 
+        (id_store, nominal, max_qty, isactive, insertby, startdate, enddate) 
         VALUES $values
     ";
     $connec->exec($insert);
