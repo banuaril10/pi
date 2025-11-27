@@ -96,7 +96,7 @@
                                 <?= date('d-m-Y H:i', strtotime($row['created_at'])); ?>
                             </td>
                             <td>
-                                <?= nl2br(htmlspecialchars($row['keterangan'])); ?>
+                                <?= nl2br(htmlspecialchars($row['description'])); ?>
                             </td>
                             <td>
                                 <a href="price_tag_list_detail.php?header_id=<?= $row['id']; ?>" target="_blank" class="btn btn-sm btn-danger">
