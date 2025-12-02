@@ -147,6 +147,7 @@ if ($_GET['modul'] == 'inventory') {
 	$kat = $_POST['kat'];
 	$rack = $_POST['rack'];
 	$pc = $_POST['pc'];
+	$sub = $_POST['sub'];
 	$ss = $_POST['sso'];
 	if ($it == 'Nasional') {
 		$ss = '0';
@@ -290,7 +291,7 @@ if ($_GET['modul'] == 'inventory') {
 
 		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 
-			$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='" . $namakat . "' and status not in ('4','5') and date(insertdate) = date(now())";
+			$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='" . $namakat . "' and status != '5' and date(insertdate) = date(now())";
 			$cr = $connec->query($cekrak);
 			foreach ($cr as $ra) {
 				$countrak = $ra['jum'];
@@ -370,7 +371,136 @@ if ($_GET['modul'] == 'inventory') {
 
 						if ($statement1) {
 
-							$connec->query("update pos_mproduct set isactived = '0' where sku = '" . $sku . "'");
+							$connec->query("update pos_mproduct set isactived = 0 where sku = '" . $sku . "'");
+							$no = $no + 1;
+							if ($no == $count) {
+								$json = array('result' => '1');
+
+							} else {
+
+								$json = array('result' => '2');
+							}
+						}
+
+						$total = $total + 1;
+					}
+
+					if ($total == 0) {
+						$json = array('result' => '0', 'msg' => 'Items tidak ditemukan');
+					}
+
+
+				} else {
+
+					$json = array('result' => '0', 'msg' => 'Gagal, coba lagi nanti');
+				}
+
+
+			}
+
+
+		} else {
+
+			$json = array('result' => '3', 'msg' => 'Session telah habis, reload halaman dulu');
+		}
+
+		$json_string = json_encode($json);
+		echo $json_string;
+
+
+	} else if ($_GET['act'] == 'input_sub') {
+
+
+		$ceknamakat = "select * from in_master_categorysub where catsub_id = '" . $sub . "'";
+		$cnk = $connec->query($ceknamakat);
+		foreach ($cnk as $ras) {
+			$namakat = $ras['subcategory'];
+		}
+
+
+		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+
+			$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='" . $namakat . "' and status != '5' and date(insertdate) = date(now())";
+			$cr = $connec->query($cekrak);
+			foreach ($cr as $ra) {
+				$countrak = $ra['jum'];
+			}
+
+			if ($countrak > 0) {
+				$json = array('result' => '0', 'msg' => 'Sub Category sudah ada');
+
+			} else {
+
+				$statement = $connec->query("insert into m_pi (
+				ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
+				movementdate, approvedby, status, rack_name, postby, postdate, category
+				) VALUES ('','" . $org_key . "','1','" . date('Y-m-d H:i:s') . "','" . $username . "', '" . $sl . "', '" . $it . "','" . $kode_toko . "-" . date('YmdHis') . "','PI-" . $namakat . "', 
+				'" . date('Y-m-d H:i:s') . "','user spv','1','" . $namakat . "','" . $username . "','" . date('Y-m-d H:i:s') . "', '2') RETURNING m_pi_key");
+
+
+
+				if ($statement) {
+
+					foreach ($statement as $rr) {
+
+						$lastid = $rr['m_pi_key'];
+						// $lastid = '12322';
+						if ($insertfrom == 'M') {
+							$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '" . $lastid . "'");
+						} else if ($insertfrom == 'W') {
+							$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '" . $lastid . "'");
+						}
+					}
+
+					$no = 0;
+					$items = array();
+					$hasil = get_data_cat_get_cyber($base_url, $sub, $rack, $org_key, $kode_toko, "Sub Category");
+					$total = 0;
+
+					$j_hasil = json_decode($hasil, true);
+
+					foreach ($j_hasil as $r) {
+						$qtyon = $r['qtyon'];
+						$price = $r['price'];
+						$pricebuy = $r['pricebuy'];
+						$qtyout = $r['qtyout'];
+						$mpi = $r['mpi'];
+						$sku = $r['sku'];
+						$namaitem = $r['namaitem'];
+						$barcode = $r['barcode'];
+
+						$sql_sales = "select case when sum(qty) is null THEN '0' ELSE sum(qty) END as qtysales from pos_dsalesline 
+						where date(insertdate)=date(now()) and sku='" . $r['sku'] . "'";
+
+						$rsa = $connec->query($sql_sales);
+						$qtysales = 0;
+						foreach ($rsa as $rsa1) {
+
+							$qtysales = $rsa1['qtysales'];
+						}
+
+						$cek_count = "select qtycount from m_piline where sku = '" . $r['sku'] . "' and date(insertdate)=date(now())"; //mencari apakah items sdh ada di rack piline
+						$rsac = $connec->query($cek_count);
+						$ccc = $rsac->rowCount();
+
+						if ($ccc > 0) {
+							foreach ($rsac as $rrr) {
+
+								$qtycount = $rrr['qtycount'];
+							}
+
+						} else {
+							$qtycount = 0;
+
+						}
+
+						$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1, barcode, hargabeli) 
+						VALUES ('" . $lastid . "','" . $org_key . "','1','" . date('Y-m-d H:i:s') . "','" . $username . "', '" . date('Y-m-d H:i:s') . "', '" . $sl . "','" . $mpi . "', 
+						'" . $sku . "', '" . $qtyon . "', '" . $qtycount . "', '" . $qtysales . "','" . $price . "', '1', '" . $qtyout . "','1', '" . $barcode . "','" . $pricebuy . "')");
+
+						if ($statement1) {
+
+							$connec->query("update pos_mproduct set isactived = 0 where sku = '" . $sku . "'");
 							$no = $no + 1;
 							if ($no == $count) {
 								$json = array('result' => '1');
@@ -727,8 +857,8 @@ if ($_GET['modul'] == 'inventory') {
 					$hasil = get_data_cat_get_cyber($base_url, $pc, $sku, $org_key, $kode_toko, "Items");
 					// print_r($hasil);
 					//count array
-					
-					if($hasil == '[]'){
+
+					if ($hasil == '[]') {
 						$json = array('result' => '0', 'msg' => 'Items ini belum diinput stock nya');
 						$json_string = json_encode($json);
 						echo $json_string;
@@ -1543,16 +1673,16 @@ if ($_GET['modul'] == 'inventory') {
 
 		foreach ($connec->query($getinv) as $gi) {
 			$sku = $gi['sku'];
-			if($gi['sku'] != ''){
-				$get_barcode = "select sku from pos_mproduct where barcode = '".$gi['sku']."'";
+			if ($gi['sku'] != '') {
+				$get_barcode = "select sku from pos_mproduct where barcode = '" . $gi['sku'] . "'";
 				$gb = $connec->query($get_barcode);
-			
-				foreach($gb as $rrr){
+
+				foreach ($gb as $rrr) {
 					$sku = $rrr['sku'];
 				}
 			}
-			
-			
+
+
 
 			$cekqty = "select qtycount from m_piline where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate) = date(now())";
 			$result = $connec->query($cekqty);
@@ -1758,7 +1888,8 @@ if ($_GET['modul'] == 'inventory') {
 
 
 
-		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, 
+		m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
 		where m_pi.m_pi_key = '" . $mpi . "' and m_pi.status = '2' and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) != 0  ";
 
 		if ($show != '1') {
@@ -2003,6 +2134,117 @@ if ($_GET['modul'] == 'inventory') {
 
 
 
+	} else if ($_GET['act'] == 'api_datatable_promo') {
+
+
+		$columns = array(
+			0 => 'postdate',
+			1 => 'discountname',
+			2 => 'discounttype',
+			3 => 'sku',
+			4 => 'nama',
+			5 => 'price',
+			6 => 'price_discount',
+			7 => 'price_after_discount',
+			8 => 'fromdate',
+			9 => 'todate',
+		);
+
+		$querycount = $connec->query("SELECT count(*) as jumlah FROM pos_mproductdiscount");
+
+		foreach ($querycount as $r) {
+			$datacount = $r['jumlah'];
+
+		}
+
+		$totalData = $datacount;
+
+		$totalFiltered = $totalData;
+
+		$limit = $_POST['length'];
+		$start = $_POST['start'];
+		$order = $columns[$_POST['order']['0']['column']];
+		$dir = $_POST['order']['0']['dir'];
+
+		if (empty($_POST['search']['value'])) {
+			$query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscount a left join pos_mproduct b on a.sku = b.sku order by $order $dir
+                                                      LIMIT $limit
+                                                      OFFSET $start");
+		} else {
+			$search = $_POST['search']['value'];
+			$query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscount a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
+                                                         or a.discountname ILIKE  '%$search%'
+                                                         or b.name ILIKE  '%$search%'
+                                                         order by $order $dir
+                                                         LIMIT $limit
+                                                         OFFSET $start");
+
+
+			$querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscount a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
+                                                         or a.discountname ILIKE  '%$search%'");
+			foreach ($querycount as $rr) {
+				$datacount = $rr['jumlah'];
+
+			}
+			$totalFiltered = $datacount;
+		}
+
+		$data = array();
+		if (!empty($query)) {
+			$no = $start + 1;
+			foreach ($query as $r) {
+
+				if ($r['discountname'] != '') {
+					$discname = '<font style="color: blue; font-weight: bold">' . $r['discountname'] . '</font>';
+
+				} else {
+
+					$discname = '';
+				}
+
+				$pd = $r['price'] - $r['discount'];
+
+				if ($r['price'] != $pd) {
+
+					$fontdiskon = '<br> <font style="color: red; font-weight: bold">Setelah Diskon : ' . rupiah($pd) . '</font>';
+				} else {
+
+					$fontdiskon = '';
+				}
+
+
+
+				$nestedData['no'] = $no;
+				$nestedData['postdate'] = $r['postdate'];
+				$nestedData['discounttype'] = $r['discounttype'];
+				$nestedData['sku'] = '<font style="font-weight: bold">' . $r['sku'] . '</font>';
+				$nestedData['name'] = $r['name'];
+				$nestedData['hargareguler'] = '<font style="color: blue;font-weight: bold">Rp. ' . rupiah($r['price']) . '</font>';
+				$nestedData['potongan'] = '<font style="color: red;font-weight: bold">Rp. ' . rupiah($r['discount']) . '</font>';
+				$nestedData['afterdiscount'] = '<font style="color: green;font-weight: bold">Rp. ' . rupiah($pd) . '</font>';
+				$nestedData['discountname'] = $discname;
+				$nestedData['fromdate'] = $r['fromdate'];
+				$nestedData['todate'] = $r['todate'];
+				$nestedData['price'] = rupiah($r['price']);
+				$nestedData['price_discount'] = rupiah($pd);
+				$data[] = $nestedData;
+				$no++;
+
+			}
+
+
+		}
+
+		$json_data = array(
+			"draw" => intval($_POST['draw']),
+			"recordsTotal" => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data" => $data
+		);
+
+		echo json_encode($json_data);
+
+
 	} else if ($_GET['act'] == 'api_datatable_promo_bundling') {
 
 
@@ -2094,117 +2336,6 @@ if ($_GET['modul'] == 'inventory') {
 				$nestedData['discountname'] = $discname;
 				$nestedData['fromdate'] = $r['fromdate'];
 				$nestedData['qtybundling'] = $r['maxqty'];
-				$nestedData['todate'] = $r['todate'];
-				$nestedData['price'] = rupiah($r['price']);
-				$nestedData['price_discount'] = rupiah($pd);
-				$data[] = $nestedData;
-				$no++;
-
-			}
-
-
-		}
-
-		$json_data = array(
-			"draw" => intval($_POST['draw']),
-			"recordsTotal" => intval($totalData),
-			"recordsFiltered" => intval($totalFiltered),
-			"data" => $data
-		);
-
-		echo json_encode($json_data);
-
-
-	} else if ($_GET['act'] == 'api_datatable_promo') {
-
-
-		$columns = array(
-			0 => 'postdate',
-			1 => 'discountname',
-			2 => 'discounttype',
-			3 => 'sku',
-			4 => 'nama',
-			5 => 'price',
-			6 => 'price_discount',
-			7 => 'price_after_discount',
-			8 => 'fromdate',
-			9 => 'todate',
-		);
-
-		$querycount = $connec->query("SELECT count(*) as jumlah FROM pos_mproductdiscount");
-
-		foreach ($querycount as $r) {
-			$datacount = $r['jumlah'];
-
-		}
-
-		$totalData = $datacount;
-
-		$totalFiltered = $totalData;
-
-		$limit = $_POST['length'];
-		$start = $_POST['start'];
-		$order = $columns[$_POST['order']['0']['column']];
-		$dir = $_POST['order']['0']['dir'];
-
-		if (empty($_POST['search']['value'])) {
-			$query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscount a left join pos_mproduct b on a.sku = b.sku order by $order $dir
-                                                      LIMIT $limit
-                                                      OFFSET $start");
-		} else {
-			$search = $_POST['search']['value'];
-			$query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscount a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
-                                                         or a.discountname ILIKE  '%$search%'
-                                                         or b.name ILIKE  '%$search%'
-                                                         order by $order $dir
-                                                         LIMIT $limit
-                                                         OFFSET $start");
-
-
-			$querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscount a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
-                                                         or a.discountname ILIKE  '%$search%'");
-			foreach ($querycount as $rr) {
-				$datacount = $rr['jumlah'];
-
-			}
-			$totalFiltered = $datacount;
-		}
-
-		$data = array();
-		if (!empty($query)) {
-			$no = $start + 1;
-			foreach ($query as $r) {
-
-				if ($r['discountname'] != '') {
-					$discname = '<font style="color: blue; font-weight: bold">' . $r['discountname'] . '</font>';
-
-				} else {
-
-					$discname = '';
-				}
-
-				$pd = $r['price'] - $r['discount'];
-
-				if ($r['price'] != $pd) {
-
-					$fontdiskon = '<br> <font style="color: red; font-weight: bold">Setelah Diskon : ' . rupiah($pd) . '</font>';
-				} else {
-
-					$fontdiskon = '';
-				}
-
-
-
-				$nestedData['no'] = $no;
-				$nestedData['postdate'] = $r['postdate'];
-				$nestedData['discounttype'] = $r['discounttype'];
-				$nestedData['sku'] = '<font style="font-weight: bold">' . $r['sku'] . '</font>';
-				$nestedData['name'] = $r['name'];
-				$nestedData['hargareguler'] = '<font style="color: blue;font-weight: bold">Rp. ' . rupiah($r['price']) . '</font>';
-				$nestedData['potongan'] = '<font style="color: red;font-weight: bold">Rp. ' . rupiah($r['discount']) . '</font>';
-				$nestedData['afterdiscount'] = '<font style="color: green;font-weight: bold">Rp. ' . rupiah($pd) . '</font>';
-				$nestedData['discountname'] = $discname;
-				$nestedData['fromdate'] = $r['fromdate'];
 				$nestedData['todate'] = $r['todate'];
 				$nestedData['price'] = rupiah($r['price']);
 				$nestedData['price_discount'] = rupiah($pd);

@@ -79,6 +79,9 @@
 						<li class="submenu-item ">
 							<a href="importer.php">Importer</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="jadwal_pi.php">Jadwal PI</a>
+						</li>
 					</ul>
 				</li>
 
