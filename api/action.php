@@ -411,11 +411,13 @@ if ($_GET['modul'] == 'inventory') {
 	} else if ($_GET['act'] == 'input_sub') {
 
 
-		$ceknamakat = "select * from in_master_categorysub where catsub_id = '" . $sub . "'";
-		$cnk = $connec->query($ceknamakat);
-		foreach ($cnk as $ras) {
-			$namakat = $ras['subcategory'];
-		}
+		// $ceknamakat = "select * from in_master_categorysub where catsub_id = '" . $sub . "'";
+		// $cnk = $connec->query($ceknamakat);
+		// foreach ($cnk as $ras) {
+		// 	$namakat = $ras['subcategory'];
+		// }
+
+		$namakat = $sub;
 
 
 		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
