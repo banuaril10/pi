@@ -972,5 +972,11 @@ foreach ($indexing_table_promo_new as $r) {
 	$connec->exec($r);
 }
 
+
+$cmd_alter_length = ['ALTER TABLE m_pi ADD COLUMN IF NOT EXISTS length VARCHAR(150);'];
+foreach ($cmd_alter_length as $r) {
+	$connec->exec($r);
+}
+
 ?>
 
