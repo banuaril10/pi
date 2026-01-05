@@ -979,5 +979,13 @@ foreach ($cmd_alter_length as $r) {
 	$connec->exec($r);
 }
 
+$indexing_table_billno = [
+	'CREATE INDEX IF NOT EXISTS pos_dsalesline_billno_idx ON public.pos_dsalesline USING btree (billno);'
+];
+
+foreach ($indexing_table_billno as $r) {
+	$connec->exec($r);
+}
+
 ?>
 

@@ -4110,6 +4110,39 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		echo $nama;
 	}
 
+} else if ($_GET['modul'] == 'cashier') {
+	if ($_GET['act'] == 'reset_user') {
+		if (isset($_POST['pos_mcashier_key'])) {
+			$key = $_POST['pos_mcashier_key'];
+			$sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE pos_mcashier_key = '$key'";
+			if ($connec->query($sql)) {
+				echo json_encode(array('result' => '1', 'msg' => 'Success'));
+			} else {
+				echo json_encode(array('result' => '0', 'msg' => 'Error: ' . $connec->error));
+			}
+		}
+	} else if ($_GET['act'] == 'reset_user_batch') {
+		if (isset($_POST['cashier_keys'])) {
+			$keys = json_decode($_POST['cashier_keys']);
+			$count = 0;
+			foreach ($keys as $key) {
+				$safe_key = $connec->real_escape_string($key);
+				$sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE pos_mcashier_key = '$safe_key'";
+				if ($connec->query($sql)) {
+					$count++;
+				}
+			}
+			echo json_encode(array('result' => '1', 'count' => $count, 'msg' => 'Berhasil reset ' . $count . ' cashier'));
+		}
+	} else if ($_GET['act'] == 'reset_all_users') {
+		$sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE ad_muser_key IS NOT NULL";
+		if ($connec->query($sql)) {
+			$affected = $connec->affected_rows;
+			echo json_encode(array('result' => '1', 'count' => $affected, 'msg' => 'Berhasil reset semua cashier'));
+		} else {
+			echo json_encode(array('result' => '0', 'msg' => 'Error: ' . $connec->error));
+		}
+	}
 }
 
 ?>
