@@ -314,7 +314,7 @@
 		function print_text(html) {
 			// console.log(html);
 			$.ajax({
-				url: "print.php",
+				url: "printer/print_struk_linux.php",
 				type: "POST",
 				data: { html: html },
 				success: function (dataResult) {

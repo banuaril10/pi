@@ -724,25 +724,6 @@ foreach ($send_to_pos_dsalesline as $r) {
 }
 
 
-$indexing_table_promo = [
-	'CREATE INDEX IF NOT EXISTS idx_bundling_sku 
-	ON pos_mproductdiscount_bundling (sku);',
-	'CREATE INDEX IF NOT EXISTS idx_bundling_discountname 
-	ON pos_mproductdiscount_bundling (discountname);',
-	'CREATE INDEX IF NOT EXISTS idx_bundling_from_to_date 
-	ON pos_mproductdiscount_bundling (fromdate, todate);',
-	'CREATE INDEX IF NOT EXISTS idx_bundling_header_code 
-	ON pos_mproductdiscount_bundling_header (bundling_code);',
-	'CREATE INDEX IF NOT EXISTS idx_bundling_key 
-	ON pos_mproductdiscount_bundling (pos_mproductdiscount_key);',
-	'CREATE INDEX IF NOT EXISTS idx_bundling_header_key 
-	ON pos_mproductdiscount_bundling_header (pos_mproductdiscount_key);'
-];
-
-foreach ($indexing_table_promo as $r) {
-	$connec->exec($r);
-}
-
 $remove_primary_edc_key = [
 	'ALTER TABLE pos_medc DROP CONSTRAINT pos_medc_pkey'
 ];
@@ -844,6 +825,7 @@ foreach ($pos_dsales_ppob as $r) {
 }
 
 
+
 $pos_mproductdiscount_bundling = [
 	'CREATE TABLE pos_mproductdiscount_bundling_header (
 		pos_mproductdiscount_key varchar(32) NOT NULL DEFAULT get_uuid(),
@@ -864,6 +846,24 @@ foreach ($pos_mproductdiscount_bundling as $r) {
 }
 
 
+$indexing_table_promo = [
+	'CREATE INDEX IF NOT EXISTS idx_bundling_sku 
+	ON pos_mproductdiscount_bundling (sku);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_discountname 
+	ON pos_mproductdiscount_bundling (discountname);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_from_to_date 
+	ON pos_mproductdiscount_bundling (fromdate, todate);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_header_code 
+	ON pos_mproductdiscount_bundling_header (bundling_code);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_key 
+	ON pos_mproductdiscount_bundling (pos_mproductdiscount_key);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_header_key 
+	ON pos_mproductdiscount_bundling_header (pos_mproductdiscount_key);'
+];
+
+foreach ($indexing_table_promo as $r) {
+	$connec->exec($r);
+}
 
 
 $create_table_combo = [
@@ -901,6 +901,7 @@ foreach ($create_table_combo as $r) {
 }
 
 
+
 $alter_tempsales = [
 	'ALTER TABLE public.pos_dtempsalesline ADD COLUMN IF NOT EXISTS reference_id varchar NULL;'
 ];
@@ -909,7 +910,7 @@ foreach ($alter_tempsales as $r) {
 }
 
 $create_voucher_store = [
-	'CREATE TABLE IF NOT EXISTS in_config_voucher_store (
+'CREATE TABLE IF NOT EXISTS in_config_voucher_store (
 	id serial4 NOT NULL,
 	id_store varchar(50) NOT NULL,
 	nominal numeric NOT NULL,
@@ -925,6 +926,8 @@ foreach ($create_voucher_store as $r) {
 	$connec->exec($r);
 }
 
+
+//alter add column in_config_voucher_store = startdate, enddate
 $alter_voucher_store = [
 	'ALTER TABLE in_config_voucher_store ADD COLUMN IF NOT EXISTS startdate date;',
 	'ALTER TABLE in_config_voucher_store ADD COLUMN IF NOT EXISTS enddate date;'
@@ -933,8 +936,10 @@ foreach ($alter_voucher_store as $r) {
 	$connec->exec($r);
 }
 
+
+
 $create_price_tag = [
-	'CREATE TABLE IF NOT EXISTS price_tag_headers (
+'CREATE TABLE IF NOT EXISTS price_tag_headers (
 	id SERIAL PRIMARY KEY,
 	header_number VARCHAR(50) UNIQUE NOT NULL,
 	created_by VARCHAR(100) NOT NULL,
@@ -942,28 +947,30 @@ $create_price_tag = [
 	status VARCHAR(20) DEFAULT \'DRAFT\', -- DRAFT, COMPLETED
 	total_items INTEGER DEFAULT 0
 );',
-	'CREATE TABLE IF NOT EXISTS price_tag_items (
+'CREATE TABLE IF NOT EXISTS price_tag_items (
 	id SERIAL PRIMARY KEY,
 	header_id INTEGER REFERENCES price_tag_headers(id),
 	sku VARCHAR(50) NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );',
-	'CREATE INDEX IF NOT EXISTS idx_price_tag_header_number ON price_tag_headers(header_number);',
-	'CREATE INDEX IF NOT EXISTS idx_price_tag_items_header_id ON price_tag_items(header_id);',
-	'CREATE INDEX IF NOT EXISTS idx_price_tag_items_sku ON price_tag_items(sku);'
-];
+'CREATE INDEX IF NOT EXISTS idx_price_tag_header_number ON price_tag_headers(header_number);',
+'CREATE INDEX IF NOT EXISTS idx_price_tag_items_header_id ON price_tag_items(header_id);',
+'CREATE INDEX IF NOT EXISTS idx_price_tag_items_sku ON price_tag_items(sku);'
+];	
 foreach ($create_price_tag as $r) {
 	$connec->exec($r);
 }
 
-
-//add column description di price_tag_headers
 $alter_price_tag = [
 	'ALTER TABLE price_tag_headers ADD COLUMN IF NOT EXISTS description TEXT;'
 ];
 foreach ($alter_price_tag as $r) {
 	$connec->exec($r);
 }
+
+
+
+// CREATE INDEX pos_dsalesline_insertdate_idx ON public.pos_dsalesline USING btree (insertdate, sku);
 
 $indexing_table_promo_new = [
 	'CREATE INDEX IF NOT EXISTS pos_dsalesline_insertdate_idx ON public.pos_dsalesline USING btree (insertdate, sku);'
@@ -972,13 +979,17 @@ foreach ($indexing_table_promo_new as $r) {
 	$connec->exec($r);
 }
 
+//ALTER TABLE m_pi ADD COLUMN length VARCHAR(50);
 
 $cmd_alter_length = ['ALTER TABLE m_pi 
-ALTER COLUMN rack_name TYPE VARCHAR(150);'];
+ALTER COLUMN rack_name TYPE VARCHAR(150);'
+];
 foreach ($cmd_alter_length as $r) {
 	$connec->exec($r);
 }
 
+
+//tambahin indexing tp cek existing dlu CREATE INDEX pos_dsalesline_billno_idx ON public.pos_dsalesline USING btree (billno);
 $indexing_table_billno = [
 	'CREATE INDEX IF NOT EXISTS pos_dsalesline_billno_idx ON public.pos_dsalesline USING btree (billno);'
 ];
@@ -986,6 +997,101 @@ $indexing_table_billno = [
 foreach ($indexing_table_billno as $r) {
 	$connec->exec($r);
 }
+
+
+// CREATE TABLE pos_mvoucher_rule (
+//     pos_mvoucher_rule_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+//     isactived varchar(2),
+//     id_location varchar(10),
+//     min_transaction numeric,
+//     voucher_amount numeric,
+//     valid_days int,
+//     description varchar(255),
+//     insertdate timestamp,
+//     insertby varchar(50)
+// );
+
+
+$cmd_voucher_rule = [
+	'CREATE TABLE IF NOT EXISTS pos_mvoucher_rule (
+		pos_mvoucher_rule_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+		isactived varchar(2),
+		id_location varchar(10),
+		min_transaction numeric,
+		voucher_amount numeric,
+		valid_days int,
+		description varchar(255),
+		insertdate timestamp,
+		insertby varchar(50),
+		percent numeric default 0,
+		limit_voucher numeric default 0
+	);'
+];
+foreach ($cmd_voucher_rule as $r) {
+	$connec->exec($r);
+}
+
+
+
+$cmd_dvoucher = [
+	'CREATE TABLE IF NOT EXISTS pos_dvoucher (
+		pos_dvoucher_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+		pos_dsales_key varchar(32),
+		membercard varchar(50),
+		voucher_amount numeric,
+		voucher_code varchar(30),
+		status varchar(20), -- NEW, USED, EXPIRED
+		valid_from date,
+		valid_until date,
+		insertdate timestamp,
+		useddate timestamp,
+		percent numeric default 0
+	);'
+];
+foreach ($cmd_dvoucher as $r) {
+	$connec->exec($r);
+}
+
+
+// ALTER TABLE pos_dsales
+// ADD COLUMN voucher_amount numeric DEFAULT 0,
+// ADD COLUMN voucher_code varchar(30);
+
+$cmd_alter_dsales_voucher = [
+	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS voucher_amount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS voucher_code varchar(30);',
+	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS voucher_description varchar(125);'
+
+];
+
+foreach ($cmd_alter_dsales_voucher as $r) {
+	$connec->exec($r);
+}
+
+$cmd_alter_dcashierbalance_voucher = [
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS vouchercashamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS voucherdebitamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS vouchercreditamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;'
+];
+
+foreach ($cmd_alter_dcashierbalance_voucher as $r) {
+	$connec->exec($r);
+}
+
+//untuk pos_dshopsales juga
+$cmd_alter_dshopsales_voucher = [
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS vouchercashamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS voucherdebitamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS vouchercreditamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;'
+];
+
+foreach ($cmd_alter_dshopsales_voucher as $r) {
+	$connec->exec($r);
+}
+
+
 
 ?>
 
