@@ -1045,7 +1045,9 @@ $cmd_dvoucher = [
 		valid_until date,
 		insertdate timestamp,
 		useddate timestamp,
-		percent numeric default 0
+		percent numeric default 0,
+		status_intransit varchar(2),
+		id_location varchar(10)
 	);'
 ];
 foreach ($cmd_dvoucher as $r) {
