@@ -34,14 +34,12 @@ function push_to_server($url, $payload)
 if ($tanggal != "now") {
     $sql = "
         select * from pos_dvoucher
-        where date(insertdate) = '$tanggal'
-        and status_intransit is null
+        where (status_intransit is null or status_intransit = '')
     ";
 } else {
     $sql = "
         select * from pos_dvoucher
-        where date(insertdate) = date(now())
-        and status_intransit is null
+        where (status_intransit is null or status_intransit = '')
     ";
 }
 
