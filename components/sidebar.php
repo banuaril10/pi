@@ -38,12 +38,19 @@
 				</li>
 
 				<li class="sidebar-item">
+					<a href="dashboard_voucher.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Dashboard Voucher</span>
+					</a>
+				</li>
+				
+				<li class="sidebar-item">
 					<a href="muser.php" class='sidebar-link'>
 						<i class="bi bi-cash-stack"></i>
 						<span>User POS</span>
 					</a>
 				</li>
-
+				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-camera"></i>
@@ -115,7 +122,7 @@
 						</li>
 					</ul>
 				</li>
-
+				
 				<li class="sidebar-item">
 					<a href="cek_harga.php" class='sidebar-link'>
 						<i class="bi bi-cash-stack"></i>
@@ -137,27 +144,27 @@
 						<li class="submenu-item ">
 							<a href="sync_function.php">Sync Function</a>
 						</li>
+						
 
 
-
-						<?php
-						if ($username == 'pos') { ?>
-							<li class="submenu-item ">
-								<a href="sync_function_dev.php">Sync Function Dev</a>
-							</li>
+						<?php 
+						if($username == 'pos'){ ?>
+						<li class="submenu-item ">
+							<a href="sync_function_dev.php">Sync Function Dev</a>
+						</li>
 						<?php } ?>
 
-
+						
 						<li class="submenu-item ">
 							<a href="sync_struk_category.php">Sync Struk Undian</a>
 						</li>
-
+						
 						<li class="submenu-item ">
 							<a href="sync.php">Sync All</a>
 						</li>
 					</ul>
 				</li>
-
+				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-gift"></i>
@@ -204,7 +211,7 @@
 						</li>
 					</ul>
 				</li>
-
+				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-tags-fill"></i>
@@ -250,7 +257,7 @@
 						</li>
 					</ul>
 				</li>
-
+				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
 						<i class="bi bi-file-bar-graph"></i>
