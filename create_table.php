@@ -1093,7 +1093,24 @@ foreach ($cmd_alter_dshopsales_voucher as $r) {
 	$connec->exec($r);
 }
 
+$cmd_alter_noncash = ['ALTER TABLE pos_dcashiernoncash
+ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;
+'
+];
 
+foreach ($cmd_alter_noncash as $r) {
+	$connec->exec($r);
+}
+
+$cmd_alter_pos_dvoucher = [
+	'ALTER TABLE public.pos_dvoucher ADD COLUMN IF NOT EXISTS status_intransit varchar(2) NULL;',
+	'ALTER TABLE public.pos_dvoucher ADD COLUMN IF NOT EXISTS id_location varchar(10) NULL;',
+	'alter table pos_dshopsalesnoncash add voucheramount numeric default 0'
+];
+
+foreach ($cmd_alter_pos_dvoucher as $r) {
+	$connec->exec($r);
+}
 
 ?>
 
