@@ -28,8 +28,9 @@ function get($url)
     return $response;
 }
 
-
-$url = $base_url . '/store/version/get_version.php?idstore=' . $idstore;
+$version = isset($_GET['version']) ? $_GET['version'] : '';
+$mac_address = isset($_GET['mac_address']) ? $_GET['mac_address'] : '';
+$url = $base_url . '/store/version/get_version.php?idstore=' . $idstore.'&version='.$version.'&mac_address='.$mac_address;
 
 $hasil = get($url);
 $j_hasil = json_decode($hasil, true);
