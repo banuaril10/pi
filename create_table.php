@@ -1137,7 +1137,8 @@ $cmd_price_audit = [
 		price numeric,
 		discount numeric,
 		insertdate timestamp,
-		id_location varchar(10)
+		id_location varchar(10),
+		scanfrom varchar(20)
 	);'
 ];
 
