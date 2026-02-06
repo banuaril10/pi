@@ -173,6 +173,8 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 // 	);'
 // ]; tp jgn error klo table ga ada
 
+$scanfrom = 'android';
+
         $insertAudit = "
             INSERT INTO price_audit (sku, price, discount, insertdate, id_location, scanfrom)
             VALUES (:sku, :price, :discount, NOW(), :id_location, :scanfrom)
@@ -184,7 +186,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         $discountValue = $discount ? $discount['discount'] : 0;
         $stmtAudit->bindParam(':discount', $discountValue);
         $stmtAudit->bindParam(':id_location', $id_location);
-        $stmtAudit->bindParam(':scanfrom', 'android');
+        $stmtAudit->bindParam(':scanfrom', $scanfrom);
         
 
         $stmtAudit->execute();
