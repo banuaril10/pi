@@ -3,6 +3,16 @@ include "../../config/koneksi.php";
 
 header('Content-Type: application/json');
 
+$id_location = '';
+
+//select ad_morg_key from m_org 
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $id_location = $row['ad_morg_key'];
+}
+
 // Mendapatkan SKU atau barcode dari parameter GET
 if (isset($_GET['sku']) || isset($_GET['barcode'])) {
     $sku_or_barcode = isset($_GET['sku']) ? $_GET['sku'] : $_GET['barcode'];
@@ -150,7 +160,37 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             ];
         }
 
+
+
+        //save ke $cmd_price_audit = [
+// 	'CREATE TABLE IF NOT EXISTS price_audit (
+// 		price_audit_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+// 		sku varchar(50),
+// 		price numeric,
+// 		discount numeric,
+// 		insertdate timestamp,
+// 		id_location varchar(10)
+// 	);'
+// ]; tp jgn error klo table ga ada
+
+        $insertAudit = "
+            INSERT INTO price_audit (sku, price, discount, insertdate, id_location)
+            VALUES (:sku, :price, :discount, NOW(), :id_location)
+        ";
+        $stmtAudit = $connec->prepare($insertAudit);
+        // $id_location = isset($_GET['location']) ? $_GET['location'] : 'DEFAULT';
+        $stmtAudit->bindParam(':sku', $sku);
+        $stmtAudit->bindParam(':price', $regularPrice);
+        $discountValue = $discount ? $discount['discount'] : 0;
+        $stmtAudit->bindParam(':discount', $discountValue);
+        $stmtAudit->bindParam(':id_location', $id_location);
+        $stmtAudit->execute();
+
+
+
         echo json_encode($response, JSON_PRETTY_PRINT);
+
+
 
     } else {
         echo json_encode(['error' => 'Product not found']);
