@@ -1129,5 +1129,21 @@ foreach ($indexing_voucher_code as $r) {
 	$connec->exec($r);
 }
 
+
+$cmd_price_audit = [
+	'CREATE TABLE IF NOT EXISTS price_audit (
+		price_audit_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+		sku varchar(50),
+		price numeric,
+		discount numeric,
+		insertdate timestamp,
+		id_location varchar(10)
+	);'
+];
+
+foreach ($cmd_price_audit as $r) {
+	$connec->exec($r);
+}
+
 ?>
 
