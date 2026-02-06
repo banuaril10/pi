@@ -174,8 +174,8 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 // ]; tp jgn error klo table ga ada
 
         $insertAudit = "
-            INSERT INTO price_audit (sku, price, discount, insertdate, id_location)
-            VALUES (:sku, :price, :discount, NOW(), :id_location)
+            INSERT INTO price_audit (sku, price, discount, insertdate, id_location,scanfrom)
+            VALUES (:sku, :price, :discount, NOW(), :id_location, :scanfrom)
         ";
         $stmtAudit = $connec->prepare($insertAudit);
         // $id_location = isset($_GET['location']) ? $_GET['location'] : 'DEFAULT';
@@ -184,6 +184,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         $discountValue = $discount ? $discount['discount'] : 0;
         $stmtAudit->bindParam(':discount', $discountValue);
         $stmtAudit->bindParam(':id_location', $id_location);
+        $stmtAudit->bindParam(':scanfrom', 'price_checker');
         $stmtAudit->execute();
 
 
