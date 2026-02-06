@@ -2,6 +2,9 @@
 include "../../config/koneksi.php";
 
 header('Content-Type: application/json');
+//show error
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $id_location = '';
 
