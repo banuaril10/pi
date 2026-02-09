@@ -70,7 +70,7 @@ foreach ($connec->query($sql) as $row) {
 // ================= push ke server pusat =================
 if (!empty($jj_audit)) {
 
-    $url = $base_url . "/price_audit/sync_price_audit.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
+    $url = $base_url . "/store/price_checker/sync_price_audit.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
 
     $payload = json_encode(array(
         "price_audit" => $jj_audit
