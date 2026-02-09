@@ -1,5 +1,13 @@
 <?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 include "../../config/koneksi.php";
+//show error
+
+
+
 
 $tanggal = $_GET['date'] ?? 'now';
 
@@ -43,16 +51,16 @@ $jj_audit = array();
 if ($tanggal != "now") {
     $sql = "
         select * from price_audit
-        where date(insertdate) = '".$tanggal."'
-        and status_intransit is null
+        where status_intransit is null
     ";
 } else {
     $sql = "
         select * from price_audit
-        where date(insertdate) = date(now())
-        and status_intransit is null
+        where status_intransit is null
     ";
 }
+
+echo $sql;
 
 foreach ($connec->query($sql) as $row) {
     $jj_audit[] = array(
@@ -66,6 +74,8 @@ foreach ($connec->query($sql) as $row) {
         "status_intransit"=> $row['status_intransit']
     );
 }
+
+echo json_encode($jj_audit);
 
 // ================= push ke server pusat =================
 if (!empty($jj_audit)) {
