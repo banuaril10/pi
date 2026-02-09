@@ -60,7 +60,7 @@ if ($tanggal != "now") {
     ";
 }
 
-echo $sql;
+// echo $sql;
 
 foreach ($connec->query($sql) as $row) {
     $jj_audit[] = array(
