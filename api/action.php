@@ -1603,24 +1603,26 @@ if ($_GET['modul'] == 'inventory') {
 		$json_string = json_encode($json);
 		echo $json_string;
 
-	} else if ($_GET['act'] == 'cleansing_data') {
+	} 
+	// else if ($_GET['act'] == 'cleansing_data') {
 
-		$yd = date('Y-m-d', strtotime("-2 days"));
+	// 	$yd = date('Y-m-d', strtotime("-2 days"));
 
-		$delete_header = $connec->query("delete from m_pi where date(insertdate) < '" . $yd . "' ");
-		$delete_line = $connec->query("delete from m_piline where date(insertdate) < '" . $yd . "' ");
+	// 	$delete_header = $connec->query("delete from m_pi where date(insertdate) < '" . $yd . "' ");
+	// 	$delete_line = $connec->query("delete from m_piline where date(insertdate) < '" . $yd . "' ");
 
-		if ($delete_line) {
-			$json = array('result' => '1');
-		} else {
+	// 	if ($delete_line) {
+	// 		$json = array('result' => '1');
+	// 	} else {
 
-			$json = array('result' => '0');
-		}
+	// 		$json = array('result' => '0');
+	// 	}
 
-		$json_string = json_encode($json);
-		echo $json_string;
+	// 	$json_string = json_encode($json);
+	// 	echo $json_string;
 
-	} else if ($_GET['act'] == 'proses_inv_temp') {
+	// } 
+	else if ($_GET['act'] == 'proses_inv_temp') {
 		$sku = $_POST['sku'];
 		$qty = $_POST['qty'];
 		$tgl = $_POST['tgl'];
