@@ -54,17 +54,18 @@ foreach ($j_hasil as $key => $value) {
     $note1 = $j_hasil[0]['note1'];
     $note2 = $j_hasil[0]['note2'];
     $note3 = $j_hasil[0]['note3'];
+    $website = $j_hasil[0]['website'];
 
     if ($isqty == 0) {
         $update = "UPDATE ad_morg
         SET name='".$name."', value='". $value."', address1='". $address1."', 
         address2='" . $address2 . "', address3='" . $address3 . "', addressdonasi='" . $addressdonasi . "', isqty=false, note1='" . $note1 . "', 
-        note2='" . $note2 . "', note3='" . $note3 . "'";
+        note2='" . $note2 . "', note3='" . $note3 . "', website='" . $website . "'";
     } else {
         $update = "UPDATE ad_morg
         SET name='" . $name . "', value='" . $value . "', address1='" . $address1 . "', 
         address2='" . $address2 . "', address3='" . $address3 . "', addressdonasi='" . $addressdonasi . "', isqty=true, note1='" . $note1 . "', 
-        note2='" . $note2 . "', note3='" . $note3 . "'";
+        note2='" . $note2 . "', note3='" . $note3 . "', website='" . $website . "'";
     }
 }
 

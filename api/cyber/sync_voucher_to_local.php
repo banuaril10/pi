@@ -64,6 +64,8 @@ try {
             $connec->exec("
                 insert into pos_dvoucher (
                     pos_dvoucher_key,
+                    pos_dsales_key,
+                    voucher_amount,
                     voucher_code,
                     status,
                     valid_from,
@@ -75,6 +77,8 @@ try {
                     status_intransit
                 ) values (
                     '{$key}',
+                    '{$r['pos_dsales_key']}',
+                    '{$r['voucher_amount']}',
                     '{$r['voucher_code']}',
                     '{$r['status']}',
                     '{$r['valid_from']}',

@@ -75,14 +75,15 @@ if ($jum == 0) {
     $note1 = $j_hasil[0]['note1'];
     $note2 = $j_hasil[0]['note2'];
     $note3 = $j_hasil[0]['note3'];
+    $website = $j_hasil[0]['website'];
     $orgtype = 'oracle';
 
     if ($isqty == 0) {
         $s[] = "('$ad_morg_key', '$ad_mclient_key', '$isactived', '$insertdate', '$insertby', '$postby', '$postdate', '$name', '$description', '$value', 
-            '$ppn', '$address1', '$address2', '$address3', false, '$note1', '$note2', '$note3')";
+            '$ppn', '$address1', '$address2', '$address3', false, '$note1', '$note2', '$note3','$website')";
     } else {
         $s[] = "('$ad_morg_key', '$ad_mclient_key', '$isactived', '$insertdate', '$insertby', '$postby', '$postdate', '$name', '$description', '$value', 
-            '$ppn', '$address1', '$address2', '$address3', true, '$note1', '$note2', '$note3')";
+            '$ppn', '$address1', '$address2', '$address3', true, '$note1', '$note2', '$note3','$website')";
     }
     // echo $ad_morg_key;
 
@@ -92,7 +93,7 @@ if ($jum == 0) {
 
     $values = implode(", ", $s);
     $insert = "INSERT INTO ad_morg (ad_morg_key, ad_mclient_key, isactived, insertdate, insertby, postby, postdate,
-    name, description, value, ppn, address1, address2, address3, isqty, note1, note2, note3) VALUES $values";
+    name, description, value, ppn, address1, address2, address3, isqty, note1, note2, note3, website) VALUES $values";
 
     // echo $insert;
 
