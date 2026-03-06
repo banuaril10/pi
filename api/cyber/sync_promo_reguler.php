@@ -157,4 +157,79 @@ try {
 
 
 
+
+
+
+
+
+
+
+// ===============================
+// SYNC PROMO TEBUS MURAH
+// ===============================
+
+$url_tebus = $base_url . '/store/promo/get_promo_tebusmurah.php?idstore=' . $idstore;
+
+$hasil_tebus = get_category($url_tebus);
+$j_hasil_tebus = json_decode($hasil_tebus, true);
+
+try {
+
+    if ($j_hasil_tebus != null) {
+
+        $truncate = "TRUNCATE table pos_mproductdiscountmurah";
+        $statement = $connec->prepare($truncate);
+        $statement->execute();
+
+        foreach ($j_hasil_tebus as $key => $value) {
+
+            $amk = $value['ad_morg_key'];
+            $isactived = $value['isactived'];
+            $insertdate = $value['insertdate'];
+            $insertby = $value['insertby'];
+            $discountname = str_replace("'", "\'", $value['discountname']);
+            $sku = $value['sku'];
+            $pricediscount = $value['afterdiscount'];
+            $fromdate = $value['fromdate'];
+            $todate = $value['todate'];
+            $limitamount = $value['minbelanja'];
+            $ispromo = $value['ispromo'] ? 'true' : 'false';
+
+            $insert = "INSERT INTO pos_mproductdiscountmurah
+            (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postdate, discountname, sku, pricediscount, fromdate, todate, limitamount, ispromo)
+            VALUES
+            (
+            '" . $ad_mclient_key . "',
+            '" . $amk . "',
+            '" . $isactived . "',
+            '" . date("Y-m-d H:i:s") . "',
+            '" . $insertby . "',
+            '" . date("Y-m-d H:i:s") . "',
+            '" . $discountname . "',
+            '" . $sku . "',
+            '" . $pricediscount . "',
+            '" . $fromdate . "',
+            '" . $todate . "',
+            '" . $limitamount . "',
+            " . $ispromo . "
+            );";
+
+            $statement = $connec->prepare($insert);
+            $statement->execute();
+        }
+    }
+
+} catch (Exception $e) {
+
+    $json = array(
+        "status" => "FAILED",
+        "message" => "Sync Tebus Murah Error : " . $e->getMessage(),
+    );
+    echo json_encode($json);
+    die();
+
+}
+
+
+
 ?>
