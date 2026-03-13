@@ -17,7 +17,7 @@ $discount_name = "";
 $product = "select * from pos_mproduct where sku = '" . $sku . "'";
 $cp = $connec->query($product);
 foreach ($cp as $r1) {
-  $nama_product = $r1['name'];
+  $nama_product = '<font style="color:blue; font-size:12px">' . $r1['name'] . '</font>';
   $price = $r1['price'];
 }
 
@@ -161,9 +161,72 @@ foreach ($cc as $c1) {
 }
 
 
+// Promo Buy & Get
+$cek_buyget = "SELECT distinct
+               b.qtybuy,
+               b.qtyget,
+               (b.priceget - b.discount) AS priceget,
+               p.name AS nama_get,
+               b.skuget
+               FROM pos_mproductbuyget b
+               LEFT JOIN pos_mproduct p 
+                 ON b.skuget = p.sku
+               WHERE b.skubuy = '".$sku."'
+               AND CURRENT_DATE BETWEEN b.fromdate AND b.todate
+               ORDER BY b.qtybuy, p.name";
+
+$cbg = $connec->query($cek_buyget);
+$data_buyget = $cbg->fetchAll(PDO::FETCH_ASSOC);
+
+$totalData = count($data_buyget);
+
+# Font dinamis
+if ($totalData <= 3) {
+    $fontHeader = 13;
+    $fontItem = 12;
+} elseif ($totalData <= 6) {
+    $fontHeader = 11;
+    $fontItem = 10;
+} elseif ($totalData <= 10) {
+    $fontHeader = 11;
+    $fontItem = 10;
+} else {
+    $fontHeader = 10;
+    $fontItem = 10;
+}
+
+$lastPromo = '';
+
+foreach ($data_buyget as $bg) {
+
+  $qtybuy = $bg['qtybuy'];
+  $qtyget = $bg['qtyget'];
+  $priceget = $bg['priceget'];
+  $nama_get = $bg['nama_get'];
+  $skuget = $bg['skuget'];
+
+  $promoKey = $qtybuy.'-'.$qtyget.'-'.$priceget;
+
+  if ($lastPromo != $promoKey) {
+    $discount_name .= '<div style="font-size:'.$fontHeader.'px; margin-top:4px">
+                        <b style="color:purple">Buy '.$qtybuy.' Get '.$qtyget.'</b><br>';
+    $lastPromo = $promoKey;
+  }
+
+  $discount_name .= '<div style="display:flex; justify-content:space-between; font-size:'.$fontItem.'px;">
+                       <span>'.$skuget.' - '.$nama_get.'</span>
+                       <span style="color:red">'.rupiah($priceget).'</span>
+                     </div>';
+}
 
 
-$info = $nama_product . '<br>' . $discount_name;
+
+
+$info = '<div style="line-height:1.2">';
+$info .= '<b>'.$nama_product.'</b><br>';
+$info .= $discount_name;
+$info .= '</div>';
 
 echo $info;
+
 ?>
