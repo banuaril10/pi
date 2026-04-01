@@ -2,19 +2,20 @@
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+include "../../config/koneksi.php";
 require_once 'auth_middleware.php';
 
 // Authenticate dulu
 $userData = authenticate();
-include "../../config/koneksi.php";
 
 // Terima input JSON
 $input = json_decode(file_get_contents("php://input"), true);
 
-$ad_mclient_key = $input["ad_mclient_key"] ?? null;
-$ad_morg_key = $input["ad_morg_key"] ?? null;
-$ad_muser_key = $input["ad_muser_key"] ?? null;
+$ad_mclient_key = $input["ad_mclient_key"] ?? $userData['cln'] ?? null;
+$ad_morg_key = $input["ad_morg_key"] ?? $userData['org'] ?? null;
+$ad_muser_key = $input["ad_muser_key"] ?? $userData['user_id'] ?? null;
 
 // Validasi input
 if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key)) {
@@ -26,8 +27,8 @@ if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key)) {
 }
 
 try {
-    // Panggil function proc_pos_dsales_lastbill_get
-    $sql = "SELECT * FROM proc_pos_dsales_lastbill_get(
+    // Panggil function proc_pos_dcashierbalance_shopclose_check
+    $sql = "SELECT * FROM proc_pos_dcashierbalance_shopclose_check(
         :p_ad_mclient_key,
         :p_ad_morg_key,
         :p_ad_muser_key
@@ -46,32 +47,28 @@ try {
     $o_message = $result["o_message"] ?? "";
     
     // Decode JSON data
-    $data = $o_data ? json_decode($o_data, true) : null;
+    $data = $o_data ? json_decode($o_data, true) : [];
     
-    if ($o_message == "success" && !empty($data) && is_array($data)) {
-        // Ambil data pertama (karena array)
-        $billData = $data[0];
+    if ($o_message == "Confirm") {
+        // Format data untuk dropdown
+        $formattedData = [];
+        foreach ($data as $item) {
+            $formattedData[] = [
+                "id" => $item['id'],
+                "text" => $item['salesdate'] . " - " . $item['balanceamount'] // Format: "24-Feb-26 - 1,000,000"
+            ];
+        }
         
         echo json_encode([
             "status" => "SUCCESS",
-            "message" => "Berhasil mendapatkan bill",
-            "data" => [
-                "serialno" => $billData["serialno"] ?? 0,
-                "lastbillno" => $billData["lastbillno"] ?? "",
-                "lasttempvalue" => $billData["lasttempvalue"] ?? 0,
-                "lasttempstring" => $billData["lasttempstring"] ?? "Rp 0",
-                "memberid" => $billData["memberid"] ?? null,
-                "membername" => $billData["membername"] ?? null,
-                "isbirthday" => $billData["isbirthday"] ?? false,
-                "memberpoint" => $billData["memberpoint"] ?? 0,
-                "membercardno" => $billData["membercardno"] ?? null,
-                "membertext" => $billData["membertext"] ?? null
-            ]
+            "message" => "Data ditemukan",
+            "data" => $formattedData
         ]);
     } else {
         echo json_encode([
             "status" => "ERROR",
-            "message" => "Gagal mendapatkan bill: " . $o_message
+            "message" => $o_message ?: "Tidak ada data",
+            "data" => []
         ]);
     }
     

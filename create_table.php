@@ -1153,5 +1153,25 @@ foreach ($cmd_alter_price_audit as $r) {
 	$connec->exec($r);
 }
 
+
+$cmd_mobile_transaction_log = [
+	'CREATE TABLE IF NOT EXISTS pos_mobile_transaction_log (
+		id SERIAL PRIMARY KEY,
+		billno VARCHAR(50) NOT NULL,
+		amount DECIMAL(20,2) DEFAULT 0,
+		payment_method VARCHAR(20) DEFAULT \'CASH\',
+		cashier_name VARCHAR(100),
+		transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		status VARCHAR(20) DEFAULT \'SUCCESS\'
+	);',
+	'CREATE INDEX IF NOT EXISTS idx_pos_mobile_log_billno ON pos_mobile_transaction_log(billno);',
+	'CREATE INDEX IF NOT EXISTS idx_pos_mobile_log_date ON pos_mobile_transaction_log(transaction_date);'
+];
+
+foreach ($cmd_mobile_transaction_log as $r) {
+	$connec->exec($r);
+}
+
+
 ?>
 

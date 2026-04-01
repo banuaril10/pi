@@ -3,7 +3,10 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
+require_once 'auth_middleware.php';
 
+// Authenticate dulu
+$userData = authenticate();
 include "../../config/koneksi.php";
 
 // Terima input JSON

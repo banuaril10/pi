@@ -103,6 +103,9 @@ try {
                 where pos_dvoucher_key = '{$key}'
             ");
         }
+
+
+        
     }
 
     $connec->commit();

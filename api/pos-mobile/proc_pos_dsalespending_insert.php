@@ -12,11 +12,12 @@ include "../../config/koneksi.php";
 // Terima input JSON
 $input = json_decode(file_get_contents("php://input"), true);
 
-$ad_mclient_key = $input["ad_mclient_key"] ?? null;
-$ad_morg_key = $input["ad_morg_key"] ?? null;
-$ad_muser_key = $input["ad_muser_key"] ?? null;
+// Mapping parameter sesuai dengan function
+$ad_mclient_key = $input["p_ad_mclient_key"] ?? null;
+$ad_morg_key = $input["p_ad_morg_key"] ?? null;
+$ad_muser_key = $input["p_ad_muser_key"] ?? null;
 
-// Validasi input
+// Validasi input wajib
 if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key)) {
     echo json_encode([
         "status" => "ERROR",
@@ -26,8 +27,8 @@ if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key)) {
 }
 
 try {
-    // Panggil function proc_pos_dsales_lastbill_get
-    $sql = "SELECT * FROM proc_pos_dsales_lastbill_get(
+    // Panggil function proc_pos_dsalespending_insert
+    $sql = "SELECT * FROM proc_pos_dsalespending_insert(
         :p_ad_mclient_key,
         :p_ad_morg_key,
         :p_ad_muser_key
@@ -45,33 +46,28 @@ try {
     $o_data = $result["o_data"] ?? null;
     $o_message = $result["o_message"] ?? "";
     
-    // Decode JSON data
-    $data = $o_data ? json_decode($o_data, true) : null;
-    
-    if ($o_message == "success" && !empty($data) && is_array($data)) {
-        // Ambil data pertama (karena array)
-        $billData = $data[0];
-        
+    if ($o_message == "success") {
+        // UBAH INI: kirim sebagai ARRAY dengan 1 elemen
         echo json_encode([
             "status" => "SUCCESS",
-            "message" => "Berhasil mendapatkan bill",
-            "data" => [
-                "serialno" => $billData["serialno"] ?? 0,
-                "lastbillno" => $billData["lastbillno"] ?? "",
-                "lasttempvalue" => $billData["lasttempvalue"] ?? 0,
-                "lasttempstring" => $billData["lasttempstring"] ?? "Rp 0",
-                "memberid" => $billData["memberid"] ?? null,
-                "membername" => $billData["membername"] ?? null,
-                "isbirthday" => $billData["isbirthday"] ?? false,
-                "memberpoint" => $billData["memberpoint"] ?? 0,
-                "membercardno" => $billData["membercardno"] ?? null,
-                "membertext" => $billData["membertext"] ?? null
+            "message" => "success",
+            "data" => [  // INI TETAP ARRAY
+                [
+                    "tempbillno" => "TEMP#1",
+                    "message" => "Transaksi berhasil dipending"
+                ]
             ]
+        ]);
+    } else if ($o_message == "exists") {
+        echo json_encode([
+            "status" => "SUCCESS", 
+            "message" => "exists",
+            "data" => []  // KIRIM ARRAY KOSONG
         ]);
     } else {
         echo json_encode([
             "status" => "ERROR",
-            "message" => "Gagal mendapatkan bill: " . $o_message
+            "message" => $o_message ?: "Gagal memproses pending"
         ]);
     }
     

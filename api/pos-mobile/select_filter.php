@@ -3,7 +3,10 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
+require_once 'auth_middleware.php';
 
+// Authenticate dulu
+$userData = authenticate();
 include "../../config/koneksi.php";
 
 // Ambil parameter GET
@@ -67,8 +70,28 @@ try {
             echo json_encode(["data" => []]);
         }
     }
-    else if ($f3 == 'pos_dailyclose_reprint_get') {
-        echo json_encode(["data" => []]);
+    else if ($f3 == 'pos_dshopsales_reprint_get') {
+        // Function membutuhkan 5 parameter, dengan status 'DONE' sebagai parameter ke-3
+        $sql = "SELECT * FROM proc_pos_dshopsales_reprint_get(
+            null, :p_ad_morg_key, null, null, :p_search
+        )";
+        
+        $stmt = $connec->prepare($sql);
+        $stmt->bindParam(":p_ad_morg_key", $ad_morg_key); // Perbaiki: pakai $ad_morg_key, bukan $org_id
+        $stmt->bindParam(":p_search", $f4);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $o_data = $result['o_data'] ?? null;
+        
+        error_log("pos_dshopsales_reprint_get result: " . ($o_data ?? 'null'));
+        
+        if ($o_data) {
+            $data = json_decode($o_data, true);
+            echo json_encode(["data" => $data]);
+        } else {
+            echo json_encode(["data" => []]);
+        }
     }
     else {
         error_log("Unknown sp: " . $f3);

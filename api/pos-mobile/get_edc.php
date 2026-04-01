@@ -1,4 +1,9 @@
-<?php include "../../config/koneksi.php";
+<?php 
+require_once 'auth_middleware.php';
+
+// Authenticate dulu
+$userData = authenticate();
+include "../../config/koneksi.php";
 $jenis = $_GET['jenis'];
 $statement = $connec->query("select * from pos_medc where jenis = '$jenis' order by name asc");
 

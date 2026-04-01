@@ -13,40 +13,34 @@ include "../../config/koneksi.php";
 $input = json_decode(file_get_contents("php://input"), true);
 
 // Mapping parameter sesuai dengan function
-$pos_dtempsalesline_key = $input["pos_dtempsalesline_key"] ?? null;
-$qty = $input["qty"] ?? null;
-$approvedby = $input["approvedby"] ?? "SYSTEM";
+$billno = $input["p_billno"] ?? null;
+$pos_mcashier_key = $input["p_pos_mcashier_key"] ?? null;
+$ad_muser_key = $input["p_ad_muser_key"] ?? null;
+$postby = $input["p_postby"] ?? $userData['username'] ?? 'SYSTEM';
 
 // Validasi input wajib
-if (empty($pos_dtempsalesline_key) || empty($qty)) {
+if (empty($billno) || empty($pos_mcashier_key) || empty($ad_muser_key)) {
     echo json_encode([
         "status" => "ERROR",
-        "message" => "Parameter pos_dtempsalesline_key dan qty wajib diisi"
-    ]);
-    exit;
-}
-
-// Validasi qty harus angka positif
-if (!is_numeric($qty) || $qty <= 0) {
-    echo json_encode([
-        "status" => "ERROR",
-        "message" => "Qty harus berupa angka positif"
+        "message" => "Parameter tidak lengkap"
     ]);
     exit;
 }
 
 try {
-    // Panggil function proc_pos_dtempsalesline_2_update
-    $sql = "SELECT * FROM proc_pos_dtempsalesline_2_update(
-        :p_pos_dtempsalesline_key,
-        :p_qty,
-        :p_approvedby
+    // Panggil function proc_pos_dtempsalesline_recall
+    $sql = "SELECT * FROM proc_pos_dtempsalesline_recall(
+        :p_billno,
+        :p_pos_mcashier_key,
+        :p_ad_muser_key,
+        :p_postby
     )";
     
     $stmt = $connec->prepare($sql);
-    $stmt->bindParam(":p_pos_dtempsalesline_key", $pos_dtempsalesline_key);
-    $stmt->bindParam(":p_qty", $qty);
-    $stmt->bindParam(":p_approvedby", $approvedby);
+    $stmt->bindParam(":p_billno", $billno);
+    $stmt->bindParam(":p_pos_mcashier_key", $pos_mcashier_key);
+    $stmt->bindParam(":p_ad_muser_key", $ad_muser_key);
+    $stmt->bindParam(":p_postby", $postby);
     $stmt->execute();
     
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -55,19 +49,19 @@ try {
     $o_data = $result["o_data"] ?? null;
     $o_message = $result["o_message"] ?? "";
     
-    // Decode JSON data
-    $data = $o_data ? json_decode($o_data, true) : null;
-    
     if ($o_message == "success") {
+        // Parse o_data yang berupa JSON string
+        $dataArray = json_decode($o_data, true);
+        
         echo json_encode([
             "status" => "SUCCESS",
-            "message" => "Berhasil mengupdate qty",
-            "data" => $data ? $data[0] : null
+            "message" => "success",
+            "data" => $dataArray
         ]);
     } else {
         echo json_encode([
             "status" => "ERROR",
-            "message" => $o_message ?: "Gagal mengupdate qty"
+            "message" => $o_message ?: "Gagal recall pending"
         ]);
     }
     

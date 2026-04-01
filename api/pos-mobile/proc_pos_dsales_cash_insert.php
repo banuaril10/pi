@@ -3,7 +3,10 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
+require_once 'auth_middleware.php';
 
+// Authenticate dulu
+$userData = authenticate();
 include "../../config/koneksi.php";
 
 // Terima input JSON
@@ -21,6 +24,7 @@ $donasiamount = $input["donasiamount"] ?? "0";
 $membercard = $input["membercard"] ?? "";
 $point = $input["point"] ?? "0";
 $postby = $input["postby"] ?? "SYSTEM";
+$payment_method = $input["payment_method"] ?? "CASH";
 
 // Validasi input wajib
 if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($pos_mcashier_key) || empty($billno)) {
@@ -79,6 +83,22 @@ try {
     $o_message = $result["o_message"] ?? "";
     
     if ($o_message == "success") {
+
+        try {
+            $logSql = "INSERT INTO pos_mobile_transaction_log (billno, amount, payment_method, cashier_name, status) 
+                       VALUES (:billno, :amount, :payment_method, :cashier_name, 'SUCCESS')";
+            $logStmt = $connec->prepare($logSql);
+            $logStmt->bindParam(":billno", $billno);
+            $logStmt->bindParam(":amount", $billamount);
+            $logStmt->bindParam(":payment_method", $payment_method);
+            $logStmt->bindParam(":cashier_name", $postby);
+            $logStmt->execute();
+        } catch (Exception $logError) {
+            // Log error ke file, tapi jangan ganggu response
+            error_log("POS Mobile Log Error: " . $logError->getMessage());
+        }
+
+    
         echo json_encode([
             "status" => "SUCCESS",
             "message" => "Pembayaran berhasil",

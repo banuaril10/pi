@@ -1,5 +1,9 @@
 <?php
 header("Content-Type: application/json");
+require_once 'auth_middleware.php';
+
+// Authenticate dulu
+$userData = authenticate();
 include "../../config/koneksi.php";
 
 $input = json_decode(file_get_contents("php://input"), true);
