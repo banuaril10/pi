@@ -6,6 +6,13 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 include "../../config/koneksi.php";
 
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $idstore = $row['ad_morg_key'];
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($input['vouchercode']) || !isset($input['totalamount'])) {
@@ -17,95 +24,85 @@ if (!isset($input['vouchercode']) || !isset($input['totalamount'])) {
     exit;
 }
 
-$voucherCode  = trim($input['vouchercode']);
-$totalAmount  = floatval($input['totalamount']);
-$currentDate  = date('Y-m-d');
+$voucherCode = trim($input['vouchercode']);
+$totalAmount = floatval($input['totalamount']);
 
-try {
+/* =========================
+   1️⃣ CEK KE SERVER (FINAL)
+   ========================= */
+$serverUrl = $base_url . "/store/voucher/check_status.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3";
 
-    // 1. Ambil voucher berdasarkan kode
-    $sql = "SELECT * FROM pos_dvoucher 
-            WHERE voucher_code = ?
-            LIMIT 1";
-    $stmt = $connec->prepare($sql);
-    $stmt->execute([$voucherCode]);
-    $voucher = $stmt->fetch(PDO::FETCH_ASSOC);
+$payload = json_encode([
+    "vouchercode" => $voucherCode,
+    "idstore" => $idstore
+]);
 
-    // 2. Voucher tidak ditemukan
-    if (!$voucher) {
-        echo json_encode([
-            'valid' => false,
-            'message' => 'Voucher tidak ditemukan',
-            'amount' => 0
-        ]);
-        exit;
-    }
+$ch = curl_init($serverUrl);
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST           => true,
+    CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+    CURLOPT_POSTFIELDS     => $payload,
+    CURLOPT_TIMEOUT        => 5
+]);
 
-    // 3. Voucher sudah digunakan
-    if ($voucher['useddate'] !== null || $voucher['status'] !== 'NEW') {
-        echo json_encode([
-            'valid' => false,
-            'message' => 'Voucher sudah digunakan',
-            'amount' => 0
-        ]);
-        exit;
-    }
+$response = curl_exec($ch);
+curl_close($ch);
 
-    // 4. Voucher belum berlaku
-    if ($currentDate < $voucher['valid_from']) {
-        echo json_encode([
-            'valid' => false,
-            'message' => 'Voucher belum berlaku',
-            'amount' => 0
-        ]);
-        exit;
-    }
+$server = json_decode($response, true);
 
-    // 5. Voucher sudah kadaluarsa
-    if ($currentDate > $voucher['valid_until']) {
-        echo json_encode([
-            'valid' => false,
-            'message' => 'Voucher sudah kadaluarsa',
-            'amount' => 0
-        ]);
-        exit;
-    }
-
-    // 6. Hitung nilai voucher
-    $voucherAmount = 0;
-
-    if (!empty($voucher['percent']) && $voucher['percent'] > 0) {
-        $percent = floatval($voucher['percent']);
-        $calculatedAmount = $totalAmount * ($percent / 100);
-
-        if (!empty($voucher['voucher_amount']) && $voucher['voucher_amount'] > 0) {
-            $voucherAmount = min($calculatedAmount, $voucher['voucher_amount']);
-        } else {
-            $voucherAmount = $calculatedAmount;
-        }
-
-        $voucherAmount = min($voucherAmount, $totalAmount);
-    } else {
-        $voucherAmount = min(floatval($voucher['voucher_amount']), $totalAmount);
-    }
-
-    // 7. Response sukses
-    echo json_encode([
-        'valid' => true,
-        'message' => 'Voucher valid',
-        'amount' => $voucherAmount,
-        'voucher_data' => [
-            'voucher_key'     => $voucher['pos_dvoucher_key'],
-            'original_amount' => $voucher['voucher_amount'] ?? 0,
-            'percent'         => $voucher['percent'] ?? 0,
-            'valid_until'     => $voucher['valid_until']
-        ]
-    ]);
-
-} catch (PDOException $e) {
+if (!$server || ($server['valid'] ?? false) !== true) {
     echo json_encode([
         'valid' => false,
-        'message' => 'Error database',
+        'message' => $server['message'] ?? 'Gagal cek voucher ke server, periksa internet/intransit',
         'amount' => 0
     ]);
+    exit;
 }
+
+/* =========================
+   2️⃣ AMBIL DATA LOKAL (CACHE)
+   ========================= */
+$sql = "SELECT * FROM pos_dvoucher WHERE voucher_code = ? LIMIT 1";
+$stmt = $connec->prepare($sql);
+$stmt->execute([$voucherCode]);
+$voucher = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$voucher) {
+    echo json_encode([
+        'valid' => false,
+        'message' => 'Voucher belum tersinkron di lokal',
+        'amount' => 0
+    ]);
+    exit;
+}
+
+/* =========================
+   3️⃣ HITUNG DISKON
+   ========================= */
+$voucherAmount = 0;
+
+if (!empty($voucher['percent']) && $voucher['percent'] > 0) {
+    $calc = $totalAmount * ($voucher['percent'] / 100);
+    $voucherAmount = $voucher['voucher_amount']
+        ? min($calc, $voucher['voucher_amount'])
+        : $calc;
+} else {
+    $voucherAmount = $voucher['voucher_amount'];
+}
+
+$voucherAmount = min($voucherAmount, $totalAmount);
+
+/* =========================
+   4️⃣ RESPONSE OK
+   ========================= */
+echo json_encode([
+    'valid' => true,
+    'message' => 'Voucher valid (server verified)',
+    'amount' => $voucherAmount,
+    'voucher_data' => [
+        'voucher_key' => $server['data']['voucher_key'],
+        'percent'     => $server['data']['percent'],
+        'valid_until' => $server['data']['valid_until']
+    ]
+]);
