@@ -72,8 +72,8 @@
 									<td style="width: 40px; background-color: #ffa597"></td>
 									<td> : </td>
 									<td>Sudah verifikasi</td>
-
-								</tr>
+									
+							</tr>
 							</table>
 							<font style="color: red; font-weight: bold">Data diurutkan dari selisih terbesar</font>
 						</div>
@@ -135,6 +135,8 @@
 											onclick="cetakPdf('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>','<?php echo $selisih; ?>');"
 											class="btn btn-warning">Cetak Selisih PDF</button>
 										<button onclick="testPrint();" class="btn btn-success">Test Print</button>
+										<!-- TOMBOL EXPORT EXCEL -->
+										<button onclick="exportToExcel('<?php echo $_GET['m_pi']; ?>');" class="btn btn-info" style="background-color: #1E8449; color: white;">Export to Excel</button>
 										<br>
 										<br>
 										<input type="text" id="search" class="form-control" id="exampleInputName2"
@@ -199,8 +201,8 @@
 													<?php echo $barc; ?>
 												</font> (
 												<?php echo $row1['name']; ?>)
-											</td>
-										</tr>
+												</td>
+											</tr>
 
 										<tr class="header1" style="background: #f0f1f2">
 											<td style="width: 150px">Counter</td>
@@ -211,7 +213,7 @@
 
 
 
-										</tr>
+											</tr>
 										<tr class="header2" <?php echo $color; ?> style="font-size: 16px">
 
 											<td>
@@ -227,12 +229,12 @@
 													</div>
 
 
-												</td>
-												<td><?php echo $qtyerpreal; ?></td>
-												<td><?php echo $row1['qtysales']; ?></td>
-												<td><?php echo $variant; ?></td>
-												<td><?php echo $vc; ?></td>
-											</tr>
+													</td>
+													<td><?php echo $qtyerpreal; ?></td>
+													<td><?php echo $row1['qtysales']; ?></td>
+													<td><?php echo $variant; ?></td>
+													<td><?php echo $vc; ?></td>
+												</tr>
 
 
 
@@ -314,7 +316,7 @@
 		function print_text(html) {
 			// console.log(html);
 			$.ajax({
-				url: "printer/print_struk_linux.php",
+				url: "printer/print_struk.php",
 				type: "POST",
 				data: { html: html },
 				success: function (dataResult) {
@@ -645,7 +647,7 @@
 						let verifiedcount = data.verifiedcount || 0;
 
 						html += `
-					<tr>
+						<tr>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${no}</td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${sku}</td>
 						<td style="border:1px solid ${warna}; color:${warna};">${name}</td>
@@ -655,7 +657,7 @@
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;"></td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;"></td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${verifiedcount}</td>
-					</tr>
+						</tr>
 				`;
 						no++;
 						number++;
@@ -723,11 +725,106 @@
 			}
 		}
 
-
-
-
-
-
+		// ========== FUNGSI EXPORT KE EXCEL ==========
+		function exportToExcel(mpi) {
+			var sort = document.getElementById("sort").value;
+			
+			$.ajax({
+				url: "api/action.php?modul=inventory&act=cetak_generic_all",
+				type: "POST",
+				data: { mpi: mpi, sort: sort },
+				success: function(dataResult) {
+					var data = JSON.parse(dataResult);
+					
+					// Buat workbook dan worksheet
+					var html = `
+					<html>
+					<head>
+						<meta charset="UTF-8">
+						<title>Export Inventory Verification</title>
+						<style>
+							th { background-color: #4CAF50; color: white; border: 1px solid #ddd; padding: 8px; }
+							td { border: 1px solid #ddd; padding: 8px; }
+							table { border-collapse: collapse; width: 100%; }
+						</style>
+					</head>
+					<body>
+						<h2>INVENTORY VERIFICATION REPORT</h2>
+						<p><strong>Document No:</strong> <?php echo $dn; ?></p>
+						<p><strong>Rack:</strong> <?php echo $rack_name; ?></p>
+						<p><strong>Total Selisih:</strong> <?php echo rupiah($selisih); ?></p>
+						<p><strong>Export Date:</strong> ${new Date().toLocaleString('id-ID')}</p>
+						<br>
+						<table>
+							<thead>
+								<tr>
+									<th>No</th>
+									<th>SKU</th>
+									<th>Barcode</th>
+									<th>Nama Barang</th>
+									<th>Qty Counter</th>
+									<th>Qty ERP</th>
+									<th>Qty Sales</th>
+									<th>Varian</th>
+									<th>Status Verifikasi</th>
+									<th>Verified Count</th>
+								</tr>
+							</thead>
+							<tbody>
+					`;
+					
+					var no = 1;
+					for (var i = 0; i < data.length; i++) {
+						var item = data[i];
+						var statusVerif = (item.verifiedcount > 0) ? "Sudah Verifikasi" : "Belum Verifikasi";
+						
+						html += `
+							<tr>
+								<td style="text-align:center;">${no}</td>
+								<td>${item.sku || ''}</td>
+								<td>${item.barcode || ''}</td>
+								<td>${item.name || ''}</td>
+								<td style="text-align:right;">${item.qtycount || 0}</td>
+								<td style="text-align:right;">${item.qtyerp || 0}</td>
+								<td style="text-align:right;">${item.qtysales || 0}</td>
+								<td style="text-align:right;">${item.qtyvariant || 0}</td>
+								<td>${statusVerif}</td>
+								<td style="text-align:center;">${item.verifiedcount || 0}</td>
+							</tr>
+						`;
+						no++;
+					}
+					
+					html += `
+							</tbody>
+						</table>
+						<br>
+						<p><em>Generated by Inventory System</em></p>
+					</body>
+					</html>
+					`;
+					
+					// Buat blob dan download
+					var blob = new Blob([html], { type: "application/vnd.ms-excel" });
+					var link = document.createElement("a");
+					var url = URL.createObjectURL(blob);
+					link.href = url;
+					link.download = "Inventory_Verification_<?php echo $dn; ?>_<?php echo date('Y-m-d'); ?>.xls";
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+					URL.revokeObjectURL(url);
+					
+					$('#notif').html("<font style='color: green'>Export Excel berhasil!</font>");
+					setTimeout(function() {
+						$('#notif').html("");
+					}, 3000);
+				},
+				error: function() {
+					$('#notif').html("<font style='color: red'>Gagal export Excel, silakan coba lagi!</font>");
+				}
+			});
+		}
 
 		function testPrint() {
 			// const process = require('child_process');
