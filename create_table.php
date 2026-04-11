@@ -1173,5 +1173,12 @@ foreach ($cmd_mobile_transaction_log as $r) {
 }
 
 
+$cmd_alter_pos_dvoucher_nohp = [
+	'ALTER TABLE pos_dvoucher ADD COLUMN IF NOT EXISTS nohp varchar(50);'
+];	
+foreach ($cmd_alter_pos_dvoucher_nohp as $r) {
+	$connec->exec($r);
+}
+
 ?>
 
