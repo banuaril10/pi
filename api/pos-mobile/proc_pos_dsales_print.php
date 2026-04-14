@@ -45,6 +45,28 @@ try {
     $line = $o_data_line ? json_decode($o_data_line, true) : [];
     
     if ($o_message == "success") {
+        $billamount = 999;
+        $billno = 'BOSOL-99';
+        $payment_method = 'CASH';
+        $postby = 'SYSTEM';
+        $payload = json_encode(["header" => $header, "line" => $line]);
+
+        try {
+            $logSql = "INSERT INTO pos_mobile_transaction_log (billno, amount, payment_method, cashier_name, status, payload) 
+                       VALUES (:billno, :amount, :payment_method, :cashier_name, 'SUCCESS', :payload)";
+            $logStmt = $connec->prepare($logSql);
+            $logStmt->bindParam(":billno", $billno);
+            $logStmt->bindParam(":amount", $billamount);
+            $logStmt->bindParam(":payment_method", $payment_method);
+            $logStmt->bindParam(":cashier_name", $postby);
+            $logStmt->bindParam(":payload", $payload);
+            $logStmt->execute();
+        } catch (Exception $logError) {
+            // Log error ke file, tapi jangan ganggu response
+            error_log("POS Mobile Log Error: " . $logError->getMessage());
+        }
+
+
         echo json_encode([
             "o_data_header" => $header,
             "o_data_line" => $line,
