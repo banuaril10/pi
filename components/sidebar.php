@@ -28,7 +28,12 @@
 					</li>
 				<?php } ?>
 
-
+				<li class="sidebar-item">
+					<a href="price_tag_perubahan_harga_header.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Perubahan Harga</span>
+					</a>
+				</li>
 
 				<li class="sidebar-item">
 					<a href="receive_print.php" class='sidebar-link'>
