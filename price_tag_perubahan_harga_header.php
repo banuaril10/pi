@@ -27,7 +27,7 @@
             <div class="card-body">
 
             <!-- FILTER TANGGAL RANGE -->
-            <!-- <form method="get" class="row mb-4" id="filterForm">
+            <form method="get" class="row mb-4" id="filterForm">
                 <div class="col-md-3">
                     <label for="start" class="form-label">Tanggal Mulai</label>
                     <input type="date" class="form-control" id="start" name="start" value="<?= isset($_GET['start']) ? $_GET['start'] : date('Y-m-d') ?>">
@@ -39,7 +39,7 @@
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary">FILTER</button>
                 </div>
-            </form> -->
+            </form>
 
             <?php
                 // Full URL API
@@ -126,9 +126,7 @@
                             <tr <?= $is_active; ?>>
                                 <td><?= $no_tgl++; ?></td>
                                 <td><?= $tgl_format; ?></td>
-                                <td>
-                                    <span class="badge bg-primary"><?= $count_sku; ?> SKU</span>
-                                </td>
+                                <td><span class="badge bg-primary"><?= $count_sku; ?> SKU</span></td>
                                 <td>
                                     <a href="?start=<?= $tanggal_mulai; ?>&end=<?= $tanggal_akhir; ?>&tgl=<?= $tgl; ?>" class="btn btn-sm btn-info">
                                         <i class="bi bi-eye"></i> Lihat Detail
@@ -169,18 +167,20 @@
                         <div class="card-header bg-light">
                             <h5 class="mb-0">
                                 Detail SKU - <?= date('d-m-Y', strtotime($selected_tanggal)); ?>
-                                <button class="btn btn-sm btn-danger float-end" id="btn-cetak-tinta-selected"><b>CETAK HARGA</b></button>
-                                <button class="btn btn-sm btn-warning float-end me-2" id="btn-cetak-promo-selected"><b>CETAK PROMO</b></button>
-                                <button class="btn btn-sm btn-success float-end me-2" id="btn-cetak-planogram-selected"><b>CETAK PLANOGRAM</b></button>
+                                <button class="btn btn-sm btn-danger float-end" id="btn-cetak-tinta"><b>CETAK HARGA</b></button>
+                                <button class="btn btn-sm btn-warning float-end me-2" id="btn-cetak-promo"><b>CETAK PROMO</b></button>
+                                <button class="btn btn-sm btn-success float-end me-2" id="btn-cetak-planogram"><b>CETAK PLANOGRAM</b></button>
                             </h5>
                         </div>
                         <div class="card-body">
                             <p style="color: red; font-weight: bold">Satu kertas terdiri dari 32 tag</p>
+
+                            <button class="btn btn-sm btn-secondary mb-3" id="checkall">CHECK ALL</button>
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="detailTable">
+                                <table class="table table-bordered" id="example">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" id="checkall-detail"></th>
+                                            <th>Pilih</th>
                                             <th>No</th>
                                             <th>SKU</th>
                                             <th>Barcode</th>
@@ -239,18 +239,18 @@
                                                 ?>
                                                 <tr>
                                                     <td>
-                                                        <input type="checkbox" class="checkbox-reguler-detail" value="<?php echo $checkbox_value_reguler; ?>">
+                                                        <input type="checkbox" class="checkbox-reguler" value="<?php echo $checkbox_value_reguler; ?>">
                                                         <?php if ($ada_diskon): ?>
                                                             <br>
-                                                            <input type="checkbox" class="checkbox-promo-detail" value="<?php echo $checkbox_value_promo; ?>">
+                                                            <input type="checkbox" class="checkbox-promo" value="<?php echo $checkbox_value_promo; ?>">
                                                             <small class="text-success">Promo</small>
                                                         <?php endif; ?>
-                                                    </td>
-                                                    <td><?php echo $no++; ?></td>
-                                                    <td><?php echo $row['sku']; ?></td>
-                                                    <td><?php echo $row['barcode']; ?></td>
-                                                    <td><?php echo htmlspecialchars($row['name']); ?></td>
-                                                    <td><?php echo number_format($harga_normal, 0, ',', '.'); ?></td>
+                                                    </div>
+                                                    <td><?php echo $no++; ?></div>
+                                                    <td><?php echo $row['sku']; ?></div>
+                                                    <td><?php echo $row['barcode']; ?></div>
+                                                    <td><?php echo htmlspecialchars($row['name']); ?></div>
+                                                    <td><?php echo number_format($harga_normal, 0, ',', '.'); ?></div>
                                                     <td>
                                                         <?php 
                                                         if ($ada_diskon) {
@@ -260,11 +260,11 @@
                                                             echo '<span class="badge bg-secondary">Tidak Ada Promo</span>';
                                                         }
                                                         ?>
-                                                     </td>
-                                                    <td><?php echo $rack_name; ?></td>
-                                                    <td><?php echo $row['tag']; ?></td>
-                                                    <td><input type="number" id="copy_detail_<?php echo $row['sku']; ?>" value="1" style="width:60px" class="form-control"></td>
-                                                    <td><?php echo date('d-m-Y', strtotime($selected_tanggal)); ?></td>
+                                                     </div>
+                                                    <td><?php echo $rack_name; ?></div>
+                                                    <td><?php echo $row['tag']; ?></div>
+                                                    <td><input type="number" id="copy_<?php echo $row['sku']; ?>" value="1" style="width:60px" class="form-control copy-input" data-sku="<?php echo $row['sku']; ?>"></div>
+                                                    <td><?php echo date('d-m-Y', strtotime($selected_tanggal)); ?></div>
                                                 </tr>
                                                 <?php
                                             }
@@ -273,7 +273,7 @@
                                             <tr>
                                                 <td colspan="11" class="text-center text-warning">
                                                     SKU tidak ditemukan di database pos_mproduct
-                                                </td>
+                                                </div>
                                             </tr>
                                             <?php
                                         }
@@ -297,13 +297,104 @@
 </div>
 
 <script src="styles/js/jsbarcode.js"></script>
-<script src="https://intransit.idolmartidolaku.com/apiidolmart/pricetag/price-reguler-store-apps.js?id=dwa"></script>
-<script src="https://intransit.idolmartidolaku.com/apiidolmart/pricetag/price-promo-perubahan-harga.js?id=dwa"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 
-<script type="text/javascript">
+<script>
+// Fungsi format Rupiah
+function formatRupiah(angka) {
+    if (!angka) return '0';
+    return new Intl.NumberFormat('id-ID').format(angka);
+}
+
+// Generate Barcode
+function generateBarcodeDataURL(text) {
+    const canvas = document.createElement("canvas");
+    JsBarcode(canvas, text, {
+        format: "CODE128",
+        width: 1.5,
+        height: 20,
+        displayValue: false,
+        margin: 0,
+    });
+    return canvas.toDataURL("image/png");
+}
+
+// Fungsi Cetak Reguler dengan COPY
+function cetakPriceTagWithCopy(selectedData) {
+    let text = "<table><tr>";
+    let x = 0;
+    
+    for (let i = 0; i < selectedData.length; i++) {
+        let copyCount = parseInt(selectedData[i].split('|')[selectedData[i].split('|').length - 1]) || 1;
+        let originalValue = selectedData[i].substring(0, selectedData[i].lastIndexOf('|'));
+        let res = originalValue.split("|");
+        
+        for (let c = 0; c < copyCount; c++) {
+            let sku = res[0];
+            let name = res[1];
+            let normal = res[2];
+            let dates = res[3];
+            let rack = res[4];
+            let shortcut = res[5];
+            let afterdiscount = res[6];
+            let tag = res[7];
+            let kodetoko_tgl = res[8];
+            let barcode = res[9];
+            
+            if (shortcut === "undefined" || shortcut === "null" || shortcut === "") {
+                var sc = "";
+            } else {
+                var sc = "/" + shortcut;
+            }
+            
+            let panjangharga = parseInt(normal);
+            let sizeprice = "49px";
+            let margin_bot = "0";
+            if (panjangharga > 999999) {
+                sizeprice = "40px";
+                margin_bot = "9px";
+            }
+            
+            let newStr = "";
+            if (sku != "") newStr += sku;
+            if (barcode != "") newStr += "/" + barcode;
+            if (rack != "") newStr += "/" + rack.replace("-", "_");
+            
+            let barcodeDataURL = generateBarcodeDataURL(sku);
+            let barcodeImage = "<div style='display:flex; justify-content:flex-end; margin-top:4px;'>" +
+                "<img src='" + barcodeDataURL + "' style='width:60px; height:15px;' />" +
+                "</div>";
+            
+            text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '>" +
+                "<div style='height:30px; text-align: left; font-size: 10px'><b>" + name.toUpperCase() + "</b></div>" +
+                "<label style='color: #000; margin: -10px 0 " + margin_bot + " 0; float: right; font-size: " + sizeprice + "'>" +
+                "<label style='font-size: 10px'><b>Rp </b></label><b>" + formatRupiah(normal) + "</b></label>" +
+                "<hr style='width: 100%;border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:15px 0 0 0;'>" +
+                "<label style='text-align: center; font-size: 9px;'>" + newStr + "</label>" +
+                barcodeImage +
+                "</div></td>";
+            
+            if ((x + 1) % 4 == 0 && x !== 0) {
+                text += "</tr><tr>";
+            }
+            x++;
+        }
+    }
+    
+    text += "</tr></table>";
+    
+    let mywindow = window.open("", "my div", "height=600,width=800");
+    mywindow.document.write("<style>@media print{@page {size: portrait; width: 216mm;height: 280mm;margin-top: 15;margin-right: 2;margin-left: 2; padding: 0;} margin: 0; padding: 0;} table { page-break-inside:auto }tr{ page-break-inside:avoid; page-break-after:auto }</style>");
+    mywindow.document.write(text);
+    setTimeout(function() {
+        mywindow.print();
+        mywindow.close();
+    }, 500);
+    return true;
+}
+
 $(document).ready(function() {
     // Inisialisasi DataTable untuk tabel tanggal
     $('#tanggalTable').DataTable({
@@ -312,18 +403,19 @@ $(document).ready(function() {
         order: [[1, 'asc']]
     });
     
-    // Inisialisasi DataTable untuk detail table (jika ada)
-    if ($('#detailTable').length) {
-        $('#detailTable').DataTable({
+    // Inisialisasi DataTable untuk detail table
+    if ($('#example').length) {
+        $('#example').DataTable({
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
             pageLength: 10,
-            order: [[1, 'asc']]
+            order: [[1, 'asc']],
+            destroy: true
         });
     }
     
-    // Check all untuk detail table
-    $("#checkall-detail").on("click", function() {
-        var checkboxes = document.querySelectorAll('.checkbox-reguler-detail');
+    // Check all button
+    $("#checkall").on("click", function() {
+        var checkboxes = document.querySelectorAll('.checkbox-reguler');
         var allChecked = true;
         for (var i = 0; i < checkboxes.length; i++) {
             if (!checkboxes[i].checked) {
@@ -336,13 +428,13 @@ $(document).ready(function() {
         }
     });
     
-    // Cetak harga reguler (selected)
-    $('#btn-cetak-tinta-selected').on('click', function() {
+    // Cetak harga reguler (dengan copy)
+    $('#btn-cetak-tinta').on('click', function() {
         var selected = [];
-        $('.checkbox-reguler-detail:checked').each(function() {
+        $('.checkbox-reguler:checked').each(function() {
             var val = $(this).val();
             var skuValue = val.split('|')[0];
-            var copyValue = $('#copy_detail_' + skuValue).length ? $('#copy_detail_' + skuValue).val() : 1;
+            var copyValue = $('#copy_' + skuValue).length ? $('#copy_' + skuValue).val() : 1;
             selected.push(val + '|' + copyValue);
         });
         
@@ -351,21 +443,16 @@ $(document).ready(function() {
             return false;
         }
         
-        if(typeof cetakPriceTag === 'function') {
-            cetakPriceTag(selected);
-        } else {
-            console.log("Data yang akan dicetak:", selected);
-            alert("Cetak reguler: " + selected.length + " item dipilih");
-        }
+        cetakPriceTagWithCopy(selected);
     });
     
-    // Cetak harga promo (selected)
-    $('#btn-cetak-promo-selected').on('click', function() {
+    // Cetak harga promo (belum diimplementasikan, bisa ditambahkan)
+    $('#btn-cetak-promo').on('click', function() {
         var selected = [];
-        $('.checkbox-promo-detail:checked').each(function() {
+        $('.checkbox-promo:checked').each(function() {
             var val = $(this).val();
             var skuValue = val.split('|')[0];
-            var copyValue = $('#copy_detail_' + skuValue).length ? $('#copy_detail_' + skuValue).val() : 1;
+            var copyValue = $('#copy_' + skuValue).length ? $('#copy_' + skuValue).val() : 1;
             selected.push(val + '|' + copyValue);
         });
         
@@ -374,19 +461,13 @@ $(document).ready(function() {
             return false;
         }
         
-        if(typeof cetakPriceTagPromo === 'function') {
-            cetakPriceTagPromo(selected);
-        } else if(typeof cetakPromo === 'function') {
-            cetakPromo(selected);
-        } else {
-            alert("Cetak Promo: " + selected.length + " item dipilih");
-        }
+        alert("Cetak Promo: " + selected.length + " item dipilih (fungsi menyusul)");
     });
     
     // Cetak planogram
-    $('#btn-cetak-planogram-selected').on('click', function() {
+    $('#btn-cetak-planogram').on('click', function() {
         var selected = [];
-        $('.checkbox-reguler-detail:checked').each(function() {
+        $('.checkbox-reguler:checked').each(function() {
             selected.push($(this).val());
         });
         
@@ -395,11 +476,7 @@ $(document).ready(function() {
             return false;
         }
         
-        if(typeof cetakPlanogram === 'function') {
-            cetakPlanogram(selected);
-        } else {
-            alert("Cetak planogram: " + selected.length + " item dipilih");
-        }
+        alert("Cetak planogram: " + selected.length + " item dipilih (fungsi menyusul)");
     });
 });
 </script>
