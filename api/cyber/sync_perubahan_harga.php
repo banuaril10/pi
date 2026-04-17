@@ -47,7 +47,7 @@ if (!$data_api || !is_array($data_api)) {
 
 // Ambil hanya data SKU
 $sku_list = array_map(function ($item) {
-    return $item['sku'];
+    return $item['sku']."|".$item['price'];
 }, $data_api);
 
 // Kembalikan JSON hanya SKU saja

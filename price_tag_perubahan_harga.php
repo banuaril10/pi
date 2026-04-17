@@ -316,56 +316,56 @@ $(document).ready(function() {
     });
     
     // Cetak harga reguler
-    $('#btn-cetak-tinta').on('click', function() {
-        var selected = [];
-        $('.checkbox-reguler:checked').each(function() {
-            var copyValue = 1;
-            var skuValue = $(this).val().split('|')[0];
-            if($('#copy' + skuValue).length) {
-                copyValue = $('#copy' + skuValue).val();
-            }
-            selected.push($(this).val() + '|' + copyValue);
-        });
+    // $('#btn-cetak-tinta').on('click', function() {
+    //     var selected = [];
+    //     $('.checkbox-reguler:checked').each(function() {
+    //         var copyValue = 1;
+    //         var skuValue = $(this).val().split('|')[0];
+    //         if($('#copy' + skuValue).length) {
+    //             copyValue = $('#copy' + skuValue).val();
+    //         }
+    //         selected.push($(this).val() + '|' + copyValue);
+    //     });
         
-        if(selected.length === 0) {
-            alert("Pilih minimal 1 item untuk dicetak!");
-            return false;
-        }
+    //     if(selected.length === 0) {
+    //         alert("Pilih minimal 1 item untuk dicetak!");
+    //         return false;
+    //     }
         
-        if(typeof cetakPriceTag === 'function') {
-            cetakPriceTag(selected);
-        } else {
-            console.log("Data yang akan dicetak:", selected);
-            alert("Fungsi cetak reguler: " + selected.length + " item dipilih");
-        }
-    });
+    //     if(typeof cetakPriceTag === 'function') {
+    //         cetakPriceTag(selected);
+    //     } else {
+    //         console.log("Data yang akan dicetak:", selected);
+    //         alert("Fungsi cetak reguler: " + selected.length + " item dipilih");
+    //     }
+    // });
     
-    // Cetak harga promo
-    $('#btn-cetak-promo').on('click', function() {
-        var selected = [];
-        $('.checkbox-promo:checked').each(function() {
-            var copyValue = 1;
-            var skuValue = $(this).val().split('|')[0];
-            if($('#copy' + skuValue).length) {
-                copyValue = $('#copy' + skuValue).val();
-            }
-            selected.push($(this).val() + '|' + copyValue);
-        });
+    // // Cetak harga promo
+    // $('#btn-cetak-promo').on('click', function() {
+    //     var selected = [];
+    //     $('.checkbox-promo:checked').each(function() {
+    //         var copyValue = 1;
+    //         var skuValue = $(this).val().split('|')[0];
+    //         if($('#copy' + skuValue).length) {
+    //             copyValue = $('#copy' + skuValue).val();
+    //         }
+    //         selected.push($(this).val() + '|' + copyValue);
+    //     });
         
-        if(selected.length === 0) {
-            alert("Tidak ada item promo yang dipilih!\n\nCentang checklist Promo pada item yang memiliki diskon.");
-            return false;
-        }
+    //     if(selected.length === 0) {
+    //         alert("Tidak ada item promo yang dipilih!\n\nCentang checklist Promo pada item yang memiliki diskon.");
+    //         return false;
+    //     }
         
-        if(typeof cetakPriceTagPromo === 'function') {
-            cetakPriceTagPromo(selected);
-        } else if(typeof cetakPromo === 'function') {
-            cetakPromo(selected);
-        } else {
-            console.log("Data promo yang akan dicetak:", selected);
-            alert("Cetak Promo: " + selected.length + " item dipilih");
-        }
-    });
+    //     if(typeof cetakPriceTagPromo === 'function') {
+    //         cetakPriceTagPromo(selected);
+    //     } else if(typeof cetakPromo === 'function') {
+    //         cetakPromo(selected);
+    //     } else {
+    //         console.log("Data promo yang akan dicetak:", selected);
+    //         alert("Cetak Promo: " + selected.length + " item dipilih");
+    //     }
+    // });
     
     // Cetak planogram
     $('#btn-cetak-tinta-pdf').on('click', function() {
