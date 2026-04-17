@@ -176,6 +176,7 @@
                             <p style="color: red; font-weight: bold">Satu kertas terdiri dari 32 tag</p>
 
                             <button class="btn btn-sm btn-secondary mb-3" id="checkall">CHECK ALL</button>
+                            <button class="btn btn-sm btn-secondary mb-3" id="checkallpromo">CHECK ALL PROMO</button>
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="example">
                                     <thead>
@@ -502,6 +503,20 @@ $(document).ready(function() {
     // Check all button
     $("#checkall").on("click", function() {
         var checkboxes = document.querySelectorAll('.checkbox-reguler');
+        var allChecked = true;
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (!checkboxes[i].checked) {
+                allChecked = false;
+                break;
+            }
+        }
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = !allChecked;
+        }
+    });
+
+        $("#checkallpromo").on("click", function() {
+        var checkboxes = document.querySelectorAll('.checkbox-promo');
         var allChecked = true;
         for (var i = 0; i < checkboxes.length; i++) {
             if (!checkboxes[i].checked) {
