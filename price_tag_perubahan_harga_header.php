@@ -305,7 +305,18 @@
 // Fungsi format Rupiah
 function formatRupiah(angka) {
     if (!angka) return '0';
-    return new Intl.NumberFormat('id-ID').format(angka);
+    var number_string = angka.toString().replace(/[^,\d]/g, ""),
+        split = number_string.split(","),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+    
+    if (ribuan) {
+        var separator = sisa ? "." : "";
+        rupiah += separator + ribuan.join(".");
+    }
+    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+    return rupiah;
 }
 
 // Generate Barcode
@@ -323,7 +334,7 @@ function generateBarcodeDataURL(text) {
 
 // Fungsi Cetak Reguler dengan COPY
 function cetakPriceTagWithCopy(selectedData) {
-    let text = "<table><tr>";
+    let text = "<table border='0'>";
     let x = 0;
     
     for (let i = 0; i < selectedData.length; i++) {
@@ -395,6 +406,81 @@ function cetakPriceTagWithCopy(selectedData) {
     return true;
 }
 
+// Fungsi Cetak Promo dengan COPY
+function cetakPromoWithCopy(selectedData) {
+    let text = "<table border='0'>";
+    let x = 0;
+    
+    for (let i = 0; i < selectedData.length; i++) {
+        let copyCount = parseInt(selectedData[i].split('|')[selectedData[i].split('|').length - 1]) || 1;
+        let originalValue = selectedData[i].substring(0, selectedData[i].lastIndexOf('|'));
+        let res = originalValue.split("|");
+        
+        for (let c = 0; c < copyCount; c++) {
+            let sku = res[0];
+            let name = res[1];
+            let normal = res[2];
+            let dates = res[3];
+            let rack = res[4];
+            let shortcut = res[5];
+            let afterdiscount = res[6];
+            let todate = res[7];
+            let tag = res[8];
+            let barcode = res[9];
+            let fromdate = res[10];
+            
+            // Hanya cetak jika ada diskon (afterdiscount < normal)
+            if (parseInt(afterdiscount) >= parseInt(normal)) continue;
+            
+            let panjangharga = parseInt(afterdiscount);
+            let sizeprice = "48px";
+            if (panjangharga > 999999) sizeprice = "43px";
+            
+            let newStr = "";
+            if (sku != "") newStr += sku;
+            if (barcode != "") newStr += "/" + barcode;
+            if (rack != "") newStr += "/" + rack.replace("-", "_");
+            
+            let barcodeDataURL = generateBarcodeDataURL(sku);
+            let barcodeImage = "<div style='position:absolute; bottom:2px; right:2px;'>" +
+                "<img src='" + barcodeDataURL + "' width='60' height='15' />" +
+                "</div>";
+            
+            text += "<td style='border: 0.5px solid #000; position: relative;'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; position: relative;'>" +
+                "<div style='height:25px; text-align: left; font-size: 10px'><b>" + name.toUpperCase() + "</b></div>" +
+                "<label style='text-align: left; font-size: 10px'><b>Rp </b></label>" +
+                "<label style='text-align: left; font-size: 20px; text-decoration: line-through;'><b>" + formatRupiah(normal) + "</b></label>" +
+                "<label style='float: right !important; font-size: 7px;'>" + fromdate + " s.d. " + todate + "</label>" +
+                "<label style='margin: -10px 0 0 0; float: right; font-size: " + sizeprice + "'><label style='font-size: 10px'><b>Rp </b></label><b>" + formatRupiah(afterdiscount) + "</b></label>" +
+                "<hr style='width: 100%;border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:1.5px 0 0 0;'>" +
+                "<label style='text-align: center; font-size: 9px; margin-top: -10px'>" + newStr + "</label>" +
+                barcodeImage +
+                "</div></td>";
+            
+            if ((x + 1) % 4 == 0 && x !== 0) {
+                text += "</tr><tr>";
+            }
+            x++;
+        }
+    }
+    
+    text += "</tr></table>";
+    
+    if (text === "<table border='0'></tr></table>") {
+        alert("Tidak ada item promo yang valid untuk dicetak!");
+        return false;
+    }
+    
+    let mywindow = window.open("", "my div", "height=600,width=800");
+    mywindow.document.write("<style>@media print{@page {size: portrait; width: 216mm;height: 280mm;margin-top: 15;margin-right: 2;margin-left: 2; padding: 0;} margin: 0; padding: 0;} table { page-break-inside:auto }tr{ page-break-inside:avoid; page-break-after:auto }</style>");
+    mywindow.document.write(text);
+    setTimeout(function() {
+        mywindow.print();
+        mywindow.close();
+    }, 500);
+    return true;
+}
+
 $(document).ready(function() {
     // Inisialisasi DataTable untuk tabel tanggal
     $('#tanggalTable').DataTable({
@@ -446,7 +532,7 @@ $(document).ready(function() {
         cetakPriceTagWithCopy(selected);
     });
     
-    // Cetak harga promo (belum diimplementasikan, bisa ditambahkan)
+    // Cetak harga promo (dengan copy)
     $('#btn-cetak-promo').on('click', function() {
         var selected = [];
         $('.checkbox-promo:checked').each(function() {
@@ -457,11 +543,11 @@ $(document).ready(function() {
         });
         
         if(selected.length === 0) {
-            alert("Tidak ada item promo yang dipilih!");
+            alert("Tidak ada item promo yang dipilih!\n\nCentang checklist Promo pada item yang memiliki diskon.");
             return false;
         }
         
-        alert("Cetak Promo: " + selected.length + " item dipilih (fungsi menyusul)");
+        cetakPromoWithCopy(selected);
     });
     
     // Cetak planogram
