@@ -353,7 +353,8 @@ function cetakPriceTagWithCopy(selectedData) {
             let afterdiscount = res[6];
             let tag = res[7];
             let kodetoko_tgl = res[8];
-            let barcode = res[9];
+            // let barcode = res[9];
+            let barcode = "";
             
             if (shortcut === "undefined" || shortcut === "null" || shortcut === "") {
                 var sc = "";
@@ -427,9 +428,9 @@ function cetakPromoWithCopy(selectedData) {
             let afterdiscount = res[6];
             let todate = res[7];
             let tag = res[8];
-            let barcode = res[9];
+            // let barcode = res[9];
             let fromdate = res[10];
-            
+            let barcode = "";
             // Hanya cetak jika ada diskon (afterdiscount < normal)
             if (parseInt(afterdiscount) >= parseInt(normal)) continue;
             
