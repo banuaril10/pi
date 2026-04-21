@@ -81,8 +81,13 @@ foreach ($connec->query($list_cashierbalance) as $row4) {
         "pointamount" => $row4['pointamount'],
         "pointdebitamout" => $row4['pointdebitamout'],
         "pointcreditamount" => $row4['pointcreditamount'],
+        "vouchercashamount" => $row4['vouchercashamount'],
+        "voucherdebitamount" => $row4['voucherdebitamount'],
+        "vouchercreditamount" => $row4['vouchercreditamount'],
+        "voucheramount" => $row4['voucheramount'],
         "status_intransit" => $row4['status_intransit'],
         "notes" => $row4['notes'],
+
     );
 }
 
