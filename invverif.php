@@ -313,21 +313,19 @@
 		};
 
 
-		function print_text(html) {
-			// console.log(html);
-			$.ajax({
-				url: "printer/print_struk.php",
-				type: "POST",
-				data: { html: html },
-				success: function (dataResult) {
-					var dataResult = JSON.parse(dataResult);
-
-					$('#notif').html("Proses print");
-
-
-				}
-			});
-		}
+function print_text(html) {
+    var isLinux = (navigator.platform.indexOf('Linux') > -1) || (navigator.userAgent.indexOf('Linux') > -1);
+    var url = isLinux ? "printer/print_struk_linux.php" : "printer/print_struk.php";
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: { html: html },
+        success: function (dataResult) {
+            var dataResult = JSON.parse(dataResult);
+            $('#notif').html("Proses print");
+        }
+    });
+}
 
 
 
