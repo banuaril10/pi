@@ -227,44 +227,7 @@
 							</div>
 							
 							<!-- Modal Otorisasi SPV untuk PI Items -->
-<div class="modal fade" id="modalOtorisasiSpv" tabindex="-1" aria-labelledby="modalOtorisasiSpvLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-warning">
-        <h5 class="modal-title" id="modalOtorisasiSpvLabel">🔐 Otorisasi Supervisor Diperlukan</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Anda akan membuat <strong>Physical Inventory untuk Items tertentu</strong>. Harap diisi oleh Supervisor yang bertugas.</p>
-        
-        <div class="mb-3">
-            <label>Pilih Supervisor</label>
-            <select id="spv_user" class="form-control selectize">
-                <option value="">-- Pilih Supervisor --</option>
-                <?php 
-                // Query ambil data SPV dari tabel ad_muser
-                $sql_spv = "SELECT ad_muser_key, username FROM ad_muser WHERE description = 'SPV' AND status = '1'";
-                foreach ($connec->query($sql_spv) as $spv) {
-                    echo '<option value="'.$spv['ad_muser_key'].'" data-username="'.$spv['username'].'">'.$spv['username'].'</option>';
-                }
-                ?>
-            </select>
-        </div>
-        
-        <div class="mb-3">
-            <label>Password Supervisor</label>
-            <input type="password" id="spv_password" class="form-control" placeholder="Masukkan password supervisor">
-        </div>
-        
-        <div id="otorisasi_notif" style="color:red; font-size:12px;"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-        <button type="button" id="btnConfirmOtorisasiSpv" class="btn btn-primary">Validasi & Proses</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 							
 							<div class="modal fade" id="batal<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
@@ -430,7 +393,44 @@
     </div>
   </div>
 </div>
-
+<div class="modal fade" id="modalOtorisasiSpv" tabindex="-1" aria-labelledby="modalOtorisasiSpvLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="modalOtorisasiSpvLabel">🔐 Otorisasi Supervisor Diperlukan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Anda akan membuat <strong>Physical Inventory untuk Items tertentu</strong>. Harap diisi oleh Supervisor yang bertugas.</p>
+        
+        <div class="mb-3">
+            <label>Pilih Supervisor</label>
+            <select id="spv_user" class="form-control selectize">
+                <option value="">-- Pilih Supervisor --</option>
+                <?php 
+                // Query ambil data SPV dari tabel ad_muser
+                $sql_spv = "SELECT ad_muser_key, username FROM ad_muser WHERE description = 'SPV' AND status = '1'";
+                foreach ($connec->query($sql_spv) as $spv) {
+                    echo '<option value="'.$spv['ad_muser_key'].'" data-username="'.$spv['username'].'">'.$spv['username'].'</option>';
+                }
+                ?>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label>Password Supervisor</label>
+            <input type="password" id="spv_password" class="form-control" placeholder="Masukkan password supervisor">
+        </div>
+        
+        <div id="otorisasi_notif" style="color:red; font-size:12px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" id="btnConfirmOtorisasiSpv" class="btn btn-primary">Validasi & Proses</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
 function resetPI(){
@@ -714,7 +714,7 @@ $('#butsave').on('click', function() {
 		var rack = $('select[id=rack] option').filter(':selected').val();
 		var pc = $('select[id=pc] option').filter(':selected').val();
 		var sub = $('select[id=sub] option').filter(':selected').val();
-		var sso = $('#stats_sales_order').val();
+		// var sso = $('#stats_sales_order').val();
 
 		var formData = new FormData();
 		
@@ -724,7 +724,7 @@ $('#butsave').on('click', function() {
 		formData.append('rack', rack);
 		formData.append('pc', pc);
 		formData.append('sub', sub);
-		formData.append('sso', sso);
+		// formData.append('sso', sso);
 		
 // alert(sub);
 
@@ -839,14 +839,14 @@ $('#butsave').on('click', function() {
 					var it = $('#it').val();
 					var sl = $('#sl').val();
 					var kat = $('#kat').val();
-					var sso = $('#stats_sales_order').val();
+					// var sso = $('#stats_sales_order').val();
 					
 					// Simpan data ke modal untuk diproses nanti
 					$('#modalOtorisasiSpv').data('formData', {
 						it: it,
 						sl: sl,
-						kat: kat,
-						sso: sso
+						kat: kat
+						// sso: sso
 					});
 					
 					// Reset form otorisasi
@@ -862,6 +862,8 @@ $('#butsave').on('click', function() {
 						// Tampilkan modal otorisasi
 						$('#modalOtorisasiSpv').modal('show');
 					}, 300);
+
+					// alert('tet');
 
 
 
@@ -1027,39 +1029,39 @@ $('#notif').html("Pastikan sales order sudah completed..");
 		
 	}
 	
-	function updateStatusSales(stats){
-		// alert(stats);
-		$.ajax({
-			url: "api/action.php?modul=inventory&act=update_sales&status_sales="+stats,
-			type: "GET",
-			beforeSend: function(){
-				$('#notif').html("Proses cek sales order gantung..");
-			},
-			success: function(dataResult){
+	// function updateStatusSales(stats){
+	// 	// alert(stats);
+	// 	$.ajax({
+	// 		url: "api/action.php?modul=inventory&act=update_sales&status_sales="+stats,
+	// 		type: "GET",
+	// 		beforeSend: function(){
+	// 			$('#notif').html("Proses cek sales order gantung..");
+	// 		},
+	// 		success: function(dataResult){
 				
-				console.log(dataResult);
-				var dataResult = JSON.parse(dataResult);
-				if(dataResult.result=='1'){
-					$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-					$('#stats_sales_order').val(stats);
-					$(".row-info").show();
-					$(".modal-footer").show();
-					// location.reload();
-				}else if(dataResult.result=='0'){
-					$('#notif').html(dataResult.msg);
+	// 			console.log(dataResult);
+	// 			var dataResult = JSON.parse(dataResult);
+	// 			if(dataResult.result=='1'){
+	// 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+	// 				$('#stats_sales_order').val(stats);
+	// 				$(".row-info").show();
+	// 				$(".modal-footer").show();
+	// 				// location.reload();
+	// 			}else if(dataResult.result=='0'){
+	// 				$('#notif').html(dataResult.msg);
 					
 					
-				}else {
-					$('#notif').html(dataResult.msg);
+	// 			}else {
+	// 				$('#notif').html(dataResult.msg);
 					
 					
-				}
+	// 			}
 				
 				
-			}
-		});
+	// 		}
+	// 	});
 		
-	}
+	// }
 	
 	
 	
