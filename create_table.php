@@ -1180,5 +1180,17 @@ foreach ($cmd_alter_pos_dvoucher_nohp as $r) {
 	$connec->exec($r);
 }
 
+
+$cmd_alter_m_piline = [
+	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS updatedby varchar NULL;',
+	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS updateddate timestamp NULL;'
+];
+
+foreach ($cmd_alter_m_piline as $r) {
+	$connec->exec($r);
+}
+
+
+
 ?>
 

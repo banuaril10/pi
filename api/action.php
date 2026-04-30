@@ -155,7 +155,49 @@ if ($_GET['modul'] == 'inventory') {
 
 
 
-	if ($_GET['act'] == 'input') {
+	if($_GET['act'] == 'cek_spv_password'){
+
+		$spv_user_key = $_POST['spv_user_key'];
+		$spv_password = $_POST['spv_password'];
+		
+		// Validasi input tidak kosong
+		if(empty($spv_user_key) || empty($spv_password)){
+			echo json_encode(['result' => '0', 'msg' => 'Supervisor dan password harus diisi!']);
+			exit;
+		}
+		
+		// Hash password dengan metode HMAC SHA256
+		$hashed_password = hash_hmac("sha256", $spv_password, 'marinuak');
+		
+		// Query cek SPV (gaya seperti contoh Anda)
+		$sql = "SELECT * FROM ad_muser 
+				WHERE ad_muser_key = '$spv_user_key' 
+				AND description = 'SPV' 
+				AND status = '1'
+				AND userpwd = '$hashed_password'";
+		
+		$result = $connec->query($sql);
+		
+		$spv_valid = 0;
+		$spv_name = '';
+		
+		foreach ($result as $row) {
+			$spv_valid = 1;
+			$spv_name = $row['username'];
+		}
+		
+		if($spv_valid == 1){
+			echo json_encode([
+				'result' => '1', 
+				'msg' => 'Valid',
+				'spv_name' => $spv_name
+			]);
+		} else {
+			echo json_encode(['result' => '0', 'msg' => 'Password supervisor salah atau user tidak ditemukan!']);
+		}
+		
+		exit;
+	}else if ($_GET['act'] == 'input') {
 
 		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 
@@ -1378,54 +1420,54 @@ if ($_GET['modul'] == 'inventory') {
 
 
 
-		$sku = $_POST['sku'];
+				$sku = $_POST['sku'];
 		$qtyon = $_POST['quan'];
 		$nama = $_POST['nama'];
 		$mpi = $_GET['mpi'];
 
 		if ($insertfrom == 'M') {
-
 			$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '" . $mpi . "'");
 		} else if ($insertfrom == 'W') {
 			$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '" . $mpi . "'");
-
-
 		}
 
-		$sql = "select m_piline.verifiedcount from m_piline where m_piline.sku ='" . $sku . "'";
+		// Get existing qtycount and verifiedcount
+		$sql = "select m_piline.verifiedcount, m_piline.qtycount from m_piline where m_piline.sku ='" . $sku . "' and m_pi_key = '" . $mpi . "' and date(m_piline.insertdate) = '" . date('Y-m-d') . "'";
 		$result = $connec->query($sql);
-		foreach ($result as $row) {
+		$existingQtyCount = null;
+		$vc = 0;
 
+		foreach ($result as $row) {
+			$existingQtyCount = $row['qtycount'];
+			
 			if ($row['verifiedcount'] == '') {
 				$vc = 0;
-
 			} else {
-
 				$vc = $row['verifiedcount'];
 			}
-
 		}
 
 		$totvc = $vc + 1;
 
 		if ($sku != "") {
-
-
-			$statement1 = $connec->query("update m_piline set qtycount = '" . $qtyon . "', verifiedcount = '" . $totvc . "' where sku = '" . $sku . "' and date(m_piline.insertdate) = '" . date('Y-m-d') . "'");
+			// Check if existing qtycount equals new qtyon
+			if ($existingQtyCount == $qtyon) {
+				// Don't update, just return success message without changes
+				$json = array('result' => '1', 'msg' => $sku . ' (' . $nama . ') Tidak ada perubahan (Quantity sama: ' . $qtyon . ')');
+			} else {
+				// Proceed with update
+				$statement1 = $connec->query("update m_piline set qtycount = '" . $qtyon . "', verifiedcount = '" . $totvc . "', updatedby = '".$username."', updateddate = NOW()
+				where sku = '" . $sku . "' and date(m_piline.insertdate) = '" . date('Y-m-d') . "'");
+				
+				if ($statement1) {
+					$json = array('result' => '1', 'msg' => $sku . ' (' . $nama . ') QUANTITY = <font style="color: red">' . $qtyon . '</font>');
+				} else {
+					$json = array('result' => '0', 'msg' => 'Gagal, coba lagi nanti');
+				}
+			}
 		} else {
-
 			$json = array('result' => '0', 'msg' => 'SKU tidak boleh kosong');
 		}
-
-
-
-		if ($statement1) {
-			$json = array('result' => '1', 'msg' => $sku . ' (' . $nama . ') QUANTITY = <font style="color: red">' . $qtyon . '</font>');
-		} else {
-			$json = array('result' => '0', 'msg' => 'Gagal ,coba lagi nanti');
-
-		}
-
 
 		$json_string = json_encode($json);
 		echo $json_string;

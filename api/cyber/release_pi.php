@@ -39,11 +39,7 @@ $items = array();
 $pi_key = $_POST['m_pi'];
 $sql = "select * from m_pi where m_pi_key ='" . $pi_key . "'";
 $result = $connec->query($sql);
-// echo "select * from m_pi where m_pi_key ='" . $pi_key . "'";
-
 foreach ($result as $row) {
-	
-	// print_r($row);
 
     $a = $row['ad_client_id'];
     $b = $row['ad_org_id'];
@@ -89,7 +85,7 @@ foreach ($result as $row) {
 
     );
 
-    $sql_line = "select distinct m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='" . $pi_key . "' and m_piline.issync =0";
+    $sql_line = "select distinct m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='" . $pi_key . "' and m_piline.issync =0 order by m_piline.sku asc";
 
 
 
@@ -117,7 +113,10 @@ foreach ($result as $row) {
             'qtysales' => $rline['qtysales'],
             'price' => $rline['price'],
             'qtysalesout' => $rline['qtysalesout'],
-            'hargabeli' => $rline['hargabeli']
+            'hargabeli' => $rline['hargabeli'],
+            'updatedby' => $rline['updatedby'],
+            'updateddate' => $rline['updateddate']
+
         );
 
     }
@@ -126,8 +125,9 @@ foreach ($result as $row) {
 
     
     $items_json = json_encode($allarray);
+	
+	// echo  $items_json;
 
-	// var_dump($items_json);
 
     $hasil = piline_semua($url, $items_json);
     // var_dump($hasil);

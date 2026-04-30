@@ -4,939 +4,1067 @@
 
 
 <?php
-// $sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
-$sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '" . date('Y-m-d') . "'";
 
-$rsa = $connec->query($sql_sales);
-
-foreach ($rsa as $h) {
-
-
-	if ($h['jums'] > 0) {
-
-		$sql_sales1 = "select status_sales from m_pi_sales where date(tanggal) = '" . date('Y-m-d') . "'";
-
-		$rsa1 = $connec->query($sql_sales1);
-		foreach ($rsa1 as $h1) {
-			$_SESSION['status_sales'] = $h1['status_sales'];
-
-			if ($_SESSION['status_sales'] == '1') {
-
-				$status_gantung = 1;
-			} else {
-				$status_gantung = 0;
-			}
-		}
-		?>
-
-
-	<?php } else {
-		$status_gantung = 2;
-
-		?>
-
-
-	<?php }
-
-}
-
+		// $sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
+		$sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
+		
+		$rsa = $connec->query($sql_sales);
+			
+		foreach ($rsa as $h){ 
+			
+		
+			if($h['jums'] > 0){ 
+			
+				$sql_sales1 = "select status_sales from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
+		
+				$rsa1 = $connec->query($sql_sales1);
+					foreach ($rsa1 as $h1){
+					$_SESSION['status_sales'] = $h1['status_sales'];
+						
+						if($_SESSION['status_sales'] == '1'){
+							
+							$status_gantung = 1;
+						}else{
+							$status_gantung = 0;
+						}
+					}	
+			?>
+				
+				
+			<?php }else{ 
+				$status_gantung = 2;
+			
+			?>
+				
+				
+			<?php }
+			
+		}	
+		
 ?>
 
 <div id="overlay">
-	<div class="cv-spinner">
-		<span class="spinner"></span>
-	</div>
-</div>
+			<div class="cv-spinner">
+				<span class="spinner"></span>
+			</div>
+		</div>
 
 <div id="app">
 
-	<div id="main">
-		<header class="mb-3">
-			<a href="#" class="burger-btn d-block d-xl-none">
-				<i class="bi bi-justify fs-3"></i>
-			</a>
-		</header>
-		<?php include "components/hhh.php"; ?>
+<div id="main">
+<header class="mb-3">
+	<a href="#" class="burger-btn d-block d-xl-none">
+		<i class="bi bi-justify fs-3"></i>
+	</a>
+</header>
+<?php include "components/hhh.php"; ?>
 
-		<!------ CONTENT AREA ------->
-		<div class="row">
-			<div class="col-12">
-				<div class="card">
-					<div class="card-header">
-						<h4>INVENTORY LIST</h4>
-
-						<button type="button" onclick="resetPI();" class="btn btn-danger" name="reset">Active
-							Product</button>
-						<button type="button" onclick="cleansingData();" class="btn btn-dark" name="clean">Cleansing
-							Data PI Lama</button>
-
-						<p>Note : Proses input header sekaligus sync dari ERP, mohon tunggu</p>
-
-						<p style="color:red; font-weight: bold">Pastikan GR Area sesuai dengan toko</p>
-						<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');"
-							class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-						<font id="notif1" style="color: red; font-weight: bold"></font>
-					</div>
-					<div class="card-body">
-						<div class="tables">
-							<div class="table-responsive bs-example widget-shadow">
-
-
-								<input type="hidden" id="stats_sales_order"
-									value="<?php echo $_SESSION['status_sales']; ?>">
-
-
-								<table class="table table-bordered" id="example">
-									<thead>
-										<tr>
-											<th>No</th>
-											<th>Document No</th>
-											<th>GR Area</th>
-											<th>Tanggal / Description</th>
-											<th>Post By</th>
-											<th>Type</th>
-											<th>Status</th>
-											<th>Status Sync ERP</th>
-											<th>Aksi</th>
-										</tr>
-									</thead>
-									<tbody>
-
-										<?php
-										// $sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
-										// where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
-										
-										$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
+<!------ CONTENT AREA ------->
+<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h4>INVENTORY LIST</h4>
+				
+				<button type="button" onclick="resetPI();" class="btn btn-danger" name="reset">Active Product</button>
+				<button type="button" onclick="cleansingData();" class="btn btn-dark" name="clean">Cleansing Data PI Lama</button>
+				
+				<p>Note : Proses input header sekaligus sync dari ERP, mohon tunggu</p>
+				
+				<p style="color:red; font-weight: bold">Pastikan GR Area sesuai dengan toko</p>
+				<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+				<font id="notif1" style="color: red; font-weight: bold"></font>	
+			</div>
+			<div class="card-body">
+			<div class="tables">			
+				<div class="table-responsive bs-example widget-shadow">	
+					
+				
+				<input type="hidden" id="stats_sales_order" value="<?php echo $_SESSION['status_sales']; ?>">
+				
+				
+					<table class="table table-bordered" id="example">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Document No</th>
+								<th>GR Area</th>
+								<th>Tanggal / Description</th>
+								<th>Post By</th>
+								<th>Type</th>
+								<th>Status</th>
+								<th>Status Sync ERP</th>
+								<th>Aksi</th>
+							</tr>
+						</thead>
+						<tbody>
+						
+						<?php 
+						// $sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
+						// where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						
+						$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
 						where status = '1' and date(insertdate) = date(now()) order by insertdate desc";
+						
+						$no = 1;
+						foreach ($connec->query($sql_list) as $row) {
+						if($row['status'] == 1){
+							$stat = 'Draft';
+							
+						}else if($row['status'] == 2){
+							$stat = 'Verifikasi';
+							
+						}else{
+							
+							$stat = $row['status'];
+						}
+						
+						if($row['category'] == 1){
+							$cat = 'RACK';
+							
+						}else if($row['category'] == 3){
+							$cat = 'ITEMS';
+							
+						}else if($row['category'] == 2){
+							$cat = 'CATEGORY';
+							
+						}
+						
+						$m_locator = "-";
+						$get_locator = "select locator_name from pos_mproduct where m_locator_id = '".$row['m_locator_id']."' group by locator_name";
+						foreach ($connec->query($get_locator) as $rrr) {
+							
+							$m_locator = $rrr['locator_name'];
+							
+						}
+						
+						$sql_amount = "select coalesce(SUM(CASE WHEN status=1 THEN 1 ELSE 0 END),0) jumsync, count(sku) jumline
+						from m_piline where m_pi_key = '".$row['m_pi_key']."'";
+						foreach ($connec->query($sql_amount) as $tot) {
+							
+							$jumsync = $tot['jumsync'];
+							$jumline = $tot['jumline'];
+							
+						}
+						
+						if($jumsync == $jumline){
+							
+							$color = 'blue';
+							$statt = 1;
+						}else{
+							
+							$color = 'red';
+							$statt = 0;
+						}
+						
+						$jumrelease = '<font style="color: '.$color.'; font-weight: bold">'.$jumsync.' / '.$jumline.' Items</font>';
+						
+						?>
+						
+						
+							<tr>
+								<th scope="row"><?php echo $no; ?></th>
+								<td><?php echo $row['name']; ?><br>
+								
+								
+									<a href="invlist.php?m_pi=<?php echo $row['m_pi_key']; ?>&kat=<?php echo $row['category']; ?>" class="btn btn-primary">Counting</a>
+						
+								
+								</td>
+								<td><b style="color:red"><?php echo $m_locator; ?></b></td>
+								<td><?php echo $row['insertdate']; ?><br><?php echo $cat; ?> : <b><?php echo $row['rack_name']; ?></b></td>
+					
+					
+								
+								<td><?php echo $row['insertby']; ?></td>
+								<td><?php echo $row['inventorytype']; ?></td>
+								<td><?php echo $stat; ?><br>
+								
+					
+								
 
-										$no = 1;
-										foreach ($connec->query($sql_list) as $row) {
-											if ($row['status'] == 1) {
-												$stat = 'Draft';
-
-											} else if ($row['status'] == 2) {
-												$stat = 'Verifikasi';
-
-											} else {
-
-												$stat = $row['status'];
-											}
-
-											if ($row['category'] == 1) {
-												$cat = 'RACK';
-
-											} else if ($row['category'] == 3) {
-												$cat = 'ITEMS';
-
-											} else if ($row['category'] == 2) {
-												$cat = 'CATEGORY';
-
-											}
-
-											$m_locator = "-";
-											$get_locator = "select locator_name from pos_mproduct where m_locator_id = '" . $row['m_locator_id'] . "' group by locator_name";
-											foreach ($connec->query($get_locator) as $rrr) {
-
-												$m_locator = $rrr['locator_name'];
-
-											}
-
-											$sql_amount = "select coalesce(SUM(CASE WHEN status=1 THEN 1 ELSE 0 END),0) jumsync, count(sku) jumline
-						from m_piline where m_pi_key = '" . $row['m_pi_key'] . "'";
-											foreach ($connec->query($sql_amount) as $tot) {
-
-												$jumsync = $tot['jumsync'];
-												$jumline = $tot['jumline'];
-
-											}
-
-											if ($jumsync == $jumline) {
-
-												$color = 'blue';
-												$statt = 1;
-											} else {
-
-												$color = 'red';
-												$statt = 0;
-											}
-
-											$jumrelease = '<font style="color: ' . $color . '; font-weight: bold">' . $jumsync . ' / ' . $jumline . ' Items</font>';
-
-											?>
-
-
-										<tr>
-											<th scope="row">
-												<?php echo $no; ?>
-											</th>
-											<td>
-												<?php echo $row['name']; ?><br>
-
-
-												<a href="invlist.php?m_pi=<?php echo $row['m_pi_key']; ?>&kat=<?php echo $row['category']; ?>"
-													class="btn btn-primary">Counting</a>
-
-
-											</td>
-											<td><b style="color:red">
-													<?php echo $m_locator; ?>
-												</b></td>
-											<td>
-												<?php echo $row['insertdate']; ?><br>
-												<?php echo $cat; ?> : <b>
-													<?php echo $row['rack_name']; ?>
-												</b>
-											</td>
-
-
-
-											<td>
-												<?php echo $row['insertby']; ?>
-											</td>
-											<td>
-												<?php echo $row['inventorytype']; ?>
-											</td>
-											<td>
-												<?php echo $stat; ?><br>
-
-
-
-
-											</td>
-											<td>
-												<?php echo $jumrelease; ?><br>
-												<?php if ($statt == 0) { ?>
-												<button type="button"
-													onclick="syncErp('<?php echo $row['m_pi_key']; ?>');"
-													class="btn btn-primary">Sync Ulang</button>
-
-												<?php } else if ($statt == 1) { ?>
-
-												<button type="button" class="btn btn-success" data-bs-toggle="modal"
-													data-bs-target="#exampleModal<?php echo $row['m_pi_key']; ?>">Verifikasi</button>
-
-												<?php } ?>
-
-											</td>
-
-											<td><button type="button" class="btn btn-danger" data-bs-toggle="modal"
-													data-bs-target="#batal<?php echo $row['m_pi_key']; ?>">Batalkan</button>
-											</td>
-
-										</tr>
-
-
-
-										<div class="modal fade" id="exampleModal<?php echo $row['m_pi_key']; ?>"
-											aria-labelledby="exampleModalLabel" aria-hidden="true">
-											<div class="modal-dialog">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin
-															melakukan verifikasi?</h5>
-
-														<button type="button" class="close" data-bs-dismiss="modal"
-															aria-label="Close">
-															<span aria-hidden="true">&times;</span>
-														</button>
-													</div>
-													<div class="modal-body">
-														No. Document : <b>
-															<?php echo $row['name']; ?>
-														</b><br>
-														Tanggal : <b>
-															<?php echo $row['insertdate']; ?>
-														</b>
-
-														<br>RACK : <b>
-															<?php echo $row['rack_name']; ?>
-														</b>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary"
-															data-bs-dismiss="modal">CANCEL</button>
-														<button onclick="ubahStatus('<?php echo $row['m_pi_key']; ?>');"
-															class="btn btn-success">YAKIN</button>
-													</div>
-												</div>
-											</div>
-										</div>
-
-
-
-										<div class="modal fade" id="batal<?php echo $row['m_pi_key']; ?>"
-											aria-labelledby="exampleModalLabel" aria-hidden="true">
-											<div class="modal-dialog">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title" id="exampleModalLabel">Yakin membatalkan
-															PI? <br>Data Header akan menghilang dari daftar</h5>
-
-														<button type="button" class="close" data-bs-dismiss="modal"
-															aria-label="Close">
-															<span aria-hidden="true">&times;</span>
-														</button>
-													</div>
-
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary"
-															data-bs-dismiss="modal">CANCEL</button>
-														<button onclick="batalPI('<?php echo $row['m_pi_key']; ?>');"
-															class="btn btn-success">YAKIN</button>
-													</div>
-												</div>
-											</div>
-										</div>
-
-
-
-										<?php $no++;
-										} ?>
-
-
-									</tbody>
-								</table>
+								</td>
+								<td><?php echo $jumrelease; ?><br>
+								<?php if($statt == 0){ ?>
+								<button type="button" onclick="syncErp('<?php echo $row['m_pi_key']; ?>');" class="btn btn-primary">Sync Ulang</button>	
+									
+								<?php }else if($statt == 1){ ?>
+									
+								<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row['m_pi_key']; ?>">Verifikasi</button>	
+									
+								<?php } ?>
+								
+								</td>
+								
+								<td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#batal<?php echo $row['m_pi_key']; ?>">Batalkan</button></td>
+								
+							</tr>
+							
+							
+							
+							<div class="modal fade" id="exampleModal<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin melakukan verifikasi?</h5>
+								
+									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									No. Document : <b><?php echo $row['name']; ?></b><br>
+									Tanggal : <b><?php echo $row['insertdate']; ?></b>
+									
+									<br>RACK : <b><?php echo $row['rack_name']; ?></b>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+									<button onclick="ubahStatus('<?php echo $row['m_pi_key']; ?>');" class="btn btn-success">YAKIN</button>
+								</div>
+								</div>
 							</div>
-						</div>
-					</div>
+							</div>
+							
+							<!-- Modal Otorisasi SPV untuk PI Items -->
+<div class="modal fade" id="modalOtorisasiSpv" tabindex="-1" aria-labelledby="modalOtorisasiSpvLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="modalOtorisasiSpvLabel">🔐 Otorisasi Supervisor Diperlukan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Anda akan membuat <strong>Physical Inventory untuk Items tertentu</strong>. Harap diisi oleh Supervisor yang bertugas.</p>
+        
+        <div class="mb-3">
+            <label>Pilih Supervisor</label>
+            <select id="spv_user" class="form-control selectize">
+                <option value="">-- Pilih Supervisor --</option>
+                <?php 
+                // Query ambil data SPV dari tabel ad_muser
+                $sql_spv = "SELECT ad_muser_key, username FROM ad_muser WHERE description = 'SPV' AND status = '1'";
+                foreach ($connec->query($sql_spv) as $spv) {
+                    echo '<option value="'.$spv['ad_muser_key'].'" data-username="'.$spv['username'].'">'.$spv['username'].'</option>';
+                }
+                ?>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label>Password Supervisor</label>
+            <input type="password" id="spv_password" class="form-control" placeholder="Masukkan password supervisor">
+        </div>
+        
+        <div id="otorisasi_notif" style="color:red; font-size:12px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" id="btnConfirmOtorisasiSpv" class="btn btn-primary">Validasi & Proses</button>
+      </div>
+    </div>
+  </div>
+</div>
+							
+							<div class="modal fade" id="batal<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Yakin membatalkan PI? <br>Data Header akan menghilang dari daftar</h5>
+								
+									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+									<button onclick="batalPI('<?php echo $row['m_pi_key']; ?>');" class="btn btn-success">YAKIN</button>
+								</div>
+								</div>
+							</div>
+							</div>
+							
+							
+							
+						<?php $no++;} ?>
+   
+   
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Description</h5><br>
+</div>
+</div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Description</h5><br>
+       
+		 
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+		
+		
+      </div>
+	  
+      <div class="modal-body" style="background: #cacaca">
+	  
+	  
+	    <p id="notif" style="color: red; font-weight: bold; background: #fff; padding: 10px"></p>
+		
+		<div class="row-info"> 
+			
+			<select name="it" id="it" class="selectize" required>
+				
+				<option value="Daily">Daily</option>
+				<option value="Global">Global</option>
+				
+			</select>
+			
+			<select name="sl" id="sl" class="selectize">
+				<?php 
+				
+				$sqll = "select ad_morg_key,name from ad_morg";
+				$results = $connec->query($sqll);
+				foreach ($results as $r) {
+					$ad_morg_key = $r["ad_morg_key"];	
+					$name = $r["name"];	
+				}
 
-
-					<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-
-
-				</div>
-
-				<div class="modal-body" style="background: #cacaca">
-
-
-					<p id="notif" style="color: red; font-weight: bold; background: #fff; padding: 10px"></p>
-
-					<div class="row-info">
-
-						<select name="it" id="it" class="selectize" required>
-
-							<option value="Daily">Daily</option>
-							<option value="Global">Global</option>
-
-						</select>
-
-						<select name="sl" id="sl" class="selectize">
-							<?php
-
-							$sqll = "select ad_morg_key,name from ad_morg";
-							$results = $connec->query($sqll);
-							foreach ($results as $r) {
-								$ad_morg_key = $r["ad_morg_key"];
-								$name = $r["name"];
-							}
-
-							echo '<option value="' . $ad_morg_key . '">' . $name . '</option>';
-
-							?>
-						</select>
-						<select name="kat" id="kat" onchange="selectKat();" class="selectize">
-							<option value="">Kategori PI</option>
-
-
-							<?php //if($_SESSION['role'] == 'Global'){ ?>
-							<option value="1">Product Category</option>
-							<?php //} ?>
-
-							<option value="2">Rack</option>
-							<option value="3">Items</option>
-							<option value="4">Sesuai Schedule IC</option>
-						</select>
-						<div id="pc" style="display: none">
-							<select name="pc" id="pc" class="selectize">
-								<option value="">Product Category</option>
-								<?php
-								$sql = "select * from in_master_category where category not in (		
+				echo '<option value="'.$ad_morg_key.'">'.$name.'</option>';	    
+				
+				?>
+			</select>
+			<select name="kat" id="kat" onchange="selectKat();" class="selectize">
+				<option value="">Kategori PI</option>
+				
+				
+			<?php //if($_SESSION['role'] == 'Global'){ ?>	
+				<option value="1">Product Category</option>
+			<?php //} ?>	
+				
+				<option value="2">Rack</option>
+				<option value="3">Items</option>
+				<option value="4">Sesuai Schedule IC</option>
+			</select>
+		<div id="pc" style="display: none">
+			<select name="pc" id="pc"class="selectize" >
+				<option value="">Product Category</option>			
+				<?php 
+				$sql = "select * from in_master_category where category not in (		
 				select rack_name as value from m_pi where status in ('1','2') and date(insertdate) = date(now()) )
 				order by length(cat_id),cat_id  asc";
-
-
-
-								foreach ($connec->query($sql) as $row) {
-									echo '<option value="' . $row['cat_id'] . '">' . $row['category'] . '</option>';
-								}
-								?>
-							</select>
-						</div>
-
-
-						<div id="sub" style="display: none">
-							<select name="sub" id="sub" class="selectize">
-								<option value="">Sub Category</option>
-								<?php
-								// URL API
-								$api_url = "https://api.idolmartidolaku.com/apiidolmart/store/pi/get_subcat.php?date=" . date('Y-m-d');
-
-								// Mengambil data dari API dengan CURL
-								$ch = curl_init();
-								curl_setopt($ch, CURLOPT_URL, $api_url);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-								curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Timeout 10 detik
-								$api_response = curl_exec($ch);
-								$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-								curl_close($ch);
-
-								if ($api_response !== false && $http_code === 200) {
-									$api_data = json_decode($api_response, true);
-
-									// Debug: uncomment untuk melihat respons API
-									// echo "<pre>API Response: ";
-									// print_r($api_data);
-									// echo "</pre>";
-								
-									if (is_array($api_data) && !empty($api_data)) {
-										// Urutkan data berdasarkan subcategory
-										usort($api_data, function ($a, $b) {
-											return strcmp($a['subcategory'] ?? '', $b['subcategory'] ?? '');
-										});
-
-										// Loop melalui data API langsung
-										foreach ($api_data as $item) {
-											if (isset($item['id']) && isset($item['subcategory'])) {
-												$id = htmlspecialchars($item['id']);  // PERUBAHAN DI SINI
-												$name = htmlspecialchars($item['subcategory']);
-												echo '<option value="' . $name . '">' . $name . '</option>';
-											}
-										}
-									} else {
-										echo '<option value="">No data from API</option>';
-									}
-								} else {
-									echo '<option value="">Failed to fetch API (HTTP: ' . $http_code . ')</option>';
-								}
-								?>
-							</select>
-
-						</div>
-
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-					<button type="button" id="butsave" class="btn btn-primary">SUBMIT</button>
-				</div>
-			</div>
+				
+				
+	
+				foreach ($connec->query($sql) as $row) {
+					echo '<option value="'.$row['cat_id'].'">'.$row['category'].'</option>';	    
+				}
+				?>
+			</select>
 		</div>
-	</div>
 
 
-	<script type="text/javascript">
-		function resetPI() {
-			$.ajax({
-				url: "api/action.php?modul=inventory&act=reset_active",
-				type: "GET",
-				beforeSend: function () {
-					$('#notif1').html("Proses active kembali product..");
-					$("#overlay").fadeIn(300);
-				},
-				success: function (dataResult) {
-					console.log(dataResult);
-					var dataResult = JSON.parse(dataResult);
-					if (dataResult.result == '1') {
-						$('#notif1').html("<font style='color: green'>Berhasil active product!</font>");
-						$("#overlay").fadeOut(300);
+			<div id="sub" style="display: none">
+				<select name="sub" id="sub" class="selectize">
+					<option value="">Sub Category</option>
+					<?php
+					// URL API
+					$api_url = "https://api.idolmartidolaku.com/apiidolmart/store/pi/get_subcat.php?date=" . date('Y-m-d')."&idstore=".$org_key;
+
+					// Mengambil data dari API dengan CURL
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $api_url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Timeout 10 detik
+					$api_response = curl_exec($ch);
+					$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+					curl_close($ch);
+
+					if ($api_response !== false && $http_code === 200) {
+						$api_data = json_decode($api_response, true);
+
+						// Debug: uncomment untuk melihat respons API
+						// echo "<pre>API Response: ";
+						// print_r($api_data);
+						// echo "</pre>";
+					
+						if (is_array($api_data) && !empty($api_data)) {
+							// Urutkan data berdasarkan subcategory
+							usort($api_data, function ($a, $b) {
+								return strcmp($a['subcategory'] ?? '', $b['subcategory'] ?? '');
+							});
+
+							// Loop melalui data API langsung
+							foreach ($api_data as $item) {
+								if (isset($item['id']) && isset($item['subcategory'])) {
+									$id = htmlspecialchars($item['id']);  // PERUBAHAN DI SINI
+									$name = htmlspecialchars($item['subcategory']);
+									echo '<option value="' . $name . '">' . $name . '</option>';
+								}
+							}
+						} else {
+							echo '<option value="">No data from API</option>';
+						}
+					} else {
+						echo '<option value="">Failed to fetch API (HTTP: ' . $http_code . ')</option>';
 					}
-					$("#overlay").fadeOut(300);
-				}
-			});
-		}
+					?>
+				</select>
+			
+			</div>	
+			
+		</div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+        <button type="button" id="butsave" class="btn btn-primary">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-
-		function cleansingData() {
-
-			$.ajax({
-				url: "api/action.php?modul=inventory&act=cleansing_data",
-				type: "GET",
-				beforeSend: function () {
-					$('#notif1').html("Proses active kembali product..");
-					$("#overlay").fadeIn(300);
-				},
-				success: function (dataResult) {
-					console.log(dataResult);
-					var dataResult = JSON.parse(dataResult);
-					if (dataResult.result == '1') {
-						$('#notif1').html("<font style='color: green'>Berhasil cleansing data!</font>");
-						$("#overlay").fadeOut(300);
-					}
-					$("#overlay").fadeOut(300);
-
-					// else {
-					// $('#notif').html(dataResult.msg);
-					// }
-
-				}
-			});
-		}
-
-
-		function selectKat() {
-			var kat = document.getElementById('kat').value;
-
-			if (kat == '1') {
-				$("#pc").show();
-				$("#rack").hide();
-				$("#sub").hide();
-
-			} else if (kat == '2') {
-
-				$("#pc").hide();
-				$("#rack").show();
-				$("#sub").hide();
-			} else if (kat == '3') {
-
-				$("#pc").hide();
-				$("#rack").hide();
-				$("#sub").hide();
-			} else if (kat == '4') {
-
-				$("#pc").hide();
-				$("#rack").hide();
-				$("#sub").show();
+<script type="text/javascript">
+function resetPI(){
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=reset_active",
+		type: "GET",
+		beforeSend: function(){
+			$('#notif1').html("Proses active kembali product..");
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: green'>Berhasil active product!</font>");
+				$("#overlay").fadeOut(300);
 			}
+			$("#overlay").fadeOut(300);
 		}
+	});
+}
 
-		function syncErp(m_pi) {
 
-			// alert("cu");
-			var formData = new FormData();
 
-			formData.append('m_pi', m_pi);
-
-			$.ajax({
-				url: "api/action.php?modul=inventory&act=sync_erp",
-				type: "POST",
-				data: formData,
-				processData: false,
-				contentType: false,
-				beforeSend: function () {
-					$('#notif1').html("<font style='color: red'>Sedang melakukan sync..</font>");
-				},
-				success: function (dataResult) {
-					console.log(dataResult);
-					var dataResult = JSON.parse(dataResult);
-					if (dataResult.result == '1') {
-						$('#notif1').html("<font style='color: green'>" + dataResult.msg + "</font>");
-						$("#example").load(" #example");
-						$(".modal").modal('hide');
-					}
-					// else {
-					// $('#notif').html(dataResult.msg);
-					// }
-
-				}
-			});
-
+function cleansingData(){ 
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=cleansing_data",
+		type: "GET",
+		beforeSend: function(){
+			$('#notif1').html("Proses active kembali product..");
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: green'>Berhasil cleansing data!</font>");
+				$("#overlay").fadeOut(300);
+			}
+			$("#overlay").fadeOut(300);
+			
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
 		}
+	});
+}
 
 
-		function batalPI(m_pi_key) {
+function selectKat(){
+	var kat = document.getElementById( 'kat' ).value;
+	
+	if(kat == '1'){
+		 $("#pc").show();
+		 $("#rack").hide();
+		 $("#sub").hide();
+		
+	}else if(kat == '2'){
+		
+		 $("#pc").hide();
+		 $("#rack").show();
+		  $("#sub").hide();
+	}else if(kat == '3'){
+		
+		 $("#pc").hide();
+		 $("#rack").hide();
+		  $("#sub").hide();
+	}else if(kat == '4'){
+		
+		 $("#pc").hide();
+		 $("#rack").hide();
+		$("#sub").show();
+	}
+}
 
-			var formData = new FormData();
-
-			formData.append('m_pi', m_pi_key);
-
-			$.ajax({
-				url: "api/action.php?modul=inventory&act=batal",
-				type: "POST",
-				data: formData,
-				processData: false,
-				contentType: false,
-				beforeSend: function () {
-					$('#notif1').html("Proses batalkan header, mohon tunggu..");
-					$("#overlay").fadeIn(300);
-				},
-				success: function (dataResult) {
-					console.log(dataResult);
-					var dataResult = JSON.parse(dataResult);
-					if (dataResult.result == '1') {
-						$('#notif1').html("<font style='color: red'>Berhasil membatalkan PI!</font>");
-						$("#example").load(" #example");
-						$(".modal").modal('hide');
-						$("#overlay").fadeOut(300);
-					}
-					$("#overlay").fadeOut(300);
-
-					// else {
-					// $('#notif').html(dataResult.msg);
-					// }
-
-				}
-			});
+function syncErp(m_pi){
+	
+	// alert("cu");
+	var formData = new FormData();
+		
+	formData.append('m_pi', m_pi);
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=sync_erp",
+		type: "POST",
+		data : formData,
+		processData: false,
+		contentType: false,
+		beforeSend: function(){
+			$('#notif1').html("<font style='color: red'>Sedang melakukan sync..</font>");
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: green'>"+dataResult.msg+"</font>");
+				$("#example").load(" #example");
+				$(".modal").modal('hide');
+			}
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
 		}
+	});
+	
+}
 
-		function ubahStatus(m_pi_key) {
-			// alert(m_pi_key);
-			var formData = new FormData();
 
-			formData.append('m_pi', m_pi_key);
+function batalPI(m_pi_key){ 
 
-			$.ajax({
-				url: "api/action.php?modul=inventory&act=verifikasi",
-				type: "POST",
-				data: formData,
-				processData: false,
-				contentType: false,
-				success: function (dataResult) {
-					console.log(dataResult);
-					var dataResult = JSON.parse(dataResult);
-					if (dataResult.result == '1') {
-						$('#notif1').html("<font style='color: green'>Berhasil verifikasi!</font>");
-						$("#example").load(" #example");
-						$(".modal").modal('hide');
-					}
-					// else {
-					// $('#notif').html(dataResult.msg);
-					// }
-
-				}
-			});
-
+	var formData = new FormData();
+		
+	formData.append('m_pi', m_pi_key);
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=batal",
+		type: "POST",
+		data : formData,
+		processData: false,
+		contentType: false,
+		beforeSend: function(){
+			$('#notif1').html("Proses batalkan header, mohon tunggu..");
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: red'>Berhasil membatalkan PI!</font>");
+				$("#example").load(" #example");
+				$(".modal").modal('hide');
+				$("#overlay").fadeOut(300);
+			}
+			$("#overlay").fadeOut(300);
+			
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
 		}
+	});
+}
 
-		$('#butsave').on('click', function () {
-
-			var it = $('#it').val();
-			var sl = $('#sl').val();
-			var kat = $('select[id=kat] option').filter(':selected').val();
-			var rack = $('select[id=rack] option').filter(':selected').val();
-			var pc = $('select[id=pc] option').filter(':selected').val();
-			var sub = $('select[id=sub] option').filter(':selected').val();
-			var sso = $('#stats_sales_order').val();
-
-			var formData = new FormData();
-
-			formData.append('it', it);
-			formData.append('sl', sl);
-			formData.append('kat', kat);
-			formData.append('rack', rack);
-			formData.append('pc', pc);
-			formData.append('sub', sub);
-			formData.append('sso', sso);
-
-			if (it != "" || sl != "" || kat != "") {
-				$("#butsave").prop("disabled", true);
-				// $('#notif').html("Sistem sedang melakukan input, jangan refresh halaman..");
-
-				if (kat == '1') {
-
-					if (pc != "") {
-
-
-						$.ajax({
-							url: "api/action.php?modul=inventory&act=input_kat",
-							type: "POST",
-							data: formData,
-							processData: false,
-							contentType: false,
-							beforeSend: function () {
-								$('#notif').html("Proses input header dan line..");
-								$("#overlay").fadeIn(300);
-								$(".modal").modal('hide');
-							},
-							success: function (dataResult) {
-								console.log(dataResult);
+function ubahStatus(m_pi_key){
+	// alert(m_pi_key);
+	var formData = new FormData();
+		
+	formData.append('m_pi', m_pi_key);
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=verifikasi",
+		type: "POST",
+		data : formData,
+		processData: false,
+		contentType: false,
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: green'>Berhasil verifikasi!</font>");
+				$("#example").load(" #example");
+				$(".modal").modal('hide');
+			}
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+	
+}
 
 
-								// if (!$.trim(dataResult)){   
+// Event untuk tombol validasi SPV di modal otorisasi
+$('#btnConfirmOtorisasiSpv').on('click', function() {
+    var spv_user_key = $('#spv_user').val();
+    var spv_password = $('#spv_password').val();
+    var spv_name = $('#spv_user option:selected').text();
+    var formDataSaved = $('#modalOtorisasiSpv').data('formData');
+    
+    // Validasi tidak boleh kosong
+    if(spv_user_key == ""){
+        $('#otorisasi_notif').html("Silakan pilih Supervisor terlebih dahulu!");
+        return false;
+    }
+    
+    if(spv_password == ""){
+        $('#otorisasi_notif').html("Password Supervisor tidak boleh kosong!");
+        return false;
+    }
+    
+    // AJAX untuk validasi password SPV
+    $.ajax({
+        url: "api/action.php?modul=inventory&act=cek_spv_password",
+        type: "POST",
+        data: {
+            spv_user_key: spv_user_key,
+            spv_password: spv_password
+        },
+        dataType: "json",
+        beforeSend: function(){
+            $('#otorisasi_notif').html("<span style='color:blue'>Memeriksa password supervisor...</span>");
+            $('#btnConfirmOtorisasiSpv').prop('disabled', true);
+        },
+        success: function(res){
+            console.log(res);
+            if(res.result == '1'){
+                // Validasi sukses, lanjutkan proses PI Items
+                $('#otorisasi_notif').html("<span style='color:green'>✓ Otorisasi diterima. Memproses PI...</span>");
+                
+                // Siapkan FormData untuk AJAX inputitems
+                var formData = new FormData();
+                formData.append('it', formDataSaved.it);
+                formData.append('sl', formDataSaved.sl);
+                formData.append('kat', formDataSaved.kat);
+                formData.append('sso', formDataSaved.sso);
+                formData.append('spv_user_key', spv_user_key);
+                formData.append('spv_name', spv_name);
+                
+                // Eksekusi AJAX inputitems
+                $.ajax({
+                    url: "api/action.php?modul=inventory&act=inputitems",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(){
+                        $('#notif').html("Proses input header dan line..");
+                        $("#overlay").fadeIn(300);
+                        $('#modalOtorisasiSpv').modal('hide');
+                        $(".modal").modal('hide');
+                    },
+                    success: function(dataResult){
+                        console.log(dataResult);
+                        try {
+                            var dataResultJson = JSON.parse(dataResult);
+                            if(dataResultJson.result=='2'){
+                                $('#notif').html("Proses input ke inventory line");
+                                $("#overlay").fadeOut(300);
+                                location.reload();
+                            }else if(dataResultJson.result=='1'){
+                                $('#notif').html("<font style='color: green'>Berhasil input items!</font>");
+                                $("#overlay").fadeOut(300);
+                                location.reload();
+                            }else {
+                                $('#notif').html(dataResultJson.msg);
+                                $("#overlay").fadeOut(300);
+                            }
+                        } catch(e) {
+                            $('#notif').html("Terjadi kesalahan: " + dataResult);
+                            $("#overlay").fadeOut(300);
+                        }
+                        $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+                    },
+                    error: function(xhr, status, error){
+                        $('#notif').html("Error: " + error);
+                        $("#overlay").fadeOut(300);
+                        $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+                    }
+                });
+            } else {
+                $('#otorisasi_notif').html("❌ Otorisasi gagal! Password supervisor salah atau user tidak valid.");
+                $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+            }
+        },
+        error: function(){
+            $('#otorisasi_notif').html("❌ Terjadi kesalahan saat validasi. Silakan coba lagi.");
+            $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+        }
+    });
+});
 
-								if (dataResult) {
+$('#butsave').on('click', function() {
+		
+		var it = $('#it').val();
+		var sl = $('#sl').val();
+		var kat = $('select[id=kat] option').filter(':selected').val();
+		var rack = $('select[id=rack] option').filter(':selected').val();
+		var pc = $('select[id=pc] option').filter(':selected').val();
+		var sub = $('select[id=sub] option').filter(':selected').val();
+		var sso = $('#stats_sales_order').val();
+
+		var formData = new FormData();
+		
+		formData.append('it', it);
+		formData.append('sl', sl);
+		formData.append('kat', kat);
+		formData.append('rack', rack);
+		formData.append('pc', pc);
+		formData.append('sub', sub);
+		formData.append('sso', sso);
+		
+// alert(sub);
+
+		if(it!="" || sl!="" || kat!=""){
+			$( "#butsave" ).prop( "disabled", true );
+			// $('#notif').html("Sistem sedang melakukan input, jangan refresh halaman..");
+			
+			if(kat == '1'){
+				
+				if(pc!=""){
+					
+					
+					$.ajax({
+						url: "api/action.php?modul=inventory&act=input_kat",
+						type: "POST",
+						data : formData,
+						processData: false,
+						contentType: false,
+						beforeSend: function(){
+							$('#notif').html("Proses input header dan line..");
+							$("#overlay").fadeIn(300);
+							$(".modal").modal('hide');
+						},
+						success: function(dataResult){
+							console.log(dataResult);
+							
+							
+							// if (!$.trim(dataResult)){   
+								
+								if(dataResult){
 									var dataResult = JSON.parse(dataResult);
-									if (dataResult.result == '2') {
+									if(dataResult.result=='2'){
 										$('#notif').html("Proses input ke inventory line");
-										$("#butsave").prop("disabled", false);
+										$( "#butsave" ).prop( "disabled", false );
 										$("#overlay").fadeOut(300);
 										location.reload();
-									} else if (dataResult.result == '1') {
+									}else if(dataResult.result=='1'){
 										$('#notif').html("<font style='color: green'>Berhasil input dengan category!</font>");
 										$("#overlay").fadeOut(300);
 										location.reload();
-										$("#butsave").prop("disabled", false);
+										$( "#butsave" ).prop( "disabled", false );
 									}
 									else {
 										$('#notif').html(dataResult.msg);
-										$("#butsave").prop("disabled", false);
+										$( "#butsave" ).prop( "disabled", false );
 										$("#overlay").fadeOut(300);
 									}
-
-								} else {
-
-									$('#notif').html("Items tidak ditemukan");
-									$("#butsave").prop("disabled", false);
-									$("#overlay").fadeOut(300);
-
+									
+								}else{
+									
+										$('#notif').html("Items tidak ditemukan");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									
 								}
-
-							}
-						});
-
-
-
-
-					} else {
-
-						$('#notif').html("Product category tidak boleh kosong!");
-						$("#butsave").prop("disabled", false);
-					}
-				} else if (kat == '2') {
-					if (rack != "") {
-
-						$.ajax({
-							url: "api/action.php?modul=inventory&act=input",
-							type: "POST",
-							data: formData,
-							processData: false,
-							contentType: false,
-							beforeSend: function () {
-								$('#notif').html("Proses input header dan line..");
-								$("#overlay").fadeIn(300);
-								$(".modal").modal('hide');
-							},
-							success: function (dataResult) {
-								console.log(dataResult);
-								var dataResult = JSON.parse(dataResult);
-								if (dataResult.result == '2') {
-									$('#notif').html("Proses input ke inventory line");
-									$("#butsave").prop("disabled", false);
-									$("#overlay").fadeOut(300);
-									location.reload();
-								} else if (dataResult.result == '1') {
-									$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
-									$("#overlay").fadeOut(300);
-									location.reload();
-									$("#butsave").prop("disabled", false);
-								}
-								else {
-									$('#notif').html(dataResult.msg);
-									$("#butsave").prop("disabled", false);
-									$("#overlay").fadeOut(300);
-								}
-
-							}
-						});
-					} else {
-
-						$('#notif').html("Rack tidak boleh kosong!");
-						$("#butsave").prop("disabled", false);
-					}
-
-				} else if (kat == '3') {
-
+								
+						}
+					});
+					
+					
+					
+					
+				}else{
+					
+					$('#notif').html("Product category tidak boleh kosong!");
+					$( "#butsave" ).prop( "disabled", false );
+				}
+			}else if(kat == '2'){
+				if(rack!=""){
+					
 					$.ajax({
-						url: "api/action.php?modul=inventory&act=inputitems",
+						url: "api/action.php?modul=inventory&act=input",
 						type: "POST",
-						data: formData,
+						data : formData,
 						processData: false,
 						contentType: false,
-						beforeSend: function () {
+						beforeSend: function(){
 							$('#notif').html("Proses input header dan line..");
 							$("#overlay").fadeIn(300);
-							//close modal 
 							$(".modal").modal('hide');
 						},
-						success: function (dataResult) {
+						success: function(dataResult){
 							console.log(dataResult);
 							var dataResult = JSON.parse(dataResult);
-							if (dataResult.result == '2') {
+							if(dataResult.result=='2'){
 								$('#notif').html("Proses input ke inventory line");
-								$("#butsave").prop("disabled", false);
+								$( "#butsave" ).prop( "disabled", false );
 								$("#overlay").fadeOut(300);
 								location.reload();
-								// $("#example").load(" #example");
-							} else if (dataResult.result == '1') {
+							}else if(dataResult.result=='1'){
 								$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
 								$("#overlay").fadeOut(300);
 								location.reload();
-								$("#butsave").prop("disabled", false);
+								$( "#butsave" ).prop( "disabled", false );
 							}
 							else {
 								$('#notif').html(dataResult.msg);
+								$( "#butsave" ).prop( "disabled", false );
 								$("#overlay").fadeOut(300);
-								$("#butsave").prop("disabled", false);
 							}
-
+							
 						}
 					});
+				}else{
+					
+					$('#notif').html("Rack tidak boleh kosong!");
+					$( "#butsave" ).prop( "disabled", false );
+				}
+				
+			}else if(kat == '3'){
 
-				} else if (kat == '4') {
+					var it = $('#it').val();
+					var sl = $('#sl').val();
+					var kat = $('#kat').val();
+					var sso = $('#stats_sales_order').val();
+					
+					// Simpan data ke modal untuk diproses nanti
+					$('#modalOtorisasiSpv').data('formData', {
+						it: it,
+						sl: sl,
+						kat: kat,
+						sso: sso
+					});
+					
+					// Reset form otorisasi
+					$('#spv_user').val('');
+					$('#spv_password').val('');
+					$('#otorisasi_notif').html('');
+					
+					// TUTUP MODAL exampleModal TERLEBIH DAHULU
+					$('#exampleModal').modal('hide');
+					
+					// TUNGGU SEBENTAR (opsional, biar animasi selesai)
+					setTimeout(function() {
+						// Tampilkan modal otorisasi
+						$('#modalOtorisasiSpv').modal('show');
+					}, 300);
 
-					if (sub != "") {
 
 
-						$.ajax({
-							url: "api/action.php?modul=inventory&act=input_sub",
-							type: "POST",
-							data: formData,
-							processData: false,
-							contentType: false,
-							beforeSend: function () {
-								$('#notif').html("Proses input header dan line..");
-								$("#overlay").fadeIn(300);
-								$(".modal").modal('hide');
-							},
-							success: function (dataResult) {
-								console.log(dataResult);
-
-
-								// if (!$.trim(dataResult)){   
-
-								if (dataResult) {
+					
+					// $.ajax({
+					// 	url: "api/action.php?modul=inventory&act=inputitems",
+					// 	type: "POST",
+					// 	data : formData,
+					// 	processData: false,
+					// 	contentType: false,
+					// 	beforeSend: function(){
+					// 		$('#notif').html("Proses input header dan line..");
+					// 		$("#overlay").fadeIn(300);
+					// 		//close modal 
+					// 		$(".modal").modal('hide');
+					// 	},
+					// 	success: function(dataResult){
+					// 		console.log(dataResult);
+					// 		var dataResult = JSON.parse(dataResult);
+					// 		if(dataResult.result=='2'){
+					// 			$('#notif').html("Proses input ke inventory line");
+					// 			$( "#butsave" ).prop( "disabled", false );
+					// 			$("#overlay").fadeOut(300);
+					// 			location.reload();
+					// 			// $("#example").load(" #example");
+					// 		}else if(dataResult.result=='1'){
+					// 			$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
+					// 			$("#overlay").fadeOut(300);
+					// 			location.reload();
+					// 			$( "#butsave" ).prop( "disabled", false );
+					// 		}
+					// 		else {
+					// 			$('#notif').html(dataResult.msg);
+					// 			$("#overlay").fadeOut(300);
+					// 			$( "#butsave" ).prop( "disabled", false );
+					// 		}
+							
+					// 	}
+					// });
+				
+			}else if(kat == '4'){
+				
+				if(sub!=""){
+					
+					
+					$.ajax({
+						url: "api/action.php?modul=inventory&act=input_sub",
+						type: "POST",
+						data : formData,
+						processData: false,
+						contentType: false,
+						beforeSend: function(){
+							$('#notif').html("Proses input header dan line..");
+							$("#overlay").fadeIn(300);
+							$(".modal").modal('hide');
+						},
+						success: function(dataResult){
+							console.log(dataResult);
+							
+							
+							// if (!$.trim(dataResult)){   
+								
+								if(dataResult){
 									var dataResult = JSON.parse(dataResult);
-									if (dataResult.result == '2') {
+									if(dataResult.result=='2'){
 										$('#notif').html("Proses input ke inventory line");
-										$("#butsave").prop("disabled", false);
+										$( "#butsave" ).prop( "disabled", false );
 										$("#overlay").fadeOut(300);
 										location.reload();
-									} else if (dataResult.result == '1') {
+									}else if(dataResult.result=='1'){
 										$('#notif').html("<font style='color: green'>Berhasil input dengan category!</font>");
 										$("#overlay").fadeOut(300);
 										location.reload();
-										$("#butsave").prop("disabled", false);
+										$( "#butsave" ).prop( "disabled", false );
 									}
 									else {
 										$('#notif').html(dataResult.msg);
-										$("#butsave").prop("disabled", false);
+										$( "#butsave" ).prop( "disabled", false );
 										$("#overlay").fadeOut(300);
 									}
-
-								} else {
-
-									$('#notif').html("Items tidak ditemukan");
-									$("#butsave").prop("disabled", false);
-									$("#overlay").fadeOut(300);
-
+									
+								}else{
+									
+										$('#notif').html("Items tidak ditemukan");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									
 								}
-
-							}
-						});
-
-
-
-
-					} else {
-
-						$('#notif').html("Product category tidak boleh kosong!");
-						$("#butsave").prop("disabled", false);
-					}
+								
+						}
+					});
+					
+					
+					
+					
+				}else{
+					
+					$('#notif').html("Product category tidak boleh kosong!");
+					$( "#butsave" ).prop( "disabled", false );
 				}
-
-
-				// $("#overlay").fadeIn(300);
-				// $.ajax({
+			}
+			
+			
+			// $("#overlay").fadeIn(300);
+			// $.ajax({
 				// url: "action.php?modul=inventory&act=input",
 				// type: "POST",
 				// data : formData,
 				// processData: false,
 				// contentType: false,
 				// success: function(dataResult){
-				// var dataResult = JSON.parse(dataResult);
-				// if(dataResult.result=='1'){
-				// $('#notif').html("Maaf, nomor/password salah, coba dicek lagi");
+					// var dataResult = JSON.parse(dataResult);
+					// if(dataResult.result=='1'){
+						// $('#notif').html("Maaf, nomor/password salah, coba dicek lagi");
+					// }
+					// else {
+						// alert("Gagal input");
+					// }
+					
 				// }
-				// else {
-				// alert("Gagal input");
-				// }
+			// });
+		}
+		else{
+			$('#notif').html("Lengkapi isian dulu!");
+		}
+	});
+	
+	
+	
+	function cekSalesOrder(org_id){
 
-				// }
-				// });
-			}
-			else {
-				$('#notif').html("Lengkapi isian dulu!");
+$('#notif').html("Pastikan sales order sudah completed..");
+
+		// $.ajax({
+		// 	url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=cek_sales&org_id="+org_id,
+		// 	type: "GET",
+		// 	beforeSend: function(){
+		// 		$("#overlay").fadeIn(300);
+		// 		$('#notif').html("Proses cek sales order gantung..");
+		// 		$(".row-info").hide();
+		// 		$(".modal-footer").hide();
+				
+		// 	},
+		// 	success: function(dataResult){
+		// 		var dataResult = JSON.parse(dataResult);
+		// 		if(dataResult.result=='1'){
+		// 			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+		// 			$("#overlay").fadeOut(300);
+		// 			updateStatusSales(dataResult.stats);
+					
+					
+		// 		}else if(dataResult.result=='0'){
+					// $("#overlay").fadeOut(300);
+					// $('#notif').html(dataResult.msg);
+					
+					
+					
+		// 		}
+				
+				
+		// 	}
+		// });
+		
+	}
+	
+	function updateStatusSales(stats){
+		// alert(stats);
+		$.ajax({
+			url: "api/action.php?modul=inventory&act=update_sales&status_sales="+stats,
+			type: "GET",
+			beforeSend: function(){
+				$('#notif').html("Proses cek sales order gantung..");
+			},
+			success: function(dataResult){
+				
+				console.log(dataResult);
+				var dataResult = JSON.parse(dataResult);
+				if(dataResult.result=='1'){
+					$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+					$('#stats_sales_order').val(stats);
+					$(".row-info").show();
+					$(".modal-footer").show();
+					// location.reload();
+				}else if(dataResult.result=='0'){
+					$('#notif').html(dataResult.msg);
+					
+					
+				}else {
+					$('#notif').html(dataResult.msg);
+					
+					
+				}
+				
+				
 			}
 		});
-
-
-
-		function cekSalesOrder(org_id) {
-
-			$('#notif').html("Pastikan sales order sudah completed..");
-
-			// $.ajax({
-			// 	url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=cek_sales&org_id="+org_id,
-			// 	type: "GET",
-			// 	beforeSend: function(){
-			// 		$("#overlay").fadeIn(300);
-			// 		$('#notif').html("Proses cek sales order gantung..");
-			// 		$(".row-info").hide();
-			// 		$(".modal-footer").hide();
-
-			// 	},
-			// 	success: function(dataResult){
-			// 		var dataResult = JSON.parse(dataResult);
-			// 		if(dataResult.result=='1'){
-			// 			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-			// 			$("#overlay").fadeOut(300);
-			// 			updateStatusSales(dataResult.stats);
-
-
-			// 		}else if(dataResult.result=='0'){
-			// $("#overlay").fadeOut(300);
-			// $('#notif').html(dataResult.msg);
-
-
-
-			// 		}
-
-
-			// 	}
-			// });
-
-		}
-
-		function updateStatusSales(stats) {
-			// alert(stats);
-			$.ajax({
-				url: "api/action.php?modul=inventory&act=update_sales&status_sales=" + stats,
-				type: "GET",
-				beforeSend: function () {
-					$('#notif').html("Proses cek sales order gantung..");
-				},
-				success: function (dataResult) {
-
-					console.log(dataResult);
-					var dataResult = JSON.parse(dataResult);
-					if (dataResult.result == '1') {
-						$('#notif').html("<font style='color: green'>" + dataResult.msg + "</font>");
-						$('#stats_sales_order').val(stats);
-						$(".row-info").show();
-						$(".modal-footer").show();
-						// location.reload();
-					} else if (dataResult.result == '0') {
-						$('#notif').html(dataResult.msg);
-
-
-					} else {
-						$('#notif').html(dataResult.msg);
-
-
-					}
-
-
-				}
-			});
-
-		}
-
-
-
-
-
-	</script>
+		
+	}
+	
+	
+	
+	
+	
+</script>
 </div>
 <?php include "components/fff.php"; ?>

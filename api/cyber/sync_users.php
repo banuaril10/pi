@@ -46,9 +46,10 @@ foreach ($j_hasil as $key => $value) {
     $password = $value['password'];
     $accesscode = $value['accesscode'];
     $unicode = $value['unicode'];
+    $description = $value['description'];
 
     $s_user[] = "('".$id_user."', '".$ad_mclient_key."', '".$idstore."', '1', '".date('Y-m-d H:i:s')."', 'SYSTEM', 'SYSTEM', '".date('Y-m-d H:i:s')."', '".$id_role."', '".$username."', 
-    '".$fullname."', '".$password."', '1')";
+    '".$fullname."', '".$password."', '1', '".$description."')";
 
     if($accesscode != "" && $unicode != ""){
         $s_spv[] = "('" . $ad_mclient_key . "', '" . $idstore . "', '1', '" . date('Y-m-d H:i:s') . "', 'SYSTEM', 'SYSTEM', '" . date('Y-m-d H:i:s') . "', '" . $id_user . "','" . $accesscode . "', '" . $unicode . "')";
@@ -65,7 +66,7 @@ if(count($s_user) > 0){
 
     $values = implode(", ", $s_user);
     $insert = "insert into ad_muser (ad_muser_key, ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, postdate, ad_mrole_key, userid, 
-    username, userpwd, status) VALUES " . $values . ";";
+    username, userpwd, status, description) VALUES " . $values . ";";
 
     $statement = $connec->prepare($insert);
     $statement->execute();
