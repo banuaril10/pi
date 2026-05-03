@@ -842,67 +842,67 @@ $('#butsave').on('click', function() {
 					// var sso = $('#stats_sales_order').val();
 					
 					// Simpan data ke modal untuk diproses nanti
-					$('#modalOtorisasiSpv').data('formData', {
-						it: it,
-						sl: sl,
-						kat: kat
-						// sso: sso
-					});
-					
-					// Reset form otorisasi
-					$('#spv_user').val('');
-					$('#spv_password').val('');
-					$('#otorisasi_notif').html('');
-					
-					// TUTUP MODAL exampleModal TERLEBIH DAHULU
-					$('#exampleModal').modal('hide');
-					
-					// TUNGGU SEBENTAR (opsional, biar animasi selesai)
-					setTimeout(function() {
-						// Tampilkan modal otorisasi
-						$('#modalOtorisasiSpv').modal('show');
-					}, 300);
-
-					// alert('tet');
-
-
-
-					
-					// $.ajax({
-					// 	url: "api/action.php?modul=inventory&act=inputitems",
-					// 	type: "POST",
-					// 	data : formData,
-					// 	processData: false,
-					// 	contentType: false,
-					// 	beforeSend: function(){
-					// 		$('#notif').html("Proses input header dan line..");
-					// 		$("#overlay").fadeIn(300);
-					// 		//close modal 
-					// 		$(".modal").modal('hide');
-					// 	},
-					// 	success: function(dataResult){
-					// 		console.log(dataResult);
-					// 		var dataResult = JSON.parse(dataResult);
-					// 		if(dataResult.result=='2'){
-					// 			$('#notif').html("Proses input ke inventory line");
-					// 			$( "#butsave" ).prop( "disabled", false );
-					// 			$("#overlay").fadeOut(300);
-					// 			location.reload();
-					// 			// $("#example").load(" #example");
-					// 		}else if(dataResult.result=='1'){
-					// 			$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
-					// 			$("#overlay").fadeOut(300);
-					// 			location.reload();
-					// 			$( "#butsave" ).prop( "disabled", false );
-					// 		}
-					// 		else {
-					// 			$('#notif').html(dataResult.msg);
-					// 			$("#overlay").fadeOut(300);
-					// 			$( "#butsave" ).prop( "disabled", false );
-					// 		}
-							
-					// 	}
+					// $('#modalOtorisasiSpv').data('formData', {
+					// 	it: it,
+					// 	sl: sl,
+					// 	kat: kat
+					// 	// sso: sso
 					// });
+					
+					// // Reset form otorisasi
+					// $('#spv_user').val('');
+					// $('#spv_password').val('');
+					// $('#otorisasi_notif').html('');
+					
+					// // TUTUP MODAL exampleModal TERLEBIH DAHULU
+					// $('#exampleModal').modal('hide');
+					
+					// // TUNGGU SEBENTAR (opsional, biar animasi selesai)
+					// setTimeout(function() {
+					// 	// Tampilkan modal otorisasi
+					// 	$('#modalOtorisasiSpv').modal('show');
+					// }, 300);
+
+			
+
+
+
+					
+					$.ajax({
+						url: "api/action.php?modul=inventory&act=inputitems",
+						type: "POST",
+						data : formData,
+						processData: false,
+						contentType: false,
+						beforeSend: function(){
+							$('#notif').html("Proses input header dan line..");
+							$("#overlay").fadeIn(300);
+							//close modal 
+							$(".modal").modal('hide');
+						},
+						success: function(dataResult){
+							console.log(dataResult);
+							var dataResult = JSON.parse(dataResult);
+							if(dataResult.result=='2'){
+								$('#notif').html("Proses input ke inventory line");
+								$( "#butsave" ).prop( "disabled", false );
+								$("#overlay").fadeOut(300);
+								location.reload();
+								// $("#example").load(" #example");
+							}else if(dataResult.result=='1'){
+								$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
+								$("#overlay").fadeOut(300);
+								location.reload();
+								$( "#butsave" ).prop( "disabled", false );
+							}
+							else {
+								$('#notif').html(dataResult.msg);
+								$("#overlay").fadeOut(300);
+								$( "#butsave" ).prop( "disabled", false );
+							}
+							
+						}
+					});
 				
 			}else if(kat == '4'){
 				
