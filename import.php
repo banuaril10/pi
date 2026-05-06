@@ -1,4 +1,5 @@
-<?php include "config/koneksi.php";
+<?php session_start();
+include "config/koneksi.php";
 // Memanggil Library
 // require 'vendor/autoload.php';
 
@@ -54,8 +55,8 @@
 // }
 
 
-
-
+$username = $_SESSION['username'];
+$user_counting = $_POST['user_counting'];
 
 // if (isset($_POST['submit']))
 // {
@@ -121,7 +122,7 @@
 						if($sku != ""){
 							
 							$qty = $getData[1];
-							$sqll = "insert into inv_temp (sku, tanggal, qty, status, filename) VALUES ('".$sku."','".date('Y-m-d')."','".$qty."','0', '".$_FILES['import']['name']."');";
+							$sqll = "insert into inv_temp (sku, tanggal, qty, status, filename, user_import, user_counting) VALUES ('".$sku."','".date('Y-m-d')."','".$qty."','0', '".$_FILES['import']['name']."', '".$username."', '".$user_counting."');";
 							$import = $connec->query($sqll);
 							
 							if($import){

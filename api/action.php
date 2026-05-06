@@ -1710,58 +1710,138 @@ if ($_GET['modul'] == 'inventory') {
 		echo $json_string;
 
 	} else if ($_GET['act'] == 'proses_inv_temps') {
+		// $filename = $_POST['filename'];
+		// $no = 0;
+		// $getinv = "select sku, qty, filename, sum(qty) as jumqty from inv_temp where filename = '" . $filename . "' and date(tanggal) = date(now()) and status = '0' and sku !='' group by sku, qty, filename, tanggal";
+		// $con = $connec->query($getinv);
+		// $concon = $con->rowCount();
+
+
+		// foreach ($connec->query($getinv) as $gi) {
+		// 	$sku = $gi['sku'];
+		// 	if ($gi['sku'] != '') {
+		// 		$get_barcode = "select sku from pos_mproduct where barcode = '" . $gi['sku'] . "'";
+		// 		$gb = $connec->query($get_barcode);
+
+		// 		foreach ($gb as $rrr) {
+		// 			$sku = $rrr['sku'];
+		// 		}
+		// 	}
+
+
+
+		// 	$cekqty = "select qtycount from m_piline where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate) = date(now())";
+		// 	$result = $connec->query($cekqty);
+		// 	$count = $result->rowCount();
+
+		// 	if ($count > 0) {
+
+		// 		foreach ($result as $tot) {
+		// 			$qtycount = $tot['qtycount'];
+		// 			$jumqty = (int) $qtycount + (int) $gi['jumqty'];
+
+
+
+
+		// 			$upcount = $connec->query("update m_piline set qtycount='" . $jumqty . "' where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate)=date(now()) ");
+		// 			if ($upcount) {
+
+		// 				$connec->query("update inv_temp set status = 1 where sku = '" . $gi['sku'] . "' and date(tanggal) = date(now()) and filename = '" . $filename . "'");
+		// 				$no = $no + 1;
+		// 			}
+		// 		}
+
+
+		// 	}
+
+
+		// }
+
+
+
+		// $json = array('result' => '1', 'msg' => 'Berhasil proses ' . $no . ' dari ' . $concon . '');
+		// $json_string = json_encode($json);
+		// echo $json_string;
+
+
 		$filename = $_POST['filename'];
 		$no = 0;
 		$getinv = "select sku, qty, filename, sum(qty) as jumqty from inv_temp where filename = '" . $filename . "' and date(tanggal) = date(now()) and status = '0' and sku !='' group by sku, qty, filename, tanggal";
 		$con = $connec->query($getinv);
 		$concon = $con->rowCount();
 
-
 		foreach ($connec->query($getinv) as $gi) {
 			$sku = $gi['sku'];
-			if ($gi['sku'] != '') {
-				$get_barcode = "select sku from pos_mproduct where barcode = '" . $gi['sku'] . "'";
+			if($gi['sku'] != ''){
+				$get_barcode = "select sku from pos_mproduct where barcode = '".$gi['sku']."'";
 				$gb = $connec->query($get_barcode);
-
-				foreach ($gb as $rrr) {
+			
+				foreach($gb as $rrr){
 					$sku = $rrr['sku'];
 				}
 			}
-
-
+			
+			// Get the latest user_import from inv_temp for this sku
+			$getImportedBy = "select user_import from inv_temp where sku = '".$gi['sku']."' and filename = '".$filename."' and date(tanggal) = date(now()) order by tanggal desc limit 1";
+			$importedResult = $connec->query($getImportedBy);
+			$importedBy = '';
+			foreach($importedResult as $imp){
+				$importedBy = $imp['user_import'];
+			}
+			
+			// Get all user_counting for this sku from inv_temp
+			$getCountingUsers = "select distinct user_counting from inv_temp where sku = '".$gi['sku']."' and filename = '".$filename."' and date(tanggal) = date(now()) and user_counting != '' order by user_counting";
+			$countingResult = $connec->query($getCountingUsers);
+			
+			$counting_by_1 = '';
+			$counting_by_2 = '';
+			$counting_by_3 = '';
+			
+			$counter = 1;
+			foreach($countingResult as $counting){
+				if($counter == 1){
+					$counting_by_1 = $counting['user_counting'];
+				} else if($counter == 2){
+					$counting_by_2 = $counting['user_counting'];
+				} else if($counter == 3){
+					$counting_by_3 = $counting['user_counting'];
+				} else {
+					break; // Only take first 3, ignore the rest
+				}
+				$counter++;
+			}
 
 			$cekqty = "select qtycount from m_piline where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate) = date(now())";
 			$result = $connec->query($cekqty);
 			$count = $result->rowCount();
 
 			if ($count > 0) {
-
 				foreach ($result as $tot) {
 					$qtycount = $tot['qtycount'];
 					$jumqty = (int) $qtycount + (int) $gi['jumqty'];
-
-
-
-
-					$upcount = $connec->query("update m_piline set qtycount='" . $jumqty . "' where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate)=date(now()) ");
+					
+					// Update with the new fields
+					$upcount = $connec->query("update m_piline set 
+						qtycount='" . $jumqty . "',
+						imported_by='" . $importedBy . "',
+						counting_by_1='" . $counting_by_1 . "',
+						counting_by_2='" . $counting_by_2 . "',
+						counting_by_3='" . $counting_by_3 . "'
+						where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate)=date(now()) ");
+						
 					if ($upcount) {
-
 						$connec->query("update inv_temp set status = 1 where sku = '" . $gi['sku'] . "' and date(tanggal) = date(now()) and filename = '" . $filename . "'");
 						$no = $no + 1;
 					}
 				}
-
-
 			}
-
-
 		}
-
-
 
 		$json = array('result' => '1', 'msg' => 'Berhasil proses ' . $no . ' dari ' . $concon . '');
 		$json_string = json_encode($json);
 		echo $json_string;
+
+
 
 	} else if ($_GET['act'] == 'sync_grab') {
 

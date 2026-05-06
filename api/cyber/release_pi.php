@@ -115,7 +115,11 @@ foreach ($result as $row) {
             'qtysalesout' => $rline['qtysalesout'],
             'hargabeli' => $rline['hargabeli'],
             'updatedby' => $rline['updatedby'],
-            'updateddate' => $rline['updateddate']
+            'updateddate' => $rline['updateddate'],
+            'imported_by' => $rline['imported_by'],
+            'counting_by_1' => $rline['counting_by_1'],
+            'counting_by_2' => $rline['counting_by_2'],
+            'counting_by_3' => $rline['counting_by_3'],
 
         );
 

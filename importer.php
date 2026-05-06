@@ -31,6 +31,18 @@
                 <div class="sebentar" id="sebentar"></div>
 				
 				<form method="post" enctype="multipart/form-data" action="import.php">
+                  <div class="form-group">
+                    <label><b>User Counting</b></label>
+					<select name="user_counting" id="user_counting" class="form-control">
+						<?php
+						$sql_user = "SELECT ad_muser_key, username FROM ad_muser WHERE description='IC'";
+						foreach ($connec->query($sql_user) as $row_user) {
+							echo '<option value="' . $row_user['username'] . '">' . $row_user['username'] . '</option>';
+						}
+						?>
+					</select>
+                  </div> 
+				
 
                   <div class="form-group">
                     <label><b>Upload File</b></label>
