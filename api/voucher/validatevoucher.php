@@ -6,6 +6,13 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 include "../../config/koneksi.php";
 
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $idstore = $row['ad_morg_key'];
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($input['vouchercode']) || !isset($input['totalamount'])) {
@@ -26,7 +33,8 @@ $totalAmount = floatval($input['totalamount']);
 $serverUrl = $base_url . "/store/voucher/check_status.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3";
 
 $payload = json_encode([
-    "vouchercode" => $voucherCode
+    "vouchercode" => $voucherCode,
+    "idstore" => $idstore
 ]);
 
 $ch = curl_init($serverUrl);
@@ -83,7 +91,7 @@ if (!empty($voucher['percent']) && $voucher['percent'] > 0) {
     $voucherAmount = $voucher['voucher_amount'];
 }
 
-$voucherAmount = min($voucherAmount, $totalAmount);
+$voucherAmount = ceil(min($voucherAmount, $totalAmount));  // atau round()
 
 /* =========================
    4️⃣ RESPONSE OK
