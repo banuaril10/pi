@@ -8,7 +8,8 @@ include "../../config/koneksi.php";
 
 $input = json_decode(file_get_contents("php://input"), true);
 
-$ad_client_id = $input["ad_client_id"] ?? null;
+// $ad_client_id = $input["ad_client_id"] ?? null;
+$ad_client_id = "";
 $ad_org_id    = $input["ad_org_id"] ?? null;
 $opt = $input["option"] ?? [];
 
