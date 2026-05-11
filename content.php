@@ -307,14 +307,22 @@
 			<select name="kat" id="kat" onchange="selectKat();" class="selectize">
 				<option value="">Kategori PI</option>
 				
-				
-			<?php //if($_SESSION['role'] == 'Global'){ ?>	
-				<option value="1">Product Category</option>
-			<?php //} ?>	
+				<?php //if($_SESSION['role'] == 'Global'){ ?>	
+					<option value="1">Product Category</option>
+				<?php //} ?>	
 				
 				<option value="2">Rack</option>
 				<option value="3">Items</option>
 				<option value="4">Sesuai Schedule IC</option>
+				
+				<?php 
+				// Only show this option on the 1st day of the month
+				if(date('j') == 8) { 
+				?>
+					<option value="5">PI Negatif Inventory</option>
+				<?php 
+				} 
+				?>
 			</select>
 		<div id="pc" style="display: none">
 			<select name="pc" id="pc"class="selectize" >
@@ -964,6 +972,53 @@ $('#butsave').on('click', function() {
 					$('#notif').html("Product category tidak boleh kosong!");
 					$( "#butsave" ).prop( "disabled", false );
 				}
+			}else if(kat == '5'){
+					$.ajax({
+						url: "api/action.php?modul=inventory&act=input_negatif_inv",
+						type: "POST",
+						data : formData,
+						processData: false,
+						contentType: false,
+						beforeSend: function(){
+							$('#notif').html("Proses input header dan line..");
+							$("#overlay").fadeIn(300);
+							$(".modal").modal('hide');
+						},
+						success: function(dataResult){
+							console.log(dataResult);
+							
+							
+							// if (!$.trim(dataResult)){   
+								
+								if(dataResult){
+									var dataResult = JSON.parse(dataResult);
+									if(dataResult.result=='2'){
+										$('#notif').html("Proses input ke inventory line");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+										location.reload();
+									}else if(dataResult.result=='1'){
+										$('#notif').html("<font style='color: green'>Berhasil input dengan PI Negatif Inventory!</font>");
+										$("#overlay").fadeOut(300);
+										location.reload();
+										$( "#butsave" ).prop( "disabled", false );
+									}
+									else {
+										$('#notif').html(dataResult.msg);
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									}
+									
+								}else{
+									
+										$('#notif').html("Items tidak ditemukan");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									
+								}
+								
+						}
+					});
 			}
 			
 			
