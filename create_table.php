@@ -1219,5 +1219,23 @@ foreach ($cmd_alter_m_piline_counting as $r) {
 	$connec->exec($r);
 }
 
+
+// ALTER TABLE public.ad_morg ADD max_kode_undian int4 NULL DEFAULT 5;
+$cmd_alter_ad_morg = [
+	'ALTER TABLE public.ad_morg ADD COLUMN IF NOT EXISTS max_kode_undian int4 NULL DEFAULT 5;'
+];
+
+foreach ($cmd_alter_ad_morg as $r) {
+	$connec->exec($r);
+}
+
+
+$cmd_alter_pos_dsales_undian = [
+	'ALTER TABLE public.pos_dsales ADD COLUMN IF NOT EXISTS kode_undian varchar(10) NULL;'
+];
+
+foreach ($cmd_alter_pos_dsales_undian as $r) {
+	$connec->exec($r);
+}
 ?>
 
