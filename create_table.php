@@ -1237,5 +1237,14 @@ $cmd_alter_pos_dsales_undian = [
 foreach ($cmd_alter_pos_dsales_undian as $r) {
 	$connec->exec($r);
 }
+
+$cmd_alter_pos_dsales_manualnote = [
+	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS manualnote VARCHAR(500);'
+];
+
+foreach ($cmd_alter_pos_dsales_manualnote as $r) {
+	$connec->exec($r);
+}
+
 ?>
 
