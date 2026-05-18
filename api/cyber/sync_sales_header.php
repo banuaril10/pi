@@ -85,7 +85,8 @@ foreach ($connec->query($list_header) as $row1) {
         "voucher_amount" => $row1['voucher_amount'],
         "voucher_code" => $row1['voucher_code'],
         "voucher_description" => $row1['voucher_description'],
-        "kode_undian" => $row1['kode_undian']
+        "kode_undian" => $row1['kode_undian'],
+        "manualnote" => $row1['manualnote']
     );
 }
 
