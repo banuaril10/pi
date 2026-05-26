@@ -317,7 +317,7 @@
 				
 				<?php 
 				// Only show this option on the 1st day of the month
-				if(date('j') == 1) { 
+				if(date('j') == 28) { 
 				?>
 					<option value="5">PI Negatif Inventory</option>
 				<?php 
