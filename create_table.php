@@ -1093,6 +1093,8 @@ foreach ($cmd_alter_dshopsales_voucher as $r) {
 	$connec->exec($r);
 }
 
+
+//alter table m_pi add column weight numeric
 $cmd_alter_noncash = ['ALTER TABLE pos_dcashiernoncash
 ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;
 '
@@ -1101,6 +1103,11 @@ ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;
 foreach ($cmd_alter_noncash as $r) {
 	$connec->exec($r);
 }
+
+
+// ALTER TABLE public.pos_dvoucher ADD status_intransit varchar(2) NULL;
+
+// ALTER TABLE public.pos_dvoucher ADD id_location varchar(10) NULL;
 
 $cmd_alter_pos_dvoucher = [
 	'ALTER TABLE public.pos_dvoucher ADD COLUMN IF NOT EXISTS status_intransit varchar(2) NULL;',
@@ -1112,6 +1119,9 @@ foreach ($cmd_alter_pos_dvoucher as $r) {
 	$connec->exec($r);
 }
 
+
+
+// ALTER TABLE pos_dcashierbalance add notes text;
 $cmd_alter_notes = [
 	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS notes text;'
 ];
@@ -1120,6 +1130,8 @@ foreach ($cmd_alter_notes as $r) {
 	$connec->exec($r);
 }
 
+
+//indexing voucher_code di pos_dsales dan pos_dvoucher
 $indexing_voucher_code = [
 	'CREATE INDEX IF NOT EXISTS idx_pos_dsales_voucher_code ON pos_dsales(voucher_code);',
 	'CREATE INDEX IF NOT EXISTS idx_pos_dvoucher_voucher_code ON pos_dvoucher(voucher_code);'
@@ -1129,6 +1141,8 @@ foreach ($indexing_voucher_code as $r) {
 	$connec->exec($r);
 }
 
+
+//create table isinya data sku/barcode, price, diskon, insertdate, id_location
 
 $cmd_price_audit = [
 	'CREATE TABLE IF NOT EXISTS price_audit (
@@ -1146,6 +1160,7 @@ foreach ($cmd_price_audit as $r) {
 	$connec->exec($r);
 }
 
+//alter add column status_intransit di table price_audit
 $cmd_alter_price_audit = [
 	'ALTER TABLE price_audit ADD COLUMN IF NOT EXISTS status_intransit varchar(2);'
 ];
@@ -1153,6 +1168,22 @@ foreach ($cmd_alter_price_audit as $r) {
 	$connec->exec($r);
 }
 
+
+
+// -- Tabel log transaksi POS Mobile
+// CREATE TABLE IF NOT EXISTS pos_mobile_transaction_log (
+//     id SERIAL PRIMARY KEY,
+//     billno VARCHAR(50) NOT NULL,
+//     amount DECIMAL(20,2) DEFAULT 0,
+//     payment_method VARCHAR(20) DEFAULT 'CASH',
+//     cashier_name VARCHAR(100),
+//     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     status VARCHAR(20) DEFAULT 'SUCCESS'
+// );
+
+// -- Index
+// CREATE INDEX idx_pos_mobile_log_billno ON pos_mobile_transaction_log(billno);
+// CREATE INDEX idx_pos_mobile_log_date ON pos_mobile_transaction_log(transaction_date);
 
 $cmd_mobile_transaction_log = [
 	'CREATE TABLE IF NOT EXISTS pos_mobile_transaction_log (
@@ -1173,6 +1204,7 @@ foreach ($cmd_mobile_transaction_log as $r) {
 }
 
 
+//alter add column pos_dvoucher, nohp varchar(50);
 $cmd_alter_pos_dvoucher_nohp = [
 	'ALTER TABLE pos_dvoucher ADD COLUMN IF NOT EXISTS nohp varchar(50);'
 ];	
@@ -1181,6 +1213,7 @@ foreach ($cmd_alter_pos_dvoucher_nohp as $r) {
 }
 
 
+// ALTER TABLE public.m_piline ADD updatedby varchar NULL;
 $cmd_alter_m_piline = [
 	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS updatedby varchar NULL;',
 	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS updateddate timestamp NULL;'
@@ -1190,6 +1223,9 @@ foreach ($cmd_alter_m_piline as $r) {
 	$connec->exec($r);
 }
 
+
+
+// ALTER TABLE public.inv_temp ADD user_import varchar NULL;
 $cmd_alter_inv_temp = [
 	'ALTER TABLE public.inv_temp ADD COLUMN IF NOT EXISTS user_import varchar NULL;',
 	'ALTER TABLE public.inv_temp ADD COLUMN IF NOT EXISTS user_counting varchar NULL;'
@@ -1199,14 +1235,6 @@ foreach ($cmd_alter_inv_temp as $r) {
 	$connec->exec($r);
 }
 
-
-// ALTER TABLE public.m_piline ADD imported_by varchar NULL;
-
-// ALTER TABLE public.m_piline ADD counting_by_1 varchar NULL;
-
-// ALTER TABLE public.m_piline ADD counting_by_2 varchar NULL;
-
-// ALTER TABLE public.m_piline ADD counting_by_3 varchar NULL;
 
 $cmd_alter_m_piline_counting = [
 	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS imported_by varchar NULL;',
@@ -1219,8 +1247,14 @@ foreach ($cmd_alter_m_piline_counting as $r) {
 	$connec->exec($r);
 }
 
+$cmd_alter_ad_morg = [
+	'ALTER TABLE public.ad_morg ADD COLUMN IF NOT EXISTS max_kode_undian int4 NULL DEFAULT 5;'
+];
 
-// ALTER TABLE public.ad_morg ADD max_kode_undian int4 NULL DEFAULT 5;
+foreach ($cmd_alter_ad_morg as $r) {
+	$connec->exec($r);
+}
+
 $cmd_alter_ad_morg = [
 	'ALTER TABLE public.ad_morg ADD COLUMN IF NOT EXISTS max_kode_undian int4 NULL DEFAULT 5;'
 ];
@@ -1230,6 +1264,7 @@ foreach ($cmd_alter_ad_morg as $r) {
 }
 
 
+// ALTER TABLE public.pos_dsales ADD kode_undian varchar(10) NULL;
 $cmd_alter_pos_dsales_undian = [
 	'ALTER TABLE public.pos_dsales ADD COLUMN IF NOT EXISTS kode_undian varchar(10) NULL;'
 ];
@@ -1238,6 +1273,7 @@ foreach ($cmd_alter_pos_dsales_undian as $r) {
 	$connec->exec($r);
 }
 
+//ALTER TABLE pos_dsales ADD COLUMN manualnote VARCHAR(500);
 $cmd_alter_pos_dsales_manualnote = [
 	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS manualnote VARCHAR(500);'
 ];
@@ -1250,6 +1286,7 @@ foreach ($cmd_alter_pos_dsales_manualnote as $r) {
 $cmd_alter_pos_mproductdiscountmurah = [
 	'ALTER TABLE public.pos_mproductdiscountmurah ADD COLUMN IF NOT EXISTS cat_exclude varchar(125) NULL;'
 ];
+
 foreach ($cmd_alter_pos_mproductdiscountmurah as $r) {
 	$connec->exec($r);
 }
@@ -1262,5 +1299,6 @@ $cmd_alter_pos_mproductdiscountmurah_kelipatan = [
 foreach ($cmd_alter_pos_mproductdiscountmurah_kelipatan as $r) {
 	$connec->exec($r);
 }
+
 ?>
 
