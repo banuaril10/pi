@@ -1246,5 +1246,21 @@ foreach ($cmd_alter_pos_dsales_manualnote as $r) {
 	$connec->exec($r);
 }
 
+// ALTER TABLE public.pos_mproductdiscountmurah ADD cat_exclude varchar(25) NULL;
+$cmd_alter_pos_mproductdiscountmurah = [
+	'ALTER TABLE public.pos_mproductdiscountmurah ADD COLUMN IF NOT EXISTS cat_exclude varchar(125) NULL;'
+];
+foreach ($cmd_alter_pos_mproductdiscountmurah as $r) {
+	$connec->exec($r);
+}
+
+// ALTER TABLE public.pos_mproductdiscountmurah ADD max_kelipatan varchar NULL DEFAULT 1;
+$cmd_alter_pos_mproductdiscountmurah_kelipatan = [
+	'ALTER TABLE public.pos_mproductdiscountmurah ADD COLUMN IF NOT EXISTS max_kelipatan varchar NULL DEFAULT 1;'
+];
+
+foreach ($cmd_alter_pos_mproductdiscountmurah_kelipatan as $r) {
+	$connec->exec($r);
+}
 ?>
 

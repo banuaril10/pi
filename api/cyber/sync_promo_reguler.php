@@ -194,9 +194,11 @@ try {
             $todate = $value['todate'];
             $limitamount = $value['minbelanja'];
             $ispromo = $value['ispromo'] ? 'true' : 'false';
+            $cat_exclude = $value['cat_exclude'];
+            $max_kelipatan = $value['max_kelipatan'];
 
             $insert = "INSERT INTO pos_mproductdiscountmurah
-            (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postdate, discountname, sku, pricediscount, fromdate, todate, limitamount, ispromo)
+            (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postdate, discountname, sku, pricediscount, fromdate, todate, limitamount, ispromo, cat_exclude, max_kelipatan)
             VALUES
             (
             '" . $ad_mclient_key . "',
@@ -211,7 +213,9 @@ try {
             '" . $fromdate . "',
             '" . $todate . "',
             '" . $limitamount . "',
-            " . $ispromo . "
+            " . $ispromo . ",
+            '" . $cat_exclude . "',
+            '" . $max_kelipatan . "'
             );";
 
             $statement = $connec->prepare($insert);
