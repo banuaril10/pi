@@ -581,6 +581,137 @@ if ($_GET['modul'] == 'inventory') {
 		echo $json_string;
 
 
+	}else if ($_GET['act'] == 'input_negatif_inv') {
+
+
+		// $ceknamakat = "select * from in_master_categorysub where catsub_id = '" . $sub . "'";
+		// $cnk = $connec->query($ceknamakat);
+		// foreach ($cnk as $ras) {
+		// 	$namakat = $ras['subcategory'];
+		// }
+
+		$namakat = 'NEGATIF';
+
+
+		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+
+			$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='" . $namakat . "' and status not in ('5','4') and date(insertdate) = date(now())";
+			$cr = $connec->query($cekrak);
+			foreach ($cr as $ra) {
+				$countrak = $ra['jum'];
+			}
+
+			if ($countrak > 0) {
+				$json = array('result' => '0', 'msg' => 'Sub Category sudah ada');
+
+			} else {
+
+				$statement = $connec->query("insert into m_pi (
+				ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
+				movementdate, approvedby, status, rack_name, postby, postdate, category
+				) VALUES ('','" . $org_key . "','1','" . date('Y-m-d H:i:s') . "','" . $username . "', '" . $sl . "', '" . $it . "','" . $kode_toko . "-" . date('YmdHis') . "','PI-" . $namakat . "', 
+				'" . date('Y-m-d H:i:s') . "','user spv','1','" . $namakat . "','" . $username . "','" . date('Y-m-d H:i:s') . "', '2') RETURNING m_pi_key");
+
+
+
+				if ($statement) {
+
+					foreach ($statement as $rr) {
+
+						$lastid = $rr['m_pi_key'];
+						// $lastid = '12322';
+						if ($insertfrom == 'M') {
+							$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '" . $lastid . "'");
+						} else if ($insertfrom == 'W') {
+							$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '" . $lastid . "'");
+						}
+					}
+
+					$no = 0;
+					$items = array();
+					$hasil = get_data_cat_get_cyber($base_url, $sub, $rack, $org_key, $kode_toko, "Negatif Inventory");
+					$total = 0;
+
+					$j_hasil = json_decode($hasil, true);
+
+					foreach ($j_hasil as $r) {
+						$qtyon = $r['qtyon'];
+						$price = $r['price'];
+						$pricebuy = $r['pricebuy'];
+						$qtyout = $r['qtyout'];
+						$mpi = $r['mpi'];
+						$sku = $r['sku'];
+						$namaitem = $r['namaitem'];
+						$barcode = $r['barcode'];
+
+						$sql_sales = "select case when sum(qty) is null THEN '0' ELSE sum(qty) END as qtysales from pos_dsalesline 
+						where date(insertdate)=date(now()) and sku='" . $r['sku'] . "'";
+
+						$rsa = $connec->query($sql_sales);
+						$qtysales = 0;
+						foreach ($rsa as $rsa1) {
+
+							$qtysales = $rsa1['qtysales'];
+						}
+
+						$cek_count = "select qtycount from m_piline where sku = '" . $r['sku'] . "' and date(insertdate)=date(now())"; //mencari apakah items sdh ada di rack piline
+						$rsac = $connec->query($cek_count);
+						$ccc = $rsac->rowCount();
+
+						if ($ccc > 0) {
+							foreach ($rsac as $rrr) {
+
+								$qtycount = $rrr['qtycount'];
+							}
+
+						} else {
+							$qtycount = 0;
+
+						}
+
+						$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1, barcode, hargabeli) 
+						VALUES ('" . $lastid . "','" . $org_key . "','1','" . date('Y-m-d H:i:s') . "','" . $username . "', '" . date('Y-m-d H:i:s') . "', '" . $sl . "','" . $mpi . "', 
+						'" . $sku . "', '" . $qtyon . "', '" . $qtycount . "', '" . $qtysales . "','" . $price . "', '1', '" . $qtyout . "','1', '" . $barcode . "','" . $pricebuy . "')");
+
+						if ($statement1) {
+
+							$connec->query("update pos_mproduct set isactived = 0 where sku = '" . $sku . "'");
+							$no = $no + 1;
+							if ($no == $count) {
+								$json = array('result' => '1');
+
+							} else {
+
+								$json = array('result' => '2');
+							}
+						}
+
+						$total = $total + 1;
+					}
+
+					if ($total == 0) {
+						$json = array('result' => '0', 'msg' => 'Items tidak ditemukan');
+					}
+
+
+				} else {
+
+					$json = array('result' => '0', 'msg' => 'Gagal, coba lagi nanti');
+				}
+
+
+			}
+
+
+		} else {
+
+			$json = array('result' => '3', 'msg' => 'Session telah habis, reload halaman dulu');
+		}
+
+		$json_string = json_encode($json);
+		echo $json_string;
+
+
 	} else if ($_GET['act'] == 'input_kat_nasional') {
 
 
