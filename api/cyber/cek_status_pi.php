@@ -46,6 +46,15 @@ if ($count > 0) {
             $update = $connec->query("update m_pi set status = '2' where m_pi_key = '" . $mpk . "'");
             if ($update) {
                 $connec->query("update m_piline set issync = '0' where m_pi_key = '" . $mpk . "'");
+                $connec->query("
+                    update pos_mproduct
+                    set isactived = '0'
+                    where sku in (
+                        select sku
+                        from m_piline
+                        where m_pi_key = '".$mpk."'
+                    )
+                ");
                 $no = $no + 1;
             }
         }
