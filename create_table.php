@@ -1300,5 +1300,13 @@ foreach ($cmd_alter_pos_mproductdiscountmurah_kelipatan as $r) {
 	$connec->exec($r);
 }
 
+$cmd_alter_ad_morg_note1 = [
+	'ALTER TABLE public.ad_morg ALTER COLUMN note1 TYPE varchar(255);'
+];
+
+foreach ($cmd_alter_ad_morg_note1 as $r) {
+	$connec->exec($r);
+}
+
 ?>
 
