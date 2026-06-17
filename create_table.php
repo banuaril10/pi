@@ -1301,7 +1301,9 @@ foreach ($cmd_alter_pos_mproductdiscountmurah_kelipatan as $r) {
 }
 
 $cmd_alter_ad_morg_note1 = [
-	'ALTER TABLE public.ad_morg ALTER COLUMN note1 TYPE varchar(255);'
+	'ALTER TABLE public.ad_morg ALTER COLUMN note1 TYPE varchar(255);',
+	//note3 jadi text
+	'ALTER TABLE public.ad_morg ALTER COLUMN note3 TYPE text;'
 ];
 
 foreach ($cmd_alter_ad_morg_note1 as $r) {
