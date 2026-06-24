@@ -1,5 +1,13 @@
 <?php include "../../config/koneksi.php";
 ini_set('max_execution_time', '300');
+
+//show error
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
+
+
 $connec->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $ll = "select * from ad_morg where isactived = 'Y'";
 $query = $connec->query($ll);
