@@ -315,13 +315,22 @@
 				<option value="3">Items</option>
 				<option value="4">Sesuai Schedule IC</option>
 				
-				<?php 
-				// Only show this option on the 1st day of the month
-				if(date('j') == 28) { 
+				<?php
+				$sqlTgl = "SELECT avatar AS tgl
+						FROM ad_morg
+						WHERE ad_morg_key = '".$org_key."'
+						LIMIT 1";
+
+				$tglPi = "";
+				foreach ($connec->query($sqlTgl) as $rowTgl) {
+					$tglPi = $rowTgl['tgl'];
+				}
+
+				if (date('j') == $tglPi) {
 				?>
 					<option value="5">PI Negatif Inventory</option>
-				<?php 
-				} 
+				<?php
+				}
 				?>
 			</select>
 		<div id="pc" style="display: none">
