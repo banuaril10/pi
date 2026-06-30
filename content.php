@@ -316,21 +316,16 @@
 				<option value="4">Sesuai Schedule IC</option>
 				
 				<?php
-				$sqlTgl = "SELECT avatar AS tgl
-						FROM ad_morg
-						WHERE ad_morg_key = '".$org_key."'
-						LIMIT 1";
-
-				$tglPi = "";
-				foreach ($connec->query($sqlTgl) as $rowTgl) {
-					$tglPi = $rowTgl['tgl'];
-				}
-
-				if (date('j') == $tglPi) {
-				?>
-					<option value="5">PI Negatif Inventory</option>
-				<?php
-				}
+					// CEK APAKAH SEKARANG ADALAH 3 HARI TERAKHIR BULAN
+					$last_day = date('t');
+					$three_days_ago = $last_day - 2;
+					$current_day = date('j');
+					
+					if ($current_day >= $three_days_ago && $current_day <= $last_day) {
+					?>
+						<option value="5">PI Negatif Inventory</option>
+					<?php
+					}
 				?>
 			</select>
 		<div id="pc" style="display: none">
