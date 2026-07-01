@@ -1312,5 +1312,13 @@ foreach ($cmd_alter_ad_morg_note1 as $r) {
 	$connec->exec($r);
 }
 
+$cmd_alter_qty_outstanding = ['ALTER TABLE m_piline ADD COLUMN IF NOT EXISTS qty_outstanding int default 0;'];
+
+foreach ($cmd_alter_qty_outstanding as $r) {
+	$connec->exec($r);
+}
+
+
+
 ?>
 
