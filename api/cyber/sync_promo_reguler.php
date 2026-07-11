@@ -175,7 +175,7 @@ $j_hasil_tebus = json_decode($hasil_tebus, true);
 
 try {
 
-    if ($j_hasil_tebus != null) {
+    //if ($j_hasil_tebus != null) {
 
         $truncate = "TRUNCATE table pos_mproductdiscountmurah";
         $statement = $connec->prepare($truncate);
@@ -221,7 +221,7 @@ try {
             $statement = $connec->prepare($insert);
             $statement->execute();
         }
-    }
+    //}
 
 } catch (Exception $e) {
 

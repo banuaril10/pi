@@ -1319,6 +1319,20 @@ foreach ($cmd_alter_qty_outstanding as $r) {
 }
 
 
+$alter_create_pos_settlement = [
+	'CREATE TABLE IF NOT EXISTS pos_settlement (
+		pos_settlement_key varchar(40) PRIMARY KEY,
+		pos_dcashierbalance_key varchar(40),
+		pos_medc_key varchar(40),
+		amount numeric,
+		tanggal date
+	);'
+];
+
+foreach ($alter_create_pos_settlement as $r) {
+	$connec->exec($r);
+}
+
 
 ?>
 
