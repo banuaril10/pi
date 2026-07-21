@@ -1509,6 +1509,18 @@ foreach ($indexing_additional as $r) {
 
 
 
+//add column urutan di pos_medc
+$cmd_alter_pos_medc_urutan = [
+	'ALTER TABLE public.pos_medc ADD COLUMN IF NOT EXISTS urutan int4 NULL DEFAULT 0;'
+];
+
+foreach ($cmd_alter_pos_medc_urutan as $r) {
+	$connec->exec($r);
+}
+
+
+
+
 
 
 
