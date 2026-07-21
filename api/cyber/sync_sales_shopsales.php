@@ -113,3 +113,80 @@ if (!empty($jj_posdshopsales)) {
 
 
 
+$jj_possettlement = array();
+
+if ($tanggal != "now") {
+    $list_possettlement = "
+        SELECT ps.*
+        FROM pos_settlement ps
+        INNER JOIN pos_dshopsales pds
+            ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
+        WHERE DATE(pds.insertdate) = '".$tanggal."'
+    ";
+} else {
+    $list_possettlement = "
+        SELECT ps.*
+        FROM pos_settlement ps
+        INNER JOIN pos_dshopsales pds
+            ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
+        WHERE pds.status_intransit IS NULL
+        AND DATE(pds.insertdate) = DATE(NOW())
+    ";
+}
+
+foreach ($connec->query($list_possettlement) as $row) {
+    $jj_possettlement[] = array(
+        "pos_settlement_key" => $row['pos_settlement_key'],
+        "pos_dshopsales_key" => $row['pos_dshopsales_key'],
+        "pos_medc_key" => $row['pos_medc_key'],
+        "amount" => $row['amount'],
+        "tanggal" => $row['tanggal']
+    );
+}
+
+if (!empty($jj_possettlement)) {
+
+    $url = $base_url . "/sales_order/sync_sales_possettlement.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
+
+    $array_possettlement = array(
+        "possettlement" => $jj_possettlement
+    );
+
+    $array_possettlement_json = json_encode($array_possettlement);
+
+    $postData = array(
+        "possettlement" => $array_possettlement_json,
+        "idstore" => $idstore
+    );
+
+    $fields_string = http_build_query($postData);
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => $fields_string,
+    ));
+
+    $hasil_possettlement = curl_exec($curl);
+
+    curl_close($curl);
+
+    // echo $hasil_possettlement;
+}
+
+
+
+
+
+
+
+
+
