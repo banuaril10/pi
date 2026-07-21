@@ -1,6 +1,6 @@
 <?php include "../../config/koneksi.php";
 $jenis = $_GET['jenis'];
-$statement = $connec->query("select * from pos_medc where jenis = '$jenis' order by name asc");
+$statement = $connec->query("select * from pos_medc where jenis = '$jenis' order by urutan asc");
 
 $edc = array();
 foreach ($statement as $r) {
