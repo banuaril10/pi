@@ -1300,17 +1300,20 @@ foreach ($cmd_alter_pos_mproductdiscountmurah_kelipatan as $r) {
 	$connec->exec($r);
 }
 
+// ALTER TABLE public.ad_morg
+// ALTER COLUMN note1 TYPE varchar(255);
 $cmd_alter_ad_morg_note1 = [
 	'ALTER TABLE public.ad_morg ALTER COLUMN note1 TYPE varchar(255);',
 	//note3 jadi text
 	'ALTER TABLE public.ad_morg ALTER COLUMN note3 TYPE text;',
 	'ALTER TABLE public.ad_morg ALTER COLUMN note2 TYPE text;'
-	
+
 ];
 
 foreach ($cmd_alter_ad_morg_note1 as $r) {
 	$connec->exec($r);
 }
+
 
 $cmd_alter_qty_outstanding = ['ALTER TABLE m_piline ADD COLUMN IF NOT EXISTS qty_outstanding int default 0;'];
 
@@ -1319,19 +1322,199 @@ foreach ($cmd_alter_qty_outstanding as $r) {
 }
 
 
-$alter_create_pos_settlement = [
+// CREATE TABLE pos_settlement (
+//     pos_settlement_key VARCHAR(40) PRIMARY KEY,
+//     pos_dcashierbalance_key VARCHAR(40),
+//     pos_medc_key VARCHAR(40),
+//     amount DECIMAL(15,2)
+// );
+
+// -- Tambahkan index untuk performance
+// CREATE INDEX idx_settlement_dcashier ON pos_settlement(pos_dcashierbalance_key);
+// CREATE INDEX idx_settlement_medc ON pos_settlement(pos_medc_key);
+
+$cmd_create_pos_settlement = [
 	'CREATE TABLE IF NOT EXISTS pos_settlement (
-		pos_settlement_key varchar(40) PRIMARY KEY,
-		pos_dcashierbalance_key varchar(40),
-		pos_medc_key varchar(40),
-		amount numeric,
-		tanggal date
-	);'
+		pos_settlement_key VARCHAR(40) PRIMARY KEY,
+		pos_dshopsales_key VARCHAR(40),
+		pos_medc_key VARCHAR(40),
+		amount DECIMAL(15,2),
+		tanggal timestamp NULL
+	);',
+	'CREATE INDEX IF NOT EXISTS idx_settlement_dshopsales ON pos_settlement(pos_dshopsales_key);',
+	'CREATE INDEX IF NOT EXISTS idx_settlement_medc ON pos_settlement(pos_medc_key);'
 ];
 
-foreach ($alter_create_pos_settlement as $r) {
+foreach ($cmd_create_pos_settlement as $r) {
 	$connec->exec($r);
 }
+
+
+
+// 'ALTER TABLE public.m_piline ADD COLUMN qty_outstanding TYPE int default 0;',
+
+
+
+
+// ============================================================
+// INDEXING UNTUK OPTIMASI PERFORMANCE
+// ============================================================
+
+$indexing_additional = [
+    // Index untuk pos_dtempsalesline (tabel transaksi sementara)
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempsalesline_billno ON pos_dtempsalesline(billno);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempsalesline_sku ON pos_dtempsalesline(sku);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempsalesline_billno_sku ON pos_dtempsalesline(billno, sku);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempsalesline_cashier_status ON pos_dtempsalesline(pos_mcashier_key, status);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempsalesline_user ON pos_dtempsalesline(ad_muser_key);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempsalesline_sku_left3 ON pos_dtempsalesline(LEFT(sku, 3));',
+    
+    // Index untuk pos_dsalesline (tabel sales line)
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsalesline_billno ON pos_dsalesline(billno);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsalesline_sku ON pos_dsalesline(sku);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsalesline_billno_sku ON pos_dsalesline(billno, sku);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsalesline_insertdate_sku ON pos_dsalesline(insertdate, sku);',
+    
+    // Index untuk pos_dsales (header sales)
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_billno ON pos_dsales(billno);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_billcode ON pos_dsales(billcode);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_ad_morg_key ON pos_dsales(ad_morg_key);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_voucher_code ON pos_dsales(voucher_code);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_cashierbalance ON pos_dsales(pos_dcashierbalance_key);',
+    
+    // Index untuk pos_mproduct (master product)
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproduct_sku ON pos_mproduct(sku);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproduct_sku_stock ON pos_mproduct(sku, stockqty);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproduct_tag ON pos_mproduct(tag);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproduct_idcat ON pos_mproduct(idcat);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproduct_idsubcat ON pos_mproduct(idsubcat);',
+    
+    // Index untuk pos_mproductdiscount (diskon reguler)
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_sku_date ON pos_mproductdiscount(sku, fromdate, todate);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_name_sku_date ON pos_mproductdiscount(discountname, sku, fromdate, todate);',
+    
+    // Index untuk pos_mproductdiscountmurah (tebus murah)
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscountmurah_sku_date ON pos_mproductdiscountmurah(sku, fromdate, todate);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscountmurah_limit ON pos_mproductdiscountmurah(limitamount, max_kelipatan);',
+    
+    // Index untuk pos_mproductdiscountgrosir_new (grosir)
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscountgrosir_sku_date ON pos_mproductdiscountgrosir_new(sku, fromdate, todate);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscountgrosir_minbuy ON pos_mproductdiscountgrosir_new(minbuy DESC);',
+    
+    // Index untuk pos_mproductdiscount_bundling (bundling)
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_bundling_sku ON pos_mproductdiscount_bundling(sku);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_bundling_discountname ON pos_mproductdiscount_bundling(discountname);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_bundling_date ON pos_mproductdiscount_bundling(fromdate, todate);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_bundling_key ON pos_mproductdiscount_bundling(pos_mproductdiscount_key);',
+    
+    // Index untuk pos_mproductdiscount_bundling_header
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_bundling_header_code ON pos_mproductdiscount_bundling_header(bundling_code);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductdiscount_bundling_header_key ON pos_mproductdiscount_bundling_header(pos_mproductdiscount_key);',
+    
+    // Index untuk pos_mproductbuyget (buy & get)
+    'CREATE INDEX IF NOT EXISTS idx_pos_mproductbuyget_sku_date ON pos_mproductbuyget(skubuy, fromdate, todate);',
+    
+    // Index untuk pos_dtempbuyget (temp buy & get)
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempbuyget_billno_sku ON pos_dtempbuyget(billno, skuget);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dtempbuyget_status ON pos_dtempbuyget(status);',
+    
+    // Index untuk pos_mmember (member)
+    'CREATE INDEX IF NOT EXISTS idx_pos_mmember_id_card_nohp ON pos_mmember(memberid, membercardno, nohp);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mmember_birthday ON pos_mmember(dateofbirth);',
+    
+    // Index untuk pos_dcashierbalance (cashier balance)
+    'CREATE INDEX IF NOT EXISTS idx_pos_dcashierbalance_user_date ON pos_dcashierbalance(ad_muser_key, startdate);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dcashierbalance_org ON pos_dcashierbalance(ad_morg_key);',
+    
+    // Index untuk pos_dshopsales (shop sales)
+    'CREATE INDEX IF NOT EXISTS idx_pos_dshopsales_date ON pos_dshopsales(salesdate);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dshopsales_org ON pos_dshopsales(ad_morg_key);',
+    
+    // Index untuk pos_dvoucher (voucher)
+    'CREATE INDEX IF NOT EXISTS idx_pos_dvoucher_code ON pos_dvoucher(voucher_code);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dvoucher_member ON pos_dvoucher(membercard);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dvoucher_status ON pos_dvoucher(status);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dvoucher_valid_date ON pos_dvoucher(valid_from, valid_until);',
+    
+    // Index untuk m_pi (stock opname header)
+    'CREATE INDEX IF NOT EXISTS idx_m_pi_name ON m_pi(name);',
+    'CREATE INDEX IF NOT EXISTS idx_m_pi_key ON m_pi(m_pi_key);',
+    'CREATE INDEX IF NOT EXISTS idx_m_pi_status ON m_pi(status);',
+    
+    // Index untuk m_piline (stock opname line)
+    'CREATE INDEX IF NOT EXISTS idx_m_piline_m_pi_key ON m_piline(m_pi_key);',
+    'CREATE INDEX IF NOT EXISTS idx_m_piline_sku ON m_piline(sku);',
+    'CREATE INDEX IF NOT EXISTS idx_m_piline_insertdate ON m_piline(insertdate);',
+    'CREATE INDEX IF NOT EXISTS idx_m_piline_barcode ON m_piline(barcode);',
+    
+    // Index untuk m_pi_sales
+    'CREATE INDEX IF NOT EXISTS idx_m_pi_sales_tanggal ON m_pi_sales(tanggal);',
+    
+    // Index untuk inv_temp
+    'CREATE INDEX IF NOT EXISTS idx_inv_temp_sku ON inv_temp(sku);',
+    'CREATE INDEX IF NOT EXISTS idx_inv_temp_tanggal ON inv_temp(tanggal);',
+    
+    // Index untuk inv_temp_nasional
+    'CREATE INDEX IF NOT EXISTS idx_inv_temp_nasional_sku ON inv_temp_nasional(sku);',
+    'CREATE INDEX IF NOT EXISTS idx_inv_temp_nasional_tanggal ON inv_temp_nasional(tanggal);',
+    
+    // Index untuk m_grab_sku
+    'CREATE INDEX IF NOT EXISTS idx_m_grab_sku_sku ON m_grab_sku(sku);',
+    
+    // Index untuk m_pi_users
+    'CREATE INDEX IF NOT EXISTS idx_m_pi_users_userid ON m_pi_users(userid);',
+    'CREATE INDEX IF NOT EXISTS idx_m_pi_users_ad_org ON m_pi_users(ad_org_id);',
+    
+    // Index untuk cash_in
+    'CREATE INDEX IF NOT EXISTS idx_cash_in_org ON cash_in(org_key);',
+    'CREATE INDEX IF NOT EXISTS idx_cash_in_user ON cash_in(userid);',
+    'CREATE INDEX IF NOT EXISTS idx_cash_in_date ON cash_in(insertdate);',
+    
+    // Index untuk pos_settlement
+    'CREATE INDEX IF NOT EXISTS idx_pos_settlement_dshopsales ON pos_settlement(pos_dshopsales_key);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_settlement_medc ON pos_settlement(pos_medc_key);',
+    
+    // Index untuk pos_medc
+    'CREATE INDEX IF NOT EXISTS idx_pos_medc_jenis ON pos_medc(jenis);',
+    
+    // Index untuk pos_mcombo_promo
+    'CREATE INDEX IF NOT EXISTS idx_pos_mcombo_promo_header_date ON pos_mcombo_promo_header(fromdate, todate);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mcombo_promo_detail_header ON pos_mcombo_promo_detail(pos_mcombo_promo_header_key);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mcombo_promo_detail_sku ON pos_mcombo_promo_detail(sku);',
+    
+    // Index untuk price_tag
+    'CREATE INDEX IF NOT EXISTS idx_price_tag_header_number ON price_tag_headers(header_number);',
+    'CREATE INDEX IF NOT EXISTS idx_price_tag_items_header_id ON price_tag_items(header_id);',
+    'CREATE INDEX IF NOT EXISTS idx_price_tag_items_sku ON price_tag_items(sku);',
+    
+    // Index untuk pos_mobile_transaction_log
+    'CREATE INDEX IF NOT EXISTS idx_pos_mobile_log_billno ON pos_mobile_transaction_log(billno);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_mobile_log_date ON pos_mobile_transaction_log(transaction_date);',
+    
+    // Index untuk pos_dsales_ppob
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_ppob_billno ON pos_dsales_ppob(billno);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_ppob_org ON pos_dsales_ppob(ad_morg_key);',
+    'CREATE INDEX IF NOT EXISTS idx_pos_dsales_ppob_trxid ON pos_dsales_ppob(trxid);',
+];
+
+// Jalankan semua index dengan pengecekan IF NOT EXISTS
+foreach ($indexing_additional as $r) {
+    try {
+        $connec->exec($r);
+    } catch (PDOException $e) {
+        // Log error jika index gagal dibuat
+        error_log("Index creation failed: " . $r . " - " . $e->getMessage());
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 ?>
