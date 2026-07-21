@@ -1342,8 +1342,11 @@ $cmd_create_pos_settlement = [
 		tanggal timestamp NULL
 	);',
 	'CREATE INDEX IF NOT EXISTS idx_settlement_dshopsales ON pos_settlement(pos_dshopsales_key);',
-	'CREATE INDEX IF NOT EXISTS idx_settlement_medc ON pos_settlement(pos_medc_key);'
+	'CREATE INDEX IF NOT EXISTS idx_settlement_medc ON pos_settlement(pos_medc_key);',
+	//add column status_intransit default 0
+	'ALTER TABLE pos_settlement ADD COLUMN IF NOT EXISTS status_intransit varchar(2) NULL DEFAULT \'0\';'
 ];
+
 
 foreach ($cmd_create_pos_settlement as $r) {
 	$connec->exec($r);

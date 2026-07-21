@@ -122,6 +122,7 @@ if ($tanggal != "now") {
         INNER JOIN pos_dshopsales pds
             ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
         WHERE DATE(pds.insertdate) = '".$tanggal."'
+        AND ps.status_intransit = '0'
     ";
 } else {
     $list_possettlement = "
@@ -131,6 +132,7 @@ if ($tanggal != "now") {
             ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
         WHERE pds.status_intransit IS NULL
         AND DATE(pds.insertdate) = DATE(NOW())
+        AND ps.status_intransit = '0'
     ";
 }
 
@@ -179,9 +181,19 @@ if (!empty($jj_possettlement)) {
 
     curl_close($curl);
 
-    // echo $hasil_possettlement;
+    // Update status_intransit menjadi 1 setelah berhasil dikirim
+    if ($hasil_possettlement !== false) {
+        $response = json_decode($hasil_possettlement, true);
+        
+        // Cek apakah response berupa array dan tidak kosong (berarti berhasil)
+        if (is_array($response) && !empty($response)) {
+            foreach ($response as $key) {
+                $updateQuery = "UPDATE pos_settlement SET status_intransit = '1' WHERE pos_settlement_key = '" . $key . "'";
+                $connec->query($updateQuery);
+            }
+        }
+    }
 }
-
 
 
 
