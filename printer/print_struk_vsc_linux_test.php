@@ -1,5 +1,8 @@
 <?php
 
+echo ini_get('disable_functions');
+echo shell_exec('whoami');
+
 $html = "test print cuy";
 
 
