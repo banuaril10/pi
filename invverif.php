@@ -313,19 +313,21 @@
 		};
 
 
-function print_text(html) {
-    var isLinux = (navigator.platform.indexOf('Linux') > -1) || (navigator.userAgent.indexOf('Linux') > -1);
-    var url = isLinux ? "printer/print_struk_linux.php" : "printer/print_struk.php";
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: { html: html },
-        success: function (dataResult) {
-            var dataResult = JSON.parse(dataResult);
-            $('#notif').html("Proses print");
-        }
-    });
-}
+		function print_text(html) {
+			// console.log(html);
+			$.ajax({
+				url: "printer/print_struk.php",
+				type: "POST",
+				data: { html: html },
+				success: function (dataResult) {
+					var dataResult = JSON.parse(dataResult);
+
+					$('#notif').html("Proses print");
+
+
+				}
+			});
+		}
 
 
 
@@ -617,6 +619,7 @@ function print_text(html) {
 						<tr>
 							<th style="border:1px solid ${warna}; color:${warna};">No</th>
 							<th style="border:1px solid ${warna}; color:${warna};">SKU</th>
+							<th style="border:1px solid ${warna}; color:${warna};">Barcode Int.</th>
 							<th style="border:1px solid ${warna}; color:${warna};">Nama Barang</th>
 							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Count</th>
 							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Varian</th>
@@ -633,6 +636,7 @@ function print_text(html) {
 					for (let i = 0; i < panjang; i++) {
 						let data = dataResult[i];
 						let sku = data.sku || '';
+						let barcode = data.barcode || '';
 						let name = data.name || '';
 						let qtyvariant = parseInt(data.qtyvariant || 0);
 						let qtycount = parseInt(data.qtycount || 0);
@@ -648,6 +652,7 @@ function print_text(html) {
 						<tr>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${no}</td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${sku}</td>
+						<td style="border:1px solid ${warna}; color:${warna};">${barcode}</td>
 						<td style="border:1px solid ${warna}; color:${warna};">${name}</td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtycount}</td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtyvariant}</td>
