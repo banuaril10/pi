@@ -77,6 +77,9 @@
 							<a href="capture_sku_plano_approved.php">Planogram Approved</a>
 						</li>
 						<li class="submenu-item ">
+							<a href="capture_sku_plano_rejected.php">Planogram Rejected</a>
+						</li>
+						<li class="submenu-item ">
 							<a href="capture_sku.php">Event</a>
 						</li>
 						<li class="submenu-item ">
