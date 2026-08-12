@@ -154,8 +154,16 @@
 									</thead>
 									<tbody>
 
-										<?php $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '" . $_GET['m_pi'] . "' and m_pi.status = '2' order by variant asc";
+										<?php $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, 
+										m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, 
+										pos_mproduct.name, m_pi.status, m_piline.verifiedcount, 
+										pos_mproduct.barcode1,
+										pos_mproduct.barcode2,
+										pos_mproduct.barcode3,
+										pos_mproduct.barcode4
+										from m_pi inner join 
+										m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+											where m_pi.m_pi_key = '" . $_GET['m_pi'] . "' and m_pi.status = '2' order by variant asc";
 										$no = 1;
 										foreach ($connec->query($list_line) as $row1) {
 											// $variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);
@@ -179,13 +187,49 @@
 
 											}
 
+											$barc = "";
+
 											if ($row1['barcode'] != "") {
 
-												$barc = '(' . $row1['barcode'] . ')';
+												$barc .= '(' . $row1['barcode'] . ')';
 											} else {
-												$barc = "";
+												$barc .= "";
 
 											}
+
+											if ($row1['barcode1'] != "") {
+
+												$barc .= '(' . $row1['barcode1'] . ')';
+											} else {
+												$barc .= "";
+
+											}
+
+											if ($row1['barcode2'] != "") {
+
+												$barc .= '(' . $row1['barcode2'] . ')';
+											} else {
+												$barc .= "";
+
+											}
+
+											if ($row1['barcode3'] != "") {
+
+												$barc .= '(' . $row1['barcode3'] . ')';
+											} else {
+												$barc .= "";
+
+											}
+
+											if ($row1['barcode4'] != "") {
+
+												$barc .= '(' . $row1['barcode4'] . ')';
+											} else {
+												$barc .= "";
+
+											}
+											
+
 
 
 											?>
