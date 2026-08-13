@@ -8,7 +8,7 @@ try {
     $pos_dshopsales_key = trim($_POST['pos_dshopsales_key'] ?? '');
     $sales_date         = trim($_POST['sales_date'] ?? '');
     $total_variant      = $_POST['total_variant'] ?? 0;
-    $reason_id          = (int)($_POST['reason_id'] ?? 0);
+    $reason_id          = $_POST['reason_id'] ?? '';
     $reason_name        = trim($_POST['reason_name'] ?? '');
     $createby           = trim($_POST['createby'] ?? '');
 
@@ -27,7 +27,7 @@ try {
         throw new Exception("Sales Date tidak ditemukan.");
     }
 
-    if ($reason_id <= 0) {
+    if ($reason_id == '') {
         throw new Exception("Silakan pilih alasan variant.");
     }
 
