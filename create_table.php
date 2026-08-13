@@ -1561,6 +1561,32 @@ foreach ($cmd_create_pos_dshopsales_variant_reason as $r) {
 }
 
 
+//alter table ubah tipe data pos_dshopsales_variant_reason_key ke varchar(40)
+
+$cmd_alter_pos_dshopsales_variant_reason_key = [
+	'ALTER TABLE pos_dshopsales_variant_reason 
+	ALTER COLUMN pos_dshopsales_variant_reason_key TYPE varchar(40);'
+];
+
+foreach ($cmd_alter_pos_dshopsales_variant_reason_key as $r) {
+	$connec->exec($r);
+}
+
+
+//tambah field status_intransit default null di pos_dshopsales_variant_reason
+$cmd_alter_pos_dshopsales_variant_reason_status_intransit = [
+	'ALTER TABLE pos_dshopsales_variant_reason 
+	ADD COLUMN IF NOT EXISTS status_intransit varchar(2) NULL;'
+];
+
+foreach ($cmd_alter_pos_dshopsales_variant_reason_status_intransit as $r) {
+	$connec->exec($r);
+}
+
+
+
+
+
 
 
 
