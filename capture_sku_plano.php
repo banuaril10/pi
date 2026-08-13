@@ -132,7 +132,7 @@ if(is_array($arr_all)){
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h4>CAPTURE DISPLAY PLANOGRAM<br>MAKS 3 FOTO PER DISPLAY UNTUK YG LEBIH DARI 1 RACK, JIKA HANYA 1 RACK KOSONGKAN SAJA YG LAINNYA</h4>
+				<h4>CAPTURE DISPLAY PLANOGRAM<br>MAKS 5 FOTO PER DISPLAY UNTUK YG LEBIH DARI 1 RACK, JIKA HANYA 1 RACK KOSONGKAN SAJA YG LAINNYA</h4>
 			</div>
 			<div class="card-body">
 			<div class="tables">			
@@ -237,6 +237,8 @@ if(is_array($arr_all)){
 						$img = '<img src="images/no-image.png" style="width: 200px"></img>';
 						$img2 = '<img src="images/no-image.png" style="width: 200px"></img>';
 						$img3 = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img4 = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img5 = '<img src="images/no-image.png" style="width: 200px"></img>';
 						$img_sample = '<img src="images/no-image.png" style="width: 400px"></img>';
 
 						if ($row1['image'] != "") {
@@ -251,10 +253,19 @@ if(is_array($arr_all)){
 							$img3 = $row1['image3'];
 						}
 
+						if ($row1['image4'] != "") {
+							$img4 = $row1['image4'];
+						}
+
+						if ($row1['image5'] != "") {
+							$img5 = $row1['image5'];
+						}
+
 						$img_sample = "";
 						$img_sample2 = "";
 						$img_sample3 = "";
 						$img_sample4 = "";
+						$img_sample5 = "";
 						if($row1['file'] != ""){
 							$img_sample = '<img src="'.$row1['base_url'].$row1['file'].'" style="width: 400px"></img>';
 						}
@@ -269,6 +280,10 @@ if(is_array($arr_all)){
 						
 						if($row1['file4'] != ""){
 							$img_sample4 = '<img src="'.$row1['base_url'].$row1['file4'].'" style="width: 400px"></img>';
+						}
+						
+						if($row1['file5'] != ""){
+							$img_sample5 = '<img src="'.$row1['base_url'].$row1['file5'].'" style="width: 400px"></img>';
 						}
 						
 					?>
@@ -298,6 +313,8 @@ if(is_array($arr_all)){
 							<div id="file-load<?php echo $row1['id']; ?>"><?php echo $img; ?></div>
 							<div id="file-load2<?php echo $row1['id']; ?>"><?php echo $img2; ?></div>
 							<div id="file-load3<?php echo $row1['id']; ?>"><?php echo $img3; ?></div>
+							<div id="file-load4<?php echo $row1['id']; ?>"><?php echo $img4; ?></div>
+							<div id="file-load5<?php echo $row1['id']; ?>"><?php echo $img5; ?></div>
 							
 							</center>
 							<br>
@@ -309,7 +326,7 @@ if(is_array($arr_all)){
 							<br>
 							<input type="hidden" id="sku<?php echo $row1['id']; ?>" value="<?php echo $row1['sku']; ?>">
 							<input type="hidden" id="toko<?php echo $row1['id']; ?>" value="<?php echo $toko; ?>">
-							<button class="btn btn-primary" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file')" >Upload File</button>
+							<button class="btn btn-primary" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file')" >Upload File 1</button>
 							
 							<br><br>
 							
@@ -324,6 +341,20 @@ if(is_array($arr_all)){
 							<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload3<?php echo $row1['id']; ?>" id="fileupload3<?php echo $row1['id']; ?>" class="form-control" />
 							<br>
 							<button class="btn btn-warning" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file3')" >Upload File 3</button>
+							
+							<br><br>
+							
+							<!-- Upload untuk file4 (BARU) -->
+							<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload4<?php echo $row1['id']; ?>" id="fileupload4<?php echo $row1['id']; ?>" class="form-control" />
+							<br>
+							<button class="btn btn-info" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file4')" >Upload File 4</button>
+							
+							<br><br>
+							
+							<!-- Upload untuk file5 (BARU) -->
+							<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload5<?php echo $row1['id']; ?>" id="fileupload5<?php echo $row1['id']; ?>" class="form-control" />
+							<br>
+							<button class="btn btn-danger" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file5')" >Upload File 5</button>
 							
 							</form>
 
@@ -382,6 +413,10 @@ function uploadImage(id, fileType){
 		fileInputId = 'fileupload2'+id;
 	} else if(fileType === 'file3'){
 		fileInputId = 'fileupload3'+id;
+	} else if(fileType === 'file4'){
+		fileInputId = 'fileupload4'+id;
+	} else if(fileType === 'file5'){
+		fileInputId = 'fileupload5'+id;
 	}
 	
 	var vidFileLength = $("#"+fileInputId)[0].files.length;
@@ -415,7 +450,7 @@ function uploadImage(id, fileType){
 			return xhr;
 			},
 			type: 'POST',
-			url: "https://mkt.idolmartidolaku.com/api/upload_sku_multi.php",
+			url: "https://mkt.idolmartidolaku.com/api/upload_sku_multi_new.php",
 			data: formData,
 			cache: false,
 			processData: false,
@@ -424,6 +459,8 @@ function uploadImage(id, fileType){
 				$("#file-load"+id).load(" #file-load"+id);
 				$("#file-load2"+id).load(" #file-load2"+id);
 				$("#file-load3"+id).load(" #file-load3"+id);
+				$("#file-load4"+id).load(" #file-load4"+id);
+				$("#file-load5"+id).load(" #file-load5"+id);
 				$("#"+fileInputId).val('');
 				$("#notif"+id).html("<font style='color: green'>File "+fileType+" berhasil diupload</font>");
 				// Refresh halaman setelah 2 detik

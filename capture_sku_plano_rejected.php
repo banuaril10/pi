@@ -27,9 +27,9 @@ foreach ($connec->query($cek_brand) as $row) {
 	$value = $row['value'];
 }
 
-// Ambil data dari API untuk diambil kategorinya
+// Ambil data dari API KHUSUS REJECT
 $date_now = date("Y-m-d");
-$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_plano.php?tgl=".$date_now."&toko=".$value;
+$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_plano_reject.php?tgl=".$date_now."&toko=".$value;
 $options = stream_context_create(array('http'=>
 	array(
 	'timeout' => 10
@@ -38,6 +38,7 @@ $options = stream_context_create(array('http'=>
 
 $json = @file_get_contents($json_url, false, $options);
 $arr_all = json_decode($json, true);
+
 function getKategoriFromDesk($desk){
     $desk = strip_tags($desk);
 
@@ -47,19 +48,17 @@ function getKategoriFromDesk($desk){
 
     return '';
 }
+
 // Kumpulkan kategori unik dari data API
 $categories = array();
 
 if(is_array($arr_all)){
     foreach($arr_all as $item){
-
         $kategori = getKategoriFromDesk($item['desk']);
-
         if(!empty($kategori)){
             $categories[] = $kategori;
         }
     }
-
     $categories = array_unique($categories);
     sort($categories);
 }
@@ -98,6 +97,24 @@ if(is_array($arr_all)){
 			padding: 5px 15px;
 			border-radius: 20px;
 			font-weight: bold;
+		}
+		.reject-header {
+			background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%) !important;
+			color: #fff !important;
+		}
+		.file-upload-section {
+			background: #f5f5f5;
+			padding: 15px;
+			border-radius: 8px;
+			margin: 10px 0;
+			border: 1px solid #ddd;
+		}
+		.file-upload-section .btn-upload {
+			margin-top: 5px;
+		}
+		.file-upload-section label {
+			font-weight: bold;
+			color: #d32f2f;
 		}
 	</style>
 
@@ -138,7 +155,7 @@ if(is_array($arr_all)){
 <div class="row">
 	<div class="col-12">
 		<div class="card">
-			<div class="card-header" style="background: #ffebee; border-bottom: 3px solid #f44336;">
+			<div class="card-header reject-header">
 				<h4><span class="badge-reject">REJECT</span> CAPTURE DISPLAY PLANOGRAM - DITOLAK</h4>
 			</div>
 			<div class="card-body">
@@ -191,37 +208,12 @@ if(is_array($arr_all)){
 					
 					<?php 
 					
-					$arr = $arr_all; // reuse from above
-					
+					$arr = $arr_all;
 					$jum = count($arr);
-				
-					$s = array();
 					$no = 1;
-					$has_reject = false;
 					
 					if($jum > 0){
 					foreach ($arr as $row1) {
-						
-						// CEK APAKAH STATUSNYA REJECT (0)
-						$is_reject = false;
-						$reject_notes = "";
-						$reject_by = "";
-						
-						// Cek status dari capture_sku_approval
-						$q_check = "select * from capture_sku_approval where sku='" . $row1['sku'] . "' and store_name like '%" . $toko . "-%' and status = 0";
-						$check_status = $connec->query($q_check);
-						foreach ($check_status as $rs_check) {
-							$is_reject = true;
-							$reject_notes = $rs_check['notes_rejected'];
-							$reject_by = $rs_check['approvedby'];
-						}
-						
-						// Jika tidak reject, skip
-						if(!$is_reject){
-							continue;
-						}
-						
-						$has_reject = true;
 						
 						// APPLY FILTERS
 						$show = true;
@@ -265,16 +257,38 @@ if(is_array($arr_all)){
 						}
 						
 						$img = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img2 = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img3 = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img4 = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img5 = '<img src="images/no-image.png" style="width: 200px"></img>';
 						$img_sample = '<img src="images/no-image.png" style="width: 400px"></img>';
 
 						if ($row1['image'] != "") {
 							$img = $row1['image'];
 						}
 						
+						if ($row1['image2'] != "") {
+							$img2 = $row1['image2'];
+						}
+
+						if ($row1['image3'] != "") {
+							$img3 = $row1['image3'];
+						}
+
+						if ($row1['image4'] != "") {
+							$img4 = $row1['image4'];
+						}
+
+						if ($row1['image5'] != "") {
+							$img5 = $row1['image5'];
+						}
+						
 						$img_sample = "";
 						$img_sample2 = "";
 						$img_sample3 = "";
 						$img_sample4 = "";
+						$img_sample5 = "";
+						
 						if($row1['file'] != ""){
 							$img_sample = '<img src="'.$row1['base_url'].$row1['file'].'" style="width: 400px"></img>';
 						}
@@ -291,21 +305,30 @@ if(is_array($arr_all)){
 							$img_sample4 = '<img src="'.$row1['base_url'].$row1['file4'].'" style="width: 400px"></img>';
 						}
 						
+						if($row1['file5'] != ""){
+							$img_sample5 = '<img src="'.$row1['base_url'].$row1['file5'].'" style="width: 400px"></img>';
+						}
+						
+						$reject_notes = isset($row1['reject_notes']) ? $row1['reject_notes'] : '';
+						$reject_by = isset($row1['reject_by']) ? $row1['reject_by'] : '';
+						
 					?>
 					
 			
 						<tr class="status-reject">
-							<td colspan="4" style="background-color: #f44336; color: #fff; font-size: 35px">
+							<td colspan="5" style="background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%); color: #fff; font-size: 30px; padding: 20px;">
 								<center>
-									<i class="bi bi-x-circle-fill"></i> 
+									<i class="bi bi-x-circle-fill" style="font-size: 40px;"></i> 
 									<b><?php echo $row1['nama']; ?></b> - REJECTED
 									<?php if($reject_notes != ""): ?>
-									<br><small style="font-size: 18px; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 10px;">
-										Alasan: <?php echo $reject_notes; ?>
-									</small>
+									<br><span style="font-size: 18px; background: rgba(255,255,255,0.2); padding: 5px 20px; border-radius: 10px; display: inline-block; margin-top: 8px;">
+										<i class="bi bi-chat-left-text"></i> Alasan: <?php echo $reject_notes; ?>
+									</span>
 									<?php endif; ?>
 									<?php if($reject_by != ""): ?>
-									<br><small style="font-size: 14px;">Ditolak oleh: <?php echo $reject_by; ?></small>
+									<br><span style="font-size: 14px; opacity: 0.9;">
+										<i class="bi bi-person"></i> Ditolak oleh: <?php echo $reject_by; ?>
+									</span>
 									<?php endif; ?>
 								</center>
 							</td>
@@ -318,31 +341,77 @@ if(is_array($arr_all)){
 								<td><?php echo $img_sample2; ?></td>
 								<td><?php echo $img_sample3; ?></td>
 								<td><?php echo $img_sample4; ?></td>
+								<td><?php echo $img_sample5; ?></td>
 						</tr>
 						<tr class="status-reject">
-							<td colspan="4">
-							<?php echo $no; ?>. <?php echo $row1['desk']; ?>
+							<td colspan="5" style="padding: 20px;">
+							<h5><?php echo $no; ?>. Detail Produk</h5>
+							<?php echo $row1['desk']; ?>
 							
+							<hr style="border-top: 2px dashed #f44336; margin: 20px 0;">
+							
+							<h5><i class="bi bi-arrow-repeat"></i> Upload Ulang (Revisi) - MAKS 5 FOTO</h5>
 							<form id="file-info<?php echo $row1['id']; ?>">
 							
 							<center>
-							
-							
 							<div id="file-load<?php echo $row1['id']; ?>"><?php echo $img; ?></div>
-							
+							<div id="file-load2<?php echo $row1['id']; ?>"><?php echo $img2; ?></div>
+							<div id="file-load3<?php echo $row1['id']; ?>"><?php echo $img3; ?></div>
+							<div id="file-load4<?php echo $row1['id']; ?>"><?php echo $img4; ?></div>
+							<div id="file-load5<?php echo $row1['id']; ?>"><?php echo $img5; ?></div>
 							</center>
 							<br>
+							
+							<textarea class="form-control" id="alasan<?php echo $row1['id']; ?>" placeholder="Masukan alasan revisi jika ada.. (tidak wajib)" rows="3"><?php echo $row1['alasan']; ?></textarea>
 							<br>
 							
-							<textarea class="form-control" id="alasan<?php echo $row1['id']; ?>" placeholder="Masukan alasan jika ada.. (tidak wajib)"><?php echo $row1['alasan']; ?></textarea>
-							<br>
-							<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload<?php echo $row1['id']; ?>" id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
-							<br>
+							<!-- Upload File 1 -->
+							<div class="file-upload-section">
+								<label><i class="bi bi-file-image"></i> File 1</label>
+								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload<?php echo $row1['id']; ?>" id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
+								<button class="btn btn-warning btn-upload" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file')">
+									<i class="bi bi-arrow-repeat"></i> Upload File 1
+								</button>
+							</div>
+							
+							<!-- Upload File 2 -->
+							<div class="file-upload-section">
+								<label><i class="bi bi-file-image"></i> File 2</label>
+								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload2<?php echo $row1['id']; ?>" id="fileupload2<?php echo $row1['id']; ?>" class="form-control" />
+								<button class="btn btn-warning btn-upload" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file2')">
+									<i class="bi bi-arrow-repeat"></i> Upload File 2
+								</button>
+							</div>
+							
+							<!-- Upload File 3 -->
+							<div class="file-upload-section">
+								<label><i class="bi bi-file-image"></i> File 3</label>
+								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload3<?php echo $row1['id']; ?>" id="fileupload3<?php echo $row1['id']; ?>" class="form-control" />
+								<button class="btn btn-warning btn-upload" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file3')">
+									<i class="bi bi-arrow-repeat"></i> Upload File 3
+								</button>
+							</div>
+							
+							<!-- Upload File 4 -->
+							<div class="file-upload-section">
+								<label><i class="bi bi-file-image"></i> File 4</label>
+								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload4<?php echo $row1['id']; ?>" id="fileupload4<?php echo $row1['id']; ?>" class="form-control" />
+								<button class="btn btn-warning btn-upload" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file4')">
+									<i class="bi bi-arrow-repeat"></i> Upload File 4
+								</button>
+							</div>
+							
+							<!-- Upload File 5 -->
+							<div class="file-upload-section">
+								<label><i class="bi bi-file-image"></i> File 5</label>
+								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload5<?php echo $row1['id']; ?>" id="fileupload5<?php echo $row1['id']; ?>" class="form-control" />
+								<button class="btn btn-warning btn-upload" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file5')">
+									<i class="bi bi-arrow-repeat"></i> Upload File 5
+								</button>
+							</div>
+							
 							<input type="hidden" id="sku<?php echo $row1['id']; ?>" value="<?php echo $row1['sku']; ?>">
 							<input type="hidden" id="toko<?php echo $row1['id']; ?>" value="<?php echo $toko; ?>">
-							<button class="btn btn-warning" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>');" >
-								<i class="bi bi-arrow-repeat"></i> Upload Ulang (Revisi)
-							</button>
 							
 							</form>
 
@@ -356,18 +425,16 @@ if(is_array($arr_all)){
 							
 						</tr>
 						
-						
-						
-						
 					<?php $no++;} 
 					
-					} 
-					
-					if(!$has_reject){
-						echo '<tr><td colspan="4" class="text-center" style="padding: 50px;">
-							<i class="bi bi-check-circle-fill" style="font-size: 50px; color: green;"></i>
-							<h3 style="color: green; margin-top: 20px;">Tidak ada data yang Reject!</h3>
-							<p>Semua data sudah dalam status Approved atau Waiting Approval.</p>
+					} else {
+						echo '<tr><td colspan="5" class="text-center" style="padding: 50px;">
+							<i class="bi bi-check-circle-fill" style="font-size: 60px; color: #4caf50;"></i>
+							<h3 style="color: #4caf50; margin-top: 20px; font-weight: bold;">Tidak ada data yang Reject!</h3>
+							<p style="font-size: 16px; color: #666;">Semua data sudah dalam status Approved atau Waiting Approval.</p>
+							<a href="index.php" class="btn btn-primary mt-3">
+								<i class="bi bi-arrow-left"></i> Kembali ke Halaman Utama
+							</a>
 						</td></tr>';
 					}
 					?>
@@ -375,8 +442,6 @@ if(is_array($arr_all)){
    
 					</tbody>
 				</table>
-				
-				
 				
 				</div>
 			</div>
@@ -398,73 +463,101 @@ $(document).ready( function () {
 } );
 
 
-function uploadImage(id){
+function uploadImage(id, fileType){
+	// Tentukan file input berdasarkan tipe
+	var fileInputId = '';
+	if(fileType === 'file'){
+		fileInputId = 'fileupload'+id;
+	} else if(fileType === 'file2'){
+		fileInputId = 'fileupload2'+id;
+	} else if(fileType === 'file3'){
+		fileInputId = 'fileupload3'+id;
+	} else if(fileType === 'file4'){
+		fileInputId = 'fileupload4'+id;
+	} else if(fileType === 'file5'){
+		fileInputId = 'fileupload5'+id;
+	}
 	
-			var vidFileLength = $("#fileupload"+id)[0].files.length;
-			if(vidFileLength === 0){
-				alert("File belum dipilih");
-			}else{
-				var fileupload = $('#fileupload'+id).prop('files')[0];
-				
-				var sku = $("#sku"+id).val();
-				var toko = $("#toko"+id).val();
-				var alasan = $("#alasan"+id).val();
-				
-				
-				let formData = new FormData();
-				formData.append('fileupload', fileupload);
-				formData.append('id', id);
-				formData.append('sku', sku);
-				formData.append('toko', toko);
-				formData.append('alasan', alasan);
-				
-				$.ajax({
-					xhr: function() {
-					var xhr = new window.XMLHttpRequest();
-					xhr.upload.addEventListener("progress", function(evt) {
-						if (evt.lengthComputable) {
-							var percentComplete = ((evt.loaded / evt.total) * 100);
-							$("#progress-bar"+id).width(percentComplete+'%');
-							$("#progress-bar"+id).html(parseInt(percentComplete)+'%');
-						}
-					}, false);
-					return xhr;
-					},
-					type: 'POST',
-					url: "https://mkt.idolmartidolaku.com/api/upload_sku.php",
-					data: formData,
-					cache: false,
-					processData: false,
-					contentType: false,
-					success: function (msg) {
-						$("#file-load"+id).load(" #file-load"+id);
-						$("#fileupload"+id).val('');
-						alert("Upload berhasil! Data akan masuk ke antrian approval.");
-						location.reload();
-						
-					},
-					error: function () {
-						$("#notif"+id).html("<font style='color: red'>File Gagal diupload</font>");
+	var vidFileLength = $("#"+fileInputId)[0].files.length;
+	if(vidFileLength === 0){
+		alert("Silahkan pilih file foto terlebih dahulu untuk " + fileType + "!");
+		$("#"+fileInputId).focus();
+	}else{
+		var fileupload = $('#'+fileInputId).prop('files')[0];
+		
+		// Validasi ukuran file (max 5MB)
+		if(fileupload.size > 5 * 1024 * 1024){
+			alert("Ukuran file terlalu besar! Maksimal 5MB.");
+			return;
+		}
+		
+		var sku = $("#sku"+id).val();
+		var toko = $("#toko"+id).val();
+		var alasan = $("#alasan"+id).val();
+		
+		let formData = new FormData();
+		formData.append('fileupload', fileupload);
+		formData.append('id', id);
+		formData.append('sku', sku);
+		formData.append('toko', toko);
+		formData.append('alasan', alasan);
+		formData.append('fileType', fileType);
+		
+		$.ajax({
+			xhr: function() {
+				var xhr = new window.XMLHttpRequest();
+				xhr.upload.addEventListener("progress", function(evt) {
+					if (evt.lengthComputable) {
+						var percentComplete = ((evt.loaded / evt.total) * 100);
+						$("#progress-bar"+id).width(percentComplete+'%');
+						$("#progress-bar"+id).html(parseInt(percentComplete)+'%');
 					}
-				});
+				}, false);
+				return xhr;
+			},
+			type: 'POST',
+			url: "https://mkt.idolmartidolaku.com/api/upload_sku_multi_new.php",
+			data: formData,
+			cache: false,
+			processData: false,
+			contentType: false,
+			beforeSend: function(){
+				$("#progress-bar"+id).addClass('progress-bar-animated');
+				$("#notif"+id).html("<font style='color: blue;'>Sedang mengupload "+fileType+"...</font>");
+			},
+			success: function (msg) {
+				$("#file-load"+id).load(" #file-load"+id);
+				$("#file-load2"+id).load(" #file-load2"+id);
+				$("#file-load3"+id).load(" #file-load3"+id);
+				$("#file-load4"+id).load(" #file-load4"+id);
+				$("#file-load5"+id).load(" #file-load5"+id);
+				$("#"+fileInputId).val('');
+				$("#progress-bar"+id).removeClass('progress-bar-animated');
+				$("#notif"+id).html("<font style='color: green; font-weight: bold;'>✓ "+fileType+" berhasil diupload! Data akan masuk ke antrian approval.</font>");
+				
+				// Reload setelah 3 detik
+				setTimeout(function(){
+					location.reload();
+				}, 3000);
+			},
+			error: function () {
+				$("#notif"+id).html("<font style='color: red; font-weight: bold;'>✗ "+fileType+" Gagal diupload. Silahkan coba lagi.</font>");
+				$("#progress-bar"+id).removeClass('progress-bar-animated');
 			}
-	
+		});
+	}
 }
 
 function syncMaster(){
-	
-
-	
 	$.ajax({
 		url: "api/action.php?modul=inventory&act=sync_inv",
 		type: "GET",
 		beforeSend: function(){
-			 $('#sync').prop('disabled', true);
+			$('#sync').prop('disabled', true);
 			$('#notif1').html("<font style='color: red'>Sedang melakukan sync, sabar ya..</font>");
 			$("#overlay").fadeIn(300);
 		},
 		success: function(dataResult){
-		
 			var dataResult = JSON.parse(dataResult);
 			if(dataResult.result=='1'){
 				$('#notif1').html("<font style='color: green'>"+dataResult.msg+"</font>");
@@ -474,35 +567,26 @@ function syncMaster(){
 			else {
 				$('#notif').html(dataResult.msg);
 			}
-			
 		}
 	});
-	
 }
 
 function getType(){
-	
-
 	var type = "";
 	$.ajax({
 		url: "api/action.php?modul=inventory&act=get_type",
 		type: "GET",
 		success: function(dataResult){
-			// console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
 			if(dataResult.result=='1'){
 				localStorage.setItem("type",dataResult.type);
 				type = dataResult.type;
 			}
-			
 		}
-		
-		
 	});
 	return type;
 }
-
-
 </script>
+
 </div>
 <?php include "components/fff.php"; ?>
