@@ -2,25 +2,46 @@
 include "../../config/koneksi.php";
 
 header('Content-Type: application/json');
-//show error
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 $id_location = '';
 
-//select ad_morg_key from m_org 
-$ll = "select * from ad_morg where isactived = 'Y'";
+// =====================================================
+// AMBIL LOCATION
+// =====================================================
+$ll = "SELECT * FROM ad_morg WHERE isactived = 'Y'";
 $query = $connec->query($ll);
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $id_location = $row['ad_morg_key'];
 }
 
-// Mendapatkan SKU atau barcode dari parameter GET
-if (isset($_GET['sku']) || isset($_GET['barcode'])) {
-    $sku_or_barcode = isset($_GET['sku']) ? $_GET['sku'] : $_GET['barcode'];
 
-    // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku/barcode/barcode1-4
+// =====================================================
+// FUNCTION UPPERCASE TEXT
+// =====================================================
+function upperText($value)
+{
+    if ($value === null) {
+        return null;
+    }
+
+    return mb_strtoupper((string)$value, 'UTF-8');
+}
+
+
+// =====================================================
+// CEK PARAMETER SKU / BARCODE
+// =====================================================
+if (isset($_GET['sku']) || isset($_GET['barcode'])) {
+
+    $sku_or_barcode = isset($_GET['sku'])
+        ? $_GET['sku']
+        : $_GET['barcode'];
+
+
+    // =====================================================
+    // QUERY PRODUCT
+    // =====================================================
     $sqlPrice = "
         SELECT price, sku, name 
         FROM pos_mproduct 
@@ -35,18 +56,30 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         )
         LIMIT 1
     ";
+
     $stmtPrice = $connec->prepare($sqlPrice);
     $stmtPrice->bindParam(':sku_or_barcode', $sku_or_barcode);
     $stmtPrice->execute();
+
     $product = $stmtPrice->fetch(PDO::FETCH_ASSOC);
 
-    // Cek apakah produk ditemukan
-    if ($product) {
-        $name = $product['name'];
-        $regularPrice = $product['price'];
-        $sku = $product['sku'];
 
-        // Query untuk mendapatkan diskon dari tabel pos_mproductdiscount
+    // =====================================================
+    // PRODUCT DITEMUKAN
+    // =====================================================
+    if ($product) {
+
+        // Text dibuat uppercase
+        $name = upperText($product['name']);
+        $sku  = upperText($product['sku']);
+
+        // Angka tetap angka
+        $regularPrice = $product['price'];
+
+
+        // =====================================================
+        // DISCOUNT
+        // =====================================================
         $sqlDiscount = "
             SELECT discount, fromdate, todate 
             FROM pos_mproductdiscount 
@@ -60,29 +93,41 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         $stmtDiscount = $connec->prepare($sqlDiscount);
         $stmtDiscount->bindParam(':sku', $sku);
         $stmtDiscount->execute();
+
         $discount = $stmtDiscount->fetch(PDO::FETCH_ASSOC);
 
-        // --- TAMBAHAN: Ambil semua promo aktif dari ketiga tabel ---
+
+        // =====================================================
+        // PROMO HEADERS
+        // =====================================================
         $promo_headers = [];
 
-        // Reguler
+
+        // =====================================================
+        // REGULER
+        // =====================================================
         $sqlReguler = "
             SELECT discountname, jenis_promo, fromdate, todate, discount
             FROM pos_mproductdiscount
-            WHERE sku = :sku AND isactived = '1'
+            WHERE sku = :sku 
+            AND isactived = '1'
             AND CURRENT_DATE BETWEEN fromdate AND todate
             ORDER BY discount DESC
             LIMIT 1
         ";
+
         $stmtReguler = $connec->prepare($sqlReguler);
         $stmtReguler->bindParam(':sku', $sku);
         $stmtReguler->execute();
+
         $promoReguler = $stmtReguler->fetchAll(PDO::FETCH_ASSOC);
+
         foreach ($promoReguler as $p) {
+
             $promo_headers[] = [
-                'type' => 'Reguler',
-                'discountname' => $p['discountname'],
-                'jenis_promo' => $p['jenis_promo'],
+                'type' => 'REGULER',
+                'discountname' => upperText($p['discountname']),
+                'jenis_promo' => upperText($p['jenis_promo']),
                 'regular_price' => $regularPrice,
                 'after_discount' => $regularPrice - $p['discount'],
                 'fromdate' => $p['fromdate'],
@@ -90,23 +135,31 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             ];
         }
 
-        // Bundling
+
+        // =====================================================
+        // BUNDLING
+        // =====================================================
         $sqlBundling = "
             SELECT discountname, headername, jenis_promo, fromdate, todate, discount
             FROM pos_mproductdiscount_bundling
-            WHERE sku = :sku AND isactived = '1'
+            WHERE sku = :sku 
+            AND isactived = '1'
             AND CURRENT_DATE BETWEEN fromdate AND todate
         ";
+
         $stmtBundling = $connec->prepare($sqlBundling);
         $stmtBundling->bindParam(':sku', $sku);
         $stmtBundling->execute();
+
         $promoBundling = $stmtBundling->fetchAll(PDO::FETCH_ASSOC);
+
         foreach ($promoBundling as $p) {
+
             $promo_headers[] = [
-                'type' => 'Bundling',
-                'discountname' => $p['discountname'],
-                'headername' => $p['headername'],
-                'jenis_promo' => $p['jenis_promo'],
+                'type' => 'BUNDLING',
+                'discountname' => upperText($p['discountname']),
+                'headername' => upperText($p['headername']),
+                'jenis_promo' => upperText($p['jenis_promo']),
                 'regular_price' => $regularPrice,
                 'after_discount' => $regularPrice - $p['discount'],
                 'fromdate' => $p['fromdate'],
@@ -114,22 +167,30 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             ];
         }
 
-        // Grosir
+
+        // =====================================================
+        // GROSIR
+        // =====================================================
         $sqlGrosir = "
             SELECT discountname, jenis_promo, fromdate, todate, discount
             FROM pos_mproductdiscountgrosir_new
-            WHERE sku = :sku AND isactived = '1'
+            WHERE sku = :sku 
+            AND isactived = '1'
             AND CURRENT_DATE BETWEEN fromdate AND todate
         ";
+
         $stmtGrosir = $connec->prepare($sqlGrosir);
         $stmtGrosir->bindParam(':sku', $sku);
         $stmtGrosir->execute();
+
         $promoGrosir = $stmtGrosir->fetchAll(PDO::FETCH_ASSOC);
+
         foreach ($promoGrosir as $p) {
+
             $promo_headers[] = [
-                'type' => 'Grosir',
-                'discountname' => $p['discountname'],
-                'jenis_promo' => $p['jenis_promo'],
+                'type' => 'GROSIR',
+                'discountname' => upperText($p['discountname']),
+                'jenis_promo' => upperText($p['jenis_promo']),
                 'regular_price' => $regularPrice,
                 'after_discount' => $regularPrice - $p['discount'],
                 'fromdate' => $p['fromdate'],
@@ -137,9 +198,14 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             ];
         }
 
-        // --- Lanjut struktur lama ---
+
+        // =====================================================
+        // RESPONSE
+        // =====================================================
         if ($discount) {
+
             $discountedPrice = $regularPrice - $discount['discount'];
+
             $response = [
                 'sku' => $sku,
                 'name' => $name,
@@ -148,9 +214,11 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'discounted_price' => $discountedPrice,
                 'valid_from' => $discount['fromdate'],
                 'valid_to' => $discount['todate'],
-                'promo_headers' => $promo_headers // ✅ tambahan
+                'promo_headers' => $promo_headers
             ];
+
         } else {
+
             $response = [
                 'sku' => $sku,
                 'name' => $name,
@@ -159,49 +227,82 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'discounted_price' => null,
                 'valid_from' => null,
                 'valid_to' => null,
-                'promo_headers' => $promo_headers // ✅ tetap muncul meski kosong
+                'promo_headers' => $promo_headers
             ];
         }
 
 
-
-        //save ke $cmd_price_audit = [
-// 	'CREATE TABLE IF NOT EXISTS price_audit (
-// 		price_audit_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
-// 		sku varchar(50),
-// 		price numeric,
-// 		discount numeric,
-// 		insertdate timestamp,
-// 		id_location varchar(10)
-// 	);'
-// ]; tp jgn error klo table ga ada
-
+        // =====================================================
+        // SAVE PRICE AUDIT
+        // =====================================================
         $insertAudit = "
-            INSERT INTO price_audit (sku, price, discount, insertdate, id_location,scanfrom)
-            VALUES (:sku, :price, :discount, NOW(), :id_location, :scanfrom)
+            INSERT INTO price_audit 
+            (
+                sku,
+                price,
+                discount,
+                insertdate,
+                id_location,
+                scanfrom
+            )
+            VALUES 
+            (
+                :sku,
+                :price,
+                :discount,
+                NOW(),
+                :id_location,
+                :scanfrom
+            )
         ";
+
         $scanfrom = 'price_checker';
-        $stmtAudit = $connec->prepare($insertAudit);
-        // $id_location = isset($_GET['location']) ? $_GET['location'] : 'DEFAULT';
-        $stmtAudit->bindParam(':sku', $sku);
-        $stmtAudit->bindParam(':price', $regularPrice);
-        $discountValue = $discount ? $discount['discount'] : 0;
-        $stmtAudit->bindParam(':discount', $discountValue);
-        $stmtAudit->bindParam(':id_location', $id_location);
-        $stmtAudit->bindParam(':scanfrom', $scanfrom);
-        $stmtAudit->execute();
+
+        try {
+
+            $stmtAudit = $connec->prepare($insertAudit);
+
+            $stmtAudit->bindParam(':sku', $sku);
+            $stmtAudit->bindParam(':price', $regularPrice);
+
+            $discountValue = $discount
+                ? $discount['discount']
+                : 0;
+
+            $stmtAudit->bindParam(':discount', $discountValue);
+            $stmtAudit->bindParam(':id_location', $id_location);
+            $stmtAudit->bindParam(':scanfrom', $scanfrom);
+
+            $stmtAudit->execute();
+
+        } catch (PDOException $e) {
+
+            // Jangan sampai audit gagal membuat API utama error.
+            // Response product tetap dikirim.
+        }
 
 
-
-        echo json_encode($response, JSON_PRETTY_PRINT);
-
-
+        // =====================================================
+        // OUTPUT JSON
+        // =====================================================
+        echo json_encode(
+            $response,
+            JSON_PRETTY_PRINT |
+            JSON_UNESCAPED_UNICODE
+        );
 
     } else {
-        echo json_encode(['error' => 'Product not found']);
+
+        echo json_encode([
+            'error' => 'PRODUCT NOT FOUND'
+        ]);
     }
 
 } else {
-    echo json_encode(['error' => 'SKU or Barcode parameter is required']);
+
+    echo json_encode([
+        'error' => 'SKU OR BARCODE PARAMETER IS REQUIRED'
+    ]);
 }
+
 ?>

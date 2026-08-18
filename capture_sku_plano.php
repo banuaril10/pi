@@ -368,9 +368,6 @@ if(is_array($arr_all)){
 							
 						</tr>
 						
-						
-						
-						
 					<?php $no++;} 
 					
 					} else {
@@ -502,7 +499,6 @@ function syncMaster(){
 }
 
 function getType(){
-	
 
 	var type = "";
 	$.ajax({
