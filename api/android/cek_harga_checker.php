@@ -22,7 +22,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
     // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku/barcode/barcode1-4
     $sqlPrice = "
-        SELECT price, sku, name 
+        SELECT price, sku, UPPER(name) AS name 
         FROM pos_mproduct 
         WHERE isactived = '1'
         AND (
