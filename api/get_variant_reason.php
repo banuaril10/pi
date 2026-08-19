@@ -6,7 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 $data = [
     [
         "id" => 1,
-        "name" => "Telat Settlement"
+        "name" => "Transaksi Gagal"
     ],
     [
         "id" => 2,
@@ -18,19 +18,43 @@ $data = [
     ],
     [
         "id" => 4,
-        "name" => "Proses Investigasi"
+        "name" => "Transaksi Reversal"
     ],
     [
         "id" => 5,
-        "name" => "Tidak Keluar Struk, Saldo Customer Terdebet Double"
+        "name" => "Selisih Pembulatan"
     ],
     [
         "id" => 6,
-        "name" => "Salah Metode Transaksi Non Cash ke Cash"
+        "name" => "Salah Nominal di EDC"
     ],
     [
         "id" => 7,
-        "name" => "Trouble Jaringan"
+        "name" => "Double Transaksi EDC"
+    ],
+    [
+        "id" => 8,
+        "name" => "Double Transaksi POS"
+    ],
+    [
+        "id" => 9,
+        "name" => "Gangguan EDC / Payment"
+    ],
+    [
+        "id" => 10,
+        "name" => "Lainnya – Proses Validasi"
+    ],
+    [
+        "id" => 11,
+        "name" => "Salah Metode Pembayaran antar EDC"
+    ],
+    [
+        "id" => 12,
+        "name" => "Tidak keluar struk EDC Saldo CS Terdebit"
+    ],
+    [
+        "id" => 13,
+        "name" => "Salah Metode Pembayaran Non Cash_Cash"
     ]
 ];
 
