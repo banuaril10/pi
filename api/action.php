@@ -153,8 +153,6 @@ if ($_GET['modul'] == 'inventory') {
 		$ss = '0';
 	}
 
-
-
 	if($_GET['act'] == 'cek_spv_password'){
 
 		$spv_user_key = $_POST['spv_user_key'];
@@ -464,7 +462,7 @@ if ($_GET['modul'] == 'inventory') {
 
 		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 
-			$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='" . $namakat . "' and status != '5' and date(insertdate) = date(now())";
+			$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='" . $namakat . "' and status not in ('5','4') and date(insertdate) = date(now())";
 			$cr = $connec->query($cekrak);
 			foreach ($cr as $ra) {
 				$countrak = $ra['jum'];
@@ -630,6 +628,137 @@ if ($_GET['modul'] == 'inventory') {
 					$no = 0;
 					$items = array();
 					$hasil = get_data_cat_get_cyber($base_url, $sub, $rack, $org_key, $kode_toko, "Negatif Inventory");
+					$total = 0;
+
+					$j_hasil = json_decode($hasil, true);
+
+					foreach ($j_hasil as $r) {
+						$qtyon = $r['qtyon'];
+						$price = $r['price'];
+						$pricebuy = $r['pricebuy'];
+						$qtyout = $r['qtyout'];
+						$mpi = $r['mpi'];
+						$sku = $r['sku'];
+						$namaitem = $r['namaitem'];
+						$barcode = $r['barcode'];
+
+						$sql_sales = "select case when sum(qty) is null THEN '0' ELSE sum(qty) END as qtysales from pos_dsalesline 
+						where date(insertdate)=date(now()) and sku='" . $r['sku'] . "'";
+
+						$rsa = $connec->query($sql_sales);
+						$qtysales = 0;
+						foreach ($rsa as $rsa1) {
+
+							$qtysales = $rsa1['qtysales'];
+						}
+
+						$cek_count = "select qtycount from m_piline where sku = '" . $r['sku'] . "' and date(insertdate)=date(now())"; //mencari apakah items sdh ada di rack piline
+						$rsac = $connec->query($cek_count);
+						$ccc = $rsac->rowCount();
+
+						if ($ccc > 0) {
+							foreach ($rsac as $rrr) {
+
+								$qtycount = $rrr['qtycount'];
+							}
+
+						} else {
+							$qtycount = 0;
+
+						}
+
+						$statement1 = $connec->query("insert into m_piline (m_pi_key, ad_org_id, isactived, insertdate, insertby, postdate, m_storage_id, m_product_id, sku, qtyerp, qtycount, qtysales, price, status, qtysalesout, status1, barcode, hargabeli) 
+						VALUES ('" . $lastid . "','" . $org_key . "','1','" . date('Y-m-d H:i:s') . "','" . $username . "', '" . date('Y-m-d H:i:s') . "', '" . $sl . "','" . $mpi . "', 
+						'" . $sku . "', '" . $qtyon . "', '" . $qtycount . "', '" . $qtysales . "','" . $price . "', '1', '" . $qtyout . "','1', '" . $barcode . "','" . $pricebuy . "')");
+
+						if ($statement1) {
+
+							$connec->query("update pos_mproduct set isactived = 0 where sku = '" . $sku . "'");
+							$no = $no + 1;
+							if ($no == $count) {
+								$json = array('result' => '1');
+
+							} else {
+
+								$json = array('result' => '2');
+							}
+						}
+
+						$total = $total + 1;
+					}
+
+					if ($total == 0) {
+						$json = array('result' => '0', 'msg' => 'Items tidak ditemukan');
+					}
+
+
+				} else {
+
+					$json = array('result' => '0', 'msg' => 'Gagal, coba lagi nanti');
+				}
+
+
+			}
+
+
+		} else {
+
+			$json = array('result' => '3', 'msg' => 'Session telah habis, reload halaman dulu');
+		}
+
+		$json_string = json_encode($json);
+		echo $json_string;
+
+
+	}else if ($_GET['act'] == 'input_schedule_ic_peritems') {
+
+
+		// $ceknamakat = "select * from in_master_categorysub where catsub_id = '" . $sub . "'";
+		// $cnk = $connec->query($ceknamakat);
+		// foreach ($cnk as $ras) {
+		// 	$namakat = $ras['subcategory'];
+		// }
+
+		$namakat = 'ITEMS-SCHEDULE';
+
+
+		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+
+			$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='" . $namakat . "' and status not in ('5','4') and date(insertdate) = date(now())";
+			$cr = $connec->query($cekrak);
+			foreach ($cr as $ra) {
+				$countrak = $ra['jum'];
+			}
+
+			if ($countrak > 0) {
+				$json = array('result' => '0', 'msg' => 'Sub Category sudah ada');
+
+			} else {
+
+				$statement = $connec->query("insert into m_pi (
+				ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
+				movementdate, approvedby, status, rack_name, postby, postdate, category
+				) VALUES ('','" . $org_key . "','1','" . date('Y-m-d H:i:s') . "','" . $username . "', '" . $sl . "', '" . $it . "','" . $kode_toko . "-" . date('YmdHis') . "','PI-" . $namakat . "', 
+				'" . date('Y-m-d H:i:s') . "','user spv','1','" . $namakat . "','" . $username . "','" . date('Y-m-d H:i:s') . "', '2') RETURNING m_pi_key");
+
+
+
+				if ($statement) {
+
+					foreach ($statement as $rr) {
+
+						$lastid = $rr['m_pi_key'];
+						// $lastid = '12322';
+						if ($insertfrom == 'M') {
+							$connec->query("update m_pi set insertfrommobile = 'Y' where m_pi_key = '" . $lastid . "'");
+						} else if ($insertfrom == 'W') {
+							$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '" . $lastid . "'");
+						}
+					}
+
+					$no = 0;
+					$items = array();
+					$hasil = get_data_cat_get_cyber($base_url, $sub, $rack, $org_key, $kode_toko, "ITEMS-SCHEDULE");
 					$total = 0;
 
 					$j_hasil = json_decode($hasil, true);
@@ -1032,8 +1161,8 @@ if ($_GET['modul'] == 'inventory') {
 					$hasil = get_data_cat_get_cyber($base_url, $pc, $sku, $org_key, $kode_toko, "Items");
 					// print_r($hasil);
 					//count array
-
-					if ($hasil == '[]') {
+					
+					if($hasil == '[]'){
 						$json = array('result' => '0', 'msg' => 'Items ini belum diinput stock nya');
 						$json_string = json_encode($json);
 						echo $json_string;
@@ -1548,10 +1677,7 @@ if ($_GET['modul'] == 'inventory') {
 		echo $json_string;
 	} else if ($_GET['act'] == 'updateverifikasi') {
 
-
-
-
-				$sku = $_POST['sku'];
+		$sku = $_POST['sku'];
 		$qtyon = $_POST['quan'];
 		$nama = $_POST['nama'];
 		$mpi = $_GET['mpi'];
@@ -1850,16 +1976,16 @@ if ($_GET['modul'] == 'inventory') {
 
 		// foreach ($connec->query($getinv) as $gi) {
 		// 	$sku = $gi['sku'];
-		// 	if ($gi['sku'] != '') {
-		// 		$get_barcode = "select sku from pos_mproduct where barcode = '" . $gi['sku'] . "'";
+		// 	if($gi['sku'] != ''){
+		// 		$get_barcode = "select sku from pos_mproduct where barcode = '".$gi['sku']."'";
 		// 		$gb = $connec->query($get_barcode);
-
-		// 		foreach ($gb as $rrr) {
+			
+		// 		foreach($gb as $rrr){
 		// 			$sku = $rrr['sku'];
 		// 		}
 		// 	}
-
-
+			
+			
 
 		// 	$cekqty = "select qtycount from m_piline where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate) = date(now())";
 		// 	$result = $connec->query($cekqty);
@@ -1893,6 +2019,9 @@ if ($_GET['modul'] == 'inventory') {
 		// $json = array('result' => '1', 'msg' => 'Berhasil proses ' . $no . ' dari ' . $concon . '');
 		// $json_string = json_encode($json);
 		// echo $json_string;
+
+
+
 
 
 		$filename = $_POST['filename'];
@@ -1971,6 +2100,10 @@ if ($_GET['modul'] == 'inventory') {
 		$json = array('result' => '1', 'msg' => 'Berhasil proses ' . $no . ' dari ' . $concon . '');
 		$json_string = json_encode($json);
 		echo $json_string;
+
+
+
+
 
 
 
@@ -2196,7 +2329,66 @@ if ($_GET['modul'] == 'inventory') {
 
 		$json_string = json_encode($jj);
 		echo $json_string;
-	} else if ($_GET['act'] == 'cek_session') {
+	} else if ($_GET['act'] == 'cetak_generic_all') {
+		$mpi = $_POST['mpi'];
+		$sort = $_POST['sort'];
+		$show = $_POST['show'];
+		$jj = array();
+
+
+
+		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, 
+		m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		where m_pi.m_pi_key = '" . $mpi . "' and m_pi.status = '2'  ";
+
+		if ($show != '1') {
+			if ($show == '2') {
+
+				$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) < 0";
+			}
+
+			if ($show == '3') {
+
+				$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) > 0";
+			}
+
+		} else {
+			$list_line .= " and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) != 0";
+		}
+
+		// $list_line .= " order by variant asc";
+
+		if ($sort == '1') {
+
+			$list_line .= " order by pos_mproduct.name asc";
+		} else if ($sort == '3') {
+
+			$list_line .= " order by m_piline.sku asc";
+		} else {
+
+			$list_line .= " order by variant asc";
+		}
+
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {
+			$variant = $row1['variant'];
+			$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
+
+
+			$jj[] = array(
+				"sku" => $row1['sku'],
+				"barcode" => $row1['barcode'],
+				"name" => $row1['name'],
+				"qtyvariant" => $variant,
+				"qtycount" => $row1['qtycount'],
+				"qtysales" => $row1['qtysales']
+			);
+		}
+
+
+		$json_string = json_encode($jj);
+		echo $json_string;
+	}else if ($_GET['act'] == 'cek_session') {
 
 		if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 
@@ -4366,32 +4558,32 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 	}
 
 } else if ($_GET['modul'] == 'cashier') {
-	if ($_GET['act'] == 'reset_user') {
-		if (isset($_POST['pos_mcashier_key'])) {
+	if($_GET['act'] == 'reset_user') {
+		if(isset($_POST['pos_mcashier_key'])) {
 			$key = $_POST['pos_mcashier_key'];
 			$sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE pos_mcashier_key = '$key'";
-			if ($connec->query($sql)) {
+			if($connec->query($sql)) {
 				echo json_encode(array('result' => '1', 'msg' => 'Success'));
 			} else {
 				echo json_encode(array('result' => '0', 'msg' => 'Error: ' . $connec->error));
 			}
 		}
-	} else if ($_GET['act'] == 'reset_user_batch') {
-		if (isset($_POST['cashier_keys'])) {
+	} else if($_GET['act'] == 'reset_user_batch') {
+		if(isset($_POST['cashier_keys'])) {
 			$keys = json_decode($_POST['cashier_keys']);
 			$count = 0;
-			foreach ($keys as $key) {
+			foreach($keys as $key) {
 				$safe_key = $connec->real_escape_string($key);
 				$sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE pos_mcashier_key = '$safe_key'";
-				if ($connec->query($sql)) {
+				if($connec->query($sql)) {
 					$count++;
 				}
 			}
 			echo json_encode(array('result' => '1', 'count' => $count, 'msg' => 'Berhasil reset ' . $count . ' cashier'));
 		}
-	} else if ($_GET['act'] == 'reset_all_users') {
+	} else if($_GET['act'] == 'reset_all_users') {
 		$sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE ad_muser_key IS NOT NULL";
-		if ($connec->query($sql)) {
+		if($connec->query($sql)) {
 			$affected = $connec->affected_rows;
 			echo json_encode(array('result' => '1', 'count' => $affected, 'msg' => 'Berhasil reset semua cashier'));
 		} else {
@@ -4399,5 +4591,48 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		}
 	}
 }
+
+
+// Di dalam file api/action.php, tambahkan case untuk modul cashier
+// case 'cashier':
+//     switch($act) {
+//         case 'reset_user':
+//             if(isset($_POST['pos_mcashier_key'])) {
+//                 $key = $_POST['pos_mcashier_key'];
+//                 $sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE pos_mcashier_key = '$key'";
+//                 if($connec->query($sql)) {
+//                     echo json_encode(array('result' => '1', 'msg' => 'Success'));
+//                 } else {
+//                     echo json_encode(array('result' => '0', 'msg' => 'Error: ' . $connec->error));
+//                 }
+//             }
+//             break;
+            
+//         case 'reset_user_batch':
+//             if(isset($_POST['cashier_keys'])) {
+//                 $keys = json_decode($_POST['cashier_keys']);
+//                 $count = 0;
+//                 foreach($keys as $key) {
+//                     $safe_key = $connec->real_escape_string($key);
+//                     $sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE pos_mcashier_key = '$safe_key'";
+//                     if($connec->query($sql)) {
+//                         $count++;
+//                     }
+//                 }
+//                 echo json_encode(array('result' => '1', 'count' => $count, 'msg' => 'Berhasil reset ' . $count . ' cashier'));
+//             }
+//             break;
+            
+//         case 'reset_all_users':
+//             $sql = "UPDATE pos_mcashier SET ad_muser_key = NULL WHERE ad_muser_key IS NOT NULL";
+//             if($connec->query($sql)) {
+//                 $affected = $connec->affected_rows;
+//                 echo json_encode(array('result' => '1', 'count' => $affected, 'msg' => 'Berhasil reset semua cashier'));
+//             } else {
+//                 echo json_encode(array('result' => '0', 'msg' => 'Error: ' . $connec->error));
+//             }
+//             break;
+//     }
+//     break;
 
 ?>
