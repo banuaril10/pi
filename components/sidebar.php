@@ -116,7 +116,10 @@
 							<a href="importer.php">Importer</a>
 						</li>
 						<li class="submenu-item ">
-							<a href="jadwal_pi.php">Jadwal PI</a>
+							<a href="jadwal_pi.php">Jadwal PI Per Sub</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="schedule_pi_sku.php">Jadwal PI Per Items</a>
 						</li>
 					</ul>
 				</li>
