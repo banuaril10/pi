@@ -313,7 +313,8 @@
 				
 				<option value="2">Rack</option>
 				<option value="3">Items</option>
-				<option value="4">Sesuai Schedule IC</option>
+				<option value="4">Sesuai Schedule IC (Per Sub Category)</option>
+				
 				
 				<?php
 					// CEK APAKAH SEKARANG ADALAH 3 HARI TERAKHIR BULAN
@@ -327,6 +328,8 @@
 					<?php
 					}
 				?>
+
+				<option value="6">Sesuai Schedule IC (Per Items)</option>
 			</select>
 		<div id="pc" style="display: none">
 			<select name="pc" id="pc"class="selectize" >
@@ -517,6 +520,11 @@ function selectKat(){
 		 $("#pc").hide();
 		 $("#rack").hide();
 		$("#sub").show();
+	}else if(kat == '6'){
+		
+		 $("#pc").hide();
+		 $("#rack").hide();
+		$("#sub").hide();
 	}
 }
 
@@ -1003,6 +1011,53 @@ $('#butsave').on('click', function() {
 										location.reload();
 									}else if(dataResult.result=='1'){
 										$('#notif').html("<font style='color: green'>Berhasil input dengan PI Negatif Inventory!</font>");
+										$("#overlay").fadeOut(300);
+										location.reload();
+										$( "#butsave" ).prop( "disabled", false );
+									}
+									else {
+										$('#notif').html(dataResult.msg);
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									}
+									
+								}else{
+									
+										$('#notif').html("Items tidak ditemukan");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									
+								}
+								
+						}
+					});
+			}else if(kat == '6'){
+				$.ajax({
+						url: "api/action.php?modul=inventory&act=input_schedule_ic_peritems",
+						type: "POST",
+						data : formData,
+						processData: false,
+						contentType: false,
+						beforeSend: function(){
+							$('#notif').html("Proses input header dan line..");
+							$("#overlay").fadeIn(300);
+							$(".modal").modal('hide');
+						},
+						success: function(dataResult){
+							console.log(dataResult);
+							
+							
+							// if (!$.trim(dataResult)){   
+								
+								if(dataResult){
+									var dataResult = JSON.parse(dataResult);
+									if(dataResult.result=='2'){
+										$('#notif').html("Proses input ke inventory line");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+										location.reload();
+									}else if(dataResult.result=='1'){
+										$('#notif').html("<font style='color: green'>Berhasil input dengan PI Schedule IC Per Items!</font>");
 										$("#overlay").fadeOut(300);
 										location.reload();
 										$( "#butsave" ).prop( "disabled", false );
