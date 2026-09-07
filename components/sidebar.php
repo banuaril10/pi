@@ -74,6 +74,9 @@
 							<a href="capture_sku_plano.php">Planogram</a>
 						</li>
 						<li class="submenu-item ">
+							<a href="layout_planogram.php">Layout Planogram</a>
+						</li>
+						<li class="submenu-item ">
 							<a href="capture_sku_plano_approved.php">Planogram Approved</a>
 						</li>
 						<li class="submenu-item ">
