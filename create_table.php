@@ -1583,8 +1583,46 @@ foreach ($cmd_alter_pos_dshopsales_variant_reason_status_intransit as $r) {
 	$connec->exec($r);
 }
 
+// CREATE TABLE public.pos_transaksi_limit (
+// 	pos_transaksi_limit_key uuid DEFAULT uuid_generate_v4() NOT NULL,
+// 	ad_org_id varchar(50) NULL,
+// 	headername varchar(30) NULL,
+// 	insertdate timestamp NULL,
+// 	insertby varchar(50) NULL,
+// 	sku varchar(100) NULL,
+// 	max_per_struk int4 NULL,
+// 	fromdate date NULL,
+// 	todate date NULL,
+// 	CONSTRAINT pos_transaksi_limit_pkey PRIMARY KEY (pos_transaksi_limit_key)
+// );
 
+// CREATE INDEX pos_transaksi_limit_ad_org_id_idx ON public.pos_transaksi_limit USING btree (ad_org_id);
+// CREATE INDEX pos_transaksi_limit_fromdate_idx ON public.pos_transaksi_limit USING btree (fromdate);
+// CREATE INDEX pos_transaksi_limit_sku_idx ON public.pos_transaksi_limit USING btree (sku);
+// CREATE INDEX pos_transaksi_limit_todate_idx ON public.pos_transaksi_limit USING btree (todate);
 
+$create_pos_transaksi_limit = [
+	'CREATE TABLE IF NOT EXISTS pos_transaksi_limit (
+		pos_transaksi_limit_key uuid DEFAULT uuid_generate_v4() NOT NULL,
+		ad_org_id varchar(50) NULL,
+		headername varchar(30) NULL,
+		insertdate timestamp NULL,
+		insertby varchar(50) NULL,
+		sku varchar(100) NULL,
+		max_per_struk int4 NULL,
+		fromdate date NULL,
+		todate date NULL,
+		CONSTRAINT pos_transaksi_limit_pkey PRIMARY KEY (pos_transaksi_limit_key)
+	);',
+	'CREATE INDEX IF NOT EXISTS pos_transaksi_limit_ad_org_id_idx ON pos_transaksi_limit (ad_org_id);',
+	'CREATE INDEX IF NOT EXISTS pos_transaksi_limit_fromdate_idx ON pos_transaksi_limit (fromdate);',
+	'CREATE INDEX IF NOT EXISTS pos_transaksi_limit_sku_idx ON pos_transaksi_limit (sku);',
+	'CREATE INDEX IF NOT EXISTS pos_transaksi_limit_todate_idx ON pos_transaksi_limit (todate);'
+];
+
+foreach ($create_pos_transaksi_limit as $r) {
+	$connec->exec($r);
+}
 
 
 
