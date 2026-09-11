@@ -51,14 +51,14 @@ if ($tanggal != "now") {
                     INNER JOIN pos_dshopsales ds ON ds.pos_dshopsales_key = n.pos_dshopsales_key
                     WHERE DATE(ds.salesdate) = '" . $tanggal . "' 
                       AND n.isactived = '1'
-                      AND ds.status_intransit IS NULL
+                      AND n.status_intransit IS NULL
                       AND n.ad_morg_key IS NOT NULL";
 } else {
     $list_header = "SELECT n.* 
                     FROM pos_dshopsalesnoncash n
                     INNER JOIN pos_dshopsales ds ON ds.pos_dshopsales_key = n.pos_dshopsales_key
                     WHERE n.isactived = '1'
-                      AND ds.status_intransit IS NULL
+                      AND n.status_intransit IS NULL
                       AND DATE(ds.salesdate) = DATE(NOW())
                       AND n.ad_morg_key IS NOT NULL";
 }
