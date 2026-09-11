@@ -1627,7 +1627,14 @@ foreach ($create_pos_transaksi_limit as $r) {
 
 
 
+$cmd_alter_pos_dshopsalesnoncash_status_intransit = [
+	'ALTER TABLE pos_dshopsalesnoncash 
+	ADD COLUMN IF NOT EXISTS status_intransit varchar(2) NULL;'
+];
 
+foreach ($cmd_alter_pos_dshopsalesnoncash_status_intransit as $r) {
+	$connec->exec($r);
+}
 
 
 
