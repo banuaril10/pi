@@ -22,12 +22,35 @@ foreach ($statement as $r) {
         $selisih = $r_line['selisih'];
     }
 
+    // Tentukan status berdasarkan nilai
+    // Ganti $r['status'] dengan nama field yang sesuai di tabel m_pi
+    switch ($r['status']) {
+        case '1':
+            $status = '<span style="color:gray;">Counting</span>';
+            break;
+        case '2':
+            $status = '<span style="color:orange;">Verifikasi</span>';
+            break;
+        case '3':
+            $status = '<span style="color:blue;">Release</span>';
+            break;
+        case '4':
+            $status = '<span style="color:green;">Completed</span>';
+            break;
+        case '5':
+            $status = '<span style="color:red;">Cancel</span>'; // sesuaikan labelnya
+            break;
+        default:
+            $status = '<span style="color:black;">-</span>';
+            break;
+    }
+
     $json[] = array(
         "no" => $no,
         "tanggal" => $r['insertdate'],
         "pi_mode" => $r['inventorytype'],
         "description" => $r['description'],
-        "no_doc_pi" => $r['name'],
+        "no_doc_pi" => $r['name'].'<br>'.$status,
         "sistem" => rupiah_pos($sistem),
         "fisik" => rupiah_pos($fisik),
         "selisih" => rupiah_pos($selisih),
