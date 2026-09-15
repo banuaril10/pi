@@ -199,6 +199,57 @@ if (!empty($jj_possettlement)) {
 
 
 
+// ============================================================
+// SYNC POS_DSHOPSALESNONCASH
+// ============================================================
+$jj_header = array();
+
+if ($tanggal != "now") {
+    $list_header = "select * from pos_dshopsalesnoncash 
+                    where status_intransit is null 
+                    and date(insertdate) = '" . $tanggal . "'";
+} else {
+    $list_header = "select * from pos_dshopsalesnoncash 
+                    where status_intransit is null 
+                    and date(insertdate) = date(now())";
+}
+
+foreach ($connec->query($list_header) as $row1) {
+    $jj_header[] = array(
+        "pos_dshopsalesnoncash_key" => $row1['pos_dshopsalesnoncash_key'],
+        "ad_mclient_key"            => $row1['ad_mclient_key'],
+        "ad_morg_key"               => $row1['ad_morg_key'],
+        "isactived"                 => $row1['isactived'],
+        "insertdate"                => $row1['insertdate'],
+        "insertby"                  => $row1['insertby'],
+        "postby"                    => $row1['postby'],
+        "postdate"                  => $row1['postdate'],
+        "pos_dshopsales_key"        => $row1['pos_dshopsales_key'],
+        "pos_medc_key"              => $row1['pos_medc_key'],
+        "salesdate"                 => $row1['salesdate'],
+        "paymentmethodname"         => $row1['paymentmethodname'],
+        "valueamount"               => $row1['valueamount'],
+        "pointamount"               => $row1['pointamount'],
+        "voucheramount"             => $row1['voucheramount'],
+        "status_intransit"          => $row1['status_intransit']
+    );
+}
+
+if (!empty($jj_header)) {
+    $url = $base_url . "/sales_order/sync_shopsalesnoncash_api.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
+    $array_header = array("header" => $jj_header);
+    $array_header_json = json_encode($array_header);
+    $hasil_header = push_to_api($url, $array_header_json, $idstore);
+
+    $j_hasil_header = json_decode($hasil_header, true);
+
+    if (!empty($j_hasil_header)) {
+        foreach ($j_hasil_header as $r) {
+            $statement1 = $connec->query("update pos_dshopsalesnoncash set status_intransit = '1' 
+                where pos_dshopsalesnoncash_key = '" . $r . "'");
+        }
+    }
+}
 
 
 

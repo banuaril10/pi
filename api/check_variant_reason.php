@@ -99,6 +99,49 @@ $result = [];
 foreach ($rows as $row) {
 
     $totalVariant = (float)$row['total_variant'];
+    $salesDate = $row['salesdate'];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDASI KHUSUS KEMARIN
+    |--------------------------------------------------------------------------
+    |
+    | Kalau transaksi adalah KEMARIN dan belum ada SATU PUN data
+    | di pos_settlement, jangan dianggap sebagai variant.
+    |
+    | Ini untuk kondisi saat fitur pertama kali dijalankan,
+    | dimana data settlement kemarin memang belum masuk sama sekali.
+    |
+    */
+
+    if ($salesDate == date('Y-m-d', strtotime('-1 day'))) {
+
+        $stmtSettlement = $connec->prepare("
+            SELECT 1
+            FROM pos_settlement
+            WHERE pos_dshopsales_key = :pos_dshopsales_key
+            LIMIT 1
+        ");
+
+        $stmtSettlement->execute([
+            ':pos_dshopsales_key' =>
+                $row['pos_dshopsales_key']
+        ]);
+
+        $hasSettlement = $stmtSettlement->fetchColumn();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | KEMARIN + BELUM ADA DATA SETTLEMENT SAMA SEKALI → SKIP
+        |--------------------------------------------------------------------------
+        */
+
+        if (!$hasSettlement) {
+            continue;
+        }
+    }
 
 
     /*
