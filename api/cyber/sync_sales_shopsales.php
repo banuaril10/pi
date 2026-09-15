@@ -86,7 +86,11 @@ foreach ($connec->query($list_posdshopsales) as $row5) {
         "ppobamount" => $row5['ppobamount'],
         "ppobcashamount" => $row5['ppobcashamount'],
         "ppobdebitamount" => $row5['ppobdebitamount'],
-        "ppobcreditamount" => $row5['ppobcreditamount']
+        "ppobcreditamount" => $row5['ppobcreditamount'],
+        "vouchercashamount" => $row5['vouchercashamount'],
+        "voucherdebitamount" => $row5['voucherdebitamount'],
+        "vouchercreditamount" => $row5['vouchercreditamount'],
+        "voucheramount" => $row5['voucheramount']
     );
 }
 
