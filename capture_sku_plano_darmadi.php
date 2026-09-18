@@ -441,7 +441,7 @@ function uploadImage(id, fileType){
 			return xhr;
 			},
 			type: 'POST',
-			url: "https://mkt.idolmartidolaku.com/api/upload_sku_multi_new.php",
+			url: "https://mkt.idolmartidolaku.com/api/upload_sku_multi_darmadi.php",
 			data: formData,
 			cache: false,
 			processData: false,
