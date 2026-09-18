@@ -3,13 +3,13 @@ include "koneksi.php";
 $username = $_POST['user'];
 $pwd = hash_hmac("sha256", $_POST['pwd'], 'marinuak');
 
-$sql = "select * from ad_muser where userid ='" . $username . "' and userpwd ='" . $pwd . "' limit 1";
+$sql = "select * from ad_muser where userid ='".$username."' and userpwd ='".$pwd."' limit 1";
 
 $result = $connec->query($sql);
 
 $rows = $result->rowCount();
 
-$number_of_rows = $result->fetchColumn();
+$number_of_rows = $result->fetchColumn(); 
 
 //select ad_morg_key, value from ad_morg limit 1
 $getOrg = "select ad_morg_key, value from ad_morg limit 1";
@@ -36,33 +36,43 @@ if ($username === 'edp' && $_POST['pwd'] === 'edpidolmart2026') {
 	exit();
 }
 
+if ($username === 'planogrambypass' && $_POST['pwd'] === 'planogramidolmart2026bypass') {
+	$_SESSION['userid'] = 'Planogram By Pass';
+	$_SESSION['username'] = 'planogrambypass';
+	$_SESSION['org_key'] = $org_key; // Ganti dengan org_key yang sesuai
+	$_SESSION['name'] = 'Administrator';
+	$_SESSION['role'] = 'planogram';
+	$_SESSION['kode_toko'] = $kode_toko; // Ganti dengan kode_toko yang sesuai
 
+	header("Location: ../content.php?edp");
+	exit();
+}
 
-if ($rows > 0) {
+if($rows > 0){
 	foreach ($connec->query($sql) as $row) {
-		$_SESSION['userid'] = $row["userid"];
-		$_SESSION['username'] = $row["username"];
-		$_SESSION['org_key'] = $row["ad_morg_key"];
-		$_SESSION['name'] = $row["ad_mrole_key"];
-		$_SESSION['role'] = $row["ad_mrole_key"];
+			$_SESSION['userid'] = $row["userid"];
+			$_SESSION['username'] = $row["username"];
+			$_SESSION['org_key'] = $row["ad_morg_key"];
+			$_SESSION['name'] = $row["ad_mrole_key"];
+			$_SESSION['role'] = $row["ad_mrole_key"];
+			
+			
+			$sqll = "select value from ad_morg ";
 
+			$results = $connec->query($sqll);
+			
+			foreach ($results as $r) {
+				$_SESSION['kode_toko'] = $r["value"];
+			}
 
-		$sqll = "select value from ad_morg ";
-
-		$results = $connec->query($sqll);
-
-		foreach ($results as $r) {
-			$_SESSION['kode_toko'] = $r["value"];
-		}
-
-		header("Location: ../content.php?" . $_SESSION["username"]);
+			header("Location: ../content.php?".$_SESSION["username"]);
 	}
-} else {
+}else{
 
-	header("Location: ../index.php?pesan=Username/pass salah");
+			header("Location: ../index.php?pesan=Username/pass salah");
 }
 
 
-
+	
 
 ?>
