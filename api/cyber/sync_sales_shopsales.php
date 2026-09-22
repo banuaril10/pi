@@ -49,6 +49,18 @@ if ($tanggal != "now") {
     $list_posdshopsales = "select * from pos_dshopsales where status_intransit is null and date(insertdate) = date(now())";
 }
 
+        // ALTER TABLE public.pos_dshopsales ADD vouchercashamount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN vouchercashamount SET STORAGE MAIN;
+
+        // ALTER TABLE public.pos_dshopsales ADD voucherdebitamount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN voucherdebitamount SET STORAGE MAIN;
+
+        // ALTER TABLE public.pos_dshopsales ADD vouchercreditamount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN vouchercreditamount SET STORAGE MAIN;
+
+        // ALTER TABLE public.pos_dshopsales ADD voucheramount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN voucheramount SET STORAGE MAIN;
+
 foreach ($connec->query($list_posdshopsales) as $row5) {
     $jj_posdshopsales[] = array(
         "pos_dshopsales_key" => $row5['pos_dshopsales_key'],
@@ -128,7 +140,16 @@ if ($tanggal != "now") {
         WHERE DATE(pds.insertdate) = '".$tanggal."'
         AND ps.status_intransit = '0'
     ";
-} else {
+} else if ($tanggal == "all") {
+    $list_possettlement = "
+        SELECT ps.*
+        FROM pos_settlement ps
+        INNER JOIN pos_dshopsales pds
+            ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
+        WHERE pds.status_intransit IS NULL
+        AND ps.status_intransit = '0'
+    ";
+}else {
     $list_possettlement = "
         SELECT ps.*
         FROM pos_settlement ps
@@ -198,8 +219,6 @@ if (!empty($jj_possettlement)) {
         }
     }
 }
-
-
 
 
 
