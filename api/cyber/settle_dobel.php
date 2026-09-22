@@ -14,6 +14,9 @@ try {
 
     $connec->beginTransaction();
 
+    // =====================================================
+    // TEMP TABLE DATA YANG DIPERTAHANKAN
+    // =====================================================
     $connec->exec("DROP TABLE IF EXISTS tmp_keep");
 
     $connec->exec("
@@ -23,7 +26,12 @@ try {
     ");
 
     // =====================================================
-    // 1. SIMPAN DATA VALID
+    // 1. DATA VALID
+    //
+    // pos_dshopsales_key ADA di pos_dshopsales
+    //
+    // Kalau ada duplikat:
+    // simpan yang pos_settlement_key paling besar
     // =====================================================
     $connec->exec("
         INSERT INTO tmp_keep (pos_settlement_key)
@@ -37,8 +45,15 @@ try {
     ");
 
     // =====================================================
-    // 2. SIMPAN 1 ANOMALI TERBARU
-    // HANYA UNTUK pos_medc_key YANG TIDAK PUNYA DATA VALID
+    // 2. DATA ANOMALI
+    //
+    // pos_dshopsales_key TIDAK ADA di pos_dshopsales
+    //
+    // HANYA disimpan kalau pos_medc_key tersebut
+    // TIDAK PUNYA DATA VALID SAMA SEKALI
+    //
+    // Kalau semuanya anomali:
+    // simpan 1 yang paling baru
     // =====================================================
     $connec->exec("
         INSERT INTO tmp_keep (pos_settlement_key)
@@ -47,27 +62,48 @@ try {
         LEFT JOIN pos_dshopsales ds
             ON ds.pos_dshopsales_key = ps.pos_dshopsales_key
         WHERE ds.pos_dshopsales_key IS NULL
+
           AND NOT EXISTS (
-                SELECT 1
-                FROM pos_settlement ps2
-                INNER JOIN pos_dshopsales ds2
-                    ON ds2.pos_dshopsales_key = ps2.pos_dshopsales_key
-                WHERE ps2.pos_medc_key = ps.pos_medc_key
+              SELECT 1
+              FROM pos_settlement ps2
+              INNER JOIN pos_dshopsales ds2
+                  ON ds2.pos_dshopsales_key = ps2.pos_dshopsales_key
+              WHERE ps2.pos_medc_key = ps.pos_medc_key
           )
+
         GROUP BY ps.pos_medc_key
     ");
 
     // =====================================================
-    // HAPUS YANG TIDAK DIPAKAI
+    // HITUNG DULU JUMLAH YANG AKAN DIHAPUS
     // =====================================================
-    $affected = $connec->exec("
-        DELETE FROM pos_settlement
-        WHERE pos_settlement_key NOT IN (
-            SELECT pos_settlement_key
-            FROM tmp_keep
+    $stmt = $connec->query("
+        SELECT COUNT(*) AS total
+        FROM pos_settlement ps
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM tmp_keep tk
+            WHERE tk.pos_settlement_key = ps.pos_settlement_key
         )
     ");
 
+    $totalDihapus = (int) $stmt->fetchColumn();
+
+    // =====================================================
+    // DELETE
+    // =====================================================
+    $connec->exec("
+        DELETE FROM pos_settlement
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM tmp_keep tk
+            WHERE tk.pos_settlement_key = pos_settlement.pos_settlement_key
+        )
+    ");
+
+    // =====================================================
+    // CLEANUP
+    // =====================================================
     $connec->exec("DROP TABLE IF EXISTS tmp_keep");
 
     $connec->commit();
@@ -75,7 +111,7 @@ try {
     echo json_encode([
         'success' => true,
         'message' => 'Cleanup settlement berhasil',
-        'total_dihapus' => $affected
+        'total_dihapus' => $totalDihapus
     ]);
 
 } catch (Exception $e) {
