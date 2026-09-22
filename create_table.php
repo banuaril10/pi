@@ -1343,7 +1343,9 @@ $cmd_create_pos_settlement = [
 	);',
 	'CREATE INDEX IF NOT EXISTS idx_settlement_dshopsales ON pos_settlement(pos_dshopsales_key);',
 	'CREATE INDEX IF NOT EXISTS idx_settlement_medc ON pos_settlement(pos_medc_key);',
-	'ALTER TABLE pos_settlement ADD COLUMN IF NOT EXISTS pos_dshopsales_key varchar(40) NULL',
+	'ALTER TABLE pos_settlement ADD COLUMN IF NOT EXISTS pos_dshopsales_key varchar(40) NULL;',
+	//add salesdate dateonly
+	'ALTER TABLE pos_settlement ADD COLUMN IF NOT EXISTS salesdate date NULL;',
 	//add column status_intransit default 0
 	'ALTER TABLE pos_settlement ADD COLUMN IF NOT EXISTS status_intransit varchar(2) NULL DEFAULT \'0\';'
 ];
@@ -1637,6 +1639,18 @@ foreach ($cmd_alter_pos_dshopsalesnoncash_status_intransit as $r) {
 }
 
 
+// ALTER TABLE pos_settlement
+// ADD CONSTRAINT uniq_settlement
+// UNIQUE (pos_dshopsales_key, pos_medc_key);
+$cmd_alter_pos_settlement_unique = [
+	'ALTER TABLE pos_settlement 
+	ADD CONSTRAINT IF NOT EXISTS uniq_settlement
+	UNIQUE (pos_dshopsales_key, pos_medc_key);'
+];
+
+foreach ($cmd_alter_pos_settlement_unique as $r) {
+	$connec->exec($r);
+}
 
 
 
