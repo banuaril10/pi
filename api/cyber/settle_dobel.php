@@ -17,6 +17,11 @@ try {
     // SIMPAN 1 BARIS per kombinasi
     // pos_dshopsales_key + pos_medc_key
     // yang disimpan: tanggal PALING AKHIR
+    //
+    // Berlaku untuk SEMUA baris:
+    // - pos_dshopsales_key ada di pos_dshopsales → dedup
+    // - pos_dshopsales_key TIDAK ada di pos_dshopsales → dedup juga
+    //   (tetap sisain 1, tidak dihapus semua)
     // =========================================================
     $connec->exec("
         CREATE TEMPORARY TABLE tmp_keep AS
@@ -33,9 +38,6 @@ try {
         WHERE rn = 1
     ");
 
-    // =========================================================
-    // DELETE YANG TIDAK MASUK tmp_keep
-    // =========================================================
     $affected = $connec->exec("
         DELETE FROM pos_settlement
         WHERE pos_settlement_key NOT IN (
@@ -49,7 +51,7 @@ try {
 
     echo json_encode([
         'success' => true,
-        'message' => 'Delete data double berhasil',
+        'message' => 'Deduplikasi berhasil — 1 baris per pos_dshopsales_key + pos_medc_key',
         'total_dihapus' => $affected
     ]);
 
