@@ -197,8 +197,18 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
 
 
-    } else {
-        echo json_encode(['error' => 'Product not found']);
+   } else {
+        echo json_encode([
+            'found' => false,
+            'sku' => $sku_or_barcode,
+            'name' => 'PRODUK TIDAK DITEMUKAN',
+            'regular_price' => 0,
+            'discount' => 0,
+            'discounted_price' => 0,
+            'valid_from' => null,
+            'valid_to' => null,
+            'promo_headers' => []
+        ], JSON_PRETTY_PRINT);
     }
 
 } else {
