@@ -202,9 +202,9 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             'found' => false,
             'sku' => $sku_or_barcode,
             'name' => 'PRODUK TIDAK DITEMUKAN',
-            'regular_price' => '',
-            'discount' => '',
-            'discounted_price' => '',
+            'regular_price' => '-',
+            'discount' => '-',
+            'discounted_price' => '-',
             'valid_from' => null,
             'valid_to' => null,
             'promo_headers' => []
