@@ -369,15 +369,50 @@ function releasePI(m_pi){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
 
-			location.reload();
-
-			// if(dataResult.result=='OK'){
-			// 	updateStatusRelease(m_pi);
-			// }
+			$('#notif').html("Proses release selesai, lanjut sync change..");
+			syncChange(m_pi);
+		},
+		error: function(){
+			$('#notif').html("<font style='color: red'>Gagal release, coba lagi</font>");
+			$("#overlay").fadeOut(300);
 		}
 	});
 }
 
+
+function syncChange(m_pi){
+	var formData = new FormData();
+	formData.append('m_pi', m_pi);
+
+	$.ajax({
+		url: "api/cyber/sync_piline_change.php",
+		type: "POST",
+		data : formData,
+		processData: false,
+		contentType: false,
+		beforeSend: function(){
+			$('#notif').html("Proses sync change, jangan close halaman ini sampai selesai..");
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+
+			if(dataResult.result == '1'){
+				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			} else {
+				$('#notif').html("<font style='color: red'>Sync change gagal: "+dataResult.msg+"</font>");
+			}
+
+			// Selesai semua → reload
+			$("#overlay").fadeOut(300);
+			location.reload();
+		},
+		error: function(){
+			$('#notif').html("<font style='color: red'>Sync change error</font>");
+			$("#overlay").fadeOut(300);
+		}
+	});
+}
 
 function updateStatusRelease(m_pi){
 	$.ajax({

@@ -1688,15 +1688,17 @@ if ($_GET['modul'] == 'inventory') {
 			$connec->query("update m_pi set insertfromweb = 'Y' where m_pi_key = '" . $mpi . "'");
 		}
 
-		// Get existing qtycount and verifiedcount
-		$sql = "select m_piline.verifiedcount, m_piline.qtycount from m_piline where m_piline.sku ='" . $sku . "' and m_pi_key = '" . $mpi . "' and date(m_piline.insertdate) = '" . date('Y-m-d') . "'";
+		// Get existing qtycount, verifiedcount, dan m_piline_key
+		$sql = "select m_piline_key, m_piline.verifiedcount, m_piline.qtycount from m_piline where m_piline.sku ='" . $sku . "' and m_pi_key = '" . $mpi . "' and date(m_piline.insertdate) = '" . date('Y-m-d') . "'";
 		$result = $connec->query($sql);
 		$existingQtyCount = null;
 		$vc = 0;
+		$m_piline_key = '';
 
 		foreach ($result as $row) {
 			$existingQtyCount = $row['qtycount'];
-			
+			$m_piline_key = $row['m_piline_key'];
+
 			if ($row['verifiedcount'] == '') {
 				$vc = 0;
 			} else {
@@ -1712,9 +1714,35 @@ if ($_GET['modul'] == 'inventory') {
 				// Don't update, just return success message without changes
 				$json = array('result' => '1', 'msg' => $sku . ' (' . $nama . ') Tidak ada perubahan (Quantity sama: ' . $qtyon . ')');
 			} else {
+				// ===== CAPTURE PERUBAHAN KE m_piline_change =====
+				$m_piline_change_key = uniqid('MPLC', true); // generate unique key untuk primary key
+
+				$insertChange = $connec->query("
+					insert into m_piline_change 
+					(m_piline_change_key, m_piline_key, sku, ad_org_id, insertby, qtybefore, qtyafter, updateddate, status_intransit)
+					values
+					('" . $m_piline_change_key . "',
+					'" . $m_piline_key . "',
+					'" . $sku . "',
+					'" . $ad_morg_key . "',
+					'" . $username . "',
+					'" . $existingQtyCount . "',
+					'" . $qtyon . "',
+					NOW(),
+					NULL)
+				");
+
+				// Jika gagal insert ke log, bisa di-handle di sini
+				if (!$insertChange) {
+					// optional: log error
+					// $json = array('result' => '0', 'msg' => 'Gagal menyimpan log perubahan');
+					// echo json_encode($json); exit;
+				}
+				// ===== END CAPTURE =====
+
 				// Proceed with update
 				$statement1 = $connec->query("update m_piline set qtycount = '" . $qtyon . "', verifiedcount = '" . $totvc . "', updatedby = '".$username."', updateddate = NOW()
-				where sku = '" . $sku . "' and date(m_piline.insertdate) = '" . date('Y-m-d') . "'");
+				where sku = '" . $sku . "' and m_pi_key = '" . $mpi . "' and date(m_piline.insertdate) = '" . date('Y-m-d') . "'");
 				
 				if ($statement1) {
 					$json = array('result' => '1', 'msg' => $sku . ' (' . $nama . ') QUANTITY = <font style="color: red">' . $qtyon . '</font>');
