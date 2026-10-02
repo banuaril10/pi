@@ -9,6 +9,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $idstore = $row['ad_morg_key'];
 }
 
+$m_pi = $_POST['m_pi'] ?? null;
+
 // ===== Function kirim data m_piline_change =====
 function piline_change_semua($url, $a)
 {
@@ -54,6 +56,7 @@ foreach ($connec->query($sql_change) as $rchange) {
     $items_change[] = array(
         'm_piline_change_key' => $rchange['m_piline_change_key'],
         'm_piline_key'        => $rchange['m_piline_key'],
+        'm_pi'                => $rchange['m_pi'],
         'sku'                 => $rchange['sku'],
         'ad_org_id'           => $rchange['ad_org_id'],
         'insertby'            => $rchange['insertby'],
