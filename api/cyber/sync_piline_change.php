@@ -56,7 +56,7 @@ foreach ($connec->query($sql_change) as $rchange) {
     $items_change[] = array(
         'm_piline_change_key' => $rchange['m_piline_change_key'],
         'm_piline_key'        => $rchange['m_piline_key'],
-        'm_pi'                => $rchange['m_pi'],
+        'm_pi'                => $m_pi,
         'sku'                 => $rchange['sku'],
         'ad_org_id'           => $rchange['ad_org_id'],
         'insertby'            => $rchange['insertby'],
