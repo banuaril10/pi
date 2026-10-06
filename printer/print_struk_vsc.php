@@ -44,7 +44,7 @@ $html = $_POST['html'];
 	$html = str_replace("Nama Barang", "Nm Brg", $html);
 	$html = str_replace("Disc  ", "Disc", $html);
 	$html = str_replace("  PPN :    ", "PPN :", $html);
-	
+	$html = str_replace("Total Transaksi Cash", "Total Trans. Cash", $html);
 // }
 
 $html = str_replace(" :         ", " : ", $html);
