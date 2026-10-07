@@ -1,7 +1,10 @@
 	<?php
+
+		$html_new = str_replace("Total Transaksi Cash", "Total Trans. Cash", $_POST['html']);
+
 		//change font size to small
 		$html = chr(27) . chr(33) . chr(1); // ESC ! 1 to change font size to small
-		$html .= $_POST['html'];
+		$html .= $html_new;
 		
 		$html .= '\r\n'; 
 		$html .= '\r\n'; 
@@ -10,7 +13,7 @@
 		$html .= chr(29) . "V" . 0; 
 		// $html .= '\r\n'; 
 		
-		$html = str_replace("Total Transaksi Cash", "Total Trans. Cash", $html);
+		
 		$cmd='';
 		$cmd='echo "'.$html.'" | lpr -o raw'; //linux
 
