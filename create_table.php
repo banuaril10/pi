@@ -1671,5 +1671,57 @@ foreach ($create_m_piline_change as $r) {
 	$connec->exec($r);
 }
 
+
+
+// CREATE TABLE public.in_target_pola_perjam (
+//     id          BIGSERIAL PRIMARY KEY,
+//     jam         VARCHAR(50)   NOT NULL,
+//     sales_date  DATE          NOT NULL,
+//     realisasi   NUMERIC(18,2) NOT NULL DEFAULT 0,
+//     is_sync     SMALLINT      NOT NULL DEFAULT 0,
+//     sync_at     TIMESTAMP     NULL,
+//     isactived   SMALLINT      NOT NULL DEFAULT 1,
+//     created_at  TIMESTAMP     NOT NULL DEFAULT NOW(),
+//     updated_at  TIMESTAMP     NOT NULL DEFAULT NOW()
+// );
+
+// CREATE UNIQUE INDEX uq_tpp_jam_date
+//     ON public.in_target_pola_perjam (jam, sales_date);
+
+// CREATE INDEX idx_tpp_salesdate
+//     ON public.in_target_pola_perjam (sales_date);
+
+// CREATE INDEX idx_tpp_unsync
+//     ON public.in_target_pola_perjam (is_sync)
+//     WHERE is_sync = 0;
+
+$create_in_target_pola_perjam = [
+	'CREATE TABLE IF NOT EXISTS in_target_pola_perjam (
+		id            VARCHAR(50)   NOT NULL,
+		jam           VARCHAR(50)   NOT NULL,
+		sales_date    DATE          NOT NULL,
+		realisasi     NUMERIC(18,2) NOT NULL DEFAULT 0,
+		is_sync       SMALLINT      NOT NULL DEFAULT 0,
+		sync_at       TIMESTAMP     NULL,
+		isactived     SMALLINT      NOT NULL DEFAULT 1,
+		created_at    TIMESTAMP     NOT NULL DEFAULT NOW(),
+		updated_at    TIMESTAMP     NOT NULL DEFAULT NOW(),
+		CONSTRAINT in_target_pola_perjam_pkey PRIMARY KEY (id)
+	);',
+	'CREATE UNIQUE INDEX IF NOT EXISTS uq_tpp_jam_date
+		ON in_target_pola_perjam (jam, sales_date);',
+	'CREATE INDEX IF NOT EXISTS idx_tpp_salesdate
+		ON in_target_pola_perjam (sales_date);',
+	'CREATE INDEX IF NOT EXISTS idx_tpp_unsync
+		ON in_target_pola_perjam (is_sync)
+		WHERE is_sync = 0;'
+];
+
+foreach ($create_in_target_pola_perjam as $r) {
+	$connec->exec($r);
+}
+
+
+
 ?>
 
