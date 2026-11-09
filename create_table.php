@@ -1723,5 +1723,39 @@ foreach ($create_in_target_pola_perjam as $r) {
 
 
 
+$log_print_negatif = [
+	'CREATE TABLE IF NOT EXISTS log_print_negatif (
+		id            VARCHAR(50)   NOT NULL,
+		sales_date    DATE          NOT NULL default CURRENT_DATE,
+		created_at    TIMESTAMP     NOT NULL DEFAULT NOW(),
+		CONSTRAINT log_print_negatif_pkey PRIMARY KEY (id)
+	);'
+];
+
+foreach ($log_print_negatif as $r) {
+	$connec->exec($r);
+}	
+
+//save list items nya 
+$table_list_items = [
+	'CREATE TABLE IF NOT EXISTS list_items_negatif (
+		id            VARCHAR(50)   NOT NULL,
+		sku           VARCHAR(50)   NOT NULL,
+		item_name     VARCHAR(255)  NOT NULL,
+		stock         INT           NOT NULL DEFAULT 0,
+		created_at    TIMESTAMP     NOT NULL DEFAULT NOW(),
+		updated_at    TIMESTAMP     NOT NULL DEFAULT NOW(),
+		status_intransit varchar(2),
+		CONSTRAINT list_items_negatif_pkey PRIMARY KEY (id)
+	);'
+];
+
+foreach ($table_list_items as $r) {
+	$connec->exec($r);
+}
+
+
+
+
 ?>
 
