@@ -7,6 +7,8 @@ if (!isset($connec) || !($connec instanceof PDO)) {
     exit('Koneksi database tidak tersedia / bukan PDO');
 }
 
+$date = date('Y-m-d');
+
 // ============================================================
 // Fetch API stok negatif + outstanding documents
 // ============================================================
@@ -72,7 +74,7 @@ function replace_snapshot(PDO $connec, array $items): bool {
     try {
         $connec->beginTransaction();
 
-        $connec->exec("DELETE FROM public.list_items_negatif");
+        $connec->exec("DELETE FROM public.list_items_negatif where created_at::date = current_date");
 
         if (!empty($items)) {
             $sql = "INSERT INTO public.list_items_negatif
@@ -127,6 +129,7 @@ function load_snapshot(PDO $connec): array {
             item_name AS itemname,
             stock
         FROM public.list_items_negatif
+        WHERE created_at::date = current_date
         ORDER BY sku
     ");
 
