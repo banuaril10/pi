@@ -314,21 +314,7 @@
 				<option value="2">Rack</option>
 				<option value="3">Items</option>
 				<option value="4">Sesuai Schedule IC (Per Sub Category)</option>
-				
-				
-				<?php
-					// CEK APAKAH SEKARANG ADALAH 3 HARI TERAKHIR BULAN
-					$last_day = date('t');
-					$three_days_ago = $last_day - 2;
-					$current_day = date('j');
-					
-					if ($current_day >= $three_days_ago && $current_day <= $last_day) {
-					?>
-						<option value="5">PI Negatif Inventory</option>
-					<?php
-					}
-				?>
-
+				<option value="5">PI Negatif Inventory</option>
 				<option value="6">Sesuai Schedule IC (Per Items)</option>
 			</select>
 		<div id="pc" style="display: none">
