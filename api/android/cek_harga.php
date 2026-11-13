@@ -142,11 +142,14 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             ];
         }
 
+
+        $text_date_format = date('d-m-Y H:i', strtotime($tgl_sales));
+
         // --- Lanjut struktur lama ---
         if ($discount) {
             $discountedPrice = $regularPrice - $discount['discount'];
             $response = [
-                'sku' => $sku . "\nSales Terakhir : " . $tgl_sales,
+                'sku' => $sku . "\nSales Terakhir : " . $text_date_format,
                 'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => $discount['discount'],    
@@ -157,7 +160,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             ];
         } else {
             $response = [
-                'sku' => $sku . "\nSales Terakhir : " . $tgl_sales,
+                'sku' => $sku . "\nSales Terakhir : " . $text_date_format,
                 'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => null,
