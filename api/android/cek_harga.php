@@ -43,14 +43,6 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         $regularPrice = $product['price'];
         $sku = $product['sku'];
 
-        // Ambil tanggal sales dari API
-        $apiUrl = "https://api.idolmartidolaku.com/apiidolmart/store/sales/last_date_sales.php?sku=" . urlencode($sku);
-
-        $apiResponse = @file_get_contents($apiUrl);
-        $apiData = $apiResponse ? json_decode($apiResponse, true) : null;
-
-        $tgl_sales = $apiData['tgl'] ?? '-';
-
         // Query untuk mendapatkan diskon dari tabel pos_mproductdiscount
         $sqlDiscount = "
             SELECT discount, fromdate, todate 
@@ -147,7 +139,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             $discountedPrice = $regularPrice - $discount['discount'];
             $response = [
                 'sku' => $sku,
-                'name' => $name . "<br>" . $tgl_sales,
+                'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => $discount['discount'],
                 'discounted_price' => $discountedPrice,
@@ -158,7 +150,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         } else {
             $response = [
                 'sku' => $sku,
-                'name' => $name . "<br>" . $tgl_sales,
+                'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => null,
                 'discounted_price' => null,
@@ -181,12 +173,13 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 // 	);'
 // ]; tp jgn error klo table ga ada
 
+
+
         $insertAudit = "
             INSERT INTO price_audit (sku, price, discount, insertdate, id_location, scanfrom)
             VALUES (:sku, :price, :discount, NOW(), :id_location, :scanfrom)
         ";
-
-        $scanfrom = "android";
+        $scanfrom = 'android';
         $stmtAudit = $connec->prepare($insertAudit);
         // $id_location = isset($_GET['location']) ? $_GET['location'] : 'DEFAULT';
         $stmtAudit->bindParam(':sku', $sku);
